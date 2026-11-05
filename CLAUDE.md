@@ -111,7 +111,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   caméra de la tablette (CameraX, dans l'app : rien d'externe en kiosque), fichier (sélecteur de photos), téléphone
   (QR code → mini serveur HTTP local, code aléatoire, un seul envoi), photo HA. Détourage ML Kit (services Google,
   sinon « selfie » embarqué), filtres (aucun, doux, affiche, BD), cadrage aux doigts. Image 1024 enregistrée dans
-  l'app et incluse dans l'export. Rendu : cercle 836/1024 en bas, liseré 25/1024, fond #181818 → couleur d'accent ;
+  l'app avec la photo d'origine, le masque et les réglages (l'éditeur rouvre sur l'avatar existant), le tout dans
+  l'export. Photo coupée au sommet du crâne : photo ronde automatique (détourage réactivable). Rendu : cercle 836/1024 en bas, liseré 25/1024, fond #181818 → couleur d'accent ;
   détouré = la tête dépasse (clip cercle ∪ moitié haute), photo = rond, noir et blanc si non sélectionné.
   Cadrage par défaut (repères de l'avatar de l'utilisateur) : haut des pixels opaques à 78/1024, tête jusqu'au cou
   sur 42 % de la largeur ; le bas de la photo ne remonte jamais au-dessus du bas du cercle. La détection de visage

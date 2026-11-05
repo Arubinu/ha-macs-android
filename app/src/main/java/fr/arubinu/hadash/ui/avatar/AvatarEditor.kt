@@ -225,7 +225,22 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
     var framing by remember { mutableStateOf<Framing?>(null) }
     val thumbs = remember { mutableStateMapOf<AvatarFilter, ImageBitmap>() }
     val filteredCache = remember { HashMap<AvatarFilter, Bitmap>() }
+    /** Cadrage repris d'un avatar existant : à garder au lieu du cadrage automatique. */
+    var keepFraming by remember { mutableStateOf(false) }
     val haFailed = stringResource(R.string.avatar_ha_failed)
+
+    // Avatar déjà créé : l'éditeur rouvre sur sa photo, son détourage, son filtre et son cadrage.
+    LaunchedEffect(memberId) {
+        val e = withContext(Dispatchers.IO) { store.loadEdit(memberId) } ?: return@LaunchedEffect
+        source = e.source
+        cut = e.cut
+        cutFailed = e.cut == null
+        useCutout = e.useCutout && e.cut != null
+        cutoutChosen = true
+        filter = AvatarFilter.entries.firstOrNull { it.name == e.filter } ?: AvatarFilter.None
+        framing = Framing(e.scale, e.x, e.y)
+        keepFraming = true
+    }
     val fileFailed = stringResource(R.string.avatar_file_failed)
 
     fun setSource(b: Bitmap?) {
@@ -241,6 +256,7 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
         thumbs.clear()
         filter = AvatarFilter.None
         framing = null
+        keepFraming = false
         face = null
         cutting = true
         scope.launch {
@@ -272,6 +288,7 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
     LaunchedEffect(source, cut, useCutout, cutting) {
         val src = source ?: return@LaunchedEffect
         if (cutting) return@LaunchedEffect
+        if (keepFraming) { keepFraming = false; return@LaunchedEffect }
         val cutoutOn = useCutout && cut != null
         val img = if (cutoutOn) src.withAlphaOf(cut!!) else src
         // Haut de la tête coupé par la photo : rien ne peut dépasser du cercle proprement, et coller le bas de la
@@ -420,7 +437,10 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
                             scope.launch {
                                 busy = true
                                 val baked = withContext(Dispatchers.Default) { bakeAvatar(img, fr.scale, fr.x, fr.y) }
-                                withContext(Dispatchers.IO) { store.save(memberId, baked, mode) }
+                                val src = source ?: return@launch
+                                withContext(Dispatchers.IO) {
+                                    store.save(memberId, baked, mode, src, cut, useCutout && cut != null, filter.name, fr.scale, fr.x, fr.y)
+                                }
                                 busy = false
                                 onDismiss()
                             }
