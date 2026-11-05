@@ -1,0 +1,1161 @@
+{
+  "access_code": "1234",
+  "start_screen": "home",
+  "idle_screen": "home",
+  "theme": {
+    "card_radius": 0,
+    "gutter": 12,
+    "colors": {
+      "background": "#000"
+    },
+    "rounded_radius": 20,
+    "menu_radius": 18
+  },
+  "macs": {
+    "mood_entity": "select.macs_mood",
+    "precipitation_sensor": "sensor.valmont_daily_precipitation",
+    "precipitation_unit": "%",
+    "weather_entity": "weather.valmont",
+    "battery": "device",
+    "max_turns": 2
+  },
+  "popups": {
+    "appletv": {
+      "name": "Télécommande AppleTV",
+      "icon": "mdi:remote",
+      "auto_close_ms": 60000,
+      "cards": [
+        {
+          "type": "remote",
+          "entity": "remote.salon_appletv",
+          "media_player": "media_player.salon_appletv"
+        }
+      ]
+    }
+  },
+  "screens": {
+    "home": {
+      "layout": "overlay",
+      "cards": [
+        {
+          "type": "macs",
+          "position": "fill",
+          "tap_action": {
+            "action": "voice"
+          },
+          "hold_action": {
+            "action": "screen",
+            "screen": "dashboard"
+          }
+        },
+        {
+          "type": "clock",
+          "position": "top_start",
+          "margin": 24
+        },
+        {
+          "type": "alert_ticker",
+          "id": "alerts",
+          "position": "top_end",
+          "margin": 18,
+          "max_width": 460,
+          "radius": 20,
+          "large_button_size": 35,
+          "large_button_right": 15,
+          "content_padding_right": 55,
+          "counter_top": 10,
+          "counter_right": 14,
+          "show_history_button": false,
+          "lovelace_dashboard": "dashboard-tablette",
+          "cycle_interval": 10,
+          "show_when_clear": false,
+          "clear_message": "",
+          "clear_theme": "success",
+          "alerts": [
+            {
+              "state": "unavailable",
+              "message": "Une ou plusieurs caméras sont indisponibles",
+              "priority": 1,
+              "theme": "notification",
+              "icon": "mdi:cctv",
+              "entity_filter": "argus",
+              "entity_filter_exclude": [
+                "binary_sensor.argus_4_mouvement",
+                "binary_sensor.argus_4_humain",
+                "binary_sensor.argus_4_vehicule",
+                "binary_sensor.argus_4_animal",
+                "binary_sensor.argus_4_sleep_status",
+                "binary_sensor.argus_3_mouvement",
+                "binary_sensor.argus_3_humain",
+                "binary_sensor.argus_3_vehicule",
+                "binary_sensor.argus_3_animal",
+                "binary_sensor.argus_3_sleep_status",
+                "binary_sensor.argus_2_mouvement",
+                "binary_sensor.argus_2_humain",
+                "binary_sensor.argus_2_vehicule",
+                "binary_sensor.argus_2_animal",
+                "binary_sensor.argus_2_sleep_status",
+                "binary_sensor.argus_1_mouvement",
+                "binary_sensor.argus_1_humain",
+                "binary_sensor.argus_1_vehicule",
+                "binary_sensor.argus_1_animal",
+                "binary_sensor.argus_1_sleep_status",
+                "camera.argus_4_fluent",
+                "camera.argus_3_fluent",
+                "camera.argus_2_fluent",
+                "camera.argus_1_fluent",
+                "light.argus_4_projecteur",
+                "light.argus_3_projecteur",
+                "light.argus_2_projecteur",
+                "light.argus_1_projecteur",
+                "light.argus_4_led_d_etat",
+                "light.argus_3_led_d_etat",
+                "light.argus_2_led_d_etat",
+                "light.argus_1_led_d_etat",
+                "number.argus_4_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_3_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_2_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_1_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_4_infrared_light_brightness",
+                "number.argus_3_infrared_light_brightness",
+                "number.argus_2_infrared_light_brightness",
+                "number.argus_1_infrared_light_brightness",
+                "number.argus_4_volume",
+                "number.argus_3_volume",
+                "number.argus_2_volume",
+                "number.argus_1_volume",
+                "number.argus_4_pir_sensitivity",
+                "number.argus_3_pir_sensitivity",
+                "number.argus_2_pir_sensitivity",
+                "number.argus_1_pir_sensitivity",
+                "number.argus_4_ai_person_sensitivity",
+                "number.argus_3_ai_person_sensitivity",
+                "number.argus_2_ai_person_sensitivity",
+                "number.argus_1_ai_person_sensitivity",
+                "number.argus_4_ai_vehicle_sensitivity",
+                "number.argus_3_ai_vehicle_sensitivity",
+                "number.argus_2_ai_vehicle_sensitivity",
+                "number.argus_1_ai_vehicle_sensitivity",
+                "number.argus_4_ai_animal_sensitivity",
+                "number.argus_3_ai_animal_sensitivity",
+                "number.argus_2_ai_animal_sensitivity",
+                "number.argus_1_ai_animal_sensitivity",
+                "select.argus_4_mode_projecteur",
+                "select.argus_3_mode_projecteur",
+                "select.argus_2_mode_projecteur",
+                "select.argus_1_mode_projecteur",
+                "select.argus_4_mode_jour_nuit",
+                "select.argus_3_mode_jour_nuit",
+                "select.argus_2_mode_jour_nuit",
+                "select.argus_1_mode_jour_nuit",
+                "select.argus_4_hub_alarm_ringtone",
+                "select.argus_3_hub_alarm_ringtone",
+                "select.argus_2_hub_alarm_ringtone",
+                "select.argus_1_hub_alarm_ringtone",
+                "siren.argus_4_sirene",
+                "siren.argus_3_sirene",
+                "siren.argus_2_sirene",
+                "siren.argus_1_sirene",
+                "switch.argus_4_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_3_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_2_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_1_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_4_enregistrer_l_audio",
+                "switch.argus_3_enregistrer_l_audio",
+                "switch.argus_2_enregistrer_l_audio",
+                "switch.argus_1_enregistrer_l_audio",
+                "switch.argus_4_sirene_lors_de_l_evenement",
+                "switch.argus_3_sirene_lors_de_l_evenement",
+                "switch.argus_2_sirene_lors_de_l_evenement",
+                "switch.argus_1_sirene_lors_de_l_evenement",
+                "switch.argus_4_courriel_lors_de_l_evenement",
+                "switch.argus_3_courriel_lors_de_l_evenement",
+                "switch.argus_2_courriel_lors_de_l_evenement",
+                "switch.argus_1_courriel_lors_de_l_evenement",
+                "switch.argus_4_chargement_upload_ftp",
+                "switch.argus_3_chargement_upload_ftp",
+                "switch.argus_2_chargement_upload_ftp",
+                "switch.argus_1_chargement_upload_ftp",
+                "switch.argus_4_notifications_push",
+                "switch.argus_3_notifications_push",
+                "switch.argus_2_notifications_push",
+                "switch.argus_1_notifications_push",
+                "switch.argus_4_enregistrer",
+                "switch.argus_3_enregistrer",
+                "switch.argus_2_enregistrer",
+                "switch.argus_1_enregistrer",
+                "switch.argus_4_enregistrement_manuel",
+                "switch.argus_3_enregistrement_manuel",
+                "switch.argus_2_enregistrement_manuel",
+                "switch.argus_1_enregistrement_manuel",
+                "switch.argus_4_hub_ringtone_on_event",
+                "switch.argus_3_hub_ringtone_on_event",
+                "switch.argus_2_hub_ringtone_on_event",
+                "switch.argus_1_hub_ringtone_on_event",
+                "switch.argus_3_mode_prive",
+                "update.argus_4_micrologiciel",
+                "update.argus_3_micrologiciel",
+                "update.argus_2_micrologiciel",
+                "update.argus_1_micrologiciel",
+                "switch.argus_3_privacy_mask",
+                "camera.argus_1_clair",
+                "camera.argus_1_snapshots_fluent",
+                "camera.argus_1_les_instantanes_clair",
+                "sensor.argus_1_battery_temperature",
+                "sensor.argus_1_battery_state",
+                "camera.argus_2_clair",
+                "sensor.argus_2_battery_state",
+                "sensor.argus_2_battery_temperature",
+                "camera.argus_4_clair",
+                "camera.argus_3_clair",
+                "sensor.argus_4_battery_temperature",
+                "sensor.argus_3_battery_temperature",
+                "sensor.argus_4_battery_state",
+                "sensor.argus_3_battery_state",
+                "camera.argus_4_snapshots_fluent",
+                "camera.argus_3_snapshots_fluent",
+                "camera.argus_2_snapshots_fluent",
+                "sensor.argus_1_filetrack",
+                "sensor.argus_1_filetrack_snapshots",
+                "sensor.argus_2_filetrack",
+                "sensor.argus_2_filetrack_snapshots",
+                "sensor.argus_3_filetrack",
+                "sensor.argus_3_filetrack_snapshots",
+                "sensor.argus_4_filetrack",
+                "sensor.argus_4_filetrack_snapshots",
+                "sensor.argus_1_filetrack_2",
+                "sensor.argus_1_filetrack_snapshots_2",
+                "sensor.argus_2_filetrack_2",
+                "sensor.argus_2_filetrack_snapshots_2",
+                "sensor.argus_3_filetrack_2",
+                "sensor.argus_3_filetrack_snapshots_2",
+                "sensor.argus_4_filetrack_2",
+                "sensor.argus_4_filetrack_snapshots_2"
+              ],
+              "operator": "=",
+              "use_ha_icon": true,
+              "conditions_logic": "or",
+              "show_filter_name": false
+            },
+            {
+              "state": "50",
+              "message": "Vérifiez l'état de la batterie des caméras",
+              "priority": 2,
+              "theme": "battery",
+              "icon": "🪫",
+              "entity_filter": "argus",
+              "entity_filter_exclude": [
+                "siren.argus_4_sirene",
+                "siren.argus_2_sirene",
+                "siren.argus_1_sirene",
+                "switch.argus_4_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_2_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_1_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_4_enregistrer_l_audio",
+                "switch.argus_2_enregistrer_l_audio",
+                "switch.argus_1_enregistrer_l_audio",
+                "switch.argus_4_sirene_lors_de_l_evenement",
+                "switch.argus_2_sirene_lors_de_l_evenement",
+                "switch.argus_1_sirene_lors_de_l_evenement",
+                "switch.argus_4_courriel_lors_de_l_evenement",
+                "switch.argus_2_courriel_lors_de_l_evenement",
+                "switch.argus_1_courriel_lors_de_l_evenement",
+                "switch.argus_4_chargement_upload_ftp",
+                "switch.argus_2_chargement_upload_ftp",
+                "switch.argus_1_chargement_upload_ftp",
+                "switch.argus_4_notifications_push",
+                "switch.argus_2_notifications_push",
+                "switch.argus_1_notifications_push",
+                "switch.argus_4_enregistrer",
+                "switch.argus_2_enregistrer",
+                "switch.argus_1_enregistrer",
+                "switch.argus_4_enregistrement_manuel",
+                "switch.argus_2_enregistrement_manuel",
+                "switch.argus_1_enregistrement_manuel",
+                "switch.argus_4_hub_ringtone_on_event",
+                "switch.argus_2_hub_ringtone_on_event",
+                "switch.argus_1_hub_ringtone_on_event",
+                "update.argus_4_micrologiciel",
+                "update.argus_2_micrologiciel",
+                "update.argus_1_micrologiciel",
+                "binary_sensor.argus_3_mouvement",
+                "binary_sensor.argus_3_humain",
+                "binary_sensor.argus_3_vehicule",
+                "binary_sensor.argus_3_animal",
+                "binary_sensor.argus_3_sleep_status",
+                "light.argus_3_projecteur",
+                "light.argus_3_led_d_etat",
+                "number.argus_3_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_3_volume",
+                "number.argus_3_pir_sensitivity",
+                "number.argus_3_ai_person_sensitivity",
+                "number.argus_3_ai_vehicle_sensitivity",
+                "number.argus_3_ai_animal_sensitivity",
+                "select.argus_3_mode_projecteur",
+                "select.argus_3_mode_jour_nuit",
+                "select.argus_3_hub_alarm_ringtone",
+                "siren.argus_3_sirene",
+                "switch.argus_3_lumieres_infrarouges_en_mode_nuit",
+                "switch.argus_3_enregistrer_l_audio",
+                "switch.argus_3_sirene_lors_de_l_evenement",
+                "switch.argus_3_courriel_lors_de_l_evenement",
+                "switch.argus_3_chargement_upload_ftp",
+                "switch.argus_3_notifications_push",
+                "switch.argus_3_enregistrer",
+                "switch.argus_3_enregistrement_manuel",
+                "switch.argus_3_hub_ringtone_on_event",
+                "update.argus_3_micrologiciel",
+                "camera.argus_3_fluent",
+                "number.argus_3_infrared_light_brightness",
+                "switch.argus_3_privacy_mask",
+                "binary_sensor.argus_4_mouvement",
+                "binary_sensor.argus_4_humain",
+                "binary_sensor.argus_4_vehicule",
+                "binary_sensor.argus_4_animal",
+                "binary_sensor.argus_4_sleep_status",
+                "binary_sensor.argus_2_mouvement",
+                "binary_sensor.argus_2_humain",
+                "binary_sensor.argus_2_vehicule",
+                "binary_sensor.argus_2_animal",
+                "binary_sensor.argus_2_sleep_status",
+                "binary_sensor.argus_1_mouvement",
+                "binary_sensor.argus_1_humain",
+                "binary_sensor.argus_1_vehicule",
+                "binary_sensor.argus_1_animal",
+                "binary_sensor.argus_1_sleep_status",
+                "camera.argus_4_fluent",
+                "camera.argus_2_fluent",
+                "camera.argus_1_fluent",
+                "light.argus_4_projecteur",
+                "light.argus_2_projecteur",
+                "light.argus_1_projecteur",
+                "light.argus_4_led_d_etat",
+                "light.argus_2_led_d_etat",
+                "light.argus_1_led_d_etat",
+                "number.argus_4_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_2_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_4_infrared_light_brightness",
+                "number.argus_1_luminosite_du_projecteur_a_l_allumage",
+                "number.argus_2_infrared_light_brightness",
+                "number.argus_1_infrared_light_brightness",
+                "number.argus_4_volume",
+                "number.argus_2_volume",
+                "number.argus_1_volume",
+                "number.argus_4_pir_sensitivity",
+                "number.argus_2_pir_sensitivity",
+                "number.argus_1_pir_sensitivity",
+                "number.argus_4_ai_person_sensitivity",
+                "number.argus_2_ai_person_sensitivity",
+                "number.argus_1_ai_person_sensitivity",
+                "number.argus_4_ai_vehicle_sensitivity",
+                "number.argus_2_ai_vehicle_sensitivity",
+                "number.argus_1_ai_vehicle_sensitivity",
+                "number.argus_4_ai_animal_sensitivity",
+                "number.argus_2_ai_animal_sensitivity",
+                "number.argus_1_ai_animal_sensitivity",
+                "select.argus_4_mode_projecteur",
+                "select.argus_2_mode_projecteur",
+                "select.argus_1_mode_projecteur",
+                "select.argus_4_mode_jour_nuit",
+                "select.argus_2_mode_jour_nuit",
+                "select.argus_1_mode_jour_nuit",
+                "select.argus_4_hub_alarm_ringtone",
+                "select.argus_2_hub_alarm_ringtone",
+                "select.argus_1_hub_alarm_ringtone",
+                "switch.argus_3_mode_prive",
+                "camera.argus_1_clair",
+                "camera.argus_1_snapshots_fluent",
+                "camera.argus_1_les_instantanes_clair",
+                "sensor.argus_1_battery_temperature",
+                "sensor.argus_1_battery_state",
+                "camera.argus_2_clair",
+                "sensor.argus_2_battery_state",
+                "sensor.argus_2_battery_temperature",
+                "camera.argus_4_clair",
+                "camera.argus_3_clair",
+                "sensor.argus_4_battery_temperature",
+                "sensor.argus_3_battery_temperature",
+                "sensor.argus_4_battery_state",
+                "sensor.argus_3_battery_state",
+                "camera.argus_4_snapshots_fluent",
+                "camera.argus_3_snapshots_fluent",
+                "camera.argus_2_snapshots_fluent",
+                "sensor.argus_1_filetrack",
+                "sensor.argus_1_filetrack_snapshots",
+                "sensor.argus_2_filetrack",
+                "sensor.argus_2_filetrack_snapshots",
+                "sensor.argus_3_filetrack",
+                "sensor.argus_3_filetrack_snapshots",
+                "sensor.argus_4_filetrack",
+                "sensor.argus_4_filetrack_snapshots",
+                "sensor.argus_1_filetrack_2",
+                "sensor.argus_1_filetrack_snapshots_2",
+                "sensor.argus_2_filetrack_2",
+                "sensor.argus_2_filetrack_snapshots_2",
+                "sensor.argus_3_filetrack_2",
+                "sensor.argus_3_filetrack_snapshots_2",
+                "sensor.argus_4_filetrack_2",
+                "sensor.argus_4_filetrack_snapshots_2"
+              ],
+              "operator": "<",
+              "use_ha_icon": false,
+              "conditions_logic": "or",
+              "show_filter_name": false,
+              "secondary_text": "{name} à {state}%"
+            },
+            {
+              "entity": "binary_sensor.boite_aux_lettres_occupancy",
+              "operator": "=",
+              "state": "on",
+              "persistent": true,
+              "message": "Un courrier a été déposé dans la boîte aux lettres",
+              "priority": 4,
+              "theme": "hologram",
+              "icon": "📩",
+              "secondary_text": "Détection à {trigger_time}",
+              "sound": true
+            },
+            {
+              "entity": "sensor.hadash_weather_alert_yellow",
+              "message": "Météo: Alerte Jaune",
+              "priority": 1,
+              "theme": "nuclear",
+              "icon": "😱",
+              "attribute": "names",
+              "show_badge": false,
+              "badge_label": "{state}",
+              "secondary_text": "{state}",
+              "use_ha_icon": false,
+              "conditions": [
+                {
+                  "entity": "sensor.hadash_weather_alert_yellow",
+                  "operator": ">",
+                  "state": "0"
+                }
+              ],
+              "conditions_logic": "and"
+            },
+            {
+              "entity": "sensor.hadash_weather_alert_orange",
+              "message": "Météo: Alerte Orange",
+              "priority": 1,
+              "theme": "fire",
+              "icon": "😱",
+              "attribute": "names",
+              "show_badge": false,
+              "secondary_text": "{state}",
+              "conditions": [
+                {
+                  "entity": "sensor.hadash_weather_alert_orange",
+                  "operator": ">",
+                  "state": "0"
+                }
+              ],
+              "conditions_logic": "and"
+            },
+            {
+              "entity": "sensor.hadash_weather_alert_red",
+              "message": "Météo: Alerte Rouge",
+              "priority": 1,
+              "theme": "alarm",
+              "icon": "😱",
+              "show_badge": false,
+              "secondary_text": "{state}",
+              "attribute": "names",
+              "conditions": [
+                {
+                  "entity": "sensor.hadash_weather_alert_red",
+                  "operator": ">",
+                  "state": "0"
+                }
+              ],
+              "conditions_logic": "and"
+            }
+          ],
+          "cycle_animation": "glitch",
+          "snooze_default_duration": 8,
+          "history_max_events": 25,
+          "show_snooze_bar": false,
+          "large_buttons": true
+        },
+        {
+          "type": "image",
+          "position": "bottom_center",
+          "margin": 8,
+          "image": "file:///android_asset/images/dashboard-button.gif",
+          "accent_hue": true,
+          "tap_action": {
+            "action": "screen",
+            "screen": "dashboard"
+          },
+          "width": 800
+        }
+      ]
+    },
+    "dashboard": {
+      "layout": "columns",
+      "padding": 32,
+      "padding_top": 24,
+      "column_gap": 32,
+      "columns": [
+        {
+          "cards": [
+            {
+              "type": "macs",
+              "tap_action": {
+                "action": "voice"
+              },
+              "hold_action": {
+                "action": "screen",
+                "screen": "home"
+              },
+              "flex": true,
+              "min_height": 100,
+              "overflow_bottom": 60,
+              "layer": "front",
+              "space_after": 52
+            },
+            {
+              "type": "alarm",
+              "entity": "alarm_control_panel.alarmo",
+              "name": "Alarme",
+              "space_after": 2
+            },
+            {
+              "type": "rule",
+              "space_after": 2
+            },
+            {
+              "type": "switcher",
+              "id": "left",
+              "nav": "rail",
+              "default": "weather",
+              "pages": [
+                {
+                  "id": "weather",
+                  "icon": "mdi:home-flood",
+                  "cards": [
+                    {
+                      "type": "clock_weather",
+                      "entity": "weather.forecast_maison",
+                      "days": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "fuel",
+                  "icon": "mdi:fuel",
+                  "cards": [
+                    {
+                      "type": "swipe",
+                      "enable_auto_swipe": true,
+                      "auto_swipe_interval": 5000,
+                      "swipe_effect": "instant",
+                      "cards": [
+                        {
+                          "type": "mini_graph",
+                          "name": "Prix du Gasoil",
+                          "state_from": "min",
+                          "entities": [
+                            {
+                              "entity": "sensor.station_rochebelle_drive_gazole",
+                              "name": "Rochebelle",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_valmont_market_gazole",
+                              "name": "Valmont",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_bois_joli_gazole",
+                              "name": "Bois-Joli",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_saint_florin_gazole",
+                              "name": "Saint-Florin",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_autoroute_gazole",
+                              "name": "Autoroute",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_rochebelle_drive_gazole",
+                              "name": "Les Tilleuls",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sun.sun",
+                              "name": "Jour",
+                              "color": "#9FA4B0",
+                              "y_axis": "secondary",
+                              "smoothing": false,
+                              "show_state": false,
+                              "show_line": false,
+                              "show_points": false,
+                              "show_legend": false
+                            }
+                          ],
+                          "hours_to_show": 72,
+                          "line_width": 2,
+                          "decimals": 3,
+                          "aggregate_func": "min",
+                          "show": {
+                            "fill": true,
+                            "icon": false,
+                            "labels": false
+                          },
+                          "state_map": [
+                            {
+                              "value": "above_horizon",
+                              "label": "Jour",
+                              "y_value": 1
+                            },
+                            {
+                              "value": "below_horizon",
+                              "label": "Nuit",
+                              "y_value": 0
+                            }
+                          ],
+                          "hour24": true,
+                          "fade_edges": true
+                        },
+                        {
+                          "type": "mini_graph",
+                          "name": "Prix du Sans Plomb 98",
+                          "state_from": "min",
+                          "entities": [
+                            {
+                              "entity": "sensor.station_valmont_market_sp98",
+                              "name": "Valmont",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_autoroute_sp98",
+                              "name": "Autoroute",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sun.sun",
+                              "name": "Jour",
+                              "color": "#9FA4B0",
+                              "y_axis": "secondary",
+                              "smoothing": false,
+                              "show_state": false,
+                              "show_line": false,
+                              "show_points": false,
+                              "show_legend": false
+                            }
+                          ],
+                          "hours_to_show": 72,
+                          "line_width": 2,
+                          "decimals": 3,
+                          "aggregate_func": "min",
+                          "show": {
+                            "fill": true,
+                            "icon": false,
+                            "labels": false
+                          },
+                          "state_map": [
+                            {
+                              "value": "above_horizon",
+                              "label": "Jour",
+                              "y_value": 1
+                            },
+                            {
+                              "value": "below_horizon",
+                              "label": "Nuit",
+                              "y_value": 0
+                            }
+                          ],
+                          "hour24": true,
+                          "fade_edges": true
+                        },
+                        {
+                          "type": "mini_graph",
+                          "name": "Prix du Sans Plomb 95",
+                          "state_from": "min",
+                          "entities": [
+                            {
+                              "entity": "sensor.station_rochebelle_drive_sp95",
+                              "name": "Rochebelle",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_valmont_market_sp95",
+                              "name": "Valmont",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_saint_florin_sp95",
+                              "name": "Saint-Florin",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sensor.station_rochebelle_drive_sp95",
+                              "name": "Les Tilleuls",
+                              "show_legend": true
+                            },
+                            {
+                              "entity": "sun.sun",
+                              "name": "Jour",
+                              "color": "#9FA4B0",
+                              "y_axis": "secondary",
+                              "smoothing": false,
+                              "show_state": false,
+                              "show_line": false,
+                              "show_points": false,
+                              "show_legend": false
+                            }
+                          ],
+                          "hours_to_show": 72,
+                          "line_width": 2,
+                          "decimals": 3,
+                          "aggregate_func": "min",
+                          "show": {
+                            "fill": true,
+                            "icon": false,
+                            "labels": false
+                          },
+                          "state_map": [
+                            {
+                              "value": "above_horizon",
+                              "label": "Jour",
+                              "y_value": 1
+                            },
+                            {
+                              "value": "below_horizon",
+                              "label": "Nuit",
+                              "y_value": 0
+                            }
+                          ],
+                          "hour24": true,
+                          "fade_edges": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "radar",
+                  "icon": "mdi:radar",
+                  "cards": [
+                    {
+                      "type": "windy",
+                      "aspect_ratio": 1.45,
+                      "url": "https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km/h&zoom=10&overlay=radar&product=radar&level=surface&lat=48.857&lon=2.352&message=true"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "fit": true
+        },
+        {
+          "cards": [
+            {
+              "type": "switcher",
+              "id": "center",
+              "nav": "pills",
+              "default": "rooms",
+              "pages": [
+                {
+                  "id": "rooms",
+                  "icon": "hue:home",
+                  "label": "Pièces",
+                  "cards": [
+                    {
+                      "type": "room_grid",
+                      "columns": 2,
+                      "height": 180,
+                      "rooms": [
+                        {
+                          "name": "Entrée",
+                          "icon": "hue:room-hallway",
+                          "entity": "light.couloir_entree_plafonnier",
+                          "info": [
+                            {
+                              "icon": "mdi:smoking-off",
+                              "entity": "sensor.couloir_entree_detecteur_de_fumee_battery",
+                              "suffix": "%"
+                            },
+                            {
+                              "icon": "mdi:molecule-co",
+                              "entity": "sensor.couloir_entree_detecteur_de_monoxyde_de_carbone_battery",
+                              "suffix": "%"
+                            }
+                          ],
+                          "buttons": [
+                            {
+                              "entity": "light.couloir_entree_plafonnier_2",
+                              "icon": "hue:ceiling-adore",
+                              "color": "first"
+                            },
+                            {
+                              "entity": "light.couloir_entree_plafonnier_1",
+                              "icon": "hue:ceiling-adore",
+                              "color": "third"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Salon",
+                          "icon": "mdi:sofa",
+                          "entity": "light.salon_plafonnier",
+                          "info": [
+                            {
+                              "icon": "mdi:thermometer",
+                              "entity": "sensor.salon_thermo_hygrometre_temperature",
+                              "decimals": 1,
+                              "suffix": "°C"
+                            },
+                            {
+                              "icon": "mdi:water-percent",
+                              "entity": "sensor.salon_thermo_hygrometre_humidity",
+                              "suffix": "%"
+                            }
+                          ],
+                          "buttons": [
+                            {
+                              "entity": "light.salon_spots",
+                              "icon": "hue:single-spot",
+                              "color": "first"
+                            },
+                            {
+                              "entity": "light.salon_ambiance",
+                              "icon": "hue:wall-flood",
+                              "color": "second"
+                            },
+                            {
+                              "entity": "media_player.salon_appletv",
+                              "icon": "mdi:remote",
+                              "color": "third",
+                              "off_color": "default",
+                              "tap_action": {
+                                "action": "navigate",
+                                "navigation_path": "#appletv"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Alex",
+                          "icon": "mdi:face-man",
+                          "entity": "light.chambre_alex_plafonnier",
+                          "info": [
+                            {
+                              "icon": "mdi:thermometer",
+                              "entity": "sensor.chambre_alex_thermo_hygrometre_temperature",
+                              "decimals": 1,
+                              "suffix": "°C"
+                            },
+                            {
+                              "icon": "mdi:water-percent",
+                              "entity": "sensor.chambre_alex_thermo_hygrometre_humidity",
+                              "suffix": "%"
+                            }
+                          ],
+                          "buttons": [
+                            {
+                              "entity": "light.chambre_alex_skadis_entree",
+                              "icon": "mdi:led-strip-variant",
+                              "color": "first"
+                            },
+                            {
+                              "entity": "switch.chambre_alex_bureau",
+                              "icon": "mdi:desktop-tower-monitor",
+                              "color": "second",
+                              "tap_action": {
+                                "action": "toggle",
+                                "pin": true
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Emma",
+                          "icon": "mdi:face-woman",
+                          "entity": "light.chambre_emma_plafonnier",
+                          "info": [
+                            {
+                              "icon": "mdi:thermometer",
+                              "entity": "sensor.chambre_emma_thermo_hygrometre_temperature",
+                              "decimals": 1,
+                              "suffix": "°C"
+                            },
+                            {
+                              "icon": "mdi:water-percent",
+                              "entity": "sensor.chambre_emma_thermo_hygrometre_humidity",
+                              "suffix": "%"
+                            }
+                          ],
+                          "buttons": [
+                            {
+                              "entity": "light.chambre_emma_bandeau_led",
+                              "icon": "mdi:led-strip-variant",
+                              "color": "first"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Toilette",
+                          "icon": "hue:room-toilet",
+                          "entity": "light.toilette_plafonnier",
+                          "info": [
+                            {
+                              "icon": "mdi:thermometer",
+                              "entity": "sensor.toilette_detecteur_de_presence_device_temperature",
+                              "decimals": 1,
+                              "suffix": "°C"
+                            }
+                          ],
+                          "buttons": [
+                            {
+                              "entity": "sensor.toilette_detecteur_de_presence_movement",
+                              "icon": "hue:motion-sensor-movement-off",
+                              "icon_movement": "hue:motion-sensor-movement",
+                              "tap_action": {
+                                "action": "none"
+                              }
+                            },
+                            {
+                              "entity": "binary_sensor.toilette_detecteur_de_presence_presence",
+                              "icon": "mdi:cancel",
+                              "icon_on": "mdi:seat-recline-normal",
+                              "tap_action": {
+                                "action": "more-info"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "members",
+                  "icon": "mdi:human-greeting-variant",
+                  "label": "Membres",
+                  "cards": [
+                    {
+                      "type": "members",
+                      "avatar_url": "/local/images/avatars/mini/{member}_{state}.jpg",
+                      "members": [
+                        {
+                          "id": "alex",
+                          "person": "person.alex",
+                          "steps_sensor": "sensor.alex_smartphone_daily_steps",
+                          "battery_sensor": "sensor.alex_smartphone_battery_level",
+                          "charger_sensor": "sensor.alex_smartphone_charger_type",
+                          "calendars": [
+                            "calendar.alex_google",
+                            "calendar.jours_feries"
+                          ]
+                        },
+                        {
+                          "id": "emma",
+                          "person": "person.emma",
+                          "steps_sensor": "sensor.emma_smartphone_daily_steps",
+                          "battery_sensor": "sensor.emma_smartphone_battery_level",
+                          "charger_sensor": "sensor.emma_smartphone_charger_type",
+                          "calendars": [
+                            "calendar.emma",
+                            "calendar.emma_google",
+                            "calendar.jours_feries"
+                          ]
+                        },
+                        {
+                          "id": "leo",
+                          "person": "person.leo",
+                          "steps_sensor": "sensor.leo_telephone_steps",
+                          "battery_sensor": "sensor.leo_telephone_battery_level",
+                          "charger_sensor": "sensor.leo_telephone_battery_state",
+                          "calendars": [
+                            "calendar.leo",
+                            "calendar.jours_feries"
+                          ]
+                        },
+                        {
+                          "id": "sarah",
+                          "person": "person.sarah",
+                          "steps_sensor": "sensor.sarah_telephone_daily_steps_2",
+                          "battery_sensor": "sensor.sarah_telephone_battery_level_2",
+                          "charger_sensor": "sensor.sarah_telephone_charger_type_2",
+                          "calendars": [
+                            "calendar.sarah",
+                            "calendar.jours_feries"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "consumption",
+                  "icon": "mdi:lightning-bolt",
+                  "label": "Consommation",
+                  "cards": [
+                    {
+                      "type": "title",
+                      "text": "Consommation instantanée"
+                    },
+                    {
+                      "type": "power_graph",
+                      "entity": "sensor.nous_d4z_power_a",
+                      "hours": 48,
+                      "height": 300,
+                      "fade_edges": true
+                    },
+                    {
+                      "type": "title",
+                      "text": "Consommation moyenne"
+                    },
+                    {
+                      "type": "mini_graph",
+                      "entity": "sensor.nous_d4z_power",
+                      "hours": 24,
+                      "color": "#8cf5ff",
+                      "show_name": "false",
+                      "height": 380,
+                      "fade_edges": true
+                    }
+                  ]
+                },
+                {
+                  "id": "music",
+                  "icon": "mdi:music",
+                  "label": "Musique",
+                  "cards": [
+                    {
+                      "type": "media_player",
+                      "entity": "media_player.kiosk_3",
+                      "name": "Kiosk"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cards": [
+            {
+              "type": "camera_detections",
+              "minutes": 20,
+              "aspect_ratio": "16/9.15",
+              "storage": {
+                "type": "ha_media",
+                "path": "media-source://media_source/enregistrements",
+                "url_prefix": "/local/media/Enregistrements"
+              },
+              "cameras": [
+                {
+                  "name": "Entrée",
+                  "match": "Argus 1",
+                  "mode": "prefix"
+                },
+                {
+                  "name": "Couloir",
+                  "match": "Argus 2",
+                  "mode": "prefix"
+                },
+                {
+                  "name": "Balcon",
+                  "match": "Argus 3",
+                  "mode": "prefix"
+                },
+                {
+                  "name": "Parking",
+                  "match": "Argus 4",
+                  "mode": "prefix"
+                }
+              ]
+            },
+            {
+              "type": "rule"
+            },
+            {
+              "type": "switcher",
+              "id": "cameras",
+              "nav": "pills",
+              "default": "outside-camera",
+              "pages": [
+                {
+                  "id": "inside-camera",
+                  "icon": "hue:home",
+                  "label": "Intérieur",
+                  "cards": [
+                    {
+                      "type": "camera",
+                      "entity": "camera.argus_1_fluent",
+                      "fullscreen_entity": "camera.argus_1_clair",
+                      "battery": "sensor.argus_1_batterie",
+                      "refresh": 60,
+                      "motion": [
+                        "binary_sensor.argus_1_mouvement",
+                        "binary_sensor.argus_1_humain"
+                      ],
+                      "live_seconds": 30,
+                      "motion_delay": 10
+                    },
+                    {
+                      "type": "camera",
+                      "entity": "camera.argus_2_fluent",
+                      "fullscreen_entity": "camera.argus_2_clair",
+                      "battery": "sensor.argus_2_batterie",
+                      "refresh": 60,
+                      "motion": [
+                        "binary_sensor.argus_2_mouvement",
+                        "binary_sensor.argus_2_humain"
+                      ],
+                      "live_seconds": 30,
+                      "motion_delay": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "outside-camera",
+                  "icon": "mdi:balcony",
+                  "label": "Extérieur",
+                  "cards": [
+                    {
+                      "type": "camera",
+                      "entity": "camera.argus_3_fluent",
+                      "fullscreen_entity": "camera.argus_3_clair",
+                      "battery": "sensor.argus_3_batterie",
+                      "refresh": 60,
+                      "motion": [
+                        "binary_sensor.argus_3_mouvement",
+                        "binary_sensor.argus_3_humain"
+                      ],
+                      "live_seconds": 30,
+                      "motion_delay": 10
+                    },
+                    {
+                      "type": "camera",
+                      "entity": "camera.argus_4_fluent",
+                      "fullscreen_entity": "camera.argus_4_clair",
+                      "battery": "sensor.argus_4_batterie",
+                      "refresh": 60,
+                      "motion": [
+                        "binary_sensor.argus_4_mouvement",
+                        "binary_sensor.argus_4_humain"
+                      ],
+                      "live_seconds": 30,
+                      "motion_delay": 10
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "fit": true
+        }
+      ]
+    }
+  }
+}

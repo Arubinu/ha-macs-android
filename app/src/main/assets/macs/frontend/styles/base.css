@@ -1,0 +1,215 @@
+html,body{
+	height:100%;
+	margin:0;
+	background:#000;
+	overflow:hidden;
+	font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+body{ 
+	touch-action:manipulation; 
+	opacity: var(--brightness-level);
+	transition: opacity var(--brightness-transition, 0s) linear;
+}
+
+.stage{
+	position:fixed;
+	inset:0;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	padding: 7vmin;
+	z-index:100;
+	transform: translate(var(--stage-look-x, 0px), var(--stage-look-y, 0px));
+	transition: transform 0.2s ease-out;
+}
+
+.char-tilt{
+	position:relative;
+	width: min(60vw, 620px);
+	max-width: 60vw;
+	aspect-ratio: 1 / 1;
+	transform: rotate(var(--wind-tilt, 0deg));
+	transform-origin: 50% 60%;
+	z-index: 2;
+}
+
+.char{
+	position:relative;
+	width: 100%;
+	height: 100%;
+	transform: translateZ(0);
+	animation: idleFloat var(--idle-float-duration, 9s) ease-in-out infinite;
+}
+
+.icicle, .scarf, .handkerchief{
+	display: none;
+}
+
+.brow{
+	fill: var(--brow-fill);
+	stroke: var(--brow-fill);
+	stroke-width: 10;
+	stroke-linecap:round;
+	filter: drop-shadow(0 0 8px var(--brow-glow));
+	transform-origin:center;
+}
+
+.scleraOuterGlow{
+	fill:var(--sclera-gradient-fill);
+	opacity:1;
+	filter:url(#eyeOuterGlow);
+}
+
+.irisOuterGlow{
+	fill:var(--iris-fill);
+	opacity:1;
+	filter:url(#irisOuterGlow);
+}
+
+.pupil{
+	fill: var(--pupil-fill);
+	filter: drop-shadow(0 0 8px var(--pupil-outer-glow));
+	transform-origin:center;
+}
+
+.mouth{
+	fill: var(--mouth-fill);
+	stroke: var(--mouth-fill);
+	stroke-width: 10px;
+	stroke-linecap:round;
+	filter: drop-shadow(0 0 10px var(--mouth-glow));
+}
+
+
+/* Chat area */
+#messages{
+	position: absolute;
+	left: 0; right: 0; bottom: 0;
+	padding: 14px;
+	box-sizing: border-box;
+
+	height: 180px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 600px;
+}
+
+#messages::before{
+	content:"";
+	position: absolute;
+	left: 0; right: 0; top: 0;
+	height: 40px;
+	pointer-events: none;
+	background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.2));
+}
+
+.assist-chat{ display: flex; flex-direction: column; }
+
+.assist-turn{
+	display: flex;
+	flex-direction: column;
+}
+
+.bubble{
+	max-width: 78%;
+	font-size: 14px;
+	word-wrap: break-word;
+	overflow-wrap: anywhere;
+	padding: 5px 0px;
+}
+
+.bubble.user{
+	align-self: flex-end;
+	color: #fff;
+}
+
+.bubble.system{
+	align-self: flex-start;
+	color: var(--pupil-inner-glow);
+}
+
+.bubble-meta{
+	font-size: 11px;
+	margin-top: 4px;
+}
+
+.bubble.user .bubble-meta{
+	text-align: right;
+	color:#999;
+}
+
+.bubble.system .bubble-meta{
+	color:var(--sclera-inner-glow);
+}
+
+#debug{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+	box-sizing: border-box;
+    font-size: 10px;
+	line-height: 12px;
+    color: #aaa;
+    display:none;
+	overflow-y: auto;
+	user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+	z-index:1000;
+	height:100%;
+	direction: rtl; /* move scrollbar to left */
+	scrollbar-width: thin;
+	scrollbar-color: #555 #1e1e1e;
+	--debug-line-height: 12px;
+	overflow-x: inherit;
+}
+/* prevent debug content rtl */
+#debug .debug-title, #debug .debug-subtitle, #debug .debug-log, #debug .debug-sleep-timer, #debug .debug-autoscroll {direction: ltr;text-align: left;}
+#debug .debug-title, #debug .debug-subtitle, #debug .debug-sleep-timer, #debug .debug-autoscroll {
+	position: sticky;
+	left: 0;
+	right: 0;
+	background: #000;
+	z-index: 2;
+	padding-left:6px;
+}
+#debug .debug-title { top: 0; padding-top:10px;}
+#debug .debug-subtitle { top: var(--debug-line-height); }
+#debug .debug-sleep-timer { top: calc(var(--debug-line-height) * 2); }
+#debug .debug-autoscroll { top: calc(var(--debug-line-height) * 3); }
+#debug .debug-autoscroll{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	padding-bottom: 10px;
+	border-bottom:1px solid #555;
+}
+#debug .debug-autoscroll input{ margin: 0 6px 0 0; }
+#debug .debug-log .debug-error,
+#debug .debug-log .error{
+	color:#ff6a6a;
+}
+
+#debug::-webkit-scrollbar{
+	width: 8px;
+}
+
+#debug::-webkit-scrollbar-track{
+	background: rgba(0, 0, 0, 0.35);
+}
+
+#debug::-webkit-scrollbar-thumb{
+	background: rgba(85, 85, 85, 0.9);
+	border-radius: 6px;
+}
+
+#debug::-webkit-scrollbar-thumb:hover{
+	background: rgba(120, 120, 120, 0.95);
+}

@@ -1,0 +1,12 @@
+services:
+  voice-gateway:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    environment:
+      HA_URL: http://homeassistant.local:8123
+      HA_TOKEN: ${HA_TOKEN}
+      LLM_URL: http://llama-server:8081
+      # MODE: primed        # primed (défaut) | audio
+      # ENTITY_SOURCE: auto # auto | assist | all

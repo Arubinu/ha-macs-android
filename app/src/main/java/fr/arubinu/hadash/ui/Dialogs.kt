@@ -1,0 +1,483 @@
+package fr.arubinu.hadash.ui
+
+import androidx.annotation.OptIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
+import fr.arubinu.hadash.R
+import fr.arubinu.hadash.config.b
+import fr.arubinu.hadash.config.i
+import fr.arubinu.hadash.config.d
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import fr.arubinu.hadash.config.o
+import fr.arubinu.hadash.config.objs
+import fr.arubinu.hadash.config.s
+import fr.arubinu.hadash.ha.cameraStreamUrl
+import fr.arubinu.hadash.ui.cards.RenderCard
+import fr.arubinu.hadash.ui.components.HaIcon
+import fr.arubinu.hadash.ui.components.tapHold
+import fr.arubinu.hadash.ui.theme.Dash
+import kotlinx.coroutines.delay
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import kotlin.math.roundToInt
+
+@Composable
+fun Overlays(dashboard: JsonObject) {
+    val state = LocalDashState.current
+    state.popup?.let { id -> dashboard.o("popups")?.o(id)?.let { PopupDialog(it) { state.popup = null } } }
+    state.moreInfo?.let { MoreInfoDialog(it) { state.moreInfo = null } }
+    state.player?.let { PlayerDialog(it) { state.player = null } }
+    state.pin?.let { req -> PinDialog(req) { state.pin = null } }
+    if (state.kioskMenu) KioskMenu { state.kioskMenu = false }
+    state.editTarget?.let { t ->
+        if (t is EditTarget.Card) fr.arubinu.hadash.ui.cards.alerts.AlertTickerEditor(t.key) { state.editTarget = null }
+        else BlockEditSheet(t) {
+            // Carte ouverte depuis un carrousel : on y revient, un instant après (le toucher qui ferme ne doit
+            // pas atteindre la fenêtre qui réapparaît).
+            val back = state.editStack.removeLastOrNull()
+            state.editTarget = null
+            if (back != null) android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ state.editTarget = back }, 200)
+        }
+    }
+}
+
+/** Bandeau du mode édition, en haut au centre. */
+@Composable
+fun EditBanner(onDone: () -> Unit) {
+    val shape = RoundedCornerShape(24.dp)
+    Row(
+        Modifier
+            .clip(shape)
+            .background(Color(0xF0202024), shape)
+            .border(1.dp, Dash.colors.accent.copy(alpha = 0.6f), shape)
+            .padding(start = 20.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        HaIcon("mdi:pencil", size = 18.dp, tint = Dash.colors.accent)
+        Text(
+            stringResource(R.string.edit_banner), Modifier.padding(start = 10.dp, end = 16.dp),
+            style = TextStyle(fontSize = 14.sp, color = Color.White),
+        )
+        Box(
+            Modifier.clip(RoundedCornerShape(18.dp)).background(Dash.colors.accent).tapHold(onDone)
+                .heightIn(min = 36.dp).padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center,
+        ) { Text(stringResource(R.string.edit_done), style = TextStyle(fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Medium)) }
+    }
+}
+
+/** Réglages propres à un bloc (mode édition). Les réglages globaux restent dans la page Réglages. */
+@Composable
+private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
+    val app = fr.arubinu.hadash.App.instance
+    val raw by app.config.rawBlocks.collectAsState()
+    val source by app.config.sourceDashboard.collectAsState()
+    // Clés d'enregistrement fixées à l'ouverture : l'entité d'origine du bloc, même si elle a été remplacée.
+    val objKey = remember(target) { app.config.resolveKey((target as? EditTarget.Graph)?.entity ?: target.key) }
+    val optionKey = remember(target) { app.config.resolveKey((target as? EditTarget.Member)?.selector ?: target.key) }
+    val graphType = (target as? EditTarget.Graph)?.key?.split(':')?.getOrNull(1)
+    // Entité affichée en titre : celle actuellement utilisée (personne pour un membre).
+    val set = raw[objKey]?.get("set") as? JsonObject
+    val titleField = if (target is EditTarget.Member) "person" else "entity"
+    val original = remember(source, objKey, graphType) { fr.arubinu.hadash.config.BlockOverrides.find(source, objKey, graphType) }
+    // Graphique multi-courbes : la carte (et son nom) contient l'entité dans sa liste entities.
+    // Graphique multi-courbes : carte propre (clé mgc:…), titre = nom affiché (éventuellement modifié).
+    val multiGraph = original != null && original["entities"] != null
+    val graphTitle = if (multiGraph) set?.s("name") ?: original?.s("name") else null
+    val entityId = set?.s(titleField) ?: original?.s(titleField) ?: objKey
+    val e = entity(entityId)
+    val options = raw[optionKey]
+    // Valeurs par défaut lues dans la config, pour afficher l'état réel avant toute surcharge.
+    val configProtected = remember(source, optionKey) { configHasPin(source, optionKey) }
+    val configAlwaysLive = remember(source, optionKey) { configFlag(source, optionKey, "always_live") }
+
+    Sheet(onDismiss, 0.42f) {
+        Box(
+            Modifier.align(Alignment.TopEnd).offset(x = 10.dp, y = (-11).dp).size(48.dp).clip(CircleShape).tapHold(onDismiss),
+            contentAlignment = Alignment.Center,
+        ) { HaIcon("mdi:close", size = 26.dp, tint = Color(255, 255, 255, 200)) }
+        // En-tête fixe (titre, croix) ; seul le contenu défile, sans passer sous la croix.
+        Column {
+            // Bloc Windy : titre « Windy », sans adresse ; page web générique : son domaine en sous-titre.
+            val windy = target is EditTarget.Web && original?.s("type") == "windy"
+            val carousel = target is EditTarget.Swipe
+            // Onglet de caméras : titre = son nom.
+            val tabLabel = (target as? EditTarget.Tab)?.let { t ->
+                ((original?.get("pages") as? kotlinx.serialization.json.JsonArray)?.getOrNull(t.index) as? JsonObject)?.s("label")
+            }
+            // Pièce d'une grille : titre = son nom.
+            val roomName = (target as? EditTarget.Room)?.let { r ->
+                ((original?.get("rooms") as? kotlinx.serialization.json.JsonArray)?.getOrNull(r.index) as? JsonObject)?.s("name") ?: ""
+            }
+            val webHost = (target as? EditTarget.Web)?.let { android.net.Uri.parse(original?.s("url") ?: "").host }
+            Text(
+                when { target is EditTarget.Pages -> stringResource(R.string.pages_title); target is EditTarget.Macs -> "M.A.C.S."; target is EditTarget.Detections -> stringResource(R.string.det_title); target is EditTarget.DetectionCamera -> detectionCameraTitle(target.key, target.index); target is EditTarget.Device -> deviceTitle(target.key, target.room, target.index) ?: ""; roomName != null -> roomName; target is EditTarget.Tabs -> stringResource(R.string.tabs_title); target is EditTarget.Tab -> tabLabel ?: ""; carousel -> stringResource(R.string.swipe_title); windy -> stringResource(R.string.windy_title); target is EditTarget.Web -> stringResource(R.string.web_title); else -> graphTitle ?: e?.name ?: entityId },
+                Modifier.padding(end = 48.dp), style = TextStyle(fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Medium),
+            )
+            if (!windy && !multiGraph && !carousel && roomName == null && target !is EditTarget.Pages && target !is EditTarget.Macs && target !is EditTarget.Detections && target !is EditTarget.DetectionCamera && target !is EditTarget.Tabs && target !is EditTarget.Tab && target !is EditTarget.Device) Text(webHost ?: entityId, style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 140), fontStyle = androidx.compose.ui.text.font.FontStyle.Italic))
+            androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            if (target is EditTarget.Entity || target is EditTarget.Camera || target is EditTarget.Member) {
+                EditSwitch(
+                    stringResource(R.string.edit_protect), stringResource(R.string.edit_protect_help),
+                    options?.b("protected") ?: configProtected,
+                ) { app.config.setBlockOption(optionKey, "protected", it.takeIf { v -> v != configProtected }) }
+            }
+            if (target is EditTarget.Graph) {
+                val current = (options?.get("height") as? JsonPrimitive)?.content?.toDoubleOrNull()?.toFloat() ?: target.defaultHeight.toFloat()
+                var value by remember(target.key, current) { mutableFloatStateOf(current) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.graph_height), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+                        Text(stringResource(R.string.graph_height_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+                    }
+                    Text("${value.toInt()} dp", style = TextStyle(fontSize = 15.sp, color = Dash.colors.accent, fontWeight = FontWeight.SemiBold))
+                }
+                Slider(
+                    value = value, onValueChange = { value = (it / 5f).roundToInt() * 5f }, valueRange = 100f..600f,
+                    onValueChangeFinished = {
+                        // Valeur égale à celle de dashboard.json : la surcharge est retirée.
+                        app.config.setBlockValue(optionKey, "height", value.toInt().takeIf { it != target.defaultHeight }?.let { JsonPrimitive(it) })
+                    },
+                    colors = SliderDefaults.colors(thumbColor = Dash.colors.accent, activeTrackColor = Dash.colors.accent),
+                )
+            }
+            if (target is EditTarget.Camera) {
+                EditSwitch(
+                    stringResource(R.string.edit_always_live), stringResource(R.string.edit_always_live_help),
+                    options?.b("always_live") ?: configAlwaysLive,
+                ) { app.config.setBlockOption(optionKey, "always_live", it.takeIf { v -> v != configAlwaysLive }) }
+            }
+            when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> EntityFields(objKey, graphType) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EditSwitch(title: String, help: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).tapHold({ onChange(!checked) }).heightIn(min = 64.dp).padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f).padding(end = 16.dp)) {
+            Text(title, style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+            Text(help, style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+        }
+        Switch(checked, onChange, colors = androidx.compose.material3.SwitchDefaults.colors(checkedTrackColor = Dash.colors.accent, checkedThumbColor = Color.Black))
+    }
+}
+
+/** La config protège-t-elle déjà ce bloc (`"pin"` sur un bouton ou son action) ? */
+private fun configHasPin(root: kotlinx.serialization.json.JsonElement, entity: String): Boolean = when (root) {
+    is JsonObject -> (root.s("entity") == entity && (root["pin"] != null || root.o("tap_action")?.get("pin") != null)) ||
+        root.values.any { configHasPin(it, entity) }
+    is kotlinx.serialization.json.JsonArray -> root.any { configHasPin(it, entity) }
+    else -> false
+}
+
+private fun configFlag(root: kotlinx.serialization.json.JsonElement, entity: String, flag: String): Boolean = when (root) {
+    is JsonObject -> (root.s("entity") == entity && root.b(flag)) || root.values.any { configFlag(it, entity, flag) }
+    is kotlinx.serialization.json.JsonArray -> root.any { configFlag(it, entity, flag) }
+    else -> false
+}
+
+@Composable
+private fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        val shape = RoundedCornerShape(20.dp)
+        Box(
+            Modifier.fillMaxWidth(widthFraction).clip(shape).background(Color(0xF2222222), shape).padding(20.dp)
+        ) { content() }
+    }
+}
+
+/**
+ * Menu du kiosque, après le code : réglages, sortie temporaire, paramètres Android, redémarrage et
+ * extinction (ces deux derniers seulement si l'app est propriétaire de l'appareil).
+ */
+@Composable
+private fun KioskMenu(onDismiss: () -> Unit) {
+    val state = LocalDashState.current
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val activity = ctx as? android.app.Activity ?: return
+    val kiosk = fr.arubinu.hadash.kiosk.Kiosk
+    val owner = remember { kiosk.isDeviceOwner(ctx) }
+    var info by remember { mutableStateOf<String?>(null) }
+    val powerHelp = stringResource(R.string.kiosk_menu_power_help)
+    Sheet(onDismiss, 0.4f) {
+        Box(
+            Modifier.align(Alignment.TopEnd).offset(x = 10.dp, y = (-11).dp).size(48.dp).clip(CircleShape).tapHold(onDismiss),
+            contentAlignment = Alignment.Center,
+        ) { HaIcon("mdi:close", size = 26.dp, tint = Color(255, 255, 255, 200)) }
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.kiosk_title), Modifier.padding(bottom = 8.dp), style = TextStyle(fontSize = 20.sp, color = Color.White))
+            KioskItem("mdi:cog-outline", stringResource(R.string.kiosk_menu_settings), null) {
+                onDismiss(); state.showSettings = true
+            }
+            KioskItem("mdi:lock-open-variant-outline", stringResource(R.string.kiosk_menu_exit), stringResource(R.string.kiosk_menu_exit_help)) {
+                onDismiss(); kiosk.suspend(activity)
+            }
+            KioskItem("mdi:android", stringResource(R.string.kiosk_menu_android), null) {
+                onDismiss(); kiosk.suspend(activity, android.content.Intent(android.provider.Settings.ACTION_SETTINGS))
+            }
+            if (owner) {
+                KioskItem("mdi:restart", stringResource(R.string.kiosk_menu_reboot), null) { kiosk.reboot(ctx) }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    KioskItem("mdi:power", stringResource(R.string.kiosk_menu_power), info) {
+                        if (kiosk.allowPowerMenu(ctx)) info = powerHelp
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun KioskItem(icon: String, title: String, help: String?, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(14.dp)
+    Row(
+        Modifier.fillMaxWidth().clip(shape).background(Color(255, 255, 255, 13), shape).tapHold(onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        HaIcon(icon, size = 24.dp, tint = Dash.colors.accent)
+        Column(Modifier.padding(start = 14.dp)) {
+            Text(title, style = TextStyle(fontSize = 16.sp, color = Color.White))
+            help?.let { Text(it, Modifier.padding(top = 2.dp), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150))) }
+        }
+    }
+}
+
+/** Popup (bubble-card) : liste de cartes, fermeture automatique configurable. */
+@Composable
+private fun PopupDialog(popup: JsonObject, onDismiss: () -> Unit) {
+    val autoClose = popup.i("auto_close_ms", 60_000)
+    val state = LocalDashState.current
+    LaunchedEffect(state.lastInteraction) {
+        delay(autoClose.toLong())
+        onDismiss()
+    }
+    // Taille adaptée à l'écran : toute la hauteur moins une marge, largeur déduite des proportions du
+    // contenu (`content_aspect` = largeur / hauteur, 0,8 pour la télécommande).
+    val conf = androidx.compose.ui.platform.LocalConfiguration.current
+    val margin = popup.d("margin", 24.0).dp
+    val padding = 20.dp
+    val header = 42.dp
+    val contentHeight = conf.screenHeightDp.dp - margin * 2 - padding * 2 - header
+    val width = minOf(contentHeight * popup.d("content_aspect", 0.8).toFloat() + padding * 2, conf.screenWidthDp.dp * 0.9f)
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        val shape = RoundedCornerShape(20.dp)
+        Column(
+            Modifier.width(width).clip(shape).background(Color(0xF2222222), shape).padding(padding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Row(Modifier.height(header - 16.dp), verticalAlignment = Alignment.CenterVertically) {
+                HaIcon(popup.s("icon"), size = 26.dp)
+                Text(popup.s("name") ?: "", Modifier.padding(start = 12.dp).weight(1f), style = TextStyle(fontSize = 20.sp, color = Color.White))
+                HaIcon("mdi:close", Modifier.tapHold(onDismiss), 26.dp)
+            }
+            popup.objs("cards").forEach { RenderCard(it) }
+        }
+    }
+}
+
+/** Détail minimal : état, bascule, luminosité pour les lumières. */
+@Composable
+private fun MoreInfoDialog(entityId: String, onDismiss: () -> Unit) {
+    val state = LocalDashState.current
+    val e = entity(entityId)
+    val switchable = e != null && e.domain in setOf("light", "switch", "fan", "input_boolean", "media_player", "cover")
+    Sheet(onDismiss, 0.4f) {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            // L'interrupteur suffit à indiquer l'état : pas de « on/off » en double.
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(e?.name ?: entityId, Modifier.weight(1f), style = TextStyle(fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Medium))
+                if (switchable) {
+                    Switch(
+                        checked = e!!.isActive, onCheckedChange = { state.ha.toggle(entityId) },
+                        colors = androidx.compose.material3.SwitchDefaults.colors(checkedTrackColor = Dash.colors.accent, checkedThumbColor = Color.Black),
+                    )
+                }
+                Box(
+                    Modifier.padding(start = 8.dp).size(48.dp).clip(CircleShape).tapHold(onDismiss),
+                    contentAlignment = Alignment.Center,
+                ) { HaIcon("mdi:close", size = 26.dp) }
+            }
+            if (!switchable) Text(e?.state ?: "—", style = TextStyle(fontSize = 15.sp, color = Color(255, 255, 255, 170)))
+            if (e?.domain == "light" && e.isActive && e.attrList("supported_color_modes").any { it != "onoff" }) {
+                var value by remember(entityId) { mutableFloatStateOf(((e.attrDouble("brightness") ?: 255.0) / 255.0 * 100).toFloat()) }
+                // Même présentation que les curseurs des Réglages : libellé à gauche, valeur à droite.
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.moreinfo_brightness_label), Modifier.weight(1f),
+                        style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium),
+                    )
+                    Text("${value.toInt()} %", style = TextStyle(fontSize = 15.sp, color = Dash.colors.accent, fontWeight = FontWeight.SemiBold))
+                }
+                Slider(
+                    value = value, onValueChange = { value = it }, valueRange = 1f..100f,
+                    onValueChangeFinished = {
+                        // Pas de nouveau code ici : l'ouverture du détail (perform) l'a déjà demandé si besoin.
+                        state.ha.fireService("light", "turn_on",
+                            data = buildJsonObject { put("brightness_pct", JsonPrimitive(value.toInt())) },
+                            target = buildJsonObject { put("entity_id", JsonPrimitive(entityId)) })
+                    },
+                    colors = SliderDefaults.colors(thumbColor = Dash.colors.accent, activeTrackColor = Dash.colors.accent),
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Lecteur plein écran avec le son : enregistrement mp4, flux RTSP/HLS direct (`live_url`, go2rtc…)
+ * ou flux HLS d'une caméra Home Assistant ("camera.xxx").
+ */
+@OptIn(UnstableApi::class)
+@Composable
+private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
+    val state = LocalDashState.current
+    val ctx = LocalContext.current
+    var url by remember(target) { mutableStateOf<String?>(if (target.startsWith("camera.")) null else target) }
+    var error by remember(target) { mutableStateOf<String?>(null) }
+    LaunchedEffect(target) {
+        if (target.startsWith("camera.")) {
+            runCatching { url = state.ha.cameraStreamUrl(target) }.onFailure { error = it.message }
+        }
+    }
+    val player = remember { ExoPlayer.Builder(ctx).build() }
+    val fill = fr.arubinu.hadash.App.instance.config.settings.collectAsState().value.fullscreenFill
+    DisposableEffect(Unit) { onDispose { player.release() } }
+    LaunchedEffect(url) {
+        url?.let {
+            player.setMediaItem(MediaItem.fromUri(it))
+            player.prepare()
+            player.playWhenReady = true
+        }
+    }
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+        // Le lecteur est une fenêtre à part : on y masque aussi les barres système (vrai plein écran).
+        val view = androidx.compose.ui.platform.LocalView.current
+        DisposableEffect(view) {
+            (view.parent as? androidx.compose.ui.window.DialogWindowProvider)?.window?.let { w ->
+                w.setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT)
+                androidx.core.view.WindowInsetsControllerCompat(w, w.decorView).apply {
+                    hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+                    systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            }
+            onDispose { }
+        }
+        Box(Modifier.fillMaxSize().background(Color.Black).tapHold(onDismiss), contentAlignment = Alignment.Center) {
+            error?.let { Text(stringResource(R.string.stream_unavailable, it), color = Color.White) }
+            AndroidView(
+                factory = { PlayerView(it).apply { this.player = player; useController = false } },
+                // « Remplir » : l'image couvre tout l'écran, ce qui dépasse est rogné (aucune bande noire).
+                // Sinon : l'image entière est affichée, avec des bandes si les proportions diffèrent.
+                update = {
+                    it.resizeMode = if (fill) androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                    else androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
+                },
+                modifier = Modifier.fillMaxSize(),
+            )
+            HaIcon("mdi:close", Modifier.align(Alignment.TopEnd).padding(24.dp).tapHold(onDismiss), 32.dp)
+        }
+    }
+}
+
+/** Clavier de code (restriction-card / alarme). */
+@Composable
+private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
+    var code by remember { mutableStateOf("") }
+    var wrong by remember { mutableStateOf(false) }
+    Sheet(onDismiss, 0.32f) {
+        // Croix de fermeture (48dp de zone tactile).
+        Box(
+            Modifier.align(Alignment.TopEnd).offset(x = 10.dp, y = (-11).dp).size(48.dp).clip(CircleShape).tapHold(onDismiss),
+            contentAlignment = Alignment.Center,
+        ) { HaIcon("mdi:close", size = 26.dp, tint = Color(255, 255, 255, 200)) }
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                req.title ?: stringResource(R.string.pin_default_title),
+                Modifier.padding(top = 12.dp),
+                style = TextStyle(fontSize = 18.sp, color = Color.White),
+            )
+            Text(
+                if (wrong) stringResource(R.string.pin_wrong) else "•".repeat(code.length).ifEmpty { " " },
+                style = TextStyle(fontSize = 26.sp, color = if (wrong) Color(0xFFFF5252) else Color.White, letterSpacing = 6.sp),
+            )
+            val keys = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫", "0", "✓")
+            keys.chunked(3).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    row.forEach { k ->
+                        Box(
+                            Modifier.size(64.dp).border(1.dp, Color(255, 255, 255, 60), CircleShape).clip(CircleShape)
+                                .background(if (k == "✓") Dash.colors.firstButtonBackground else Color(255, 255, 255, 13))
+                                .tapHold({
+                                    wrong = false
+                                    when (k) {
+                                        "⌫" -> code = code.dropLast(1)
+                                        "✓" -> if (req.expected == null || req.expected == code) {
+                                            onDismiss(); req.onOk(code)
+                                        } else {
+                                            wrong = true; code = ""
+                                        }
+                                        else -> if (code.length < 8) code += k
+                                    }
+                                }),
+                            contentAlignment = Alignment.Center,
+                        ) { Text(k, style = TextStyle(fontSize = 24.sp, color = Color.White)) }
+                    }
+                }
+            }
+        }
+    }
+}

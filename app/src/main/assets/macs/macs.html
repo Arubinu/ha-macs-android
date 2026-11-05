@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<link rel="icon" type="image/x-icon" href="frontend/images/favicon.png">
+	<title>M.A.C.S.</title>
+	<script>
+		(function () {
+			const params = new URLSearchParams(window.location.search || "");
+			const version = params.get("v");
+			const debug = params.get("debug");
+			if (version) {
+				window.__MACS_VERSION__ = version;
+			}
+			if (debug !== null) {
+				window.__MACS_DEBUG__ = debug;
+			}
+			window.__MACS_WITH_VERSION__ = (path) => {
+				if (!version) return path;
+				const sep = path.indexOf("?") === -1 ? "?" : "&";
+				return `${path}${sep}v=${encodeURIComponent(version)}`;
+			};
+			const addStyle = (href) => {
+				const link = document.createElement("link");
+				link.rel = "stylesheet";
+				link.href = window.__MACS_WITH_VERSION__(href);
+				document.head.appendChild(link);
+			};
+
+			addStyle("frontend/styles/themes/default.css");
+			addStyle("frontend/styles/base.css");
+			addStyle("frontend/styles/moods.css");
+			addStyle("frontend/styles/weather.css");
+		})();
+	</script>
+</head>
+
+<body class="mood-idle weather-none">
+	<div class="stage">
+		<div class="char-tilt">
+			<div class="char" id="char">
+			<!-- Face -->
+			<svg viewBox="0 0 600 600" width="100%" height="100%" id="face">
+				<defs>
+					<!-- EYE  BEZEL -->
+						<!-- Layer 1: dark bezel gradient -->
+						<linearGradient id="bezelDark" x1="0%" y1="0%" x2="0%" y2="100%">
+							<stop offset="40%" stop-color="#323941"/>
+							<stop offset="60%" stop-color="#111213"/>
+							<stop offset="80%" stop-color="#323941"/>
+						</linearGradient>
+
+						<!-- Layer 2: metallic highlight gradient -->
+						<linearGradient id="bezelMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+							<stop offset="30%" stop-color="#78838e"/>
+							<stop offset="50%" stop-color="#d6dbe0"/>
+							<stop offset="60%" stop-color="#d6dbe0"/>
+							<stop offset="80%" stop-color="#78838e"/>
+						</linearGradient>
+
+						<linearGradient id="bezelMetalHot" x1="0%" y1="0%" x2="0%" y2="100%">
+							<stop offset="0%" stop-color="#78838e"/>
+							<stop offset="30%" stop-color="#4160e2"/>
+							<stop offset="40%" stop-color="#823574"/>
+							<stop offset="50%" stop-color="#eb5937"/>
+							<stop offset="60%" stop-color="#ffdec4"/>							
+							<stop offset="70%" stop-color="#6085f9"/>
+							<stop offset="80%" stop-color="#0030b9"/>
+							<stop offset="90%" stop-color="#191325"/>
+							<stop offset="100%" stop-color="#78838e"/>
+						</linearGradient>
+
+					<!-- SCLERA -->
+						<!-- Sclera gradient fill -->
+						<radialGradient id="scleraFill" cx="50%" cy="90%" r="78%">
+							<stop offset="0%"  stop-color="var(--sclera-gradient-highlight)"/>
+							<stop offset="30%" stop-color="var(--sclera-gradient-fill)"/>
+							<stop offset="50%" stop-color="var(--sclera-gradient-fill)"/>
+							<stop offset="100%" stop-color="var(--sclera-gradient-shadow)"/>
+						</radialGradient>
+
+						<!-- ScleraInner glow -->
+						<radialGradient id="scleraInnerGlow" cx="50%" cy="50%" r="55%">
+							<stop offset="80%" stop-color="var(--sclera-inner-glow)" stop-opacity="0"/>
+							<stop offset="100%" stop-color="var(--sclera-inner-glow)" stop-opacity="1"/>
+						</radialGradient>
+
+						<!-- ScleraOuter glow filter -->
+						<filter id="scleraOuterGlow" x="-120%" y="-120%" width="340%" height="340%">
+							<feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur"/>
+							<feFlood flood-color="var(--sclera-outer-glow)" flood-opacity="0.4" result="col"/>
+							<feComposite in="col" in2="blur" operator="in" result="glow"/>
+							<feMerge>
+							<feMergeNode in="glow"/>
+							<feMergeNode in="SourceGraphic"/>
+							</feMerge>
+						</filter>
+					
+					<!-- IRIS -->
+						<!-- Inner glow -->
+						<radialGradient id="irisInnerGlow" cx="50%" cy="50%" r="50%">
+							<stop offset="80%" stop-color="var(--iris-inner-glow)" stop-opacity="0"/>
+							<stop offset="100%" stop-color="var(--iris-inner-glow)" stop-opacity="0.3"/>
+						</radialGradient>
+
+						<!-- Outer glow filter -->
+						<filter id="irisOuterGlow" x="-120%" y="-120%" width="340%" height="340%">
+							<feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+							<feFlood flood-color="var(--iris-outer-glow)" flood-opacity="0.25" result="col"/>
+							<feComposite in="col" in2="blur" operator="in" result="glow"/>
+							<feMerge>
+							<feMergeNode in="glow"/>
+							<feMergeNode in="SourceGraphic"/>
+							</feMerge>
+						</filter>
+					
+					
+					<!-- Pupil -->
+						<!-- Inner glow-->
+						<radialGradient id="pupilInnerGlow" cx="50%" cy="50%" r="50%">
+							<stop offset="80%" stop-color="var(--pupil-inner-glow)" stop-opacity="0"/>
+							<stop offset="100%" stop-color="var(--pupil-inner-glow)" stop-opacity="0.5"/>
+						</radialGradient>
+
+						<!-- Outer glow filter -->
+						<filter id="pupilOuterGlow" x="-120%" y="-120%" width="340%" height="340%">
+							<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
+							<feFlood flood-color="var(--pupil-outer-glow)" flood-opacity="0.1" result="col"/>
+							<feComposite in="col" in2="blur" operator="in" result="glow"/>
+							<feMerge>
+							<feMergeNode in="glow"/>
+							<feMergeNode in="SourceGraphic"/>
+							</feMerge>
+						</filter>
+					<!-- Charging masks -->
+						<mask id="chargeMaskLeft" maskUnits="userSpaceOnUse">
+							<rect class="charge-mask charge-mask-left" x="120" y="180" width="160" height="160" fill="#ffffff"/>
+						</mask>
+						<mask id="chargeMaskRight" maskUnits="userSpaceOnUse">
+							<rect class="charge-mask charge-mask-right" x="320" y="180" width="160" height="160" fill="#ffffff"/>
+						</mask>
+				</defs>
+			
+				<!-- === LEFT EYE === -->
+					<g id="leftEye" transform="translate(-10 0)">
+					<!-- Icicles -->
+						<image class="icicle icicle-left" href="frontend/images/weather/icicles/icicles-l.png" x="95" y="330" width="170" height="120" preserveAspectRatio="xMidYMin meet"/>
+					<!-- Eye Bezel -->
+						<g id="eyeBezelL">
+							<rect x="80" y="170" width="200" height="180" rx="80" fill="url(#bezelDark)"/>
+							<rect x="85" y="170" width="200" height="180" rx="80" fill="url(#bezelMetal)"/>
+							<rect x="94" y="173" width="190" height="174" rx="80" fill="#000000"/>
+						</g>
+					<!-- Eye Ball -->
+						<g class="eyeball blink">
+							<!-- Sclera (White part) -->
+							<g class="sclera">
+								<circle cx="200" cy="260" r="71" fill="var(--sclera-outer-glow)" filter="url(#scleraOuterGlow)"/>
+								<circle cx="200" cy="260" r="70" fill="url(#scleraFill)"/>
+								<circle cx="200" cy="260" r="70" fill="url(#scleraInnerGlow)"/>
+							</g>
+						<!-- Iris -->
+							<g class="iris">
+								<circle cx="200" cy="260" r="38" fill="var(--iris-outer-glow)" filter="url(#irisOuterGlow)"/>
+								<circle cx="200" cy="260" r="40" fill="var(--iris-fill)"/>
+								<circle cx="200" cy="260" r="40" fill="url(#irisInnerGlow)"/>
+							<!-- Pupil -->
+								<g class="pupil">
+									<circle cx="218" cy="242" r="10" fill="var(--pupil-outer-glow)" filter="url(#pupilOuterGlow)"/>
+									<circle cx="218" cy="242" r="10" fill="var(--pupil-fill)"/>
+									<circle cx="218" cy="242" r="10" fill="url(#pupilInnerGlow)"/>
+								</g>
+							</g><!-- Iris -->
+						</g><!-- Eye Ball -->
+					</g><!-- === LEFT EYE === -->
+
+				<!-- === RIGHT EYE === -->
+					<g id="rightEye" transform="translate(10 0)">
+					<!-- Icicles -->
+						<image class="icicle icicle-right" href="frontend/images/weather/icicles/icicles-r.png" x="335" y="320" width="170" height="120" preserveAspectRatio="xMidYMin meet"/>
+					<!-- Eye Bezel -->
+						<g id="eyeBezelR">
+							<rect x="320" y="170" width="200" height="180" rx="80" fill="url(#bezelDark)"/>
+							<rect x="315" y="170" width="200" height="180" rx="80" fill="url(#bezelMetal)"/>
+							<rect x="317" y="173" width="190" height="174" rx="80" fill="#000000"/>
+						</g>
+					<!-- Eye Ball -->
+						<g class="eyeball blink">
+							<g class="sclera">
+								<circle cx="400" cy="260" r="71" fill="var(--sclera-outer-glow)" filter="url(#scleraOuterGlow)"/>
+								<circle cx="400" cy="260" r="70" fill="url(#scleraFill)"/>
+								<circle cx="400" cy="260" r="70" fill="url(#scleraInnerGlow)"/>
+							</g>
+						<!-- Iris -->
+							<g class="iris">
+								<circle cx="400" cy="260" r="38" fill="var(--iris-outer-glow)" filter="url(#irisOuterGlow)"/>
+								<circle cx="400" cy="260" r="40" fill="var(--iris-fill)"/>
+								<circle cx="400" cy="260" r="40" fill="url(#irisInnerGlow)"/>
+							<!-- Pupil -->
+								<g class="pupil">
+									<circle cx="418" cy="242" r="10" fill="var(--pupil-outer-glow)" filter="url(#pupilOuterGlow)"/>
+									<circle cx="418" cy="242" r="10" fill="var(--pupil-fill)"/>
+									<circle cx="418" cy="242" r="10" fill="url(#pupilInnerGlow)"/>
+								</g>
+							</g><!-- Iris -->
+						</g><!-- Eye Ball -->
+					</g><!-- === LEFT EYE === -->
+				
+				<!-- Scarf -->
+					<image class="handkerchief" href="frontend/images/weather/handkerchief.png" x="0" y="0" width="600" height="300" preserveAspectRatio="xMidYMin meet"/>
+			
+				<!-- EYEBROWS -->
+				 	<g id="brows">
+						<path class="brow browL" d="M 100 110 Q 150 100 200 110"/>
+						<path class="brow browR" d="M 400 110 Q 450 100 500 110"/>
+					</g>
+
+
+				<!-- Mouth -->
+					<g id="mouth">
+						<path class="mouth" id="mouth-bored" d="M245 370 Q300 370 355 362"/>
+						<path class="mouth" id="mouth-confused" d="M240 410 Q270 395 300 410 T360 410"/>
+						<path class="mouth" id="mouth-happy" d="M250 370 A70 80 0 0 0 350 370 A60 20 0 0 1 250 370 Z"/>
+						<path class="mouth" id="mouth-idle" d="M240 400 Q300 410 360 400"/>
+						<path class="mouth" id="mouth-listening" d="M270 400 Q280 410 330 400"/>
+						<path class="mouth" id="mouth-sad" d="M245 370 Q300 360 355 370"/>
+						<path class="mouth" id="mouth-sleeping" d="M255 350 Q300 356 345 350"/>
+						<circle class="mouth" id="mouth-surprised" cx="300" cy="360" r="20"/>
+						<path class="mouth" id="mouth-thinking" d="M270 370 Q 330 380 360 360"></path>
+					</g>
+
+				<!-- Scarf -->
+					<image class="scarf" href="frontend/images/weather/scarf.png" x="0" y="320" width="600" height="300" preserveAspectRatio="xMidYMin meet"/>
+
+			</svg><!-- Face -->
+
+
+
+			</div> <!-- char -->
+		</div> <!-- char-tilt -->
+
+		<!-- FX layers -->
+		<svg class="fx fx-rain" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+			<g id="rain-drops"></g>
+		</svg>
+
+		<svg class="fx fx-snow" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+			<defs>
+				<radialGradient id="snowFlakeGradient" cx="50%" cy="50%" r="50%">
+					<stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+					<stop offset="70%" stop-color="#ffffff" stop-opacity="0.6"/>
+					<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+				</radialGradient>
+			</defs>
+			<g id="snow-flakes"></g>
+		</svg>
+
+		<div class="fx fx-leaves">
+			<div id="leaf-layer"></div>
+		</div>
+
+		<svg class="fx fx-wind" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+			<line class="streak" x1="60" y1="260" x2="260" y2="220"/>
+			<line class="streak s2" x1="120" y1="420" x2="360" y2="380"/>
+			<line class="streak" x1="80" y1="620" x2="340" y2="580"/>
+			<line class="streak s2" x1="220" y1="760" x2="520" y2="720"/>
+		</svg>
+	</div> <!-- stage -->
+
+	<div id="messages">Error - Unable to connect</div>
+	<div id="debug"></div>
+	<script>
+		(function () {
+			const withVersion = window.__MACS_WITH_VERSION__ || ((path) => path);
+			const addScript = (src) => {
+				const script = document.createElement("script");
+				script.type = "module";
+				script.src = withVersion(src);
+				document.head.appendChild(script);
+			};
+
+			addScript("frontend/scripts/MacsFrontend.js");
+		})();
+	</script>
+</body>
+</html>

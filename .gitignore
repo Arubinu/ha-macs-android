@@ -1,0 +1,21 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+__pycache__/
+.venv/
+
+# Secrets et sauvegardes (token, code d'acces)
+*.keystore
+*.jks
+.env
+ha-dashboard-*.json
+
+# Outils
+node_modules/
+
+# Configuration et ressources personnelles (non publiees)
+private/

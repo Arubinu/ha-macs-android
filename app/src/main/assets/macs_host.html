@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: transparent; overflow: hidden; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; background: transparent; }
+</style>
+</head>
+<body>
+<!-- Hôte du personnage M.A.C.S. : remplace la partie « backend » de macs-card.
+     Le natif envoie les états via window.macsPost(...) et reçoit les messages via Android.onMessage. -->
+<iframe id="macs" allow="autoplay"></iframe>
+<script>
+  const frame = document.getElementById('macs');
+  const origin = location.origin;
+  let ready = false, loaded = false, queue = [];
+
+  function flush() {
+    if (!ready || !loaded) return;
+    const q = queue; queue = [];
+    q.forEach(m => frame.contentWindow.postMessage(m, origin));
+  }
+
+  let currentSrc = '', watchdog = null;
+
+  // Rechargement automatique : réseau pas encore prêt au démarrage, Wi-Fi qui se reconnecte…
+  function retryLater(delay) {
+    clearTimeout(watchdog);
+    watchdog = setTimeout(() => { if (!ready) window.macsLoad(currentSrc); }, delay);
+  }
+
+  window.macsLoad = function (src) {
+    currentSrc = src;
+    ready = false; loaded = false;
+    frame.onload = () => {
+      let ok = false;
+      try { ok = !!frame.contentDocument; } catch (_) {}
+      if (!ok) { retryLater(3000); return; }   // page d'erreur (inaccessible)
+      // Fond transparent : M.A.C.S. peut déborder de sa carte par-dessus les éléments voisins.
+      const style = frame.contentDocument.createElement('style');
+      style.textContent = 'html, body { background: transparent !important; }';
+      frame.contentDocument.head.appendChild(style);
+      raw = {};          // nouveau document : aucune variable écrite pour l'instant
+      applyTheme();
+      loaded = true; Android.onLoaded(); flush();
+    };
+    frame.src = src;
+    retryLater(15000);                         // pas de macs:ready dans les temps
+  };
+
+  // Couleurs du personnage, dérivées de la couleur principale des Réglages : { "--var": ["#origine", "#nouvelle"] }.
+  // M.A.C.S. écrit lui-même ces variables en style inline (effet batterie, à partir des couleurs d'origine) :
+  // chaque écriture est interceptée et la couleur d'origine remplacée par la nouvelle (alpha conservé).
+  let themeMap = {};
+  let raw = {};
+  const rgbOf = (v) => {
+    const s = String(v || '').trim().toLowerCase();
+    if (/^#[0-9a-f]{6}$/.test(s)) return { rgb: [1, 3, 5].map(i => parseInt(s.substr(i, 2), 16)), a: null };
+    const m = s.match(/^rgba?\(([^)]*)\)$/);
+    if (!m) return null;
+    const p = m[1].split(',').map(x => parseFloat(x));
+    return p.length >= 3 ? { rgb: p.slice(0, 3), a: p.length > 3 ? p[3] : null } : null;
+  };
+  // Couleurs déjà produites → couleur d'origine : M.A.C.S. relit ses couleurs dans le style calculé (qui
+  // contient donc nos couleurs) et les réécrit ; on les ramène à l'origine avant d'appliquer la couleur actuelle.
+  const back = {};
+  const fmt = (rgb, a, hex) => a === null
+    ? (hex ? '#' + rgb.map(x => Math.round(x).toString(16).padStart(2, '0')).join('') : `rgb(${rgb.join(', ')})`)
+    : `rgba(${rgb.join(', ')}, ${a})`;
+  function original(value) {
+    const c = rgbOf(value);
+    if (!c) return value;
+    const o = back[c.rgb.map(Math.round).join(',')];
+    return o ? fmt(o, c.a, true) : value;
+  }
+  function remap(value) {
+    const c = rgbOf(value);
+    if (!c) return value;
+    for (const k in themeMap) {
+      const from = rgbOf(themeMap[k][0]).rgb, to = rgbOf(themeMap[k][1]).rgb;
+      back[to.join(',')] = from;
+      if (from.every((x, i) => Math.abs(x - c.rgb[i]) <= 1)) return fmt(to, c.a, true);
+    }
+    return value;
+  }
+  function applyTheme() {
+    let doc = null;
+    try { doc = frame.contentDocument; } catch (_) {}
+    if (!doc || !doc.documentElement) return;
+    const style = doc.documentElement.style;
+    if (!style.__macsSet) {
+      const set = style.setProperty.bind(style);
+      style.__macsSet = set;
+      style.setProperty = (k, v, p) => {
+        if (!k.startsWith('--')) return set(k, v, p);
+        raw[k] = original(v);
+        return set(k, remap(raw[k]), p);
+      };
+    }
+    // Variables du thème jamais écrites par M.A.C.S. : on part de leur couleur d'origine.
+    for (const k in themeMap) if (!(k in raw)) raw[k] = themeMap[k][0];
+    for (const k in raw) style.__macsSet(k, remap(raw[k]));
+  }
+  window.macsTheme = function (map) {
+    themeMap = map || {};
+    for (const k in themeMap) back[rgbOf(themeMap[k][1]).rgb.join(',')] = rgbOf(themeMap[k][0]).rgb;
+    applyTheme();
+  };
+
+  window.macsPost = function (msg) {
+    queue.push(msg);
+    flush();
+  };
+
+  window.addEventListener('message', (e) => {
+    if (e.source !== frame.contentWindow) return;
+    const d = e.data || {};
+    if (d.type === 'macs:ready') { ready = true; clearTimeout(watchdog); flush(); }
+    try { Android.onMessage(JSON.stringify(d)); } catch (_) {}
+  });
+</script>
+</body>
+</html>
