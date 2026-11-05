@@ -128,8 +128,14 @@ private fun initialFraming(image: Bitmap, cutout: Boolean, face: android.graphic
         return constrained(Framing(k, size / 2f - cx * k, anchor - top * k), image)
     }
     if (face != null && face.width() > 0) {
-        val k = size * 0.36f / face.width()
-        return constrained(Framing(k, size / 2f - face.exactCenterX() * k, size * 0.56f - face.exactCenterY() * k), image)
+        // Photo ronde : visage centré, mais l'image couvre toujours tout le cercle (pas de fond visible autour).
+        val k = maxOf(size * 0.36f / face.width(), d / minOf(image.width, image.height))
+        val w = image.width * k
+        val h = image.height * k
+        val left = (size - d) / 2f
+        val x = (size / 2f - face.exactCenterX() * k).coerceIn(left + d - w, left)
+        val y = (size * 0.56f - face.exactCenterY() * k).coerceIn(size - h, size - d)
+        return Framing(k, x, y)
     }
     val k = d / minOf(image.width, image.height)
     return constrained(Framing(k, size / 2f - image.width * k / 2f, size - d / 2f - image.height * k / 2f), image)
@@ -205,6 +211,10 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
     var cutFailed by remember { mutableStateOf(false) }
     var face by remember { mutableStateOf<android.graphics.Rect?>(null) }
     var useCutout by remember { mutableStateOf(true) }
+    /** Choix du détourage fait à la main (pas de bascule automatique ensuite). */
+    var cutoutChosen by remember { mutableStateOf(false) }
+    /** Photo coupée au sommet du crâne : passée automatiquement en photo ronde. */
+    var tightPhoto by remember { mutableStateOf(false) }
     var filter by remember { mutableStateOf(AvatarFilter.None) }
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
@@ -224,6 +234,9 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
         source = b
         cut = null
         cutFailed = false
+        cutoutChosen = false
+        tightPhoto = false
+        useCutout = true
         filteredCache.clear()
         thumbs.clear()
         filter = AvatarFilter.None
@@ -261,6 +274,13 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
         if (cutting) return@LaunchedEffect
         val cutoutOn = useCutout && cut != null
         val img = if (cutoutOn) src.withAlphaOf(cut!!) else src
+        // Haut de la tête coupé par la photo : rien ne peut dépasser du cercle proprement, et coller le bas de la
+        // photo au bas du cercle imposerait un zoom énorme. Photo ronde cadrée sur le visage (détourage réactivable).
+        if (cutoutOn && !cutoutChosen && withContext(Dispatchers.Default) { headOf(img)?.first?.let { it < 2f } == true }) {
+            tightPhoto = true
+            useCutout = false
+            return@LaunchedEffect
+        }
         framing = withContext(Dispatchers.Default) { initialFraming(img, cutoutOn, face) }
     }
     // Vignettes des filtres (petite image, rapide).
@@ -357,12 +377,12 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
                                 Column(Modifier.weight(1f).padding(end = 16.dp)) {
                                     Text(stringResource(R.string.avatar_cutout), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
                                     Text(
-                                        stringResource(when { cutting -> R.string.avatar_cutting; cutFailed -> R.string.avatar_cutout_failed; else -> R.string.avatar_cutout_help }),
-                                        style = TextStyle(fontSize = 13.sp, color = if (cutFailed) Color(0xFFFFB74D) else Muted),
+                                        stringResource(when { cutting -> R.string.avatar_cutting; cutFailed -> R.string.avatar_cutout_failed; tightPhoto && !useCutout -> R.string.avatar_tight_photo; else -> R.string.avatar_cutout_help }),
+                                        style = TextStyle(fontSize = 13.sp, color = if (cutFailed || (tightPhoto && !useCutout)) Color(0xFFFFB74D) else Muted),
                                     )
                                 }
                                 Switch(
-                                    useCutout && !cutFailed, { useCutout = it }, enabled = cut != null,
+                                    useCutout && !cutFailed, { useCutout = it; cutoutChosen = true }, enabled = cut != null,
                                     colors = SwitchDefaults.colors(checkedTrackColor = Dash.colors.accent, checkedThumbColor = Color.Black),
                                 )
                             }
@@ -440,10 +460,7 @@ private fun AvatarPreview(image: Bitmap?, framing: Framing?, mode: String, activ
             }
         }
         // Pas encore de photo : même silhouette que sur le tableau de bord (proportions d'un avatar de 80 dp).
-        if (img == null) HaIcon(
-            "mdi:account", Modifier.align(Alignment.BottomCenter).offset(y = -maxWidth * 0.175f),
-            size = maxWidth * 0.5f, tint = if (active) Color.Black else Color(0xFF8A8A94),
-        )
+        if (img == null) AvatarPlaceholder(active, minOf(maxWidth, maxHeight))
     }
 }
 

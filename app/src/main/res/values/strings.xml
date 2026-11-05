@@ -624,4 +624,5 @@
     <string name="member_favorite">Favourite member</string>
     <string name="member_favorite_help">Shown at start-up and each time you come back from the home screen.</string>
     <string name="import_token_needed">Configuration imported. This backup comes from another device: enter the Home Assistant token.</string>
+    <string name="avatar_tight_photo">The top of the head is cut off in this photo: it is shown in a circle. You can still cut it out.</string>
 </resources>

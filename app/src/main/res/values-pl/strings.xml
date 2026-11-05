@@ -611,4 +611,5 @@
     <string name="member_favorite">Ulubiony domownik</string>
     <string name="member_favorite_help">Pokazywany po uruchomieniu i po każdym powrocie z ekranu głównego.</string>
     <string name="import_token_needed">Konfiguracja zaimportowana. Ta kopia pochodzi z innego urządzenia: wpisz token Home Assistant.</string>
+    <string name="avatar_tight_photo">Na tym zdjęciu góra głowy jest ucięta: jest wyświetlane w kole. Nadal możesz wyciąć tło.</string>
 </resources>

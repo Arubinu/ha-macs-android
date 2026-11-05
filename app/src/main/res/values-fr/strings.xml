@@ -611,4 +611,5 @@
     <string name="member_favorite">Membre favori</string>
     <string name="member_favorite_help">Affiché au démarrage et à chaque retour depuis l\'écran d\'accueil.</string>
     <string name="import_token_needed">Configuration importée. Cette sauvegarde vient d\'un autre appareil : saisissez le jeton Home Assistant.</string>
+    <string name="avatar_tight_photo">Le haut de la tête est coupé sur cette photo : elle est affichée en rond. Vous pouvez quand même la détourer.</string>
 </resources>

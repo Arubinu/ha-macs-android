@@ -76,6 +76,21 @@ fun DrawScope.drawAvatarWith(mode: String, background: Color, active: Boolean, h
     }
 }
 
+/**
+ * Silhouette d'un avatar sans image, centrée dans le cercle (cercle de 836/1024 posé en bas d'un carré de côté [s]).
+ * À placer dans une Box de la taille de l'avatar.
+ */
+@Composable
+fun androidx.compose.foundation.layout.BoxScope.AvatarPlaceholder(active: Boolean, s: androidx.compose.ui.unit.Dp) {
+    val r = s * AvatarStore.CIRCLE / 2f
+    val icon = s * 0.5f
+    fr.arubinu.hadash.ui.components.HaIcon(
+        "mdi:account",
+        Modifier.align(Alignment.BottomCenter).offset(y = -(r - icon / 2f)),
+        size = icon, tint = if (active) Color.Black else Color(0xFF8A8A94),
+    )
+}
+
 /** Couleur du fond du cercle, en fondu entre gris foncé et couleur d'accent. */
 @Composable
 fun avatarBackground(active: Boolean): Color =
@@ -110,15 +125,13 @@ fun MemberAvatar(memberId: String, active: Boolean, personPicture: String?, fall
                 modifier = Modifier.align(Alignment.BottomCenter).offset(y = -s * AvatarStore.RING).size(inner).clip(CircleShape),
             )
         }
-        else -> androidx.compose.foundation.layout.Box(modifier) {
-            // Image absente ou introuvable : le cercle seul reste visible, avec une silhouette.
+        else -> BoxWithConstraints(modifier) {
+            // Image absente ou introuvable : le cercle seul reste visible, avec une silhouette centrée dans le cercle
+            // (proportions identiques quelle que soit la taille de l'avatar).
             var failed by androidx.compose.runtime.remember(fallbackUrl) { androidx.compose.runtime.mutableStateOf(fallbackUrl == null) }
             if (failed) {
                 Canvas(Modifier.fillMaxSize()) { drawAvatar(null, "photo", background, active) }
-                fr.arubinu.hadash.ui.components.HaIcon(
-                    "mdi:account", Modifier.align(Alignment.BottomCenter).offset(y = (-14).dp),
-                    size = 40.dp, tint = if (active) Color.Black else Color(0xFF8A8A94),
-                )
+                AvatarPlaceholder(active, minOf(maxWidth, maxHeight))
             } else AsyncImage(
                 model = fallbackUrl, contentDescription = memberId, contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize(), onError = { failed = true },

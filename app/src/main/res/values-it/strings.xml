@@ -593,4 +593,5 @@
     <string name="member_favorite">Membro preferito</string>
     <string name="member_favorite_help">Mostrato all\'avvio e a ogni ritorno dalla schermata iniziale.</string>
     <string name="import_token_needed">Configurazione importata. Questo backup proviene da un altro dispositivo: inserisci il token di Home Assistant.</string>
+    <string name="avatar_tight_photo">In questa foto la parte alta della testa è tagliata: viene mostrata in un cerchio. Puoi comunque scontornarla.</string>
 </resources>
