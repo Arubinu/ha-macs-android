@@ -213,8 +213,9 @@ private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, on
     }
     if (conn != ConnState.Connected) {
         // Connexion à Home Assistant (première installation).
-        var url by remember { mutableStateOf(settings.haUrl) }
-        var token by remember { mutableStateOf(settings.haToken) }
+        // Repris après l'import d'une sauvegarde (adresse remplie, jeton à saisir si elle vient d'un autre appareil).
+        var url by remember(settings.haUrl) { mutableStateOf(settings.haUrl) }
+        var token by remember(settings.haToken) { mutableStateOf(settings.haToken) }
         Panel {
             Text(stringResource(R.string.setup_connect), style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
             Field(url, { url = it }, stringResource(R.string.ha_url), stringResource(R.string.ha_url_hint))

@@ -99,7 +99,20 @@ fun MembersCard(card: Card, modifier: Modifier) {
     // éventuel du sélecteur est porté par la clé du bloc.
     val guardKey = fr.arubinu.hadash.config.BlockOverrides.MEMBERS_KEY
     val prefs = remember { App.instance.getSharedPreferences("members", android.content.Context.MODE_PRIVATE) }
-    var selected by remember { androidx.compose.runtime.mutableStateOf(prefs.getString("selected", null)) }
+    // Membre favori (mode édition) : affiché au démarrage et à chaque retour sur l'écran d'accueil.
+    val favorite = App.instance.config.blocks.collectAsState().value[guardKey]?.s("favorite")
+    var selected by remember {
+        val start = favorite?.takeIf { !state.memberFavoriteApplied }
+        state.memberFavoriteApplied = true
+        start?.let { prefs.edit().putString("selected", it).apply() }
+        androidx.compose.runtime.mutableStateOf(start ?: prefs.getString("selected", null))
+    }
+    androidx.compose.runtime.SideEffect {
+        if (favorite != null) state.onHome["members"] = {
+            prefs.edit().putString("selected", favorite).apply()
+            selected = favorite
+        } else state.onHome.remove("members")
+    }
     val members = card.objs("members")
     val avatarUrl = card.s("avatar_url") ?: "/local/images/avatars/mini/{member}_{state}.jpg"
     // Icône de la zone où se trouve chaque membre : celle des zones de Home Assistant (l'état d'une personne

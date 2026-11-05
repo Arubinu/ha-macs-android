@@ -590,4 +590,7 @@
     <string name="member_protect_one">Código para este miembro</string>
     <string name="member_protect_one_help">Se pide el código de acceso solo antes de mostrar este miembro.</string>
     <string name="pages_favorite_help">Pestaña favorita (★): se vuelve a mostrar cada vez que se regresa de la pantalla de inicio. Sin favorita, se mantiene la pestaña actual.</string>
+    <string name="member_favorite">Miembro favorito</string>
+    <string name="member_favorite_help">Se muestra al iniciar y cada vez que se vuelve de la pantalla de inicio.</string>
+    <string name="import_token_needed">Configuración importada. Esta copia procede de otro dispositivo: introduce el token de Home Assistant.</string>
 </resources>

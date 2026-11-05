@@ -590,4 +590,7 @@
     <string name="member_protect_one">Code voor dit lid</string>
     <string name="member_protect_one_help">De toegangscode wordt alleen gevraagd voordat dit lid wordt getoond.</string>
     <string name="pages_favorite_help">Favoriete tab (★): opnieuw getoond bij elke terugkeer van het startscherm. Zonder favoriet blijft de huidige tab staan.</string>
+    <string name="member_favorite">Favoriet lid</string>
+    <string name="member_favorite_help">Getoond bij het opstarten en bij elke terugkeer van het startscherm.</string>
+    <string name="import_token_needed">Configuratie geïmporteerd. Deze back-up komt van een ander apparaat: voer het Home Assistant-token in.</string>
 </resources>

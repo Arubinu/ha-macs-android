@@ -621,4 +621,7 @@
     <string name="member_protect_one">Code for this member</string>
     <string name="member_protect_one_help">The access code is asked only before showing this member.</string>
     <string name="pages_favorite_help">Favourite tab (★): shown again each time you come back from the home screen. Without one, the current tab is kept.</string>
+    <string name="member_favorite">Favourite member</string>
+    <string name="member_favorite_help">Shown at start-up and each time you come back from the home screen.</string>
+    <string name="import_token_needed">Configuration imported. This backup comes from another device: enter the Home Assistant token.</string>
 </resources>

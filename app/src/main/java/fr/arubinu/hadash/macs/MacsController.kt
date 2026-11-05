@@ -61,7 +61,12 @@ class MacsController(
      * en fondu une fois la page prête et stable.
      */
     private var revealed = false
-    private val reveal = Runnable { webView?.animate()?.alpha(1f)?.setDuration(300)?.start() }
+    // Apparition : fondu et zoom depuis 88 %, avec un léger rebond en fin de mouvement (la position, elle, passe par
+    // translationX/Y et n'est pas animée).
+    private val reveal = Runnable {
+        webView?.animate()?.alpha(1f)?.scaleX(1f)?.scaleY(1f)
+            ?.setDuration(700)?.setInterpolator(android.view.animation.OvershootInterpolator(1.2f))?.start()
+    }
 
     /** Masque M.A.C.S. et le réaffiche en fondu après [delay] ms (seulement si la page est déjà prête). */
     private fun settle(delay: Long = 450) {
@@ -69,6 +74,8 @@ class MacsController(
         main.removeCallbacks(reveal)
         wv.animate().cancel()
         wv.alpha = 0f
+        wv.scaleX = 0.88f
+        wv.scaleY = 0.88f
         if (revealed) main.postDelayed(reveal, delay)
     }
     private var loadedFor: String? = null

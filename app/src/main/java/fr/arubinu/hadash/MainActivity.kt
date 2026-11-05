@@ -89,10 +89,15 @@ class MainActivity : ComponentActivity() {
         val text = runCatching { contentResolver.openInputStream(uri)!!.bufferedReader().use { it.readText() } }.getOrNull()
         // null = import réussi (importAll renvoie le message d'erreur éventuel).
         val error = if (text == null) getString(R.string.import_unreadable) else App.instance.config.importAll(text)
-        transferMessage.value = if (error == null) getString(R.string.import_done) to false
-        else getString(R.string.import_error, error) to true
-        // Import réussi depuis l'assistant : la configuration est complète, l'assistant se ferme.
-        if (error == null) App.instance.config.finishSetup()
+        val needsToken = error == null && App.instance.config.importNeedsToken
+        transferMessage.value = when {
+            needsToken -> getString(R.string.import_token_needed) to true
+            error == null -> getString(R.string.import_done) to false
+            else -> getString(R.string.import_error, error) to true
+        }
+        // Import réussi depuis l'assistant : la configuration est complète, l'assistant se ferme. Jeton à saisir
+        // (sauvegarde d'un autre appareil) : l'assistant reste ouvert sur la connexion.
+        if (error == null && !needsToken) App.instance.config.finishSetup()
     }
 
     override fun attachBaseContext(newBase: android.content.Context) {

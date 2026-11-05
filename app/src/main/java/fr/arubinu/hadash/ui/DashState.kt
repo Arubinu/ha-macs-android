@@ -76,13 +76,20 @@ class DashState(
     var screen: String
         get() = currentScreen
         set(value) {
-            if (value != currentScreen && value == initialScreen) favorites.forEach { (id, page) -> pages[id] = page }
+            if (value != currentScreen && value == initialScreen) {
+                favorites.forEach { (id, page) -> pages[id] = page }
+                onHome.values.forEach { it() }
+            }
             currentScreen = value
         }
     /** Page courante de chaque switcher, par identifiant. */
     val pages = mutableStateMapOf<String, String>()
     /** Onglet favori de chaque switcher (`"favorite"` de sa config), réaffiché au retour sur l'accueil. */
     val favorites = HashMap<String, String>()
+    /** Actions au retour sur l'écran d'accueil (ex. membre favori), par clé. */
+    val onHome = HashMap<String, () -> Unit>()
+    /** Le membre favori a-t-il déjà été appliqué depuis le démarrage de l'app ? */
+    var memberFavoriteApplied = false
     /** Pages connues par switcher, pour router un "#hash" vers le bon switcher. */
     val switcherPages = HashMap<String, Set<String>>()
     var popup by mutableStateOf<String?>(null)

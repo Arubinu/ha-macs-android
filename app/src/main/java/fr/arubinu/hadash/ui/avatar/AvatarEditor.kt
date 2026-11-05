@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -104,7 +105,7 @@ private data class Framing(val scale: Float, val x: Float, val y: Float)
  *
  * Photo coupée à la poitrine (peu d'image sous la tête, ex. avatar généré) : à la taille de tête visée, son bas
  * s'arrêterait dans le cercle. Comme dans un éditeur photo, elle est alors agrandie en gardant le haut des cheveux
- * à sa place (jusqu'à 1,6 fois), plutôt que descendue (la tête ne dépasserait plus) ; la descente ne sert qu'en
+ * à sa place (jusqu'à 2,2 fois), plutôt que descendue (la tête ne dépasserait plus) ; la descente ne sert qu'en
  * dernier recours. Une photo prise de plus loin (ex. buste entier) n'est pas concernée.
  */
 private fun initialFraming(image: Bitmap, cutout: Boolean, face: android.graphics.Rect?): Framing {
@@ -122,7 +123,8 @@ private fun initialFraming(image: Bitmap, cutout: Boolean, face: android.graphic
         // du bord de l'avatar, où elle ne se voit pas, au lieu d'un haut de tête plat au-dessus du cercle.
         val anchor = if (top < 2f) -size * 0.03f else size * 78f / 1024f
         val reach = (size - anchor) / (image.height - top)
-        if (reach > k) k = minOf(reach, k * 1.6f)
+        // Jusqu'à 2,2 fois : une chevelure volumineuse rend la « tête » très large (taille de départ petite).
+        if (reach > k) k = minOf(reach, k * 2.2f)
         return constrained(Framing(k, size / 2f - cx * k, anchor - top * k), image)
     }
     if (face != null && face.width() > 0) {
@@ -149,29 +151,36 @@ private fun headOf(image: Bitmap): Triple<Float, Float, Float>? {
     if (count == 0L) return null
     val axis = (sum / count).toInt()
     val minRun = maxOf(4, w / 50)
+    // Trous tolérés dans une ligne : assez pour relier des boucles de cheveux séparées par le fond.
+    val maxGap = maxOf(3, w / 40)
+    // Le cou n'est cherché qu'à partir de 12 % de la hauteur sous le haut des cheveux : avant, la silhouette peut
+    // se rétrécir sans que ce soit le cou (mèches ou boucles isolées tout en haut).
+    val minHead = h * 0.12f
     var top = -1
     var headW = 0
     var headCx = 0f
     for (y in 0 until h) {
-        // Zone continue autour de l'axe (trous de 3 px tolérés) : ignore les restes de fond éloignés.
+        // Zone continue autour de l'axe : ignore les restes de fond éloignés.
         var c = -1
         for (dx in 0..w / 8) { if (axis + dx < w && opaque(axis + dx, y)) { c = axis + dx; break }; if (axis - dx >= 0 && opaque(axis - dx, y)) { c = axis - dx; break } }
         if (c < 0) continue
         var l = c; var r = c; var gap = 0
         var x = c - 1
-        while (x >= 0) { if (opaque(x, y)) { l = x; gap = 0 } else if (++gap > 3) break; x-- }
+        while (x >= 0) { if (opaque(x, y)) { l = x; gap = 0 } else if (++gap > maxGap) break; x-- }
         gap = 0; x = c + 1
-        while (x < w) { if (opaque(x, y)) { r = x; gap = 0 } else if (++gap > 3) break; x++ }
+        while (x < w) { if (opaque(x, y)) { r = x; gap = 0 } else if (++gap > maxGap) break; x++ }
         val rw = r - l + 1
         if (top < 0) { if (rw < minRun) continue; top = y }
         // Fin de la tête : le cou (nettement plus étroit que la tête), ou au plus 1,3 largeur de tête sous le haut
         // des cheveux (cheveux longs sans cou visible). Les épaules s'élargissent progressivement : sans ces
         // limites, elles seraient comptées dans la tête.
-        if (headW > 0 && y - top > headW * 0.5f && rw < headW * 0.8f) break
-        if (headW > 0 && y - top > headW * 1.3f) break
+        val depth = y - top
+        if (headW > 0 && depth > maxOf(headW * 0.5f, minHead) && rw < headW * 0.8f) break
+        if (headW > 0 && depth > maxOf(headW * 1.3f, minHead)) break
         if (rw > headW) { headW = rw; headCx = (l + r) / 2f }
     }
-    return if (top < 0 || headW < 8) null else Triple(top.toFloat(), headCx, headW.toFloat())
+    // Tête invraisemblablement étroite (moins de 15 % de l'image) : cadrage par le visage ou la photo entière.
+    return if (top < 0 || headW < w * 0.15f) null else Triple(top.toFloat(), headCx, headW.toFloat())
 }
 
 /** Le bas de la photo ne remonte jamais au-dessus du bas du cercle (= bas de l'avatar) : sinon, elle est descendue. */
@@ -420,14 +429,21 @@ private fun filterLabel(f: AvatarFilter) = when (f) {
 private fun AvatarPreview(image: Bitmap?, framing: Framing?, mode: String, active: Boolean, modifier: Modifier) {
     val bg = avatarBackground(active)
     val img = remember(image) { image?.asImageBitmap() }
-    Canvas(modifier) {
-        val unit = size.width / AvatarStore.SIZE
-        drawAvatarWith(mode, bg, active, img != null && framing != null) { cf ->
-            val f = framing!!
-            translate(f.x * unit, f.y * unit) {
-                scale(f.scale * unit, f.scale * unit, pivot = Offset.Zero) { drawImage(img!!, colorFilter = cf) }
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier) {
+        Canvas(Modifier.fillMaxSize()) {
+            val unit = size.width / AvatarStore.SIZE
+            drawAvatarWith(mode, bg, active, img != null && framing != null) { cf ->
+                val f = framing!!
+                translate(f.x * unit, f.y * unit) {
+                    scale(f.scale * unit, f.scale * unit, pivot = Offset.Zero) { drawImage(img!!, colorFilter = cf) }
+                }
             }
         }
+        // Pas encore de photo : même silhouette que sur le tableau de bord (proportions d'un avatar de 80 dp).
+        if (img == null) HaIcon(
+            "mdi:account", Modifier.align(Alignment.BottomCenter).offset(y = -maxWidth * 0.175f),
+            size = maxWidth * 0.5f, tint = if (active) Color.Black else Color(0xFF8A8A94),
+        )
     }
 }
 

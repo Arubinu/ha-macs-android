@@ -96,6 +96,11 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   d'arrivée/départ tirée de l'historique ; icônes des zones lues dans `zone.*`. Code d'accès : global
   (`members:main`, changer de membre) ou, s'il est désactivé, par membre (`member:<id>`). Plus de membres que la
   largeur n'en contient (avatar 80 dp) : flèches et défilement par page. Calendrier : défilement propre, fondu en bas.
+- **Membre favori** : option `favorite` sur `members:main` (réglage « Membre favori » d'un membre), appliqué au
+  démarrage et au retour sur l'accueil (`DashState.onHome`).
+- **Export** : le jeton HA y est chiffré (`config/DeviceSecret.kt`, AES-GCM, clé tirée d'`ANDROID_ID`) ; il ne se
+  déchiffre que sur l'appareil d'origine, ailleurs il est vidé et demandé (`importNeedsToken`). Un jeton en clair
+  dans un fichier reste accepté.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en
   mode édition). Affiché au démarrage et à chaque retour sur l'écran d'accueil (`start_screen`) ; sans favori,
   l'onglet en cours est gardé.

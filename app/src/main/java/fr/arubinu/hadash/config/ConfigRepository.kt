@@ -107,10 +107,12 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
      * code, réglages des blocs…) et agencement du tableau de bord.
      */
     fun exportAll(): String {
-        val values = prefs.all.mapValues { (_, v) ->
-            when (v) {
-                is Boolean -> kotlinx.serialization.json.JsonPrimitive(v)
-                is Number -> kotlinx.serialization.json.JsonPrimitive(v)
+        val values = prefs.all.mapValues { (k, v) ->
+            when {
+                // Jeton Home Assistant chiffré avec une clé propre à cet appareil : il ne se déchiffre qu'ici.
+                k == "ha_token" && v is String && v.isNotBlank() -> kotlinx.serialization.json.JsonPrimitive(DeviceSecret.encrypt(context, v))
+                v is Boolean -> kotlinx.serialization.json.JsonPrimitive(v)
+                v is Number -> kotlinx.serialization.json.JsonPrimitive(v)
                 else -> kotlinx.serialization.json.JsonPrimitive(v?.toString())
             }
         }
@@ -127,8 +129,15 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         return Json { prettyPrint = true }.encodeToString(JsonObject.serializer(), doc)
     }
 
+    /**
+     * Dernier import : jeton Home Assistant chiffré pour un autre appareil (ou absent) ; il faut le saisir à nouveau.
+     */
+    var importNeedsToken = false
+        private set
+
     /** Remplace toute la configuration par celle du fichier. Retourne un message d'erreur éventuel. */
     fun importAll(text: String): String? = runCatching {
+        importNeedsToken = false
         val doc = json.parseToJsonElement(text).jsonObject
         require(doc.s("format") == EXPORT_FORMAT) { context.getString(fr.arubinu.hadash.R.string.import_unknown_format) }
         val dashboard = doc.o("dashboard") ?: error(context.getString(fr.arubinu.hadash.R.string.import_missing_layout))
@@ -142,11 +151,19 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             settings.forEach { (k, v) ->
                 val p = v as? kotlinx.serialization.json.JsonPrimitive ?: return@forEach
                 when {
+                    // Jeton chiffré : déchiffré avec la clé de cet appareil ; autre appareil → vide (à saisir).
+                    k == "ha_token" && DeviceSecret.isEncrypted(p.content) -> putString(k, DeviceSecret.decrypt(context, p.content).orEmpty())
                     types[k] == "f" -> putFloat(k, p.content.toFloat())
                     types[k] == "i" -> putInt(k, p.content.toDouble().toInt())
                     !p.isString && (p.content == "true" || p.content == "false") -> putBoolean(k, p.content.toBoolean())
                     else -> putString(k, p.content)
                 }
+            }
+            // Pas de jeton utilisable : vide (et non absent, sinon le jeton par défaut du build serait repris).
+            val token = (settings["ha_token"] as? kotlinx.serialization.json.JsonPrimitive)?.content
+            if (token == null || (DeviceSecret.isEncrypted(token) && DeviceSecret.decrypt(context, token) == null)) {
+                putString("ha_token", "")
+                importNeedsToken = true
             }
         }.apply()
         cache.writeText(dashboard.toString())

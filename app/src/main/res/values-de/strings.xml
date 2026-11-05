@@ -590,4 +590,7 @@
     <string name="member_protect_one">Code für dieses Mitglied</string>
     <string name="member_protect_one_help">Der Zugangscode wird nur vor dem Anzeigen dieses Mitglieds abgefragt.</string>
     <string name="pages_favorite_help">Lieblings-Tab (★): wird bei jeder Rückkehr vom Startbildschirm wieder angezeigt. Ohne Favorit bleibt der aktuelle Tab.</string>
+    <string name="member_favorite">Lieblingsmitglied</string>
+    <string name="member_favorite_help">Wird beim Start und bei jeder Rückkehr vom Startbildschirm angezeigt.</string>
+    <string name="import_token_needed">Konfiguration importiert. Diese Sicherung stammt von einem anderen Gerät: Gib das Home-Assistant-Token ein.</string>
 </resources>

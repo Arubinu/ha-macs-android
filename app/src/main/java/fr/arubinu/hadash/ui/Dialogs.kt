@@ -189,6 +189,11 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                 ) { app.config.setBlockOption(optionKey, "protected", it.takeIf { v -> v != configProtected }) }
             }
             if (target is EditTarget.Member) {
+                // Membre favori : un seul, enregistré sur la carte des membres.
+                val memberId = target.key.removePrefix("member:")
+                EditSwitch(stringResource(R.string.member_favorite), stringResource(R.string.member_favorite_help), options?.s("favorite") == memberId) {
+                    app.config.setBlockValue(optionKey, "favorite", if (it) JsonPrimitive(memberId) else null)
+                }
                 // Code global (changer de membre, quel qu'il soit) ; sinon, code propre à ce membre.
                 val all = options?.b("protected") ?: configProtected
                 EditSwitch(stringResource(R.string.member_protect_all), stringResource(R.string.member_protect_all_help), all) {

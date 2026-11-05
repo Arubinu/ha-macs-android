@@ -590,4 +590,7 @@
     <string name="member_protect_one">Código para este membro</string>
     <string name="member_protect_one_help">O código de acesso é pedido apenas antes de mostrar este membro.</string>
     <string name="pages_favorite_help">Separador favorito (★): volta a ser mostrado sempre que se regressa do ecrã inicial. Sem favorito, mantém-se o separador atual.</string>
+    <string name="member_favorite">Membro favorito</string>
+    <string name="member_favorite_help">Mostrado no arranque e sempre que se regressa do ecrã inicial.</string>
+    <string name="import_token_needed">Configuração importada. Esta cópia vem de outro dispositivo: introduza o token do Home Assistant.</string>
 </resources>

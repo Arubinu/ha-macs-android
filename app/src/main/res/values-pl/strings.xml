@@ -608,4 +608,7 @@
     <string name="member_protect_one">Kod dla tego domownika</string>
     <string name="member_protect_one_help">Kod dostępu jest wymagany tylko przed pokazaniem tego domownika.</string>
     <string name="pages_favorite_help">Ulubiona karta (★): pokazywana ponownie po każdym powrocie z ekranu głównego. Bez ulubionej zostaje bieżąca karta.</string>
+    <string name="member_favorite">Ulubiony domownik</string>
+    <string name="member_favorite_help">Pokazywany po uruchomieniu i po każdym powrocie z ekranu głównego.</string>
+    <string name="import_token_needed">Konfiguracja zaimportowana. Ta kopia pochodzi z innego urządzenia: wpisz token Home Assistant.</string>
 </resources>

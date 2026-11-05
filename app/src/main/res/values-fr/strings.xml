@@ -608,4 +608,7 @@
     <string name="member_protect_one">Code pour ce membre</string>
     <string name="member_protect_one_help">Le code d\'accès est demandé seulement avant d\'afficher ce membre.</string>
     <string name="pages_favorite_help">Onglet favori (★) : réaffiché à chaque retour depuis l\'écran d\'accueil. Sans favori, l\'onglet en cours est conservé.</string>
+    <string name="member_favorite">Membre favori</string>
+    <string name="member_favorite_help">Affiché au démarrage et à chaque retour depuis l\'écran d\'accueil.</string>
+    <string name="import_token_needed">Configuration importée. Cette sauvegarde vient d\'un autre appareil : saisissez le jeton Home Assistant.</string>
 </resources>
