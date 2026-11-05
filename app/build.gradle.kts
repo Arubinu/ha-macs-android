@@ -23,7 +23,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
 
         buildConfigField("String", "DEFAULT_HA_URL", "\"${localProp("ha.url", "http://homeassistant.local:8123")}\"")
         buildConfigField("String", "DEFAULT_HA_TOKEN", "\"${localProp("ha.token")}\"")
