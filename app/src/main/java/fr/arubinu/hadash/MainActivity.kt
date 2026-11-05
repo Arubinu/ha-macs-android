@@ -268,8 +268,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Démarre ou arrête l'analyse caméra selon le réglage et la permission. */
-    private fun updatePresence() {
+    /** Démarre ou arrête l'analyse caméra selon le réglage et la permission (aussi après une photo d'avatar). */
+    fun updatePresence() {
         val app = App.instance
         val s = app.config.settings.value
         app.presence.sensitivity = s.presenceSensitivity

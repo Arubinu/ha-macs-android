@@ -54,6 +54,23 @@ class MacsController(
     private val main = Handler(Looper.getMainLooper())
     private var webView: WebView? = null
     private var ready = false
+
+    /**
+     * M.A.C.S. reste invisible tant que sa page se dessine (chargement, puis réagencement après un déplacement ou un
+     * changement de taille) : sinon on voit ses éléments se placer à des endroits bizarres de l'écran. Il apparaît
+     * en fondu une fois la page prête et stable.
+     */
+    private var revealed = false
+    private val reveal = Runnable { webView?.animate()?.alpha(1f)?.setDuration(300)?.start() }
+
+    /** Masque M.A.C.S. et le réaffiche en fondu après [delay] ms (seulement si la page est déjà prête). */
+    private fun settle(delay: Long = 450) {
+        val wv = webView ?: return
+        main.removeCallbacks(reveal)
+        wv.animate().cancel()
+        wv.alpha = 0f
+        if (revealed) main.postDelayed(reveal, delay)
+    }
     private var loadedFor: String? = null
     private var last: Snapshot? = null
     private var lastTurns: JsonArray? = null
@@ -183,10 +200,13 @@ class MacsController(
                 }
                 val lp = wv.layoutParams as android.widget.FrameLayout.LayoutParams
                 if (lp.width != b.width() || lp.height != b.height()) {
+                    settle()
                     lp.width = b.width()
                     lp.height = b.height()
                     wv.layoutParams = lp
                 }
+                // Déplacement (mise en place de l'écran) : masqué jusqu'à ce que la position ne bouge plus.
+                if (wv.translationX != b.left.toFloat() || wv.translationY != b.top.toFloat()) settle()
                 wv.translationX = b.left.toFloat()
                 wv.translationY = b.top.toFloat()
                 wv.visibility = android.view.View.VISIBLE
@@ -197,6 +217,7 @@ class MacsController(
     private fun moveTo(parent: android.widget.FrameLayout) {
         val wv = webView ?: return
         if (wv.parent === parent) return
+        settle()
         (wv.parent as? ViewGroup)?.removeView(wv)
         parent.addView(wv, android.widget.FrameLayout.LayoutParams(wv.width.coerceAtLeast(1), wv.height.coerceAtLeast(1)))
     }
@@ -210,6 +231,10 @@ class MacsController(
         if (loadedFor == base) return
         loadedFor = base
         ready = false
+        revealed = false
+        settle()
+        // Sécurité : page qui ne signale jamais qu'elle est prête → M.A.C.S. apparaît quand même.
+        main.postDelayed({ if (!revealed) { revealed = true; settle(0) } }, 4000)
         last = null
         lastTurns = null
         val html = context.assets.open("macs_host.html").bufferedReader().use { it.readText() }
@@ -536,6 +561,9 @@ class MacsController(
             if (json.contains("\"macs:ready\"")) main.post {
                 ready = true
                 sendInit()
+                // Laisse le temps au premier dessin (humeur, thème, météo) avant d'apparaître.
+                revealed = true
+                settle(900)
             }
         }
     }

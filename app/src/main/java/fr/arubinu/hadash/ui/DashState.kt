@@ -69,11 +69,20 @@ class DashState(
     val ha: HaClient,
     val voice: VoiceAssistant,
     val popups: () -> JsonObject?,
-    initialScreen: String,
+    private val initialScreen: String,
 ) {
-    var screen by mutableStateOf(initialScreen)
+    private var currentScreen by mutableStateOf(initialScreen)
+    /** Écran affiché. Retour à l'écran d'accueil : chaque sélecteur d'onglets ayant un favori y revient. */
+    var screen: String
+        get() = currentScreen
+        set(value) {
+            if (value != currentScreen && value == initialScreen) favorites.forEach { (id, page) -> pages[id] = page }
+            currentScreen = value
+        }
     /** Page courante de chaque switcher, par identifiant. */
     val pages = mutableStateMapOf<String, String>()
+    /** Onglet favori de chaque switcher (`"favorite"` de sa config), réaffiché au retour sur l'accueil. */
+    val favorites = HashMap<String, String>()
     /** Pages connues par switcher, pour router un "#hash" vers le bon switcher. */
     val switcherPages = HashMap<String, Set<String>>()
     var popup by mutableStateOf<String?>(null)

@@ -164,11 +164,43 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
             if (!windy && !multiGraph && !carousel && roomName == null && target !is EditTarget.Pages && target !is EditTarget.Macs && target !is EditTarget.Detections && target !is EditTarget.DetectionCamera && target !is EditTarget.Tabs && target !is EditTarget.Tab && target !is EditTarget.Device) Text(webHost ?: entityId, style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 140), fontStyle = androidx.compose.ui.text.font.FontStyle.Italic))
             androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            if (target is EditTarget.Entity || target is EditTarget.Camera || target is EditTarget.Member) {
+            if (target is EditTarget.Member) {
+                // Avatar créé sur la tablette (photo détourée, filtre, cadrage).
+                val memberId = target.key.removePrefix("member:")
+                var editAvatar by remember { mutableStateOf(false) }
+                val picture = e?.attrString("entity_picture")?.let { app.ha.resolveUrl(it) }
+                Row(
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).tapHold({ editAvatar = true }).heightIn(min = 64.dp).padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    fr.arubinu.hadash.ui.avatar.MemberAvatar(memberId, true, picture, null, Modifier.size(64.dp))
+                    Column(Modifier.weight(1f).padding(horizontal = 16.dp)) {
+                        Text(stringResource(R.string.avatar_edit), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+                        Text(stringResource(R.string.avatar_section_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+                    }
+                    HaIcon("mdi:chevron-right", size = 24.dp, tint = Color(255, 255, 255, 150))
+                }
+                if (editAvatar) fr.arubinu.hadash.ui.avatar.AvatarEditor(memberId, e?.name ?: memberId, picture) { editAvatar = false }
+            }
+            if (target is EditTarget.Entity || target is EditTarget.Camera) {
                 EditSwitch(
                     stringResource(R.string.edit_protect), stringResource(R.string.edit_protect_help),
                     options?.b("protected") ?: configProtected,
                 ) { app.config.setBlockOption(optionKey, "protected", it.takeIf { v -> v != configProtected }) }
+            }
+            if (target is EditTarget.Member) {
+                // Code global (changer de membre, quel qu'il soit) ; sinon, code propre à ce membre.
+                val all = options?.b("protected") ?: configProtected
+                EditSwitch(stringResource(R.string.member_protect_all), stringResource(R.string.member_protect_all_help), all) {
+                    app.config.setBlockOption(optionKey, "protected", it.takeIf { v -> v != configProtected })
+                }
+                if (!all) {
+                    val memberKey = remember(target) { app.config.resolveKey(target.key) }
+                    EditSwitch(
+                        stringResource(R.string.member_protect_one), stringResource(R.string.member_protect_one_help),
+                        raw[memberKey]?.b("protected") == true,
+                    ) { app.config.setBlockOption(memberKey, "protected", it.takeIf { v -> v }) }
+                }
             }
             if (target is EditTarget.Graph) {
                 val current = (options?.get("height") as? JsonPrimitive)?.content?.toDoubleOrNull()?.toFloat() ?: target.defaultHeight.toFloat()

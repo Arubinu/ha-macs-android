@@ -55,7 +55,9 @@ fun PagesFields(key: String) {
     val rawDash by app.config.rawDashboard.collectAsState()
     val source by app.config.sourceDashboard.collectAsState()
     val original = remember(rawDash, key) { BlockOverrides.find(rawDash, key) } ?: return
-    val pages = (BlockOverrides.find(source, key) ?: original).objs("pages")
+    val current = BlockOverrides.find(source, key) ?: original
+    val pages = current.objs("pages")
+    val favorite = (app.config.rawBlocks.collectAsState().value[key]?.get("set") as? JsonObject)?.s("favorite") ?: current.s("favorite")
     fun save(list: List<JsonObject>) {
         val arr = JsonArray(list.map { JsonObject(it - "_key") })
         app.config.setBlockField(key, "pages", arr.takeIf { it != original["pages"] })
@@ -76,11 +78,21 @@ fun PagesFields(key: String) {
                     contentAlignment = Alignment.Center,
                 ) { HaIcon(page.s("icon") ?: "mdi:tab", size = 22.dp) }
                 PageName(page.s("label").orEmpty(), Modifier.weight(1f).padding(start = 12.dp)) { setPage(i, "label", it.ifBlank { null }) }
+                // Onglet favori : un seul ; toucher l'étoile allumée la retire.
+                val pid = page.s("id")
+                val fav = pid != null && pid == favorite
+                Box(
+                    Modifier.size(44.dp).clip(CircleShape).clickable {
+                        app.config.setBlockField(key, "favorite", if (fav) null else pid?.let { JsonPrimitive(it) })
+                    },
+                    contentAlignment = Alignment.Center,
+                ) { HaIcon(if (fav) "mdi:star" else "mdi:star-outline", size = 24.dp, tint = if (fav) Dash.colors.accent else Muted) }
             }
         }
+        Text(stringResource(R.string.pages_favorite_help), style = TextStyle(fontSize = 13.sp, color = Muted))
         val set = app.config.rawBlocks.collectAsState().value[key]?.get("set") as? JsonObject
         if (set != null && set.isNotEmpty()) Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-            TextLink(stringResource(R.string.pages_reset)) { app.config.setBlockField(key, "pages", null); app.config.setBlockField(key, "default", null) }
+            TextLink(stringResource(R.string.pages_reset)) { app.config.setBlockField(key, "pages", null); app.config.setBlockField(key, "default", null); app.config.setBlockField(key, "favorite", null) }
         }
     }
     iconFor?.let { i ->

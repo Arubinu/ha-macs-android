@@ -20,14 +20,19 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   anonymisé `app/src/main/assets/dashboard.json`). Noms de l'exemple : membres alex / sarah / leo / emma, villes
   Valmont, Rochebelle, Bois-Joli, Saint-Florin, Les Tilleuls, Autoroute. Toute modification de structure de la
   config doit être faite dans **les deux** fichiers.
-- `private/assets/images/icons/*.gif` : animations Flaticon (non redistribuables), jamais dans le dépôt.
+- Animations du bandeau des membres : dessinées en Compose (`ui/components/MemberAnimations.kt`, couleur d'accent).
+  Ne jamais ajouter de ressource sous licence non redistribuable (ex. Flaticon gratuit) dans le dépôt.
+- **README en 8 langues** (`README.md` anglais + `README.<lang>.md`) : courts, avec emojis, même plan partout ; toute
+  modification se reporte dans les 8. Libellés des menus = textes réels de l'app (`strings.xml` de la langue).
+  Le détail technique va dans `docs/reference.fr.md`.
 - Licence MIT pour le code ; `assets/macs/` et `assets/hue.json` restent en CC BY-NC-SA 4.0.
 - Tester la version publique : déplacer temporairement `private/` hors du projet avant le build.
-- **Avatars** (`/local/images/avatars/`) : encore lus depuis HA, l'utilisateur a une demande à venir à ce sujet.
 
 ## Environnement (Windows)
 
-- Build : `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q assembleDebug` (Bash).
+- Build : `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q assembleDebug` (Bash) → un seul APK
+  (`app-debug.apk`). `assembleRelease` → un APK par architecture + un universel (`app-<abi>-release.apk`,
+  `app-universal-release.apk` ; arm64 ≈ 44 Mo contre 121 Mo, à cause des bibliothèques ML Kit).
 - adb : `$LOCALAPPDATA/Android/Sdk/platform-tools/adb`. Émulateur : AVD `taba8` (`emulator-5554`, 1920×1200).
 - **Encodage** : ne jamais mettre de caractères non-ASCII dans un heredoc bash, un `sed` ou un script python
   passé sur stdin (corrompt les fichiers). Utiliser Edit/Write, ou un script python écrit avec Write dans le
@@ -36,7 +41,39 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   Écrire les fichiers en LF (`newline='\n'` en python) ; vérifier avec `git ls-files --eol | grep w/crlf`.
 - Chaînes : 8 langues (`values`, `-fr`, `-de`, `-es`, `-it`, `-nl`, `-pt`, `-pl`) ; toute nouvelle chaîne
   doit être ajoutée partout.
-- Mettre à jour le `README.md` quand une fonctionnalité visible change.
+- Mettre à jour les README (8 langues) quand une fonctionnalité visible change.
+
+## Tests sur l'émulateur (erreurs déjà commises, à ne pas refaire)
+
+- Utiliser `tools/emulator.sh` (`. tools/emulator.sh` puis `open_avatar_editor`, `tapt "texte"`, `shot nom`) au lieu
+  d'enchaîner des coordonnées à l'aveugle : une seule touche décalée envoie toute la suite ailleurs (paramètres
+  Android ouverts par erreur). Prendre une capture après chaque étape incertaine.
+- Git Bash : `export MSYS_NO_PATHCONV=1` avant `adb push … /sdcard/…` ou `adb shell run-as …`, sinon le chemin
+  devient `C:/Program Files/Git/sdcard/…`.
+- `uiautomator dump` encode les apostrophes (`&apos;`) : comparer après `html.unescape`.
+- Un même texte peut apparaître deux fois (« Modifier les blocs » = titre + bouton : prendre le 2ᵉ).
+- Le nom d'un onglet (« Membres ») n'est affiché que s'il est actif : toucher son icône (966, 66).
+- Les réglages s'ouvrent par un appui long **immobile en (30, 40)** (`input swipe 30 40 30 40 2500`), avec nouvel
+  essai si besoin (le premier appui après un changement d'écran est parfois ignoré). Ne pas viser le bord (8, 8) :
+  ça ouvre parfois le volet des notifications d'Android (`cmd statusbar collapse` pour le refermer). Toujours
+  vérifier que les réglages sont ouverts avant d'enchaîner. Ils rouvrent la dernière section consultée.
+- Les commandes Bash tapées ici arrivent en cp1252 (Latin-1) : `tools/emulator.sh` passe le texte en hexadécimal et
+  accepte UTF-8 ou Latin-1. Avec `MSYS_NO_PATHCONV=1`, écrire les chemins locaux en `C:/…` (pas `/c/…`).
+- Le sélecteur de photos : Retour le ferme entièrement (pas seulement son menu). Après un `adb push` d'image, lancer
+  `am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/…` pour qu'elle apparaisse.
+- Émulateur : pas de caméra frontale (arrière émulée). Le module ML Kit de détourage des services Google met du
+  temps à se télécharger la première fois : en attendant, c'est le détourage « selfie » embarqué qui sert
+  (contours moins propres). Après une réinstallation propre, il peut falloir l'attendre à nouveau.
+- Sauvegarder les prefs (`run-as … cat shared_prefs/settings.xml`) avant un test destructif et les restaurer après.
+  Pour tout l'état de l'app : `adb exec-out run-as fr.arubinu.hadash tar cf - shared_prefs files > sauvegarde.tar`,
+  restauration par `push` puis `run-as … tar xf`. Après `pm clear`, redonner l'autorisation caméra.
+- Lancer l'app avec `am start -n fr.arubinu.hadash/.MainActivity` : `monkey` ouvre parfois le choix de l'écran
+  d'accueil (l'app se déclare HOME pour le kiosque).
+- Une liste qui défile (`verticalScroll`) dans une colonne qui défile déjà doit toujours avoir une hauteur maximale
+  finie, même provisoire, sinon Compose plante (c'est arrivé avec le calendrier des membres).
+- **Captures des README** : faux serveur Home Assistant `tools/demo/demo_ha.py` (données fictives) et script
+  `tools/demo/capture.sh <langue>` ; procédure complète dans `tools/demo/README.md`. Une série par langue dans
+  `docs/screenshots/<langue>/`. Ne jamais faire de captures avec les vraies données de l'utilisateur.
 
 ## Architecture
 
@@ -56,7 +93,24 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 ## Choix fonctionnels à retenir
 
 - **Membres** : sélection locale (prefs `members`), plus d'`input_select` ; présence via `person.*`, heure
-  d'arrivée/départ tirée de l'historique ; icônes des zones lues dans `zone.*`.
+  d'arrivée/départ tirée de l'historique ; icônes des zones lues dans `zone.*`. Code d'accès : global
+  (`members:main`, changer de membre) ou, s'il est désactivé, par membre (`member:<id>`). Plus de membres que la
+  largeur n'en contient (avatar 80 dp) : flèches et défilement par page. Calendrier : défilement propre, fondu en bas.
+- **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en
+  mode édition). Affiché au démarrage et à chaque retour sur l'écran d'accueil (`start_screen`) ; sans favori,
+  l'onglet en cours est gardé.
+- **Release** : `.github/workflows/release.yml` (Release publiée → `assembleRelease` signé avec la clé des secrets
+  `RELEASE_KEYSTORE_BASE64`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD` → 5 APK joints).
+  En local, la clé peut être donnée dans `local.properties` (`release.store.file`…), sinon clé de debug.
+- **Avatars** (`ui/avatar/`, `config/AvatarStore.kt`) : éditeur dans les réglages du membre (mode édition). Source :
+  caméra de la tablette (CameraX, dans l'app : rien d'externe en kiosque), fichier (sélecteur de photos), téléphone
+  (QR code → mini serveur HTTP local, code aléatoire, un seul envoi), photo HA. Détourage ML Kit (services Google,
+  sinon « selfie » embarqué), filtres (aucun, doux, affiche, BD), cadrage aux doigts. Image 1024 enregistrée dans
+  l'app et incluse dans l'export. Rendu : cercle 836/1024 en bas, liseré 25/1024, fond #181818 → couleur d'accent ;
+  détouré = la tête dépasse (clip cercle ∪ moitié haute), photo = rond, noir et blanc si non sélectionné.
+  Cadrage par défaut (repères de l'avatar de l'utilisateur) : haut des pixels opaques à 78/1024, tête jusqu'au cou
+  sur 42 % de la largeur ; le bas de la photo ne remonte jamais au-dessus du bas du cercle. La détection de visage
+  ML Kit ne reconnaît pas les avatars cartoon : elle ne sert qu'aux photos rondes.
 - **Caméras** : une caméra physique = un appareil ; `entity` = flux de la carte, `fullscreen_entity` = flux
   plein écran. L'assistant permet d'ajouter / renommer / supprimer des onglets.
 - **Graphiques** : `state_from: min|max` affiche la courbe la plus basse/haute avec son nom (meilleur prix) ;

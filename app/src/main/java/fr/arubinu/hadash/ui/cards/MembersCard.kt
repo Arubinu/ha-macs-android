@@ -1,5 +1,8 @@
 package fr.arubinu.hadash.ui.cards
 
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -53,6 +56,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.res.stringResource
 import fr.arubinu.hadash.App
 import fr.arubinu.hadash.R
+import fr.arubinu.hadash.config.d
 import fr.arubinu.hadash.config.Card
 import fr.arubinu.hadash.config.i
 import fr.arubinu.hadash.config.objs
@@ -110,8 +114,33 @@ fun MembersCard(card: Card, modifier: Modifier) {
     val member = members.firstOrNull { it.s("id") == selected } ?: members.firstOrNull()
 
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
-            members.forEach { m ->
+        // Avatars : autant que la largeur le permet sans se chevaucher ; au-delà, flèches et défilement par page.
+        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val gap = Dash.shapes.gutter
+        val avatar = 80.dp
+        val arrowW = 36.dp
+        val fitAll = ((maxWidth + gap) / (avatar + gap)).toInt().coerceAtLeast(1)
+        val paged = members.size > fitAll
+        val perPage = if (!paged) members.size.coerceAtLeast(1)
+            else ((maxWidth - (arrowW + gap) * 2 + gap) / (avatar + gap)).toInt().coerceIn(1, members.size)
+        val selIndex = members.indexOfFirst { it.s("id") == member?.s("id") }.coerceAtLeast(0)
+        var first by remember(perPage, members.size) {
+            androidx.compose.runtime.mutableIntStateOf((selIndex - selIndex % perPage).coerceIn(0, (members.size - perPage).coerceAtLeast(0)))
+        }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap), verticalAlignment = Alignment.CenterVertically) {
+            if (paged) MembersArrow("mdi:chevron-left", first > 0) { first = (first - perPage).coerceAtLeast(0) }
+            AnimatedContent(
+                targetState = first, modifier = Modifier.weight(1f),
+                transitionSpec = {
+                    val dir = if (targetState > initialState) 1 else -1
+                    val spec = tween<androidx.compose.ui.unit.IntOffset>(280, easing = FastOutSlowInEasing)
+                    (slideInHorizontally(spec) { it / 3 * dir } + fadeIn(tween(280))) togetherWith
+                        (slideOutHorizontally(spec) { -it / 3 * dir } + fadeOut(tween(180)))
+                },
+                label = "members-page",
+            ) { start ->
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
+            members.subList(start, (start + perPage).coerceAtMost(members.size)).forEach { m ->
                 val id = m.s("id") ?: return@forEach
                 val active = id == member?.s("id")
                 val person = entity(m.s("person") ?: "person.$id")
@@ -125,18 +154,19 @@ fun MembersCard(card: Card, modifier: Modifier) {
                         // Mode édition : réglages du membre (personne, capteurs) et code d'accès du sélecteur.
                         if (state.editMode) { state.editTarget = fr.arubinu.hadash.ui.EditTarget.Member("member:$id", guardKey); return@tapHold }
                         if (id == member?.s("id")) return@tapHold
-                        state.guard(guardKey) {
+                        // Code global (tous les membres) s'il est activé, sinon code propre au membre choisi.
+                        state.guard(if (state.isProtected(guardKey, false)) guardKey else "member:$id") {
                             selected = id
                             prefs.edit().putString("selected", id).apply()
                         }
                     }),
                 ) {
-                    AsyncImage(
-                        // `"picture": "person"` : photo de la personne dans Home Assistant (membres créés par l'assistant).
-                        model = if (m.s("picture") == "person") state.ha.resolveUrl(person?.attrString("entity_picture"))
-                            else state.ha.resolveUrl(avatarUrl.replace("{member}", id).replace("{state}", if (active) "active" else "inactive")),
-                        contentDescription = id,
-                        contentScale = ContentScale.Fit,
+                    // Avatar créé sur la tablette, sinon photo de la personne (`"picture": "person"`, membres créés par
+                    // l'assistant), sinon paire d'images `_active` / `_inactive` de `avatar_url`.
+                    fr.arubinu.hadash.ui.avatar.MemberAvatar(
+                        memberId = id, active = active,
+                        personPicture = if (m.s("picture") == "person") state.ha.resolveUrl(person?.attrString("entity_picture")) else null,
+                        fallbackUrl = state.ha.resolveUrl(avatarUrl.replace("{member}", id).replace("{state}", if (active) "active" else "inactive")),
                         modifier = Modifier.align(Alignment.Center).size(80.dp).alpha(pulse),
                     )
                     val loc = person?.state
@@ -151,6 +181,14 @@ fun MembersCard(card: Card, modifier: Modifier) {
                     ) { HaIcon(zoneIcon, size = 16.dp) }
                 }
             }
+            // Dernière page incomplète : cases vides pour garder la même taille d'avatar.
+            repeat((start + perPage - members.size).coerceAtLeast(0)) { androidx.compose.foundation.layout.Spacer(Modifier.weight(1f)) }
+        }
+            }
+            if (paged) MembersArrow("mdi:chevron-right", first + perPage < members.size) {
+                first = (first + perPage).coerceAtMost(members.size - perPage)
+            }
+        }
         }
         if (member != null) {
             val ids = members.mapNotNull { it.s("id") }
@@ -180,8 +218,6 @@ private fun MemberDetails(card: Card, m: Card) {
     val steps = entity(m.s("steps_sensor"))
     val battery = entity(m.s("battery_sensor"))
     val charger = entity(m.s("charger_sensor"))
-    // Animations embarquées dans l'app.
-    val icons = "file:///android_asset/images/icons/"
     // Heure d'arrivée / de départ : dernier passage maison ↔ dehors dans l'historique (l'état d'une personne
     // change aussi en passant d'une zone à une autre, hors de la maison).
     var since by remember(homeId) { mutableStateOf<Long?>(null) }
@@ -201,16 +237,15 @@ private fun MemberDetails(card: Card, m: Card) {
 
     DashCard(Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
         Row(Modifier.fillMaxWidth().align(Alignment.Center).padding(vertical = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-            InfoGif(
-                state.ha.resolveUrl(icons + "earth.gif"), "mdi:earth",
-                stringResource(if (home?.isActive == false) R.string.member_left else R.string.member_arrived, time),
-            )
-            InfoGif(state.ha.resolveUrl(icons + "running.gif"), "mdi:run", stringResource(R.string.member_steps, steps?.numeric?.toInt()?.toString() ?: "—"))
-            InfoGif(
-                state.ha.resolveUrl(icons + (if (charging) "battery-charged.gif" else "half-battery.gif")),
-                if (charging) "mdi:battery-charging" else "mdi:battery-50",
-                "${battery?.state ?: "—"}%",
-            )
+            InfoItem(stringResource(if (home?.isActive == false) R.string.member_left else R.string.member_arrived, time)) {
+                fr.arubinu.hadash.ui.components.GlobeAnimation()
+            }
+            InfoItem(stringResource(R.string.member_steps, steps?.numeric?.toInt()?.toString() ?: "—")) {
+                fr.arubinu.hadash.ui.components.RunnerAnimation()
+            }
+            InfoItem("${battery?.state ?: "—"}%") {
+                fr.arubinu.hadash.ui.components.BatteryAnimation(battery?.numeric?.toInt(), charging)
+            }
         }
     }
     SectionTitle(stringResource(R.string.presence_title))
@@ -225,13 +260,11 @@ private fun MemberDetails(card: Card, m: Card) {
     CalendarCard(buildJsonObject { put("entities", kotlinx.serialization.json.JsonArray(m.strs("calendars").map { JsonPrimitive(it) })) }, Modifier)
 }
 
+/** Animation (dessinée par l'app) suivie de sa valeur. */
 @Composable
-private fun InfoGif(url: String?, fallbackIcon: String, text: String) {
-    // Animation absente (autre installation) : icône à la place.
-    var failed by androidx.compose.runtime.remember(url) { androidx.compose.runtime.mutableStateOf(false) }
+private fun InfoItem(text: String, animation: @Composable () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        if (failed) fr.arubinu.hadash.ui.components.HaIcon(fallbackIcon, size = 26.dp, tint = Dash.colors.accent)
-        else AsyncImage(model = url, contentDescription = null, modifier = Modifier.size(28.dp), onError = { failed = true })
+        animation()
         Text(text, Modifier.padding(start = 10.dp), style = TextStyle(fontSize = 15.sp, color = Color.White), maxLines = 1)
     }
 }
@@ -291,7 +324,21 @@ fun CalendarCard(card: Card, modifier: Modifier) {
     }
     val fr = Locale.getDefault()
     val today = LocalDate.now()
-    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    // Hauteur limitée au bas de l'écran moins la marge du bas (= niveau du bas des caméras) : au-delà, la liste
+    // défile seule et s'efface en fondu au lieu d'être coupée net.
+    val view = androidx.compose.ui.platform.LocalView.current
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    var top by remember { mutableStateOf<Float?>(null) }
+    val maxHeight = top?.let { with(density) { (view.rootView.height - it).toDp() } - card.d("bottom_margin", 24.0).dp }
+    val scroll = androidx.compose.foundation.rememberScrollState()
+    Box(
+        modifier.fillMaxWidth()
+            .onGloballyPositioned { top = it.positionInWindow().y }
+            // Toujours une hauteur maximale finie (liste défilante dans une colonne qui défile) : provisoire tant
+            // que la position n'est pas mesurée, sinon Compose plante.
+            .heightIn(max = maxHeight?.coerceAtLeast(120.dp) ?: 400.dp),
+    ) {
+    Column(Modifier.fillMaxWidth().verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (events.isEmpty()) {
             Text(stringResource(R.string.events_none), Modifier.fillMaxWidth(), style = TextStyle(fontSize = 14.sp, color = Color(255, 255, 255, 140), textAlign = TextAlign.Center))
         }
@@ -332,5 +379,32 @@ fun CalendarCard(card: Card, modifier: Modifier) {
                 }
             }
         }
+    }
+    val bg = Dash.colors.background
+    if (scroll.canScrollForward) Box(
+        Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
+            .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(bg.copy(alpha = 0f), bg))),
+    )
+    // Liste déjà défilée : fondu court en haut, sous le titre, au lieu d'une coupure nette.
+    if (scroll.canScrollBackward) Box(
+        Modifier.align(Alignment.TopCenter).fillMaxWidth().height(24.dp)
+            .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(bg, bg.copy(alpha = 0f)))),
+    )
+    }
+}
+
+/**
+ * Flèche de défilement des avatars, aux couleurs du menu en pilules : utilisable = comme la pilule active,
+ * en bout de liste = comme une pilule inactive, icône atténuée.
+ */
+@Composable
+private fun MembersArrow(icon: String, enabled: Boolean, onClick: () -> Unit) {
+    val c = Dash.colors
+    Box(Modifier.size(width = 36.dp, height = 80.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(36.dp).background(if (enabled) c.menuActiveButtonBackground else c.menuBackground, CircleShape)
+                .clip(CircleShape).tapHold(if (enabled) onClick else null),
+            contentAlignment = Alignment.Center,
+        ) { HaIcon(icon, size = 22.dp, tint = if (enabled) c.menuActiveButton else c.menuInactiveButton.copy(alpha = 0.5f)) }
     }
 }

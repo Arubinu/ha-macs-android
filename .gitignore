@@ -19,3 +19,6 @@ node_modules/
 
 # Configuration et ressources personnelles (non publiees)
 private/
+
+# Flux vidéo de la démo (régénéré par tools/demo/demo_ha.py)
+tools/demo/stream/

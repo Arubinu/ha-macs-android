@@ -50,6 +50,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
     private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true; isLenient = true; allowTrailingComma = true; allowComments = true }
     private val cache = File(context.filesDir, "dashboard.json")
+    /** Avatars des membres créés sur la tablette (inclus dans l'export). */
+    val avatars = AvatarStore(context)
 
     private val _settings = MutableStateFlow(readSettings())
     val settings: StateFlow<Settings> = _settings.asStateFlow()
@@ -119,6 +121,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                 "app_version" to kotlinx.serialization.json.JsonPrimitive(BuildConfig.VERSION_NAME),
                 "settings" to JsonObject(values),
                 "dashboard" to _dashboard.value,
+                "avatars" to avatars.export(),
             )
         )
         return Json { prettyPrint = true }.encodeToString(JsonObject.serializer(), doc)
@@ -147,6 +150,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             }
         }.apply()
         cache.writeText(dashboard.toString())
+        avatars.import(doc.o("avatars"))
         _dashboard.value = dashboard
         _settings.value = readSettings()
         _blocks.value = readBlocks()

@@ -1,0 +1,114 @@
+# 🏠 HA-MACS Android
+
+[English](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Italiano** · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Polski](README.pl.md)
+
+Una **dashboard Android nativa per Home Assistant**, pensata per i tablet a parete. Riprende l'aspetto di una
+dashboard Lovelace in modalità kiosk in un'app Jetpack Compose fluida, anche su tablet modesti: senza browser, senza
+card personalizzate e senza nulla da configurare in Home Assistant.
+
+<p align="center">
+  <img src="docs/screenshots/it/home.jpg" width="49%" alt="">
+  <img src="docs/screenshots/it/dashboard.jpg" width="49%" alt="">
+</p>
+<p align="center">
+  <img src="docs/screenshots/it/members.jpg" width="49%" alt="">
+  <img src="docs/screenshots/it/cameras-energy.jpg" width="49%" alt="">
+</p>
+<p align="center">
+  <img src="docs/screenshots/it/avatar-editor.jpg" width="66%" alt="">
+</p>
+<p align="center">📸 <em>Dati dimostrativi.</em></p>
+
+## ✨ Funzionalità
+
+- 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale
+- 🧙 **Procedura guidata**: stanze, membri, telecamere ed elementi principali rilevati in Home Assistant
+- 🏠 **Stanze**: luci, temperatura, umidità e dispositivi a colpo d'occhio
+- 👨‍👩‍👧 **Membri**: presenza, ora di arrivo, passi, batteria del telefono e prossimi eventi
+- 🧑‍🎨 **Avatar**: foto con la fotocamera del tablet, da un file o da un telefono (codice QR), scontornata sul
+  dispositivo, filtri facoltativi, testa che esce da un cerchio con il colore della dashboard
+- 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione, ultimi rilevamenti (media
+  HA, SMB, NFS, locale)
+- 🚨 **Avvisi**: versione nativa di [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temi, suono,
+  sintesi vocale e notifiche
+- 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più
+  economico
+- 🎙️ **Assistente vocale locale** (facoltativo): parla con M.A.C.S., che risponde con un modello audio locale
+- ✏️ **Modalità modifica**: entità, stanze, schede e blocchi si modificano direttamente sul tablet
+- 🔒 **Modalità kiosk**: nessuno esce dall'app o spegne il tablet senza il codice di accesso
+- 🌍 **8 lingue**: inglese, francese, tedesco, spagnolo, italiano, olandese, portoghese, polacco
+
+> 💡 **Nessun sensore da creare in Home Assistant**: presenza, giorno/notte, allerte meteo, prezzo migliore… l'app
+> calcola tutto a partire dalle entità delle tue integrazioni.
+
+## 📋 Requisiti
+
+- 📱 Tablet con **Android 8.0** o successivo (es. Galaxy Tab A8)
+- 🏡 Home Assistant raggiungibile dal tablet e un **token di accesso a lunga durata** (Profilo › Sicurezza)
+
+## 🚀 Installazione
+
+Non è ancora pubblicato nessun APK: va compilato dai sorgenti.
+
+```sh
+# Servono Android SDK (piattaforma 36) e JDK 17
+./gradlew assembleDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+Al primo avvio, la **procedura guidata** chiede l'indirizzo di Home Assistant e il token, poi adatta la dashboard alla
+tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
+
+> 🔑 Valori facoltativi in `local.properties` (non versionato) precompilano la connessione: `ha.url`, `ha.token`,
+> `voice.url`.
+
+## ⚙️ Nell'uso quotidiano
+
+- ⚙️ **Impostazioni**: pressione prolungata sull'angolo in alto a sinistra (connessione, display, standby, codice di
+  accesso, lingua…)
+- ✏️ **Modalità modifica**: Impostazioni › Dashboard › *Modifica i blocchi*, poi tocca un blocco per cambiarlo
+- 💾 **Backup**: Impostazioni › Dashboard › *Esporta* / *Importa* (il file contiene il tuo token: conservalo al
+  sicuro)
+- 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
+
+## 🔒 Modalità kiosk
+
+Impostazioni › Sicurezza › **Modalità kiosk**. Per un blocco completo (Home, app recenti, notifiche e menu di
+spegnimento bloccati), rendi l'app *proprietaria del dispositivo* una sola volta, da un computer, senza alcun account
+collegato sul tablet:
+
+```sh
+adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+```
+
+⚠️ Prima di disinstallare: Impostazioni › Sicurezza › *Rimuovi i diritti di proprietario*.
+
+## 🎙️ Assistente vocale (facoltativo)
+
+Un piccolo gateway Python (`gateway/`, pronto per Docker) invia il microfono del tablet a un modello audio locale
+(LFM3-Audio tramite llama-server) ed esegue le azioni di Home Assistant. I comandi semplici («accendi la luce del
+soggiorno») vengono eseguiti subito, senza il modello.
+
+```sh
+cd gateway && docker compose up -d
+```
+
+## 🛠️ Per approfondire
+
+- 📖 [Riferimento tecnico](docs/reference.fr.md) (in francese): `dashboard.json`, tipi di card, rilevamenti,
+  AlertTicker, modalità modifica, gateway vocale
+- 🗂️ **File personali**: tutto ciò che si trova in `private/assets/` (non versionato) sostituisce gli asset dell'app
+  durante la compilazione, ad esempio il tuo `dashboard.json`
+
+## 📄 Licenza
+
+Il codice è sotto [licenza MIT](LICENSE). Le risorse di terze parti mantengono la propria licenza:
+
+- 🤖 [M.A.C.S.](https://github.com/glyndavidson/MACS) di Glyn Davidson e
+  [hass-hue-icons](https://github.com/arallsopp/hass-hue-icons): **CC BY-NC-SA 4.0**, solo uso non commerciale
+- 🎨 [Material Design Icons](https://pictogrammers.com/library/mdi/) (Apache 2.0),
+  [Meteocons](https://github.com/basmilius/weather-icons) (MIT), font Audiowide e
+  [Carlito](https://github.com/googlefonts/carlito) (OFL), temi e traduzioni di
+  [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card) (MIT)
+- 📚 [smbj](https://github.com/hierynomus/smbj) e [nfs-client-java](https://github.com/EMCECS/nfs-client-java)
+  (Apache 2.0)

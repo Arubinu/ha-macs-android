@@ -653,8 +653,9 @@ private fun DashboardSection(
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.action_import))
                 }
+                // Résultat de l'export / import à droite des boutons.
+                Box(Modifier.weight(1f)) { Feedback(transferMessage?.first, transferMessage?.second == true) }
             }
-            Feedback(transferMessage?.first, transferMessage?.second == true)
         }
     }
 }

@@ -60,8 +60,12 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
     val pages = card.objs("pages")
     if (pages.isEmpty()) return
     val pageIds = pages.mapNotNull { it.s("id") }
-    SideEffect { state.registerSwitcher(id, pageIds.toSet()) }
-    val current = state.pages[id]?.takeIf { it in pageIds } ?: card.s("default") ?: pageIds.first()
+    SideEffect {
+        state.registerSwitcher(id, pageIds.toSet())
+        card.s("favorite")?.takeIf { it in pageIds }?.let { state.favorites[id] = it } ?: state.favorites.remove(id)
+    }
+    val current = state.pages[id]?.takeIf { it in pageIds } ?: card.s("favorite")?.takeIf { it in pageIds }
+        ?: card.s("default") ?: pageIds.first()
     val select = { p: String -> state.pages[id] = p; state.lastInteraction = System.currentTimeMillis() }
     val vertical = card.s("nav") == "rail"
 
@@ -92,7 +96,12 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
     when (card.s("nav", "pills")) {
         "rail" -> Box(modifier.fillMaxWidth()) {
             content()
-            Rail(pages, current, select, edgeOffset = card.d("rail_offset", 32.0).dp)
+            // Mode édition : une pastille ✎ sous le rail ouvre l'éditeur des onglets (noms, icônes, favori).
+            val pagesKey = card.s("_key")?.takeIf { it.startsWith("pages:") } ?: fr.arubinu.hadash.config.BlockOverrides.pagesKey(card)
+            Rail(
+                pages, current, select, edgeOffset = card.d("rail_offset", 32.0).dp,
+                onEdit = if (state.editMode && pagesKey != null) ({ state.editTarget = fr.arubinu.hadash.ui.EditTarget.Pages(pagesKey) }) else null,
+            )
         }
         "none" -> Box(modifier.fillMaxWidth()) { content() }
         else -> Column(modifier.fillMaxWidth()) {
@@ -168,7 +177,7 @@ fun PillMenu(pages: List<Card>, current: String, onSelect: (String) -> Unit, onE
  * arrondi à droite uniquement, bouton actif sur fond clair.
  */
 @Composable
-private fun Rail(pages: List<Card>, current: String, onSelect: (String) -> Unit, edgeOffset: Dp) {
+private fun Rail(pages: List<Card>, current: String, onSelect: (String) -> Unit, edgeOffset: Dp, onEdit: (() -> Unit)? = null) {
     val c = Dash.colors
     val r = Dash.shapes.menuRadius
     val border = Dash.shapes.menuBorder
@@ -192,6 +201,13 @@ private fun Rail(pages: List<Card>, current: String, onSelect: (String) -> Unit,
                 Modifier.size(32.dp).clip(shape).background(bg, shape).tapHold({ onSelect(pid) }),
                 contentAlignment = Alignment.Center,
             ) { HaIcon(p.s("icon"), size = 16.dp, tint = if (active) c.menuActiveButton else c.menuInactiveButton) }
+        }
+        if (onEdit != null) {
+            val shape = RoundedCornerShape(topEnd = r, bottomEnd = r)
+            Box(
+                Modifier.padding(top = 4.dp).size(32.dp).clip(shape).border(1.dp, c.accent, shape).tapHold({ onEdit() }),
+                contentAlignment = Alignment.Center,
+            ) { HaIcon("mdi:pencil", size = 16.dp, tint = c.accent) }
         }
     }
 }
