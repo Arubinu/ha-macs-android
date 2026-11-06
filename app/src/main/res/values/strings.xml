@@ -627,7 +627,6 @@
     <string name="avatar_tight_photo">The top of the head is cut off in this photo: it is shown in a circle. You can still cut it out.</string>
     <string name="master_code">Master code</string>
     <string name="master_code_help">Asked to open the settings and the kiosk menu. Without a master code, the settings open freely and the kiosk uses the access code.</string>
-    <string name="master_code_none">No master code</string>
     <string name="master_code_save">Save the code</string>
     <string name="master_code_remove">Remove the code</string>
     <string name="master_code_removed">Master code removed</string>
@@ -663,4 +662,6 @@
     <string name="member_code_of">Code of %1$s</string>
     <string name="codes_replace_title">New codes</string>
     <string name="codes_replace_help">This backup comes from another tablet: its codes are encrypted for it and cannot be read here. Choose a new code for each one.</string>
+    <string name="code_defined">Set</string>
+    <string name="code_undefined">None</string>
 </resources>

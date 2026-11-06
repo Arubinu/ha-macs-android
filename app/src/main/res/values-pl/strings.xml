@@ -614,7 +614,6 @@
     <string name="avatar_tight_photo">Na tym zdjęciu góra głowy jest ucięta: jest wyświetlane w kole. Nadal możesz wyciąć tło.</string>
     <string name="master_code">Kod główny</string>
     <string name="master_code_help">Wymagany do otwarcia ustawień i menu kiosku. Bez kodu głównego ustawienia otwierają się swobodnie, a kiosk używa kodu dostępu.</string>
-    <string name="master_code_none">Brak kodu głównego</string>
     <string name="master_code_save">Zapisz kod</string>
     <string name="master_code_remove">Usuń kod</string>
     <string name="master_code_removed">Kod główny usunięty</string>
@@ -650,4 +649,6 @@
     <string name="member_code_of">Kod: %1$s</string>
     <string name="codes_replace_title">Nowe kody</string>
     <string name="codes_replace_help">Ta kopia pochodzi z innego tabletu: jej kody są zaszyfrowane dla niego i nie można ich tu odczytać. Wybierz nowy kod dla każdego z nich.</string>
+    <string name="code_defined">Ustawiony</string>
+    <string name="code_undefined">Brak</string>
 </resources>

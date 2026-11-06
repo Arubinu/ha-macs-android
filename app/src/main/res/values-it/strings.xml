@@ -596,7 +596,6 @@
     <string name="avatar_tight_photo">In questa foto la parte alta della testa è tagliata: viene mostrata in un cerchio. Puoi comunque scontornarla.</string>
     <string name="master_code">Codice principale</string>
     <string name="master_code_help">Richiesto per aprire le impostazioni e il menu del chiosco. Senza codice principale, le impostazioni si aprono liberamente e il chiosco usa il codice di accesso.</string>
-    <string name="master_code_none">Nessun codice principale</string>
     <string name="master_code_save">Salva il codice</string>
     <string name="master_code_remove">Rimuovi il codice</string>
     <string name="master_code_removed">Codice principale rimosso</string>
@@ -632,4 +631,6 @@
     <string name="member_code_of">Codice di %1$s</string>
     <string name="codes_replace_title">Nuovi codici</string>
     <string name="codes_replace_help">Questo backup proviene da un altro tablet: i suoi codici sono cifrati per quel tablet e non sono leggibili qui. Scegli un nuovo codice per ciascuno.</string>
+    <string name="code_defined">Impostato</string>
+    <string name="code_undefined">Nessuno</string>
 </resources>

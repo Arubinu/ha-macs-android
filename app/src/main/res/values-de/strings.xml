@@ -596,7 +596,6 @@
     <string name="avatar_tight_photo">Auf diesem Foto ist der Kopf oben abgeschnitten: Es wird rund angezeigt. Du kannst es trotzdem freistellen.</string>
     <string name="master_code">Mastercode</string>
     <string name="master_code_help">Wird zum Öffnen der Einstellungen und des Kioskmenüs abgefragt. Ohne Mastercode öffnen sich die Einstellungen frei und der Kiosk nutzt den Zugangscode.</string>
-    <string name="master_code_none">Kein Mastercode</string>
     <string name="master_code_save">Code speichern</string>
     <string name="master_code_remove">Code entfernen</string>
     <string name="master_code_removed">Mastercode entfernt</string>
@@ -632,4 +631,6 @@
     <string name="member_code_of">Code von %1$s</string>
     <string name="codes_replace_title">Neue Codes</string>
     <string name="codes_replace_help">Diese Sicherung stammt von einem anderen Tablet: Ihre Codes sind für dieses verschlüsselt und hier nicht lesbar. Wähle für jeden einen neuen Code.</string>
+    <string name="code_defined">Festgelegt</string>
+    <string name="code_undefined">Keiner</string>
 </resources>

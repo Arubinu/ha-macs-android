@@ -596,7 +596,6 @@
     <string name="avatar_tight_photo">Nesta foto o topo da cabeça está cortado: é mostrada num círculo. Pode mesmo assim recortá-la.</string>
     <string name="master_code">Código mestre</string>
     <string name="master_code_help">Pedido para abrir as definições e o menu do quiosque. Sem código mestre, as definições abrem livremente e o quiosque usa o código de acesso.</string>
-    <string name="master_code_none">Sem código mestre</string>
     <string name="master_code_save">Guardar o código</string>
     <string name="master_code_remove">Remover o código</string>
     <string name="master_code_removed">Código mestre removido</string>
@@ -632,4 +631,6 @@
     <string name="member_code_of">Código de %1$s</string>
     <string name="codes_replace_title">Novos códigos</string>
     <string name="codes_replace_help">Esta cópia vem de outro tablet: os seus códigos estão cifrados para ele e não podem ser lidos aqui. Escolha um novo código para cada um.</string>
+    <string name="code_defined">Definido</string>
+    <string name="code_undefined">Nenhum</string>
 </resources>

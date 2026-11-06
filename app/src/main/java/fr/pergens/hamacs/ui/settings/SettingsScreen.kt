@@ -74,6 +74,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -697,9 +698,11 @@ private fun SecuritySection() {
     val saved = stringResource(R.string.access_code_saved)
     val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
 
+    var open by remember { mutableStateOf(false) }
     Group {
-        SettingRow(stringResource(R.string.access_code), stringResource(R.string.access_code_help))
-        GroupDivider()
+        // Enroulé par défaut : un appui sur l'en-tête déroule les champs de modification.
+        SettingRow(stringResource(R.string.access_code), stringResource(R.string.access_code_help), onClick = { open = !open }) { Chevron(open) }
+        Unfold(open) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Field(current, { current = digits(it); message = null }, stringResource(R.string.access_code_current), null, null, secret = true)
             Field(new1, { new1 = digits(it); message = null }, stringResource(R.string.access_code_new), null, null, secret = true)
@@ -726,9 +729,29 @@ private fun SecuritySection() {
                 Feedback(message?.first, message?.second == true)
             }
         }
+        }
     }
     MasterCodeGroup()
     KioskGroup()
+}
+
+/** Flèche d'un groupe enroulable (vers le bas fermé, vers le haut ouvert). */
+@Composable
+private fun Chevron(open: Boolean) {
+    val angle by androidx.compose.animation.core.animateFloatAsState(if (open) 180f else 0f, label = "chevron")
+    HaIcon("mdi:chevron-down", Modifier.graphicsLayer { rotationZ = angle }, size = 28.dp, tint = TextSecondary)
+}
+
+/** Contenu d'un groupe enroulable : séparateur puis contenu, déroulés en animation. */
+@Composable
+private fun Unfold(open: Boolean, content: @Composable () -> Unit) {
+    androidx.compose.animation.AnimatedVisibility(
+        open,
+        enter = androidx.compose.animation.expandVertically() + androidx.compose.animation.fadeIn(),
+        exit = androidx.compose.animation.shrinkVertically() + androidx.compose.animation.fadeOut(),
+    ) {
+        Column { GroupDivider(); content() }
+    }
 }
 
 /** Code maître : protège les réglages (et le menu du kiosque). Le code actuel est demandé pour le changer. */
@@ -751,11 +774,18 @@ private fun MasterCodeGroup() {
         if (!defined) null else fr.pergens.hamacs.ui.checkCurrentCode(current, app.config.masterCode(), wrong)?.also { current = "" }
     }
 
+    var open by remember { mutableStateOf(false) }
     Group {
-        SettingRow(stringResource(R.string.master_code), stringResource(R.string.master_code_help))
-        GroupDivider()
+        // Enroulé par défaut ; l'état (défini ou non) reste visible sur l'en-tête.
+        SettingRow(stringResource(R.string.master_code), stringResource(R.string.master_code_help), onClick = { open = !open }) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (defined) StatusChip(Success, stringResource(R.string.code_defined)) else StatusChip(TextSecondary, stringResource(R.string.code_undefined))
+                Spacer(Modifier.width(12.dp))
+                Chevron(open)
+            }
+        }
+        Unfold(open) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (!defined) Text(stringResource(R.string.master_code_none), color = TextSecondary, fontSize = 14.sp)
             if (defined) Field(current, { current = digits(it); message = null }, stringResource(R.string.access_code_current), null, null, secret = true)
             Field(new1, { new1 = digits(it); message = null }, stringResource(R.string.access_code_new), null, null, secret = true)
             Field(new2, { new2 = digits(it); message = null }, stringResource(R.string.access_code_confirm), null, null, secret = true)
@@ -797,6 +827,7 @@ private fun MasterCodeGroup() {
                 Spacer(Modifier.width(16.dp))
                 Feedback(message?.first, message?.second == true)
             }
+        }
         }
     }
 }

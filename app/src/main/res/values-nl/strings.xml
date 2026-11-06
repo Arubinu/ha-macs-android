@@ -596,7 +596,6 @@
     <string name="avatar_tight_photo">Op deze foto is de bovenkant van het hoofd afgesneden: hij wordt rond getoond. Je kunt hem toch uitknippen.</string>
     <string name="master_code">Mastercode</string>
     <string name="master_code_help">Gevraagd om de instellingen en het kioskmenu te openen. Zonder mastercode openen de instellingen vrij en gebruikt de kiosk de toegangscode.</string>
-    <string name="master_code_none">Geen mastercode</string>
     <string name="master_code_save">Code opslaan</string>
     <string name="master_code_remove">Code verwijderen</string>
     <string name="master_code_removed">Mastercode verwijderd</string>
@@ -632,4 +631,6 @@
     <string name="member_code_of">Code van %1$s</string>
     <string name="codes_replace_title">Nieuwe codes</string>
     <string name="codes_replace_help">Deze back-up komt van een andere tablet: de codes zijn voor die tablet versleuteld en hier niet leesbaar. Kies voor elk een nieuwe code.</string>
+    <string name="code_defined">Ingesteld</string>
+    <string name="code_undefined">Geen</string>
 </resources>

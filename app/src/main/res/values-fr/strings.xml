@@ -614,7 +614,6 @@
     <string name="avatar_tight_photo">Le haut de la tête est coupé sur cette photo : elle est affichée en rond. Vous pouvez quand même la détourer.</string>
     <string name="master_code">Code maître</string>
     <string name="master_code_help">Demandé pour ouvrir les réglages et le menu du kiosque. Sans code maître, les réglages s\'ouvrent librement et le kiosque utilise le code d\'accès.</string>
-    <string name="master_code_none">Aucun code maître</string>
     <string name="master_code_save">Enregistrer le code</string>
     <string name="master_code_remove">Supprimer le code</string>
     <string name="master_code_removed">Code maître supprimé</string>
@@ -650,4 +649,6 @@
     <string name="member_code_of">Code de %1$s</string>
     <string name="codes_replace_title">Nouveaux codes</string>
     <string name="codes_replace_help">Cette sauvegarde vient d\'une autre tablette : ses codes sont chiffrés pour elle et ne peuvent pas être lus ici. Choisissez un nouveau code pour chacun.</string>
+    <string name="code_defined">Défini</string>
+    <string name="code_undefined">Aucun</string>
 </resources>
