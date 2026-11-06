@@ -603,4 +603,5 @@
     <string name="setup_master_title">Código mestre (opcional)</string>
     <string name="setup_master_help">Protege o acesso às definições. Deixe vazio para nenhum; pode ser definido mais tarde em Definições › Segurança.</string>
     <string name="setup_master_kept">Já existe um código mestre: deixe vazio para o manter.</string>
+    <string name="pin_locked">Demasiadas tentativas. Tente novamente dentro de %1$s</string>
 </resources>

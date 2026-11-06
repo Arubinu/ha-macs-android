@@ -603,4 +603,5 @@
     <string name="setup_master_title">Código maestro (opcional)</string>
     <string name="setup_master_help">Protege el acceso a los ajustes. Déjelo vacío para no poner ninguno; se puede definir más tarde en Ajustes › Seguridad.</string>
     <string name="setup_master_kept">Ya hay un código maestro: déjelo vacío para conservarlo.</string>
+    <string name="pin_locked">Demasiados intentos. Inténtelo de nuevo en %1$s</string>
 </resources>

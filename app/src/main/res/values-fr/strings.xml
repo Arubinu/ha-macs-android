@@ -621,4 +621,5 @@
     <string name="setup_master_title">Code maître (facultatif)</string>
     <string name="setup_master_help">Protège l\'accès aux réglages. Laissez vide pour ne pas en mettre ; il peut être défini plus tard dans Réglages › Sécurité.</string>
     <string name="setup_master_kept">Un code maître est déjà défini : laissez vide pour le garder.</string>
+    <string name="pin_locked">Trop d\'essais. Réessayez dans %1$s</string>
 </resources>

@@ -634,4 +634,5 @@
     <string name="setup_master_title">Master code (optional)</string>
     <string name="setup_master_help">Protects access to the settings. Leave empty for none; it can be set later in Settings › Security.</string>
     <string name="setup_master_kept">A master code is already set: leave empty to keep it.</string>
+    <string name="pin_locked">Too many attempts. Try again in %1$s</string>
 </resources>

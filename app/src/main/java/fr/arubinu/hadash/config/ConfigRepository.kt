@@ -107,7 +107,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
      * code, réglages des blocs…) et agencement du tableau de bord.
      */
     fun exportAll(): String {
-        val values = prefs.all.mapValues { (k, v) ->
+        // Compteur d'erreurs de code : propre à l'appareil, non exporté.
+        val values = prefs.all.filterKeys { it != "pin_fails" && it != "pin_lock_until" }.mapValues { (k, v) ->
             when {
                 // Jeton Home Assistant chiffré avec une clé propre à cet appareil : il ne se déchiffre qu'ici.
                 k == "ha_token" && v is String && v.isNotBlank() -> kotlinx.serialization.json.JsonPrimitive(DeviceSecret.encrypt(context, v))
@@ -183,6 +184,32 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
 
     fun setAccessCode(code: String) {
         prefs.edit().putString("access_code", code).apply()
+    }
+
+    // --- Essais de code ------------------------------------------------------------------------
+    // Compteur commun à tous les codes vérifiés par l'app (maître, accès, membres), conservé au redémarrage :
+    // à partir de 3 erreurs, attente de 30 s doublée à chaque nouvelle erreur (15 min au plus).
+
+    /** Fin du blocage en cours (ms, horloge murale), 0 si aucun. */
+    fun pinLockedUntil(): Long {
+        val until = prefs.getLong("pin_lock_until", 0L)
+        val now = System.currentTimeMillis()
+        // Horloge reculée : on ne bloque jamais plus que le maximum.
+        return if (until <= now) 0L else minOf(until, now + PIN_MAX_LOCK)
+    }
+
+    fun pinFailed() {
+        val fails = prefs.getInt("pin_fails", 0) + 1
+        val edit = prefs.edit().putInt("pin_fails", fails)
+        if (fails >= 3) {
+            val lock = minOf(30_000L shl minOf(fails - 3, 10), PIN_MAX_LOCK)
+            edit.putLong("pin_lock_until", System.currentTimeMillis() + lock)
+        }
+        edit.apply()
+    }
+
+    fun pinSucceeded() {
+        prefs.edit().remove("pin_fails").remove("pin_lock_until").apply()
     }
 
     /** Code maître (vide = aucun) : demandé pour ouvrir les réglages et le menu du kiosque. */
@@ -298,5 +325,6 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
     companion object {
         private const val TAG = "ConfigRepository"
         private const val EXPORT_FORMAT = "ha-android-dashboard"
+        private const val PIN_MAX_LOCK = 15 * 60_000L
     }
 }

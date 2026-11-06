@@ -603,4 +603,5 @@
     <string name="setup_master_title">Codice principale (facoltativo)</string>
     <string name="setup_master_help">Protegge l\'accesso alle impostazioni. Lasciare vuoto per nessuno; si può definire in seguito in Impostazioni › Sicurezza.</string>
     <string name="setup_master_kept">Un codice principale è già impostato: lasciare vuoto per mantenerlo.</string>
+    <string name="pin_locked">Troppi tentativi. Riprova tra %1$s</string>
 </resources>

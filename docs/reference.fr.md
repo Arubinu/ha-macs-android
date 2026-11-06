@@ -59,7 +59,7 @@ Options communes utiles :
 | Option | Rôle |
 |---|---|
 | `access_code` (racine) | code d'accès initial (ensuite modifiable dans Réglages › Sécurité) |
-| *(réglage)* `master_code` | code maître (vide = aucun), défini dans l'assistant ou Réglages › Sécurité : demandé avant les réglages et pour le menu du kiosque (à défaut, le code d'accès) |
+| *(réglage)* `master_code` | code maître (vide = aucun), défini dans l'assistant ou Réglages › Sécurité : demandé avant les réglages et pour le menu du kiosque (à défaut, le code d'accès). Après 3 erreurs de code : attente de 30 s, doublée à chaque nouvelle erreur (15 min au plus) |
 | `radius` | arrondi d'un bloc (défaut : `rounded_radius` du thème pour pièces, caméras, alertes, pages web) |
 | `space_after` | écart sous un bloc dans une colonne `"fit": true` |
 | `flex`, `min_height` | le bloc occupe l'espace restant d'une colonne `"fit": true` |

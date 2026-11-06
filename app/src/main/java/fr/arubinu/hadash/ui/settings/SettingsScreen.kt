@@ -660,6 +660,24 @@ private fun DashboardSection(
     }
 }
 
+/**
+ * Vérifie un code actuel saisi dans les réglages avec le même compteur d'erreurs que le pavé de code :
+ * renvoie le message d'erreur (blocage ou code incorrect), ou null si le code est bon.
+ */
+private fun checkCurrentCode(entered: String, expected: String, wrong: String): String? {
+    val config = App.instance.config
+    val until = config.pinLockedUntil()
+    fun lockedMessage(until: Long): String {
+        val s = ((until - System.currentTimeMillis() + 999) / 1000).toInt().coerceAtLeast(1)
+        return App.instance.getString(R.string.pin_locked, "%d:%02d".format(s / 60, s % 60))
+    }
+    if (until > 0L) return lockedMessage(until)
+    if (entered == expected) { config.pinSucceeded(); return null }
+    config.pinFailed()
+    val next = config.pinLockedUntil()
+    return if (next > 0L) lockedMessage(next) else wrong
+}
+
 @Composable
 private fun SecuritySection() {
     val app = App.instance
@@ -683,8 +701,9 @@ private fun SecuritySection() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
                     onClick = {
+                        val error = checkCurrentCode(current, app.config.accessCode(), wrong)
                         message = when {
-                            current != app.config.accessCode() -> wrong to true
+                            error != null -> { current = ""; error to true }
                             new1.length !in 4..8 -> invalid to true
                             new1 != new2 -> mismatch to true
                             else -> {
@@ -721,7 +740,10 @@ private fun MasterCodeGroup() {
     val saved = stringResource(R.string.access_code_saved)
     val removed = stringResource(R.string.master_code_removed)
     val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
-    val currentOk = { !defined || current == app.config.masterCode() }
+    // Code actuel vérifié avec le compteur d'erreurs (null = bon) ; vidé en cas d'erreur.
+    val currentError = {
+        if (!defined) null else checkCurrentCode(current, app.config.masterCode(), wrong)?.also { current = "" }
+    }
 
     Group {
         SettingRow(stringResource(R.string.master_code), stringResource(R.string.master_code_help))
@@ -734,8 +756,9 @@ private fun MasterCodeGroup() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
                     onClick = {
+                        val error = currentError()
                         message = when {
-                            !currentOk() -> wrong to true
+                            error != null -> error to true
                             new1.length !in 4..8 -> invalid to true
                             new1 != new2 -> mismatch to true
                             else -> {
@@ -753,7 +776,8 @@ private fun MasterCodeGroup() {
                     Spacer(Modifier.width(12.dp))
                     OutlinedButton(
                         onClick = {
-                            message = if (!currentOk()) wrong to true else {
+                            val error = currentError()
+                            message = if (error != null) error to true else {
                                 app.config.setMasterCode("")
                                 defined = false
                                 current = ""; new1 = ""; new2 = ""

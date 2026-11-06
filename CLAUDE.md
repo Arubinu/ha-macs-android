@@ -99,6 +99,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Code maître** (pref `master_code`, vide = aucun) : distinct du code d'accès (famille, blocs protégés). Demandé à
   l'appui long du coin (`DashState.askSettings`) et pour le menu du kiosque (sinon code d'accès). Défini dans
   Réglages › Sécurité (code actuel exigé pour changer/supprimer) ou à la dernière étape de l'assistant.
+- **Essais de code** : compteur commun (prefs `pin_fails`, `pin_lock_until`, non exportés) pour tous les codes vérifiés
+  par l'app (pavé `PinDialog` + champs « Code actuel » des réglages). Dès 3 erreurs : 30 s, doublé à chaque erreur,
+  15 min au plus ; conservé au redémarrage, remis à zéro par un bon code. Code de l'alarme non concerné (vérifié par HA).
+  En test : sauvegarder/restaurer les prefs pour ne pas laisser de blocage.
 - **Membre favori** : option `favorite` sur `members:main` (réglage « Membre favori » d'un membre), appliqué au
   démarrage et au retour sur l'accueil (`DashState.onHome`).
 - **Export** : le jeton HA y est chiffré (`config/DeviceSecret.kt`, AES-GCM, clé tirée d'`ANDROID_ID`) ; il ne se

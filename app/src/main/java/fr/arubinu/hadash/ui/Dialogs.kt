@@ -27,6 +27,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -475,6 +477,18 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
 private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
     var code by remember { mutableStateOf("") }
     var wrong by remember { mutableStateOf(false) }
+    // Blocage après plusieurs erreurs (codes vérifiés par l'app uniquement ; l'alarme est vérifiée par HA).
+    val config = fr.arubinu.hadash.App.instance.config
+    var lockedUntil by remember { mutableStateOf(if (req.expected != null) config.pinLockedUntil() else 0L) }
+    var remaining by remember { mutableStateOf(0L) }
+    LaunchedEffect(lockedUntil) {
+        while (true) {
+            remaining = (lockedUntil - System.currentTimeMillis()).coerceAtLeast(0L)
+            if (remaining == 0L) break
+            delay(250)
+        }
+    }
+    val locked = remaining > 0L
     Sheet(onDismiss, 0.32f) {
         // Croix de fermeture (48dp de zone tactile).
         Box(
@@ -487,7 +501,14 @@ private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
                 Modifier.padding(top = 12.dp),
                 style = TextStyle(fontSize = 18.sp, color = Color.White),
             )
-            Text(
+            if (locked) {
+                val s = ((remaining + 999) / 1000).toInt()
+                Text(
+                    stringResource(R.string.pin_locked, "%d:%02d".format(s / 60, s % 60)),
+                    Modifier.heightIn(min = 34.dp), textAlign = TextAlign.Center,
+                    style = TextStyle(fontSize = 16.sp, color = Color(0xFFFF5252), lineHeight = 20.sp),
+                )
+            } else Text(
                 if (wrong) stringResource(R.string.pin_wrong) else "•".repeat(code.length).ifEmpty { " " },
                 style = TextStyle(fontSize = 26.sp, color = if (wrong) Color(0xFFFF5252) else Color.White, letterSpacing = 6.sp),
             )
@@ -496,16 +517,20 @@ private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
                 Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     row.forEach { k ->
                         Box(
-                            Modifier.size(64.dp).border(1.dp, Color(255, 255, 255, 60), CircleShape).clip(CircleShape)
+                            Modifier.size(64.dp).alpha(if (locked) 0.35f else 1f).border(1.dp, Color(255, 255, 255, 60), CircleShape).clip(CircleShape)
                                 .background(if (k == "✓") Dash.colors.firstButtonBackground else Color(255, 255, 255, 13))
                                 .tapHold({
+                                    if (locked) return@tapHold
                                     wrong = false
                                     when (k) {
                                         "⌫" -> code = code.dropLast(1)
                                         "✓" -> if (req.expected == null || req.expected == code) {
+                                            if (req.expected != null) config.pinSucceeded()
                                             onDismiss(); req.onOk(code)
                                         } else {
                                             wrong = true; code = ""
+                                            config.pinFailed()
+                                            lockedUntil = config.pinLockedUntil()
                                         }
                                         else -> if (code.length < 8) code += k
                                     }

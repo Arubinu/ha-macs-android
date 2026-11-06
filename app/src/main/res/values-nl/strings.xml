@@ -603,4 +603,5 @@
     <string name="setup_master_title">Mastercode (optioneel)</string>
     <string name="setup_master_help">Beschermt de toegang tot de instellingen. Laat leeg voor geen; hij kan later worden ingesteld in Instellingen › Beveiliging.</string>
     <string name="setup_master_kept">Er is al een mastercode ingesteld: laat leeg om hem te behouden.</string>
+    <string name="pin_locked">Te veel pogingen. Probeer het opnieuw over %1$s</string>
 </resources>

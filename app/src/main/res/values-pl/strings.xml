@@ -621,4 +621,5 @@
     <string name="setup_master_title">Kod główny (opcjonalnie)</string>
     <string name="setup_master_help">Chroni dostęp do ustawień. Zostaw puste, aby go nie ustawiać; można go ustawić później w Ustawienia › Bezpieczeństwo.</string>
     <string name="setup_master_kept">Kod główny jest już ustawiony: zostaw puste, aby go zachować.</string>
+    <string name="pin_locked">Zbyt wiele prób. Spróbuj ponownie za %1$s</string>
 </resources>

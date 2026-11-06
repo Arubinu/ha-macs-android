@@ -603,4 +603,5 @@
     <string name="setup_master_title">Mastercode (optional)</string>
     <string name="setup_master_help">Schützt den Zugang zu den Einstellungen. Leer lassen für keinen; er kann später unter Einstellungen › Sicherheit festgelegt werden.</string>
     <string name="setup_master_kept">Ein Mastercode ist bereits festgelegt: leer lassen, um ihn zu behalten.</string>
+    <string name="pin_locked">Zu viele Versuche. Erneut versuchen in %1$s</string>
 </resources>
