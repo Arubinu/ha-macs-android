@@ -61,8 +61,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 No primeiro arranque, o **assistente** encontra o Home Assistant na rede, inicia sessão e adapta o painel à sua casa. Já
 tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
 
-> 🔑 Valores opcionais em `local.properties` (não versionado) preenchem a ligação: `ha.url`, `ha.token`, `voice.url`.
-
 ## ⚙️ No dia a dia
 
 - ⚙️ **Definições**: toque longo no canto superior esquerdo (ligação, ecrã, suspensão, código de acesso, idioma…)

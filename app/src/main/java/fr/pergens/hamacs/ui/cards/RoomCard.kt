@@ -188,7 +188,10 @@ fun RoomButton(btn: Card, modifier: Modifier = Modifier, onEdit: (() -> Unit)? =
             .editOutline(state.editMode, CircleShape),
         contentAlignment = Alignment.Center,
     ) {
-        HaIcon(icon, size = (size.value * 26 / 46).dp, tint = c.named(btn.s("icon_color"), Color.White))
+        // Icône allumé / éteint en fondu enchaîné, au rythme de la couleur.
+        androidx.compose.animation.Crossfade(icon, animationSpec = tween(250), label = "btnIcon") { ic ->
+            HaIcon(ic, size = (size.value * 26 / 46).dp, tint = c.named(btn.s("icon_color"), Color.White))
+        }
     }
 }
 

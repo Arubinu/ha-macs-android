@@ -58,8 +58,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 On first launch, the **wizard** finds Home Assistant on the network and signs in, then adapts the dashboard to your
 home. Already have a backup? **Import** it on the first step and you are done.
 
-> 🔑 Optional `local.properties` values (not versioned) prefill the connection: `ha.url`, `ha.token`, `voice.url`.
-
 ## ⚙️ Everyday use
 
 - ⚙️ **Settings**: long press on the top-left corner (connection, display, sleep, access code, language…)

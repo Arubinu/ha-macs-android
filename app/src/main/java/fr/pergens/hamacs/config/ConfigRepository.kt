@@ -71,9 +71,9 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
     val rawDashboard: StateFlow<JsonObject> = _dashboard.asStateFlow()
 
     private fun readSettings() = Settings(
-        haUrl = prefs.getString("ha_url", null) ?: BuildConfig.DEFAULT_HA_URL,
-        haToken = prefs.getString("ha_token", null) ?: BuildConfig.DEFAULT_HA_TOKEN,
-        voiceUrl = prefs.getString("voice_url", null) ?: BuildConfig.DEFAULT_VOICE_URL,
+        haUrl = prefs.getString("ha_url", null) ?: "http://homeassistant.local:8123",
+        haToken = prefs.getString("ha_token", null) ?: "",
+        voiceUrl = prefs.getString("voice_url", null) ?: "ws://homeassistant.local:8765/ws",
         keepScreenOn = prefs.getBoolean("keep_screen_on", true),
         textScale = prefs.getFloat("text_scale", 0f),
         idleSeconds = prefs.getInt("idle_seconds", 120),

@@ -125,8 +125,8 @@ et alternance météo / prévisions.
 Options propres à l'app (équivalent du `card_mod`) : `position`, `margin`, `max_width`, `radius`,
 `large_button_size`, `large_button_right`, `content_padding_right`, `counter_top`, `counter_right`.
 
-En mode édition, toucher la carte ouvre son éditeur complet (comme l'éditeur visuel de Lovelace), avec aperçu en direct
-et un bouton pour importer la configuration de la carte depuis Home Assistant.
+En mode édition, toucher la carte ouvre son éditeur complet (comme l'éditeur visuel de Lovelace), avec aperçu en direct.
+Le module est entièrement autonome : il ne lit aucun tableau de bord de Home Assistant.
 
 ### Mode édition
 

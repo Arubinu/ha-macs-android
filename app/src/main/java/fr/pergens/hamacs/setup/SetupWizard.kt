@@ -588,7 +588,7 @@ private fun DoneStep(plan: SetupPlan) {
         }
         val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
         Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(Modifier.weight(1f)) { Field(plan.masterCode, { plan.masterCode = digits(it) }, stringResource(R.string.access_code_new), null, secret = true, digits = true) }
+            Box(Modifier.weight(1f)) { Field(plan.masterCode, { plan.masterCode = digits(it) }, stringResource(R.string.access_code_new), null, secret = true, digits = true, next = true) }
             Box(Modifier.weight(1f)) { Field(plan.masterConfirm, { plan.masterConfirm = digits(it) }, stringResource(R.string.access_code_confirm), null, secret = true, digits = true) }
         }
         val error = when {
@@ -721,12 +721,18 @@ private fun StatusLine(color: Color, text: String) {
 }
 
 @Composable
-private fun Field(value: String, onChange: (String) -> Unit, label: String, hint: String?, secret: Boolean = false, digits: Boolean = false) {
+private fun Field(value: String, onChange: (String) -> Unit, label: String, hint: String?, secret: Boolean = false, digits: Boolean = false, next: Boolean = false) {
+    // "Suivant" passe au champ suivant ; "OK" ferme le clavier.
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
     OutlinedTextField(
         value, onChange, Modifier.fillMaxWidth(), label = { Text(label) }, singleLine = true,
         placeholder = hint?.let { { Text(it, color = TextSecondary.copy(alpha = 0.5f)) } },
         visualTransformation = if (secret) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = if (digits) KeyboardType.NumberPassword else if (secret) KeyboardType.Password else KeyboardType.Uri),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (digits) KeyboardType.NumberPassword else if (secret) KeyboardType.Password else KeyboardType.Uri,
+            imeAction = if (next) androidx.compose.ui.text.input.ImeAction.Next else androidx.compose.ui.text.input.ImeAction.Done,
+        ),
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { focus.clearFocus() }),
         colors = OutlinedTextFieldDefaults.colors(focusedTextColor = TextPrimary, unfocusedTextColor = TextPrimary, focusedBorderColor = Dash.colors.accent),
     )
 }
@@ -735,12 +741,13 @@ private fun Field(value: String, onChange: (String) -> Unit, label: String, hint
 private fun WizardButton(text: String, primary: Boolean, enabled: Boolean = true, onClick: () -> Unit) {
     val shape = RoundedCornerShape(14.dp)
     val c = Dash.colors.accent
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
     Text(
         text,
         Modifier.heightIn(min = 52.dp).clip(shape)
             .background(if (primary) (if (enabled) c else c.copy(alpha = 0.3f)) else Color.Transparent, shape)
             .border(1.dp, if (primary) Color.Transparent else Outline, shape)
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
+            .then(if (enabled) Modifier.clickable { focus.clearFocus(); onClick() } else Modifier)
             .padding(horizontal = 28.dp, vertical = 15.dp),
         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = if (primary) Color.Black else TextPrimary, textAlign = TextAlign.Center),
     )

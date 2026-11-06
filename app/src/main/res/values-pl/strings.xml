@@ -714,4 +714,21 @@
     <string name="ha_device_registering">Rejestracja…</string>
     <string name="ha_device_failed">Błąd: %1$s</string>
     <string name="ha_device_usage">Usługa powiadomień: %1$s. Tekst: baner na ekranie. message: TTS z data.tts_text: czytanie na głos. message: command_screen_on: budzi ekran. message: command_camera z data.entity: kamera na pełnym ekranie.</string>
+    <string name="members_pick">Dotknij członka, aby zobaczyć jego informacje</string>
+    <string name="anim_off_title">Animacje wyłączone przez Androida</string>
+    <string name="anim_off_help">Opcja Androida „Usuń animacje” (Ułatwienia dostępu) jest włączona: przejścia w aplikacji są natychmiastowe. Wyłącz ją, aby odzyskać płynne animacje.</string>
+    <string name="anim_off_open">Otwórz Ułatwienia dostępu</string>
+    <string name="anim_off_dev">Opcje programistyczne</string>
+    <string name="anim_off_later">Później</string>
+    <string name="graph_details_help">Aktualna wartość każdej krzywej i jej ostatnie zmiany z 7 dni</string>
+    <string name="graph_details_lowest">Najniższa</string>
+    <string name="graph_details_highest">Najwyższa</string>
+    <string name="graph_details_unavailable">Niedostępne</string>
+    <string name="graph_details_no_change">Brak zmian od 7 dni</string>
+    <string name="graph_details_today">Dziś %1$s</string>
+    <string name="graph_details_yesterday">Wczoraj %1$s</string>
+    <string name="presence_details_home">W domu</string>
+    <string name="presence_details_away">Poza domem</string>
+    <string name="presence_details_total">W domu %1$s w ciągu ostatnich %2$d h</string>
+    <string name="presence_details_empty">Brak historii dla tego okresu</string>
 </resources>

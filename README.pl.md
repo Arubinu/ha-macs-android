@@ -60,9 +60,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 Przy pierwszym uruchomieniu **kreator** znajduje Home Assistant w sieci i loguje się, a następnie dopasowuje pulpit do Twojego
 domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 
-> 🔑 Opcjonalne wartości w `local.properties` (poza repozytorium) wstępnie wypełniają połączenie: `ha.url`,
-> `ha.token`, `voice.url`.
-
 ## ⚙️ Na co dzień
 
 - ⚙️ **Ustawienia**: długie naciśnięcie lewego górnego rogu (połączenie, wyświetlanie, uśpienie, kod dostępu, język…)

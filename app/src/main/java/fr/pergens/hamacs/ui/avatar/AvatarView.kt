@@ -42,6 +42,13 @@ val AvatarInactiveBackground = Color(0xFF181818)
 
 private val Grayscale = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
 
+/** Filtre de saturation [saturation] (1 = couleurs d'origine, 0 = noir et blanc). */
+private fun saturationFilter(saturation: Float): ColorFilter? = when {
+    saturation >= 1f -> null
+    saturation <= 0f -> Grayscale
+    else -> ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(saturation) })
+}
+
 /**
  * Dessin d'un avatar composé, avec les proportions d'origine : cercle de 836/1024 posé en bas et centré,
  * liseré blanc de 25/1024 à l'intérieur, image enregistrée de 1024 × 1024 déjà cadrée.
@@ -50,20 +57,23 @@ private val Grayscale = ColorFilter.colorMatrix(ColorMatrix().apply { setToSatur
  *   la tête dépasse et passe devant le liseré.
  * - `photo` : photo dans le cercle, en noir et blanc quand le membre n'est pas sélectionné, liseré par-dessus.
  */
-fun DrawScope.drawAvatar(image: ImageBitmap?, mode: String, background: Color, active: Boolean) {
+fun DrawScope.drawAvatar(image: ImageBitmap?, mode: String, background: Color, active: Boolean, saturation: Float = if (active) 1f else 0f) {
     val dst = IntSize(size.width.toInt(), size.height.toInt())
-    drawAvatarWith(mode, background, active, image != null) { filter -> drawImage(image!!, dstSize = dst, colorFilter = filter) }
+    drawAvatarWith(mode, background, active, image != null, saturation) { filter -> drawImage(image!!, dstSize = dst, colorFilter = filter) }
 }
 
 /** Même dessin, le personnage étant dessiné par [subject] (l'éditeur le place selon le cadrage en cours). */
-fun DrawScope.drawAvatarWith(mode: String, background: Color, active: Boolean, hasSubject: Boolean, subject: DrawScope.(ColorFilter?) -> Unit) {
+fun DrawScope.drawAvatarWith(
+    mode: String, background: Color, active: Boolean, hasSubject: Boolean,
+    saturation: Float = if (active) 1f else 0f, subject: DrawScope.(ColorFilter?) -> Unit,
+) {
     val s = size.minDimension
     val r = s * AvatarStore.CIRCLE / 2f
     val c = Offset(size.width / 2f, size.height - r)
     val ring = s * AvatarStore.RING
     drawCircle(background, r, c)
     if (mode == "photo") {
-        if (hasSubject) clipPath(Path().apply { addOval(Rect(c, r - ring / 2f)) }) { subject(if (active) null else Grayscale) }
+        if (hasSubject) clipPath(Path().apply { addOval(Rect(c, r - ring / 2f)) }) { subject(saturationFilter(saturation)) }
         drawCircle(Color.White, r - ring / 2f, c, style = Stroke(ring))
     } else {
         drawCircle(Color.White, r - ring / 2f, c, style = Stroke(ring))
@@ -107,12 +117,14 @@ fun MemberAvatar(memberId: String, active: Boolean, personPicture: String?, fall
     val avatars by store.avatars.collectAsState()
     val meta = avatars[memberId]
     val background = avatarBackground(active)
+    // Couleur ↔ noir et blanc en fondu, au même rythme que le fond.
+    val saturation by androidx.compose.animation.core.animateFloatAsState(if (active) 1f else 0f, tween(400), label = "avatarSat")
     when {
         meta != null -> {
             val image by produceState<ImageBitmap?>(null, memberId, meta.version) {
                 value = withContext(Dispatchers.IO) { store.load(memberId)?.asImageBitmap() }
             }
-            Canvas(modifier) { drawAvatar(image, meta.mode, background, active) }
+            Canvas(modifier) { drawAvatar(image, meta.mode, background, active, saturation) }
         }
         personPicture != null -> BoxWithConstraints(modifier) {
             // Photo de Home Assistant (URL) : même géométrie, l'image est posée dans le disque intérieur.
@@ -121,7 +133,7 @@ fun MemberAvatar(memberId: String, active: Boolean, personPicture: String?, fall
             Canvas(Modifier.fillMaxSize()) { drawAvatar(null, "photo", background, active) }
             AsyncImage(
                 model = personPicture, contentDescription = memberId, contentScale = ContentScale.Crop,
-                colorFilter = if (active) null else Grayscale,
+                colorFilter = saturationFilter(saturation),
                 modifier = Modifier.align(Alignment.BottomCenter).offset(y = -s * AvatarStore.RING).size(inner).clip(CircleShape),
             )
         }
@@ -133,7 +145,10 @@ fun MemberAvatar(memberId: String, active: Boolean, personPicture: String?, fall
                 Canvas(Modifier.fillMaxSize()) { drawAvatar(null, "photo", background, active) }
                 AvatarPlaceholder(active, minOf(maxWidth, maxHeight))
             } else AsyncImage(
-                model = fallbackUrl, contentDescription = memberId, contentScale = ContentScale.Fit,
+                // Paire d'images `_active` / `_inactive` : fondu enchaîné de l'une à l'autre.
+                model = coil.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
+                    .data(fallbackUrl).crossfade(400).build(),
+                contentDescription = memberId, contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize(), onError = { failed = true },
             )
         }

@@ -302,6 +302,8 @@ class MainActivity : ComponentActivity() {
                                 onImport = { applyImport(it) },
                             )
                             fr.pergens.hamacs.ui.CodeReplaceDialog()
+                            // « Supprimer les animations » d'Android activé : conseil au démarrage.
+                            fr.pergens.hamacs.ui.AnimationsNotice(state)
                             // Sonnette, détecteurs : caméra en plein écran sur un événement (option du bloc caméra).
                             fr.pergens.hamacs.ui.CameraEventWatcher()
                             // Notification de Home Assistant : bandeau en haut (refermé au toucher ou après 15 s).

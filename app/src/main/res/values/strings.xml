@@ -725,4 +725,21 @@
     <string name="ha_device_registering">Registering…</string>
     <string name="ha_device_failed">Failed: %1$s</string>
     <string name="ha_device_usage">Notification service: %1$s. Text: banner on the screen. message: TTS with data.tts_text: read aloud. message: command_screen_on: wakes the screen. message: command_camera with data.entity: camera fullscreen.</string>
+    <string name="members_pick">Tap a member to show their information</string>
+    <string name="anim_off_title">Animations turned off by Android</string>
+    <string name="anim_off_help">Android\'s “Remove animations” option (Accessibility) is on: the app\'s transitions are instant. Turn it off to get smooth animations back.</string>
+    <string name="anim_off_open">Open Accessibility</string>
+    <string name="anim_off_dev">Developer options</string>
+    <string name="anim_off_later">Later</string>
+    <string name="graph_details_help">Current value of each curve and its latest changes over 7 days</string>
+    <string name="graph_details_lowest">Lowest</string>
+    <string name="graph_details_highest">Highest</string>
+    <string name="graph_details_unavailable">Unavailable</string>
+    <string name="graph_details_no_change">No change in 7 days</string>
+    <string name="graph_details_today">Today %1$s</string>
+    <string name="graph_details_yesterday">Yesterday %1$s</string>
+    <string name="presence_details_home">At home</string>
+    <string name="presence_details_away">Away</string>
+    <string name="presence_details_total">At home %1$s over the last %2$d h</string>
+    <string name="presence_details_empty">No history for this period</string>
 </resources>

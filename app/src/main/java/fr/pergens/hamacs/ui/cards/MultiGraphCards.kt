@@ -195,9 +195,20 @@ internal fun MiniGraphMulti(card: Card, modifier: Modifier) {
     val fadeEdges = card.b("fade_edges")
     // Clé propre à cette carte (hauteur, titre, courbes), indépendante des entités partagées avec d'autres cartes.
     val key = card.s("_key") ?: fr.pergens.hamacs.config.BlockOverrides.multiGraphKey(card) ?: first.id
+    // Plusieurs courbes sur l'axe principal : un toucher ouvre leur détail (valeurs, écarts, derniers changements).
+    val primary = graphed.filter { !it.secondary }
+    var details by remember { mutableStateOf(false) }
+    if (details) GraphDetailsSheet(
+        card.s("name") ?: current?.name ?: first.id,
+        primary.map { e -> DetailLine(e.id, e.o.s("name") ?: allStates.value[e.id]?.name ?: e.id, colorOf(e, accent)) },
+        stateFrom, decimals,
+    ) { details = false }
 
     DashCard(
         modifier.fillMaxWidth().height(graphHeight(card, key, 220).dp).graphEdit(card, key, 220)
+            .then(if (!state.editMode && primary.size > 1) Modifier.clickable(
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null,
+            ) { state.lastInteraction = System.currentTimeMillis(); details = true } else Modifier)
             .then(if (fadeEdges) Modifier.fadeEdges() else Modifier),
         background = card.s("background")?.let { parseCssColor(it) } ?: Dash.colors.cardBackground,
     ) {

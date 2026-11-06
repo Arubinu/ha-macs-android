@@ -46,6 +46,30 @@ object CrashGuard {
 
     fun clear(ctx: Context) { file(ctx).delete() }
 
+    private val noted = java.util.Collections.synchronizedSet(HashSet<String>())
+
+    /**
+     * Erreur sans plantage (lecture vidéo…) notée dans le même journal, une seule fois par [key] depuis le démarrage
+     * (un flux en échec ne doit pas remplir le journal). Les adresses passent par [redact].
+     */
+    fun note(ctx: Context, key: String, title: String, detail: String, error: Throwable? = null) {
+        if (!noted.add(key)) return
+        runCatching {
+            val trace = error?.let { e ->
+                "\n" + StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().lines().take(25).joinToString("\n")
+            }.orEmpty()
+            val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT).format(Date())
+            val entry = "$date · v${BuildConfig.VERSION_NAME} · ${Build.MANUFACTURER} ${Build.MODEL} · Android ${Build.VERSION.RELEASE} · $title\n$detail$trace"
+            synchronized(this) { file(ctx).writeText((listOf(entry) + entries(ctx)).take(MAX_ENTRIES).joinToString(SEPARATOR)) }
+        }
+    }
+
+    /** Adresse sans secret : paramètres retirés, jeton des flux HLS de HA et identifiants masqués. */
+    fun redact(url: String?): String = url.orEmpty()
+        .substringBefore('?')
+        .replace(Regex("/api/hls/[^/]+/"), "/api/hls/…/")
+        .replace(Regex("//[^/@]+@"), "//…@")
+
     private fun record(ctx: Context, thread: Thread, error: Throwable) {
         val trace = StringWriter().also { error.printStackTrace(PrintWriter(it)) }.toString()
             .lines().take(40).joinToString("\n")

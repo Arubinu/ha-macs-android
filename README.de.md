@@ -59,9 +59,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 Beim ersten Start findet der **Assistent** Home Assistant im Netzwerk, meldet sich an und passt das Dashboard an dein
 Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
 
-> 🔑 Optionale Werte in `local.properties` (nicht versioniert) füllen die Verbindung vor: `ha.url`, `ha.token`,
-> `voice.url`.
-
 ## ⚙️ Im Alltag
 
 - ⚙️ **Einstellungen**: lange auf die obere linke Ecke drücken (Verbindung, Anzeige, Ruhezustand, Zugangscode,

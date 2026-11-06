@@ -694,4 +694,21 @@
     <string name="ha_device_registering">Registreren…</string>
     <string name="ha_device_failed">Mislukt: %1$s</string>
     <string name="ha_device_usage">Meldingsdienst: %1$s. Tekst: banner op het scherm. message: TTS met data.tts_text: voorlezen. message: command_screen_on: maakt het scherm wakker. message: command_camera met data.entity: camera schermvullend.</string>
+    <string name="members_pick">Tik op een lid om de gegevens te tonen</string>
+    <string name="anim_off_title">Animaties uitgezet door Android</string>
+    <string name="anim_off_help">De Android-optie ‘Animaties verwijderen’ (Toegankelijkheid) staat aan: overgangen in de app zijn direct. Zet haar uit voor vloeiende animaties.</string>
+    <string name="anim_off_open">Toegankelijkheid openen</string>
+    <string name="anim_off_dev">Ontwikkelaarsopties</string>
+    <string name="anim_off_later">Later</string>
+    <string name="graph_details_help">Huidige waarde van elke curve en de laatste wijzigingen in 7 dagen</string>
+    <string name="graph_details_lowest">Laagste</string>
+    <string name="graph_details_highest">Hoogste</string>
+    <string name="graph_details_unavailable">Niet beschikbaar</string>
+    <string name="graph_details_no_change">Geen wijziging in 7 dagen</string>
+    <string name="graph_details_today">Vandaag %1$s</string>
+    <string name="graph_details_yesterday">Gisteren %1$s</string>
+    <string name="presence_details_home">Thuis</string>
+    <string name="presence_details_away">Afwezig</string>
+    <string name="presence_details_total">Thuis %1$s in de laatste %2$d u</string>
+    <string name="presence_details_empty">Geen geschiedenis voor deze periode</string>
 </resources>

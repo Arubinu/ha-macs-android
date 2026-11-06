@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -71,12 +72,13 @@ private val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
 
 @Composable
 private fun CodeField(value: String, onChange: (String) -> Unit, label: String, modifier: Modifier = Modifier.fillMaxWidth(), onDone: (() -> Unit)? = null) {
-    // Touche du clavier : "Suivant" passe au champ suivant, "OK" (dernier champ) valide.
+    // Touche du clavier : "Suivant" passe au champ suivant, "OK" (dernier champ) valide et ferme le clavier.
+    val focus = LocalFocusManager.current
     OutlinedTextField(
         value, { onChange(digits(it)) }, modifier, label = { Text(label) }, singleLine = true,
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword, imeAction = if (onDone != null) ImeAction.Done else ImeAction.Next),
-        keyboardActions = KeyboardActions(onDone = { onDone?.invoke() }),
+        keyboardActions = KeyboardActions(onDone = { onDone?.invoke(); focus.clearFocus() }),
         colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.White, unfocusedTextColor = Color.White, focusedBorderColor = Dash.colors.accent),
     )
 }
@@ -85,12 +87,13 @@ private fun CodeField(value: String, onChange: (String) -> Unit, label: String, 
 private fun SheetButton(text: String, primary: Boolean, enabled: Boolean = true, onClick: () -> Unit) {
     val shape = RoundedCornerShape(12.dp)
     val c = Dash.colors.accent
+    val focus = LocalFocusManager.current
     Text(
         text,
         Modifier.heightIn(min = 44.dp).clip(shape)
             .background(if (primary) (if (enabled) c else c.copy(alpha = 0.3f)) else Color.Transparent, shape)
             .border(1.dp, if (primary) Color.Transparent else c.copy(alpha = if (enabled) 1f else 0.3f), shape)
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
+            .then(if (enabled) Modifier.clickable { focus.clearFocus(); onClick() } else Modifier)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium, color = if (primary) Color.Black else c.copy(alpha = if (enabled) 1f else 0.3f)),
     )

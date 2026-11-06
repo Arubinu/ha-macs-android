@@ -122,16 +122,6 @@ fun AlertTickerEditor(cardKey: String, onClose: () -> Unit) {
                     Text("AlertTicker Card", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Medium)
                     Text(message ?: i18n.e("hub_welcome"), color = if (message != null) Dash.colors.accent else Muted, fontSize = 13.sp)
                 }
-                ActionChip("⤓ Home Assistant") {
-                    scope.launch {
-                        message = runCatching { importFromHa(app, base) }.fold({ imported ->
-                            if (imported == null) i18n.a("import_none") else {
-                                draft = mergeImport(draft, imported); i18n.a("import_done")
-                            }
-                        }, { i18n.a("import_failed", it.message) })
-                    }
-                }
-                Spacer(Modifier.width(8.dp))
                 ActionChip(if (app.config.blocks.value[cardKey]?.o("config") != null) i18n.a("reset_chip") else null) {
                     draft = base; editing = -1; message = i18n.a("reset_done")
                 }
@@ -183,7 +173,7 @@ fun AlertTickerEditor(cardKey: String, onClose: () -> Unit) {
                 // Contenu + aperçu
                 Column(Modifier.weight(1f).fillMaxHeight()) {
                     Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Color(0xFF050507)).padding(18.dp), contentAlignment = Alignment.Center) {
-                        Box(Modifier.widthIn(max = (draft.d("max_width") ?: 460.0).dp).fillMaxWidth()) {
+                        Box(Modifier.widthIn(max = (draft.d("max_width") ?: 500.0).dp).fillMaxWidth()) {
                             AtcView(draft, preview, previewEngine, cardKey, previewIndex = if (draft.b("test_mode") && editing >= 0) editing else null)
                         }
                     }
@@ -212,31 +202,6 @@ private fun findCard(el: JsonElement, key: String): JsonObject? = when (el) {
     is JsonObject -> if (el.s("type") in AlertHub.TYPES && AlertHub.cardKey(el) == key) el else el.values.firstNotNullOfOrNull { findCard(it, key) }
     is JsonArray -> el.firstNotNullOfOrNull { findCard(it, key) }
     else -> null
-}
-
-/** Cherche la première `custom:alert-ticker-card` des tableaux de bord de Home Assistant. */
-private suspend fun importFromHa(app: App, base: JsonObject): JsonObject? {
-    val ha = app.ha
-    val dashboards = (ha.call(buildJsonObject { put("type", "lovelace/dashboards/list") }) as? JsonArray)?.mapNotNull { (it as? JsonObject)?.s("url_path") } ?: emptyList()
-    val preferred = base.s("lovelace_dashboard")
-    for (path in listOfNotNull(preferred) + dashboards + listOf<String?>(null)) {
-        val cfg = runCatching {
-            ha.call(buildJsonObject { put("type", "lovelace/config"); path?.let { put("url_path", it) } }, 30_000)
-        }.getOrNull() ?: continue
-        fun find(e: JsonElement): JsonObject? = when (e) {
-            is JsonObject -> if (e.s("type") == "custom:alert-ticker-card") e else e.values.firstNotNullOfOrNull { find(it) }
-            is JsonArray -> e.firstNotNullOfOrNull { find(it) }
-            else -> null
-        }
-        find(cfg)?.let { return it }
-    }
-    return null
-}
-
-/** Reprend les options de la carte HA en gardant le placement propre à l'app (position, marge, id…). */
-private fun mergeImport(draft: JsonObject, imported: JsonObject): JsonObject {
-    val keep = setOf("type", "id", "position", "margin", "max_width", "radius", "large_button_size", "large_button_right", "content_padding_right", "counter_top", "counter_right", "lovelace_dashboard")
-    return JsonObject(draft.filterKeys { it in keep } + imported.filterKeys { it != "type" && it != "card_mod" })
 }
 
 // ------------------------------------------------------------------------------------------------

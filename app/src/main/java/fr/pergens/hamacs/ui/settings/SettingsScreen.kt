@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -79,6 +80,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.material3.CircularProgressIndicator
 import fr.pergens.hamacs.update.Updater.State as UpdateState
 import androidx.compose.ui.res.pluralStringResource
@@ -86,6 +89,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -347,8 +351,12 @@ private fun SliderRow(title: String, supporting: String?, value: Float, range: C
 }
 
 @Composable
-private fun Field(value: String, onChange: (String) -> Unit, label: String, hint: String?, help: String?, secret: Boolean = false, keyboard: KeyboardType = KeyboardType.Uri) {
+private fun Field(
+    value: String, onChange: (String) -> Unit, label: String, hint: String?, help: String?, secret: Boolean = false,
+    keyboard: KeyboardType = KeyboardType.Uri, next: Boolean = false, onDone: (() -> Unit)? = null,
+) {
     var visible by remember { mutableStateOf(false) }
+    val focus = LocalFocusManager.current
     OutlinedTextField(
         value, onChange,
         Modifier.fillMaxWidth(),
@@ -357,10 +365,15 @@ private fun Field(value: String, onChange: (String) -> Unit, label: String, hint
         supportingText = help?.let { { Text(it) } },
         singleLine = true,
         visualTransformation = if (secret && !visible) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = if (secret) KeyboardType.Password else keyboard),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (secret) (if (keyboard == KeyboardType.NumberPassword) keyboard else KeyboardType.Password) else keyboard,
+            imeAction = if (next) ImeAction.Next else ImeAction.Done,
+        ),
+        keyboardActions = KeyboardActions(onDone = { onDone?.invoke(); focus.clearFocus() }),
         trailingIcon = if (secret) {
             {
-                TextButton(onClick = { visible = !visible }) {
+                // Hors du parcours « Suivant » du clavier (qui doit aller au champ suivant).
+                TextButton(onClick = { visible = !visible }, Modifier.focusProperties { canFocus = false }) {
                     Text(stringResource(if (visible) R.string.hide else R.string.show))
                 }
             }
@@ -615,6 +628,17 @@ private fun DisplaySection() {
     val systemScale = (ctx.resources.configuration.fontScale * 100).roundToInt()
     val custom = settings.textScale > 0f
 
+    // « Supprimer les animations » d'Android activé : conseil et ouverture du réglage.
+    if (fr.pergens.hamacs.ui.rememberAnimationsOff()) Group {
+        Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                HaIcon("mdi:animation-play-outline", size = 22.dp, tint = Dash.colors.accent)
+                Text(stringResource(R.string.anim_off_title), Modifier.padding(start = 10.dp), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+            }
+            Text(stringResource(R.string.anim_off_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+            fr.pergens.hamacs.ui.AnimationsButtons()
+        }
+    }
     Group { AccentPicker(settings.accentColor) { hex -> app.config.update { it.copy(accentColor = hex) } } }
     Group {
         Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -841,31 +865,34 @@ private fun SecuritySection() {
     val saved = stringResource(R.string.access_code_saved)
     val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
 
+    val focus = LocalFocusManager.current
+    val canChange = current.isNotEmpty() && new1.isNotEmpty() && new2.isNotEmpty()
+    val change = {
+        focus.clearFocus()
+        val error = fr.pergens.hamacs.ui.checkCurrentCode(current, app.config.accessCode(), wrong)
+        message = when {
+            error != null -> { current = ""; error to true }
+            new1.length !in 4..8 -> invalid to true
+            new1 != new2 -> mismatch to true
+            else -> {
+                app.config.setAccessCode(new1)
+                current = ""; new1 = ""; new2 = ""
+                saved to false
+            }
+        }
+    }
+
     var open by remember { mutableStateOf(false) }
     Group {
         // Enroulé par défaut : un appui sur l'en-tête déroule les champs de modification.
         SettingRow(stringResource(R.string.access_code), stringResource(R.string.access_code_help), onClick = { open = !open }) { Chevron(open) }
         Unfold(open) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Field(current, { current = digits(it); message = null }, stringResource(R.string.access_code_current), null, null, secret = true)
-            Field(new1, { new1 = digits(it); message = null }, stringResource(R.string.access_code_new), null, null, secret = true)
-            Field(new2, { new2 = digits(it); message = null }, stringResource(R.string.access_code_confirm), null, null, secret = true)
+            CodeFields(current, { current = it; message = null }, new1, { new1 = it; message = null }, new2, { new2 = it; message = null }) { if (canChange) change() }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
-                    onClick = {
-                        val error = fr.pergens.hamacs.ui.checkCurrentCode(current, app.config.accessCode(), wrong)
-                        message = when {
-                            error != null -> { current = ""; error to true }
-                            new1.length !in 4..8 -> invalid to true
-                            new1 != new2 -> mismatch to true
-                            else -> {
-                                app.config.setAccessCode(new1)
-                                current = ""; new1 = ""; new2 = ""
-                                saved to false
-                            }
-                        }
-                    },
-                    enabled = current.isNotEmpty() && new1.isNotEmpty() && new2.isNotEmpty(),
+                    onClick = change,
+                    enabled = canChange,
                     modifier = Modifier.heightIn(min = 48.dp),
                 ) { Text(stringResource(R.string.access_code_change)) }
                 Spacer(Modifier.width(16.dp))
@@ -876,6 +903,19 @@ private fun SecuritySection() {
     }
     MasterCodeGroup()
     KioskGroup()
+}
+
+/** Champs de changement de code : actuel (null = pas de code défini), nouveau et confirmation. */
+@Composable
+private fun CodeFields(
+    current: String?, onCurrent: (String) -> Unit, new1: String, onNew1: (String) -> Unit,
+    new2: String, onNew2: (String) -> Unit, onDone: () -> Unit,
+) {
+    val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
+    val type = KeyboardType.NumberPassword
+    if (current != null) Field(current, { onCurrent(digits(it)) }, stringResource(R.string.access_code_current), null, null, secret = true, keyboard = type, next = true)
+    Field(new1, { onNew1(digits(it)) }, stringResource(R.string.access_code_new), null, null, secret = true, keyboard = type, next = true)
+    Field(new2, { onNew2(digits(it)) }, stringResource(R.string.access_code_confirm), null, null, secret = true, keyboard = type, onDone = onDone)
 }
 
 /** Flèche d'un groupe enroulable (vers le bas fermé, vers le haut ouvert). */
@@ -917,6 +957,24 @@ private fun MasterCodeGroup() {
         if (!defined) null else fr.pergens.hamacs.ui.checkCurrentCode(current, app.config.masterCode(), wrong)?.also { current = "" }
     }
 
+    val focus = LocalFocusManager.current
+    val canSave = (!defined || current.isNotEmpty()) && new1.isNotEmpty() && new2.isNotEmpty()
+    val save = {
+        focus.clearFocus()
+        val error = currentError()
+        message = when {
+            error != null -> error to true
+            new1.length !in 4..8 -> invalid to true
+            new1 != new2 -> mismatch to true
+            else -> {
+                app.config.setMasterCode(new1)
+                defined = true
+                current = ""; new1 = ""; new2 = ""
+                saved to false
+            }
+        }
+    }
+
     var open by remember { mutableStateOf(false) }
     Group {
         // Enroulé par défaut ; l'état (défini ou non) reste visible sur l'en-tête.
@@ -929,32 +987,18 @@ private fun MasterCodeGroup() {
         }
         Unfold(open) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (defined) Field(current, { current = digits(it); message = null }, stringResource(R.string.access_code_current), null, null, secret = true)
-            Field(new1, { new1 = digits(it); message = null }, stringResource(R.string.access_code_new), null, null, secret = true)
-            Field(new2, { new2 = digits(it); message = null }, stringResource(R.string.access_code_confirm), null, null, secret = true)
+            CodeFields(current.takeIf { defined }, { current = it; message = null }, new1, { new1 = it; message = null }, new2, { new2 = it; message = null }) { if (canSave) save() }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
-                    onClick = {
-                        val error = currentError()
-                        message = when {
-                            error != null -> error to true
-                            new1.length !in 4..8 -> invalid to true
-                            new1 != new2 -> mismatch to true
-                            else -> {
-                                app.config.setMasterCode(new1)
-                                defined = true
-                                current = ""; new1 = ""; new2 = ""
-                                saved to false
-                            }
-                        }
-                    },
-                    enabled = (!defined || current.isNotEmpty()) && new1.isNotEmpty() && new2.isNotEmpty(),
+                    onClick = save,
+                    enabled = canSave,
                     modifier = Modifier.heightIn(min = 48.dp),
                 ) { Text(stringResource(R.string.master_code_save)) }
                 if (defined) {
                     Spacer(Modifier.width(12.dp))
                     OutlinedButton(
                         onClick = {
+                            focus.clearFocus()
                             val error = currentError()
                             message = if (error != null) error to true else {
                                 app.config.setMasterCode("")

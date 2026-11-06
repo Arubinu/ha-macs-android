@@ -712,4 +712,21 @@
     <string name="ha_device_registering">Enregistrement…</string>
     <string name="ha_device_failed">Échec : %1$s</string>
     <string name="ha_device_usage">Service de notification : %1$s. Texte : bandeau à l\'écran. message: TTS avec data.tts_text : lecture à voix haute. message: command_screen_on : allume l\'écran. message: command_camera avec data.entity : caméra en plein écran.</string>
+    <string name="members_pick">Touchez un membre pour afficher ses informations</string>
+    <string name="anim_off_title">Animations coupées par Android</string>
+    <string name="anim_off_help">L\'option « Supprimer les animations » d\'Android (Accessibilité) est activée : les transitions de l\'app sont instantanées. Désactivez-la pour retrouver des animations fluides.</string>
+    <string name="anim_off_open">Ouvrir l\'accessibilité</string>
+    <string name="anim_off_dev">Options pour les développeurs</string>
+    <string name="anim_off_later">Plus tard</string>
+    <string name="graph_details_help">Valeur actuelle de chaque courbe et ses derniers changements sur 7 jours</string>
+    <string name="graph_details_lowest">Le plus bas</string>
+    <string name="graph_details_highest">Le plus haut</string>
+    <string name="graph_details_unavailable">Indisponible</string>
+    <string name="graph_details_no_change">Aucun changement en 7 jours</string>
+    <string name="graph_details_today">Aujourd\'hui %1$s</string>
+    <string name="graph_details_yesterday">Hier %1$s</string>
+    <string name="presence_details_home">À la maison</string>
+    <string name="presence_details_away">Absent</string>
+    <string name="presence_details_total">À la maison %1$s sur les dernières %2$d h</string>
+    <string name="presence_details_empty">Aucun historique sur cette période</string>
 </resources>

@@ -60,9 +60,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 Bij de eerste start vindt de **assistent** Home Assistant op het netwerk, logt in en past het dashboard aan je
 huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent klaar.
 
-> 🔑 Optionele waarden in `local.properties` (niet geversioneerd) vullen de verbinding vooraf in: `ha.url`,
-> `ha.token`, `voice.url`.
-
 ## ⚙️ Dagelijks gebruik
 
 - ⚙️ **Instellingen**: lang drukken op de linkerbovenhoek (verbinding, weergave, slaapstand, toegangscode, taal…)

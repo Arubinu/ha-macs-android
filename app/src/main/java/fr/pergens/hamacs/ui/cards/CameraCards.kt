@@ -353,7 +353,13 @@ private fun InlineLive(
                 rendered = true
                 onFirstFrame()
             }
-            override fun onPlayerError(error: androidx.media3.common.PlaybackException) = onError()
+            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                fr.pergens.hamacs.CrashGuard.note(
+                    ctx, "inline:$camId:${error.errorCodeName}", "Vidéo dans la carte",
+                    "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\nerreur ${error.errorCodeName} : ${error.message}", error,
+                )
+                onError()
+            }
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_ENDED) onEnded()
             }
@@ -364,7 +370,13 @@ private fun InlineLive(
     // Pas de première image au bout de 25 s : flux considéré indisponible.
     LaunchedEffect(Unit) {
         delay(25_000)
-        if (!rendered) onError()
+        if (!rendered) {
+            fr.pergens.hamacs.CrashGuard.note(
+                ctx, "inline:$camId:timeout", "Vidéo dans la carte",
+                "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\naucune image au bout de 25 s (état ${player.playbackState}, format ${player.videoFormat?.sampleMimeType})",
+            )
+            onError()
+        }
     }
     AndroidView(
         factory = {
@@ -460,7 +472,9 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                     val video = d.video ?: return@tapHold
                     val fullscreen = App.instance.config.settings.value.tapFullscreen || (isPlaying && videoShown)
                     scope.launch {
-                        val url = videoUrl ?: runCatching { video() }.getOrNull()?.also { videoUrl = it } ?: return@launch
+                        val url = videoUrl ?: runCatching { video() }.onFailure {
+                            fr.pergens.hamacs.CrashGuard.note(App.instance, "capture:${d.id}", "Vidéo d'une capture", "capture ${d.camera} ${d.time} : vidéo introuvable", it)
+                        }.getOrNull()?.also { videoUrl = it } ?: return@launch
                         if (fullscreen) {
                             playing = null
                             state.player = url

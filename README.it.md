@@ -61,9 +61,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 Al primo avvio, la **procedura guidata** trova Home Assistant sulla rete e accede, poi adatta la dashboard alla
 tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
 
-> 🔑 Valori facoltativi in `local.properties` (non versionato) precompilano la connessione: `ha.url`, `ha.token`,
-> `voice.url`.
-
 ## ⚙️ Nell'uso quotidiano
 
 - ⚙️ **Impostazioni**: pressione prolungata sull'angolo in alto a sinistra (connessione, display, standby, codice di

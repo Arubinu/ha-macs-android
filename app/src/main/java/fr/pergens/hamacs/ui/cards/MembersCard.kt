@@ -99,19 +99,21 @@ fun MembersCard(card: Card, modifier: Modifier) {
     // éventuel du sélecteur est porté par la clé du bloc.
     val guardKey = fr.pergens.hamacs.config.BlockOverrides.MEMBERS_KEY
     val prefs = remember { App.instance.getSharedPreferences("members", android.content.Context.MODE_PRIVATE) }
-    // Membre favori (mode édition) : affiché au démarrage et à chaque retour sur l'écran d'accueil.
+    // Membre favori (mode édition) : affiché au démarrage et à chaque retour sur l'écran d'accueil. Sans favori, un
+    // membre protégé par un code n'y reste pas affiché : il faut le redemander (code compris).
     val favorite = App.instance.config.blocks.collectAsState().value[guardKey]?.s("favorite")
+    fun locked(id: String?) = id != null && (state.isProtected(guardKey, false) || state.isProtected("member:$id", false))
+    fun reset(current: String?): String? = (favorite ?: current?.takeUnless { locked(it) }).also {
+        prefs.edit().apply { if (it != null) putString("selected", it) else remove("selected") }.apply()
+    }
     var selected by remember {
-        val start = favorite?.takeIf { !state.memberFavoriteApplied }
+        val saved = prefs.getString("selected", null)
+        val start = if (state.memberFavoriteApplied) saved else reset(saved)
         state.memberFavoriteApplied = true
-        start?.let { prefs.edit().putString("selected", it).apply() }
-        androidx.compose.runtime.mutableStateOf(start ?: prefs.getString("selected", null))
+        androidx.compose.runtime.mutableStateOf(start)
     }
     androidx.compose.runtime.SideEffect {
-        if (favorite != null) state.onHome["members"] = {
-            prefs.edit().putString("selected", favorite).apply()
-            selected = favorite
-        } else state.onHome.remove("members")
+        state.onHome["members"] = { selected = reset(selected) }
     }
     val members = card.objs("members")
     val avatarUrl = card.s("avatar_url") ?: "/local/images/avatars/mini/{member}_{state}.jpg"
@@ -124,7 +126,8 @@ fun MembersCard(card: Card, modifier: Modifier) {
             JsonObject(st.values.filter { it.domain == "zone" }.associate { it.name to JsonPrimitive(it.attrString("icon") ?: "mdi:map-marker") })
         }
     }
-    val member = members.firstOrNull { it.s("id") == selected } ?: members.firstOrNull()
+    // Aucun membre choisi : le premier qui n'est pas protégé (aucun si tous le sont).
+    val member = members.firstOrNull { it.s("id") == selected } ?: members.firstOrNull { !locked(it.s("id")) }
 
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
         // Avatars : autant que la largeur le permet sans se chevaucher ; au-delà, flèches et défilement par page.
@@ -222,6 +225,11 @@ fun MembersCard(card: Card, modifier: Modifier) {
             ) { m ->
                 Column(verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) { MemberDetails(card, m) }
             }
+        } else if (members.isNotEmpty()) {
+            Text(
+                stringResource(R.string.members_pick), Modifier.fillMaxWidth().padding(top = 24.dp),
+                style = TextStyle(fontSize = 15.sp, color = Color.White.copy(alpha = 0.6f), textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+            )
         }
     }
 }
@@ -269,6 +277,7 @@ private fun MemberDetails(card: Card, m: Card) {
     PresenceHistoryCard(
         buildJsonObject {
             put("entity", JsonPrimitive(homeId ?: ""))
+            (m.s("name") ?: entity(m.s("person") ?: "person.${m.s("id")}")?.name)?.let { put("name", JsonPrimitive(it)) }
             put("hours", JsonPrimitive(24))
         },
         Modifier,
@@ -300,7 +309,13 @@ fun PresenceHistoryCard(card: Card, modifier: Modifier) {
     LaunchedEffect(id, current?.state) {
         runCatching { spans = state.ha.history(listOf(id), hours)[id].orEmpty() }
     }
-    DashCard(modifier.fillMaxWidth(), padding = 12.dp) {
+    // Toucher la barre : arrivées et départs de la période, avec leurs heures.
+    var details by remember { mutableStateOf(false) }
+    if (details) PresenceDetailsSheet(
+        listOfNotNull(stringResource(R.string.presence_title), card.s("name") ?: current?.name).joinToString(" · "),
+        spans, hours, on, off,
+    ) { details = false }
+    DashCard(modifier.fillMaxWidth().tapHold({ state.lastInteraction = System.currentTimeMillis(); details = true }), padding = 12.dp) {
         Column {
             Canvas(Modifier.fillMaxWidth().height(30.dp)) {
                 val now = System.currentTimeMillis()

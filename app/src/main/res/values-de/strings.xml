@@ -694,4 +694,21 @@
     <string name="ha_device_registering">Registrierung…</string>
     <string name="ha_device_failed">Fehlgeschlagen: %1$s</string>
     <string name="ha_device_usage">Benachrichtigungsdienst: %1$s. Text: Banner auf dem Bildschirm. message: TTS mit data.tts_text: Vorlesen. message: command_screen_on: weckt den Bildschirm. message: command_camera mit data.entity: Kamera im Vollbild.</string>
+    <string name="members_pick">Tippe auf ein Mitglied, um seine Informationen anzuzeigen</string>
+    <string name="anim_off_title">Animationen von Android deaktiviert</string>
+    <string name="anim_off_help">Die Android-Option „Animationen entfernen“ (Bedienungshilfen) ist aktiv: Übergänge der App sind sofort. Schalte sie aus, um wieder flüssige Animationen zu erhalten.</string>
+    <string name="anim_off_open">Bedienungshilfen öffnen</string>
+    <string name="anim_off_dev">Entwickleroptionen</string>
+    <string name="anim_off_later">Später</string>
+    <string name="graph_details_help">Aktueller Wert jeder Kurve und ihre letzten Änderungen in 7 Tagen</string>
+    <string name="graph_details_lowest">Am niedrigsten</string>
+    <string name="graph_details_highest">Am höchsten</string>
+    <string name="graph_details_unavailable">Nicht verfügbar</string>
+    <string name="graph_details_no_change">Keine Änderung in 7 Tagen</string>
+    <string name="graph_details_today">Heute %1$s</string>
+    <string name="graph_details_yesterday">Gestern %1$s</string>
+    <string name="presence_details_home">Zu Hause</string>
+    <string name="presence_details_away">Abwesend</string>
+    <string name="presence_details_total">Zu Hause %1$s in den letzten %2$d h</string>
+    <string name="presence_details_empty">Kein Verlauf für diesen Zeitraum</string>
 </resources>

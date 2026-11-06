@@ -276,7 +276,7 @@ private fun configFlag(root: kotlinx.serialization.json.JsonElement, entity: Str
 }
 
 @Composable
-private fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, modifier: Modifier = Modifier, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+internal fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, modifier: Modifier = Modifier, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         val shape = RoundedCornerShape(20.dp)
         Box(
@@ -436,12 +436,36 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
     var error by remember(target) { mutableStateOf<String?>(null) }
     LaunchedEffect(target) {
         if (target.startsWith("camera.")) {
-            runCatching { url = state.ha.cameraStreamUrl(target) }.onFailure { error = it.message }
+            runCatching { url = state.ha.cameraStreamUrl(target) }.onFailure {
+                error = it.message
+                fr.pergens.hamacs.CrashGuard.note(ctx, "fullscreen:$target:stream", "Vidéo plein écran", "flux de $target refusé par Home Assistant", it)
+            }
         }
     }
     val player = remember { ExoPlayer.Builder(ctx).build() }
     val fill = fr.pergens.hamacs.App.instance.config.settings.collectAsState().value.fullscreenFill
     DisposableEffect(Unit) { onDispose { player.release() } }
+    // Erreurs notées dans le journal (Réglages › À propos) : le flux plein écran peut rester noir sans autre signe.
+    fun note(what: String, e: Throwable? = null) = fr.pergens.hamacs.CrashGuard.note(
+        ctx, "fullscreen:$target:$what", "Vidéo plein écran",
+        "cible : ${fr.pergens.hamacs.CrashGuard.redact(target)}\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\n$what", e,
+    )
+    var rendered by remember(target) { mutableStateOf(false) }
+    DisposableEffect(player) {
+        val l = object : androidx.media3.common.Player.Listener {
+            override fun onRenderedFirstFrame() { rendered = true }
+            override fun onPlayerError(e: androidx.media3.common.PlaybackException) {
+                error = e.errorCodeName
+                note("erreur ${e.errorCodeName} : ${e.message}", e)
+            }
+        }
+        player.addListener(l)
+        onDispose { player.removeListener(l) }
+    }
+    LaunchedEffect(target) {
+        delay(25_000)
+        if (!rendered && error == null) note("aucune image au bout de 25 s (état ${player.playbackState}, format ${player.videoFormat?.sampleMimeType})")
+    }
     LaunchedEffect(url) {
         url?.let {
             player.setMediaItem(MediaItem.fromUri(it))

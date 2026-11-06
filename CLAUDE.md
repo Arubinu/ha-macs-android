@@ -6,8 +6,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 ## Règles
 
 - Répondre **uniquement en français**.
-- **Token HA** : uniquement dans `local.properties` (gitignoré) et dans les prefs de l'app. Ne jamais le committer,
-  ni l'écrire dans un fichier suivi. La config exportée contient le token et le code d'accès : ne pas la publier.
+- **Token HA** : uniquement dans les prefs de l'app. Ne jamais le committer, ni l'écrire dans un fichier suivi, ni le
+  compiler dans l'APK (plus de préremplissage depuis `local.properties` : un APK installé ailleurs l'emportait).
+  La config exportée contient le token et le code d'accès : ne pas la publier.
 - **Ne jamais actionner de vrais appareils** pendant les tests (lumières, volets, scènes, services…).
 - **Réglages globaux** → page Réglages. **Réglages propres à un bloc** → mode édition (éditeur du bloc).
 - Ne pas exécuter de code externe téléchargé ; le lire / parser comme donnée est OK.

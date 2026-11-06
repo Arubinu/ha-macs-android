@@ -58,7 +58,7 @@
           "id": "alerts",
           "position": "top_end",
           "margin": 18,
-          "max_width": 460,
+          "max_width": 500,
           "radius": 20,
           "large_button_size": 35,
           "large_button_right": 15,
@@ -66,7 +66,6 @@
           "counter_top": 10,
           "counter_right": 14,
           "show_history_button": false,
-          "lovelace_dashboard": "dashboard-tablette",
           "cycle_interval": 10,
           "show_when_clear": false,
           "clear_message": "",
@@ -401,7 +400,7 @@
               "use_ha_icon": false,
               "conditions_logic": "or",
               "show_filter_name": false,
-              "secondary_text": "{name} à {state}%"
+              "secondary_text": "{name} à {state}"
             },
             {
               "entity": "binary_sensor.boite_aux_lettres_occupancy",

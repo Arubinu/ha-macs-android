@@ -29,9 +29,6 @@ android {
         versionCode = parts[0] * 10000 + parts[1] * 100 + parts[2]
         versionName = appVersion
 
-        buildConfigField("String", "DEFAULT_HA_URL", "\"${localProp("ha.url", "http://homeassistant.local:8123")}\"")
-        buildConfigField("String", "DEFAULT_HA_TOKEN", "\"${localProp("ha.token")}\"")
-        buildConfigField("String", "DEFAULT_VOICE_URL", "\"${localProp("voice.url", "ws://homeassistant.local:8765/ws")}\"")
     }
 
     // Clé de release : variables d'environnement (GitHub Actions) ou local.properties (release.store.file…).

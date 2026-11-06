@@ -61,9 +61,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'y connecte, puis adapte le tableau de bord
 à votre maison. Vous avez déjà une sauvegarde ? **Importez-la** dès la première étape, et c'est terminé.
 
-> 🔑 Des valeurs facultatives dans `local.properties` (non versionné) préremplissent la connexion : `ha.url`,
-> `ha.token`, `voice.url`.
-
 ## ⚙️ Au quotidien
 
 - ⚙️ **Réglages** : appui long sur le coin supérieur gauche (connexion, affichage, veille, code d'accès, langue…)
