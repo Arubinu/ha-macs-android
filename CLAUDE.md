@@ -69,6 +69,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   restauration par `push` puis `run-as … tar xf`. Après `pm clear`, redonner l'autorisation caméra.
 - Lancer l'app avec `am start -n fr.pergens.hamacs/.MainActivity` : `monkey` ouvre parfois le choix de l'écran
   d'accueil (l'app se déclare HOME pour le kiosque).
+- Un clavier ouvert fait remonter les fenêtres : ne pas enchaîner des coordonnées après une saisie. Viser les champs
+  par leur libellé (`tapt "Nouveau code (4 à 8 chiffres)"`) et passer au suivant / valider avec `input keyevent 66`.
+- `ffmpeg` dans Git Bash est un script qui boucle : appeler `/d/Logiciels/ffmpeg/ffmpeg.exe` (vidéo d'animation :
+  `adb shell screenrecord --time-limit 3 …`, puis une mosaïque d'images avec `-vf "fps=20,…,tile=8x4"`).
 - Une liste qui défile (`verticalScroll`) dans une colonne qui défile déjà doit toujours avoir une hauteur maximale
   finie, même provisoire, sinon Compose plante (c'est arrivé avec le calendrier des membres).
 - **Captures des README** : faux serveur Home Assistant `tools/demo/demo_ha.py` (données fictives) et script
