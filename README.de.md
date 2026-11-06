@@ -97,8 +97,6 @@ cd gateway && docker compose up -d
 
 - 📖 [Technische Referenz](docs/reference.fr.md) (auf Französisch): `dashboard.json`, Kartentypen, Erkennungen,
   AlertTicker, Bearbeitungsmodus, Sprach-Gateway
-- 🗂️ **Persönliche Dateien**: alles in `private/assets/` (nicht versioniert) ersetzt beim Build die Assets der App,
-  z. B. deine eigene `dashboard.json`
 
 ## 📄 Lizenz
 

@@ -96,8 +96,6 @@ cd gateway && docker compose up -d
 
 - 📖 [Technische referentie](docs/reference.fr.md) (in het Frans): `dashboard.json`, kaarttypen, detecties,
   AlertTicker, bewerkmodus, spraakgateway
-- 🗂️ **Persoonlijke bestanden**: alles in `private/assets/` (niet geversioneerd) vervangt bij het bouwen de assets van
-  de app, bijvoorbeeld je eigen `dashboard.json`
 
 ## 📄 Licentie
 

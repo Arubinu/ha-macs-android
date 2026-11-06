@@ -97,8 +97,6 @@ cd gateway && docker compose up -d
 
 - 📖 [Référence technique](docs/reference.fr.md) : `dashboard.json`, types de cartes, détections, AlertTicker, mode
   édition, passerelle vocale
-- 🗂️ **Fichiers personnels** : tout ce qui est dans `private/assets/` (non versionné) remplace les assets de l'app au
-  build, par exemple votre propre `dashboard.json`
 
 ## 📄 Licence
 
