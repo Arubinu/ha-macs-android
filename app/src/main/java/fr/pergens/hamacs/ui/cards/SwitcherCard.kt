@@ -1,5 +1,7 @@
 package fr.pergens.hamacs.ui.cards
 
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -128,10 +130,17 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
 @Composable
 fun PillMenu(pages: List<Card>, current: String, onSelect: (String) -> Unit, onEdit: (() -> Unit)? = null) {
     val c = Dash.colors
+    val state = fr.pergens.hamacs.ui.LocalDashState.current
     val outer = RoundedCornerShape(Dash.shapes.menuRadius)
     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Row(
             Modifier
+                // Barre la plus haute de l'écran : la pastille « en lecture » du lecteur DLNA se place à sa gauche.
+                .onGloballyPositioned { lc ->
+                    val r = lc.boundsInWindow()
+                    val cur = state.topMenu
+                    if (cur == null || r.top <= cur.top + 1f) state.topMenu = r
+                }
                 .clip(outer)
                 .background(c.menuBackground, outer)
                 .padding(Dash.shapes.menuBorder),

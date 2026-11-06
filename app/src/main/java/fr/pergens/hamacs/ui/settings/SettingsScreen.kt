@@ -620,6 +620,30 @@ private fun HaDeviceGroup() {
     }
 }
 
+/** Satellite Home Assistant (Wyoming) : la voix passe par le pipeline Assist choisi dans Home Assistant. */
+@Composable
+private fun WyomingGroup() {
+    val sat = App.instance.voice.wyoming
+    val wake by sat.wakeWord.collectAsState()
+    val status by sat.status.collectAsState()
+    Group {
+        run {
+            SwitchRow(stringResource(R.string.wyoming_wake), stringResource(R.string.wyoming_wake_help), wake) { sat.setWakeWord(it) }
+            GroupDivider()
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                when (val s = status) {
+                    is fr.pergens.hamacs.voice.WyomingSatellite.Status.Connected ->
+                        if (s.running) StatusChip(Success, stringResource(R.string.wyoming_connected))
+                        else StatusChip(Warning, stringResource(R.string.wyoming_paused))
+                    fr.pergens.hamacs.voice.WyomingSatellite.Status.Waiting -> StatusChip(Warning, stringResource(R.string.wyoming_waiting))
+                    else -> StatusChip(TextSecondary, stringResource(R.string.dlna_starting))
+                }
+                Text(stringResource(R.string.wyoming_usage), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp))
+            }
+        }
+    }
+}
+
 /** Lecteur DLNA : Home Assistant découvre la tablette comme lecteur multimédia (intégration DLNA Digital Media Renderer). */
 @Composable
 private fun DlnaGroup() {
@@ -786,6 +810,20 @@ private fun IdleSection(cameraPermissionTick: Int, requestCamera: () -> Unit) {
 @Composable
 private fun VoiceSection(requestMic: () -> Unit) {
     val app = App.instance
+    // Système vocal : passerelle (gateway/) ou Home Assistant (satellite Wyoming, pipeline Assist).
+    val useHa by app.voice.wyoming.enabled.collectAsState()
+    Group {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(stringResource(R.string.voice_system), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+            fr.pergens.hamacs.ui.LoginChoice("mdi:server-network", stringResource(R.string.voice_gateway_title), stringResource(R.string.voice_gateway_desc), !useHa) {
+                app.voice.wyoming.setEnabled(false)
+            }
+            fr.pergens.hamacs.ui.LoginChoice("mdi:home-assistant", stringResource(R.string.wyoming_title), stringResource(R.string.wyoming_help), useHa) {
+                app.voice.wyoming.setEnabled(true)
+            }
+        }
+    }
+    if (useHa) WyomingGroup()
     val ctx = LocalContext.current
     val settings by app.config.settings.collectAsState()
     var url by remember { mutableStateOf(settings.voiceUrl) }
@@ -802,7 +840,7 @@ private fun VoiceSection(requestMic: () -> Unit) {
     }
 
     Group {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (!useHa) Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Field(url, { url = it; saved = false }, stringResource(R.string.voice_url), stringResource(R.string.voice_url_hint), stringResource(R.string.voice_help))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
@@ -814,7 +852,7 @@ private fun VoiceSection(requestMic: () -> Unit) {
                 Feedback(if (saved) stringResource(R.string.saved) else null)
             }
         }
-        GroupDivider()
+        if (!useHa) GroupDivider()
         SettingRow(stringResource(R.string.mic_access), stringResource(if (micGranted) R.string.granted else R.string.not_granted)) {
             if (micGranted) StatusChip(Success, stringResource(R.string.granted))
             else Button(onClick = requestMic, Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.allow)) }

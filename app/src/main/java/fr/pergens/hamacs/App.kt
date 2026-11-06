@@ -74,6 +74,7 @@ class App : Application(), ImageLoaderFactory {
             it.start()
         }
         // La tablette en lecteur DLNA : Home Assistant la découvre et y envoie du son (TTS, radios, Music Assistant…).
+        voice.wyoming.start()
         dlna = fr.pergens.hamacs.dlna.DlnaRenderer(this, http, scope) { link.deviceName }.also { it.start(); it.watchVolume() }
 
         scope.launch {

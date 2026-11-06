@@ -129,7 +129,7 @@ fun HaLoginChoices(method: HaLoginMethod, url: String, state: HaLoginState, onSe
 
 /** Ligne de choix (icône, titre, description, bouton radio) : même rendu que `Choice` de l'assistant. */
 @Composable
-private fun LoginChoice(icon: String, title: String, desc: String, selected: Boolean, onClick: () -> Unit) {
+fun LoginChoice(icon: String, title: String, desc: String, selected: Boolean, onClick: () -> Unit) {
     val shape = RoundedCornerShape(18.dp)
     val surface = Color(0xFF19191D)
     val outline = Color(0xFF2C2C33)

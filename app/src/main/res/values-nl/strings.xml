@@ -718,4 +718,16 @@
     <string name="dlna_starting">Starten…</string>
     <string name="dlna_usage">In Home Assistant: Instellingen › Apparaten en diensten, ontdekte ‘DLNA Digital Media Renderer’ › Configureren. De tablet wordt dan een media_player-entiteit. De naam is die van de tablet (hierboven).</string>
     <string name="dlna_playing">Speelt af</string>
+    <string name="wyoming_title">Home Assistant-satelliet (Wyoming)</string>
+    <string name="wyoming_help">Wyoming-protocol, zoals ESPHome- of wyoming-satellite-spraaksatellieten: spraakherkenning, agent en tekst-naar-spraak van de Assist-pijplijn die in Home Assistant is gekozen.</string>
+    <string name="wyoming_wake">Activeringswoord</string>
+    <string name="wyoming_wake_help">De microfoon blijft open en Home Assistant herkent het activeringswoord (openWakeWord…). Anders tik je op M.A.C.S. om te spreken.</string>
+    <string name="wyoming_waiting">Wacht op Home Assistant (poort 10700)</string>
+    <string name="wyoming_connected">Verbonden met Home Assistant</string>
+    <string name="wyoming_paused">Gepauzeerd in Home Assistant</string>
+    <string name="wyoming_usage">In Home Assistant: Instellingen › Apparaten en diensten, ontdekte ‘Wyoming Protocol’ › Configureren (of toevoegen met het adres van de tablet en poort 10700), kies daarna op de apparaatpagina de Assist-pijplijn en het activeringswoord.</string>
+    <string name="voice_system">Spraaksysteem</string>
+    <string name="voice_gateway_title">Spraakgateway</string>
+    <string name="voice_gateway_desc">Je gateway (map gateway/, Docker): ruwe audio naar het model, Home Assistant-tools uitgevoerd door de gateway.</string>
+    <string name="voice_ha_not_connected">Home Assistant is niet verbonden met de satelliet</string>
 </resources>

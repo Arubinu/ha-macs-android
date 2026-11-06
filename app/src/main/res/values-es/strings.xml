@@ -718,4 +718,16 @@
     <string name="dlna_starting">Iniciando…</string>
     <string name="dlna_usage">En Home Assistant: Ajustes › Dispositivos y servicios, «DLNA Digital Media Renderer» descubierto › Configurar. La tableta pasa a ser una entidad media_player. Su nombre es el de la tableta (arriba).</string>
     <string name="dlna_playing">Reproduciendo</string>
+    <string name="wyoming_title">Satélite de Home Assistant (Wyoming)</string>
+    <string name="wyoming_help">Protocolo Wyoming, como los satélites de voz ESPHome o wyoming-satellite: reconocimiento de voz, agente y síntesis de voz de la canalización de Assist elegida en Home Assistant.</string>
+    <string name="wyoming_wake">Palabra de activación</string>
+    <string name="wyoming_wake_help">El micrófono permanece abierto y Home Assistant detecta la palabra de activación (openWakeWord…). Si no, toca M.A.C.S. para hablar.</string>
+    <string name="wyoming_waiting">Esperando a Home Assistant (puerto 10700)</string>
+    <string name="wyoming_connected">Conectado a Home Assistant</string>
+    <string name="wyoming_paused">En pausa en Home Assistant</string>
+    <string name="wyoming_usage">En Home Assistant: Ajustes › Dispositivos y servicios, «Wyoming Protocol» descubierto › Configurar (o añádelo con la dirección de la tableta y el puerto 10700) y elige la canalización de Assist y la palabra de activación en la página del dispositivo.</string>
+    <string name="voice_system">Sistema de voz</string>
+    <string name="voice_gateway_title">Pasarela de voz</string>
+    <string name="voice_gateway_desc">Tu pasarela (carpeta gateway/, Docker): audio en bruto al modelo, herramientas de Home Assistant ejecutadas por la pasarela.</string>
+    <string name="voice_ha_not_connected">Home Assistant no está conectado al satélite</string>
 </resources>

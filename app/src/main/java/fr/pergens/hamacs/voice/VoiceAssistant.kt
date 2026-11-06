@@ -94,6 +94,23 @@ class VoiceAssistant(
     private var player: AudioTrack? = null
     private var playerRate = 0
 
+    /**
+     * Satellite Home Assistant (Wyoming) : prioritaire quand Home Assistant y est connecté ; sinon la passerelle.
+     */
+    val wyoming = WyomingSatellite(context, scope) { fr.pergens.hamacs.App.instance.link.deviceName }
+    /** Micro ouvert en continu pour le mot d'activation (détecté par Home Assistant). */
+    private var wakeJob: Job? = null
+    /** Lecture de la synthèse : une seule écriture à la fois dans l'AudioTrack (sinon plantage natif). */
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private val audioQueue = Dispatchers.IO.limitedParallelism(1)
+    /** Trames de synthèse vocale écrites depuis le dernier audio-start (fin de lecture estimée). */
+    private var ttsFrames = 0L
+
+    init {
+        wyoming.onEvent = { scope.launch(Dispatchers.Main.immediate) { onWyoming(it) } }
+        wyoming.onRunning = { running -> scope.launch(Dispatchers.Main.immediate) { onWyomingRunning(running) } }
+    }
+
     fun toggleListening() {
         when (_state.value) {
             VoiceState.Listening -> stopListening()
@@ -115,13 +132,18 @@ class VoiceAssistant(
 
     /** Connexion anticipée : supprime le coût de la poignée de main au moment de parler. */
     fun warmUp() {
-        ensureSocket()
+        if (!wyoming.enabled.value) ensureSocket()
     }
 
     @SuppressLint("MissingPermission")
     fun startListening() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             requestPermission?.invoke()
+            return
+        }
+        // Système choisi dans les réglages : Home Assistant (satellite Wyoming) ou la passerelle.
+        if (wyoming.enabled.value) {
+            if (wyoming.ready) startWyoming() else fail(context.getString(R.string.voice_ha_not_connected))
             return
         }
         val ws = ensureSocket() ?: run {
@@ -186,9 +208,135 @@ class VoiceAssistant(
 
     fun stopListening() {
         if (_state.value == VoiceState.Listening) {
-            socket?.send(buildJsonObject { put("type", "end") }.toString())
+            if (!wyoming.enabled.value) socket?.send(buildJsonObject { put("type", "end") }.toString())
             _state.value = VoiceState.Thinking
         }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    // Satellite Wyoming
+    // --------------------------------------------------------------------------------------------------------
+
+    @SuppressLint("MissingPermission")
+    private fun openMic(): AudioRecord {
+        val minBuf = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+        val rec = AudioRecord(
+            MediaRecorder.AudioSource.VOICE_RECOGNITION, SAMPLE_RATE,
+            AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(minBuf, FRAME_BYTES * 8),
+        )
+        if (NoiseSuppressor.isAvailable()) runCatching { NoiseSuppressor.create(rec.audioSessionId)?.enabled = true }
+        if (AcousticEchoCanceler.isAvailable()) runCatching { AcousticEchoCanceler.create(rec.audioSessionId)?.enabled = true }
+        return rec
+    }
+
+    /** Appui sur le M.A.C.S. : pipeline Assist depuis l'écoute, audio envoyé jusqu'à la fin de la phrase. */
+    private fun startWyoming() {
+        stopPlayback()
+        val id = UUID.randomUUID().toString()
+        currentTurn = id
+        upsert(id) { it.copy(heard = "…") }
+        _state.value = VoiceState.Listening
+        // Micro déjà ouvert (mot d'activation) : on relance seulement le pipeline à partir de l'écoute.
+        if (wakeJob?.isActive == true) { wyoming.runPipeline(fromWake = false); return }
+        wyoming.runPipeline(fromWake = false)
+        wyoming.audioStart()
+        recordJob = scope.launch(Dispatchers.IO) {
+            val rec = openMic()
+            val frame = ByteArray(FRAME_BYTES)
+            val vad = EndOfSpeech()
+            var noSpeech = false
+            try {
+                rec.startRecording()
+                // Home Assistant détecte la fin de phrase (voice-stopped / transcript) ; la détection locale sert de
+                // garde-fou si rien ne vient.
+                while (isActive && _state.value == VoiceState.Listening) {
+                    val n = rec.read(frame, 0, frame.size)
+                    if (n <= 0) continue
+                    if (!wyoming.audioChunk(frame, n)) break
+                    when (vad.feed(frame, n)) {
+                        EndOfSpeech.Result.NoSpeech -> { noSpeech = true; break }
+                        else -> Unit
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Micro: ${e.message}")
+            } finally {
+                runCatching { rec.stop() }
+                rec.release()
+            }
+            wyoming.audioStop()
+            if (noSpeech && _state.value == VoiceState.Listening) {
+                _turns.value = _turns.value.filterNot { it.id == id }
+                _state.value = VoiceState.Idle
+                return@launch
+            }
+            if (_state.value == VoiceState.Listening) _state.value = VoiceState.Thinking
+            delay(30_000)
+            if (_state.value == VoiceState.Thinking && currentTurn == id) fail(context.getString(R.string.voice_no_answer))
+        }
+    }
+
+    /** Satellite démarré : micro ouvert en continu si le mot d'activation est activé. */
+    @SuppressLint("MissingPermission")
+    private fun onWyomingRunning(running: Boolean) {
+        wakeJob?.cancel()
+        wakeJob = null
+        if (!running || !wyoming.wakeWord.value) return
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) return
+        wakeJob = scope.launch(Dispatchers.IO) {
+            wyoming.runPipeline(fromWake = true)
+            wyoming.audioStart()
+            val rec = openMic()
+            val frame = ByteArray(FRAME_BYTES)
+            try {
+                rec.startRecording()
+                while (isActive && wyoming.ready) {
+                    val n = rec.read(frame, 0, frame.size)
+                    if (n > 0 && !wyoming.audioChunk(frame, n)) break
+                }
+            } finally {
+                runCatching { rec.stop() }
+                rec.release()
+                wyoming.audioStop()
+            }
+        }
+    }
+
+    private fun onWyoming(e: WyomingSatellite.Event) {
+        when (e.type) {
+            // Mot d'activation entendu par Home Assistant : nouvelle bulle, écoute.
+            "detection" -> {
+                stopPlayback()
+                val id = UUID.randomUUID().toString()
+                currentTurn = id
+                upsert(id) { it.copy(heard = "…") }
+                _state.value = VoiceState.Listening
+            }
+            "voice-stopped" -> if (_state.value == VoiceState.Listening) _state.value = VoiceState.Thinking
+            "transcript" -> {
+                currentTurn?.let { id -> upsert(id) { it.copy(heard = WyomingSatellite.text(e)) } }
+                if (_state.value == VoiceState.Listening) _state.value = VoiceState.Thinking
+            }
+            "synthesize" -> currentTurn?.let { id -> upsert(id) { it.copy(reply = WyomingSatellite.text(e)) } }
+            "audio-start" -> scope.launch(audioQueue) { ttsFrames = 0; track(WyomingSatellite.int(e, "rate", 22050)) }
+            "audio-chunk" -> e.payload?.let { pcm ->
+                scope.launch(audioQueue) {
+                    val t = track(WyomingSatellite.int(e, "rate", playerRate.takeIf { it > 0 } ?: 22050))
+                    ttsFrames += pcm.size / WyomingSatellite.int(e, "width", 2).coerceAtLeast(1)
+                    t.write(pcm, 0, pcm.size)
+                }
+            }
+            "audio-stop" -> scope.launch(audioQueue) {
+                // Fin de la synthèse : Home Assistant attend « played » une fois le son joué.
+                val left = player?.let { ((ttsFrames - it.playbackHeadPosition.toLong()).coerceAtLeast(0) * 1000 / playerRate.coerceAtLeast(1)) } ?: 0
+                delay(left + 150)
+                wyoming.send("played")
+                if (_state.value == VoiceState.Thinking) _state.value = VoiceState.Idle
+            }
+            "error" -> fail(WyomingSatellite.text(e).ifBlank { context.getString(R.string.voice_no_answer) })
+        }
+        // Réponse reçue sans audio (TTS absent du pipeline) : retour au repos.
+        if (e.type == "synthesize" && _state.value == VoiceState.Listening) _state.value = VoiceState.Thinking
     }
 
     private fun fail(message: String) {
@@ -247,7 +395,12 @@ class VoiceAssistant(
         val data = msg["data"]?.jsonPrimitive?.contentOrNull ?: return
         val rate = msg["sample_rate"]?.jsonPrimitive?.intOrNull ?: 24_000
         val pcm = Base64.decode(data, Base64.DEFAULT)
-        val track = player?.takeIf { playerRate == rate } ?: AudioTrack.Builder()
+        scope.launch(audioQueue) { track(rate).write(pcm, 0, pcm.size) }
+    }
+
+    /** Piste de lecture PCM 16 bits mono à [rate] Hz (recréée si la fréquence change). */
+    private fun track(rate: Int): AudioTrack =
+        player?.takeIf { playerRate == rate } ?: AudioTrack.Builder()
             .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANT).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
             .setAudioFormat(AudioFormat.Builder().setSampleRate(rate).setEncoding(AudioFormat.ENCODING_PCM_16BIT).setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build())
             .setTransferMode(AudioTrack.MODE_STREAM)
@@ -258,11 +411,9 @@ class VoiceAssistant(
                 playerRate = rate
                 it.play()
             }
-        track.write(pcm, 0, pcm.size)
-    }
 
     private fun stopPlayback() {
-        player?.runCatching { pause(); flush() }
+        scope.launch(audioQueue) { player?.runCatching { pause(); flush(); play() } }
     }
 
     /**

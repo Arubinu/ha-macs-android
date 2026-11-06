@@ -76,12 +76,17 @@ class DashState(
     var screen: String
         get() = currentScreen
         set(value) {
+            if (value != currentScreen) topMenu = null
             if (value != currentScreen && value == initialScreen) {
                 favorites.forEach { (id, page) -> pages[id] = page }
                 onHome.values.forEach { it() }
             }
             currentScreen = value
         }
+    /** Barre d'onglets la plus haute de l'écran (fenêtre), pour placer la pastille « en lecture » à côté. */
+    var topMenu by mutableStateOf<androidx.compose.ui.geometry.Rect?>(null)
+    /** Écran d'accueil (au démarrage et après inactivité). */
+    val homeScreen get() = initialScreen
     /** Page courante de chaque switcher, par identifiant. */
     val pages = mutableStateMapOf<String, String>()
     /** Onglet favori de chaque switcher (`"favorite"` de sa config), réaffiché au retour sur l'accueil. */
