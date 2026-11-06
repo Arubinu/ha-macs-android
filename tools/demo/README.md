@@ -15,7 +15,7 @@ Dans l'app (émulateur) : adresse `http://10.0.2.2:8123`, jeton quelconque (ex. 
 Pour refaire les captures (une série par langue de l'app) :
 
 1. sauvegarder les données de l'app sur l'émulateur (`adb exec-out run-as fr.pergens.hamacs tar cf - shared_prefs files`) ;
-2. compiler la version publique (dossier `private/` déplacé hors du projet), l'installer, `pm clear`, puis écrire
+2. compiler l'app, l'installer, `pm clear`, puis écrire
    `shared_prefs/settings.xml` avec `ha_url`, `ha_token`, `setup_done` et `presence_detection` à `false` ;
 3. lancer le faux serveur, créer les avatars des membres avec l'éditeur de l'app (photos CC0), puis sauvegarder cet
    état dans `$DEMO_WORK/demo_base.tar` (même commande `tar` qu'en 1) et arrêter le serveur ;

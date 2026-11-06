@@ -48,12 +48,6 @@ android {
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
-    // Fichiers personnels non publiés (configuration réelle, images sous licence) : `private/assets/` remplace
-    // les fichiers du même nom de `src/main/assets/` (ex. dashboard.json) et en ajoute d'autres.
-    sourceSets {
-        getByName("debug").assets.srcDir(rootProject.file("private/assets"))
-        getByName("release").assets.srcDir(rootProject.file("private/assets"))
-    }
     // Release : un APK par architecture (≈ 66 Mo pour arm64 au lieu de ≈ 143 Mo, les bibliothèques ML Kit pesant
     // 20 à 29 Mo par architecture) + un APK universel. Les builds de développement restent en un seul APK.
     splits {

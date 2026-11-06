@@ -16,17 +16,17 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - Viser l'**autonomie vis-à-vis de HA** : ce qui était calculé par des templates, helpers, automatisations ou
   fichiers `/local` doit être refait dans l'app (entités virtuelles, historique, assets embarqués).
 - **Dépôt public** (https://github.com/Arubinu/ha-macs-android) : aucune donnée personnelle versionnée. La vraie
-  config de l'utilisateur est dans `private/assets/dashboard.json` (gitignoré, prioritaire au build sur l'exemple
-  anonymisé `app/src/main/assets/dashboard.json`). Noms de l'exemple : membres alex / sarah / leo / emma, villes
+  config de l'utilisateur est un export de l'app dans `private/` (gitignoré, ex. `ha-dashboard-2026-11-05.json`),
+  restauré par import ; rien de `private/` n'entre dans l'APK. L'APK n'embarque que l'exemple anonymisé
+  `app/src/main/assets/dashboard.json`. Noms de l'exemple : membres alex / sarah / leo / emma, villes
   Valmont, Rochebelle, Bois-Joli, Saint-Florin, Les Tilleuls, Autoroute. Toute modification de structure de la
-  config doit être faite dans **les deux** fichiers.
+  config doit être faite dans l'exemple (et l'export de `private/` régénéré si besoin).
 - Animations du bandeau des membres : dessinées en Compose (`ui/components/MemberAnimations.kt`, couleur d'accent).
   Ne jamais ajouter de ressource sous licence non redistribuable (ex. Flaticon gratuit) dans le dépôt.
 - **README en 8 langues** (`README.md` anglais + `README.<lang>.md`) : courts, avec emojis, même plan partout ; toute
   modification se reporte dans les 8. Libellés des menus = textes réels de l'app (`strings.xml` de la langue).
   Le détail technique va dans `docs/reference.fr.md`.
 - Licence MIT pour le code ; `assets/macs/` et `assets/hue.json` restent en CC BY-NC-SA 4.0.
-- Tester la version publique : déplacer temporairement `private/` hors du projet avant le build.
 
 ## Environnement (Windows)
 
