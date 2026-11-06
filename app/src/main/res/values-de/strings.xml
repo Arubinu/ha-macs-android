@@ -698,7 +698,7 @@
     <string name="anim_off_title">Animationen von Android deaktiviert</string>
     <string name="anim_off_help">Die Android-Option „Animationen entfernen“ (Bedienungshilfen) ist aktiv: Übergänge der App sind sofort. Schalte sie aus, um wieder flüssige Animationen zu erhalten.</string>
     <string name="anim_off_open">Bedienungshilfen öffnen</string>
-    <string name="anim_off_dev">Entwickleroptionen</string>
+    <string name="anim_off_dev">Entwickleroptionen öffnen</string>
     <string name="anim_off_later">Später</string>
     <string name="graph_details_help">Aktueller Wert jeder Kurve und ihre letzten Änderungen in 7 Tagen</string>
     <string name="graph_details_lowest">Am niedrigsten</string>
@@ -761,4 +761,7 @@
     <string name="media_favorite_button">Favoriten-Taste</string>
     <string name="media_favorite_button_help">Button-Entität, die den aktuellen Titel zu den Favoriten hinzufügt (Music Assistant)</string>
     <string name="media_none">Keine</string>
+    <string name="anim_off_help_dev">Die Animationsskalen in den Entwickleroptionen sind aus: Übergänge der App sind sofort. Fenster-, Übergangs- und Animatordauer-Skala wieder auf 1x stellen.</string>
+    <string name="anim_off_fix">Animationen wieder einschalten</string>
+    <string name="anim_off_grant">Um sie mit einem Tippen wieder einzuschalten, erlaube es der App einmal von einem Computer aus: %1$s</string>
 </resources>

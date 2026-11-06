@@ -698,7 +698,7 @@
     <string name="anim_off_title">Animações desativadas pelo Android</string>
     <string name="anim_off_help">A opção «Remover animações» do Android (Acessibilidade) está ativa: as transições da app são instantâneas. Desative-a para recuperar animações fluidas.</string>
     <string name="anim_off_open">Abrir Acessibilidade</string>
-    <string name="anim_off_dev">Opções de programador</string>
+    <string name="anim_off_dev">Abrir opções de programador</string>
     <string name="anim_off_later">Mais tarde</string>
     <string name="graph_details_help">Valor atual de cada curva e as suas últimas alterações em 7 dias</string>
     <string name="graph_details_lowest">O mais baixo</string>
@@ -761,4 +761,7 @@
     <string name="media_favorite_button">Botão de favorito</string>
     <string name="media_favorite_button_help">Entidade botão que adiciona a música atual aos favoritos (Music Assistant)</string>
     <string name="media_none">Nenhum</string>
+    <string name="anim_off_help_dev">As escalas de animação das opções de programador estão desativadas: as transições da app são instantâneas. Volte a pôr a 1x as escalas de janela, transição e duração do animador.</string>
+    <string name="anim_off_fix">Reativar as animações</string>
+    <string name="anim_off_grant">Para as reativar com um toque, autorize a app uma vez a partir de um computador: %1$s</string>
 </resources>

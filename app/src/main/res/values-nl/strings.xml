@@ -698,7 +698,7 @@
     <string name="anim_off_title">Animaties uitgezet door Android</string>
     <string name="anim_off_help">De Android-optie ‘Animaties verwijderen’ (Toegankelijkheid) staat aan: overgangen in de app zijn direct. Zet haar uit voor vloeiende animaties.</string>
     <string name="anim_off_open">Toegankelijkheid openen</string>
-    <string name="anim_off_dev">Ontwikkelaarsopties</string>
+    <string name="anim_off_dev">Ontwikkelaarsopties openen</string>
     <string name="anim_off_later">Later</string>
     <string name="graph_details_help">Huidige waarde van elke curve en de laatste wijzigingen in 7 dagen</string>
     <string name="graph_details_lowest">Laagste</string>
@@ -761,4 +761,7 @@
     <string name="media_favorite_button">Favorietknop</string>
     <string name="media_favorite_button_help">Knopentiteit die het huidige nummer aan favorieten toevoegt (Music Assistant)</string>
     <string name="media_none">Geen</string>
+    <string name="anim_off_help_dev">De animatieschalen in de ontwikkelaarsopties staan uit: overgangen in de app zijn direct. Zet venster-, overgangs- en animatorduurschaal terug op 1x.</string>
+    <string name="anim_off_fix">Animaties weer aanzetten</string>
+    <string name="anim_off_grant">Om ze met één tik weer aan te zetten, geef de app eenmalig toestemming vanaf een computer: %1$s</string>
 </resources>

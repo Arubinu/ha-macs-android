@@ -716,7 +716,7 @@
     <string name="anim_off_title">Animations coupées par Android</string>
     <string name="anim_off_help">L\'option « Supprimer les animations » d\'Android (Accessibilité) est activée : les transitions de l\'app sont instantanées. Désactivez-la pour retrouver des animations fluides.</string>
     <string name="anim_off_open">Ouvrir l\'accessibilité</string>
-    <string name="anim_off_dev">Options pour les développeurs</string>
+    <string name="anim_off_dev">Ouvrir les options pour les développeurs</string>
     <string name="anim_off_later">Plus tard</string>
     <string name="graph_details_help">Valeur actuelle de chaque courbe et ses derniers changements sur 7 jours</string>
     <string name="graph_details_lowest">Le plus bas</string>
@@ -779,4 +779,7 @@
     <string name="media_favorite_button">Bouton favori</string>
     <string name="media_favorite_button_help">Entité bouton qui ajoute le morceau en cours aux favoris (Music Assistant)</string>
     <string name="media_none">Aucun</string>
+    <string name="anim_off_help_dev">Les échelles d\'animation des options pour les développeurs sont désactivées : les transitions de l\'app sont instantanées. Remettez à 1x l\'échelle d\'animation des fenêtres, des transitions et la durée de l\'animation.</string>
+    <string name="anim_off_fix">Réactiver les animations</string>
+    <string name="anim_off_grant">Pour les réactiver d\'un geste, autorisez une fois l\'app depuis un ordinateur : %1$s</string>
 </resources>

@@ -676,14 +676,19 @@ private fun DisplaySection() {
     val custom = settings.textScale > 0f
 
     // « Supprimer les animations » d'Android activé : conseil et ouverture du réglage.
-    if (fr.pergens.hamacs.ui.rememberAnimationsOff()) Group {
+    var animTick by remember { mutableIntStateOf(0) }
+    if (fr.pergens.hamacs.ui.rememberAnimationsOff(animTick)) Group {
         Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 HaIcon("mdi:animation-play-outline", size = 22.dp, tint = Dash.colors.accent)
                 Text(stringResource(R.string.anim_off_title), Modifier.padding(start = 10.dp), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
             }
-            Text(stringResource(R.string.anim_off_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
-            fr.pergens.hamacs.ui.AnimationsButtons()
+            Text(fr.pergens.hamacs.ui.animationsHelp(), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+            fr.pergens.hamacs.ui.AnimationsButtons(onFixed = { animTick++ })
+            if (!fr.pergens.hamacs.ui.SystemAnimations.canFix(ctx)) Text(
+                stringResource(R.string.anim_off_grant, fr.pergens.hamacs.ui.SystemAnimations.grantCommand(ctx)),
+                style = TextStyle(fontSize = 12.sp, color = TextSecondary, lineHeight = 17.sp),
+            )
         }
     }
     Group { AccentPicker(settings.accentColor) { hex -> app.config.update { it.copy(accentColor = hex) } } }

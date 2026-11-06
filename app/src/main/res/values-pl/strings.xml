@@ -718,7 +718,7 @@
     <string name="anim_off_title">Animacje wyłączone przez Androida</string>
     <string name="anim_off_help">Opcja Androida „Usuń animacje” (Ułatwienia dostępu) jest włączona: przejścia w aplikacji są natychmiastowe. Wyłącz ją, aby odzyskać płynne animacje.</string>
     <string name="anim_off_open">Otwórz Ułatwienia dostępu</string>
-    <string name="anim_off_dev">Opcje programistyczne</string>
+    <string name="anim_off_dev">Otwórz opcje programistyczne</string>
     <string name="anim_off_later">Później</string>
     <string name="graph_details_help">Aktualna wartość każdej krzywej i jej ostatnie zmiany z 7 dni</string>
     <string name="graph_details_lowest">Najniższa</string>
@@ -781,4 +781,7 @@
     <string name="media_favorite_button">Przycisk ulubionych</string>
     <string name="media_favorite_button_help">Encja przycisku dodająca bieżący utwór do ulubionych (Music Assistant)</string>
     <string name="media_none">Brak</string>
+    <string name="anim_off_help_dev">Skale animacji w opcjach programistycznych są wyłączone: przejścia w aplikacji są natychmiastowe. Ustaw z powrotem 1x skalę okien, przejść i czasu animatora.</string>
+    <string name="anim_off_fix">Włącz animacje ponownie</string>
+    <string name="anim_off_grant">Aby włączyć je jednym dotknięciem, zezwól aplikacji raz z komputera: %1$s</string>
 </resources>
