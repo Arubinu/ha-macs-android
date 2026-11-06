@@ -28,6 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
+import kotlinx.coroutines.launch
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -272,11 +274,11 @@ private fun configFlag(root: kotlinx.serialization.json.JsonElement, entity: Str
 }
 
 @Composable
-private fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+private fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, modifier: Modifier = Modifier, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         val shape = RoundedCornerShape(20.dp)
         Box(
-            Modifier.fillMaxWidth(widthFraction).clip(shape).background(Color(0xF2222222), shape).padding(20.dp)
+            modifier.fillMaxWidth(widthFraction).clip(shape).background(Color(0xF2222222), shape).padding(20.dp)
         ) { content() }
     }
 }
@@ -492,7 +494,29 @@ private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
         }
     }
     val locked = remaining > 0L
-    Sheet(onDismiss, 0.32f) {
+    // Code incorrect : la fenêtre tremble dans tous les sens (façon « Wizz »), avec une vibration.
+    val shakeX = remember { androidx.compose.animation.core.Animatable(0f) }
+    val shakeY = remember { androidx.compose.animation.core.Animatable(0f) }
+    var wizz by remember { mutableStateOf(0) }
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val amplitude = with(androidx.compose.ui.platform.LocalDensity.current) { 14.dp.toPx() }
+    LaunchedEffect(wizz) {
+        if (wizz == 0) return@LaunchedEffect
+        haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+        val step = androidx.compose.animation.core.tween<Float>(35, easing = androidx.compose.animation.core.LinearEasing)
+        repeat(12) { i ->
+            val k = 1f - i / 14f
+            kotlinx.coroutines.coroutineScope {
+                launch { shakeX.animateTo((if (i % 2 == 0) 1f else -1f) * amplitude * k * (0.6f + kotlin.random.Random.nextFloat() * 0.4f), step) }
+                launch { shakeY.animateTo((kotlin.random.Random.nextFloat() * 2f - 1f) * amplitude * 0.6f * k, step) }
+            }
+        }
+        kotlinx.coroutines.coroutineScope {
+            launch { shakeX.animateTo(0f, step) }
+            launch { shakeY.animateTo(0f, step) }
+        }
+    }
+    Sheet(onDismiss, 0.32f, Modifier.graphicsLayer { translationX = shakeX.value; translationY = shakeY.value }) {
         // Croix de fermeture (48dp de zone tactile).
         Box(
             Modifier.align(Alignment.TopEnd).offset(x = 10.dp, y = (-11).dp).size(48.dp).clip(CircleShape).tapHold(onDismiss),
@@ -531,7 +555,7 @@ private fun PinDialog(req: PinRequest, onDismiss: () -> Unit) {
                                             if (req.expected != null) config.pinSucceeded()
                                             onDismiss(); req.onOk(code)
                                         } else {
-                                            wrong = true; code = ""
+                                            wrong = true; code = ""; wizz++
                                             config.pinFailed()
                                             lockedUntil = config.pinLockedUntil()
                                         }
