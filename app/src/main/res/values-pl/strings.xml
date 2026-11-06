@@ -273,7 +273,7 @@
     <string name="edit_mode">Edytuj bloki</string>
     <string name="edit_mode_help">Następnie dotknij bloku panelu, aby dostosować jego opcje (kod dostępu, zawsze na żywo…).</string>
     <string name="section_security">Bezpieczeństwo</string>
-    <string name="section_security_desc">Kod dostępu, tryb kiosku</string>
+    <string name="section_security_desc">Kody, tryb kiosku</string>
     <string name="access_code">Kod dostępu</string>
     <string name="access_code_help">Wymagany przez chronione bloki. Wybierz chronione bloki w trybie edycji.</string>
     <string name="access_code_change">Zmień kod</string>
@@ -292,7 +292,7 @@
     <string name="licenses">Zasoby open source</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), czcionki Audiowide i Carlito (OFL), M.A.C.S. autorstwa Glyna Davidsona (CC BY-NC-SA 4.0, strona postaci dołączona bez zmian), AlertTicker Card autorstwa djdevil (MIT), smbj i nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Tryb kiosku</string>
-    <string name="kiosk_help">Panel pozostaje na ekranie: wyjście z niego lub wyłączenie tabletu wymaga kodu dostępu (przycisk Wstecz lub długie naciśnięcie w lewym górnym rogu).</string>
+    <string name="kiosk_help">Panel pozostaje na ekranie: wyjście z niego lub wyłączenie tabletu wymaga kodu głównego, a bez niego kodu dostępu (przycisk Wstecz lub długie naciśnięcie w lewym górnym rogu).</string>
     <string name="kiosk_level_full">Pełna blokada</string>
     <string name="kiosk_level_full_help">Przyciski Ekran główny i Ostatnie aplikacje, panel powiadomień i menu zasilania są zablokowane. Aplikacja jest ekranem głównym i uruchamia się wraz z tabletem.</string>
     <string name="kiosk_level_pinning">Prosta blokada (przypinanie ekranu)</string>
@@ -612,4 +612,13 @@
     <string name="member_favorite_help">Pokazywany po uruchomieniu i po każdym powrocie z ekranu głównego.</string>
     <string name="import_token_needed">Konfiguracja zaimportowana. Ta kopia pochodzi z innego urządzenia: wpisz token Home Assistant.</string>
     <string name="avatar_tight_photo">Na tym zdjęciu góra głowy jest ucięta: jest wyświetlane w kole. Nadal możesz wyciąć tło.</string>
+    <string name="master_code">Kod główny</string>
+    <string name="master_code_help">Wymagany do otwarcia ustawień i menu kiosku. Bez kodu głównego ustawienia otwierają się swobodnie, a kiosk używa kodu dostępu.</string>
+    <string name="master_code_none">Brak kodu głównego</string>
+    <string name="master_code_save">Zapisz kod</string>
+    <string name="master_code_remove">Usuń kod</string>
+    <string name="master_code_removed">Kod główny usunięty</string>
+    <string name="setup_master_title">Kod główny (opcjonalnie)</string>
+    <string name="setup_master_help">Chroni dostęp do ustawień. Zostaw puste, aby go nie ustawiać; można go ustawić później w Ustawienia › Bezpieczeństwo.</string>
+    <string name="setup_master_kept">Kod główny jest już ustawiony: zostaw puste, aby go zachować.</string>
 </resources>

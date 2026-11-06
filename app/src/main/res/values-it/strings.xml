@@ -265,7 +265,7 @@
     <string name="edit_mode">Modifica i blocchi</string>
     <string name="edit_mode_help">Poi tocca un blocco della dashboard per regolarne le opzioni (codice di accesso, sempre in diretta…).</string>
     <string name="section_security">Sicurezza</string>
-    <string name="section_security_desc">Codice di accesso, modalità kiosk</string>
+    <string name="section_security_desc">Codici, modalità kiosk</string>
     <string name="access_code">Codice di accesso</string>
     <string name="access_code_help">Richiesto dai blocchi protetti. Scegli quali blocchi proteggere nella modalità modifica.</string>
     <string name="access_code_change">Cambia codice</string>
@@ -284,7 +284,7 @@
     <string name="licenses">Risorse open source</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), font Audiowide e Carlito (OFL), M.A.C.S. di Glyn Davidson (CC BY-NC-SA 4.0, pagina del personaggio inclusa senza modifiche), AlertTicker Card di djdevil (MIT), smbj e nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Modalità kiosk</string>
-    <string name="kiosk_help">La dashboard resta visualizzata: per uscirne o spegnere il tablet viene chiesto il codice di accesso (tasto Indietro o pressione prolungata nell\'angolo in alto a sinistra).</string>
+    <string name="kiosk_help">La dashboard resta visualizzata: per uscirne o spegnere il tablet viene chiesto il codice principale, o il codice di accesso se non c\'è (tasto Indietro o pressione prolungata nell\'angolo in alto a sinistra).</string>
     <string name="kiosk_level_full">Blocco completo</string>
     <string name="kiosk_level_full_help">Tasti Home e App recenti, area notifiche e menu di spegnimento bloccati. L\'app è la schermata iniziale e si avvia con il tablet.</string>
     <string name="kiosk_level_pinning">Blocco semplice (blocco su schermo)</string>
@@ -594,4 +594,13 @@
     <string name="member_favorite_help">Mostrato all\'avvio e a ogni ritorno dalla schermata iniziale.</string>
     <string name="import_token_needed">Configurazione importata. Questo backup proviene da un altro dispositivo: inserisci il token di Home Assistant.</string>
     <string name="avatar_tight_photo">In questa foto la parte alta della testa è tagliata: viene mostrata in un cerchio. Puoi comunque scontornarla.</string>
+    <string name="master_code">Codice principale</string>
+    <string name="master_code_help">Richiesto per aprire le impostazioni e il menu del chiosco. Senza codice principale, le impostazioni si aprono liberamente e il chiosco usa il codice di accesso.</string>
+    <string name="master_code_none">Nessun codice principale</string>
+    <string name="master_code_save">Salva il codice</string>
+    <string name="master_code_remove">Rimuovi il codice</string>
+    <string name="master_code_removed">Codice principale rimosso</string>
+    <string name="setup_master_title">Codice principale (facoltativo)</string>
+    <string name="setup_master_help">Protegge l\'accesso alle impostazioni. Lasciare vuoto per nessuno; si può definire in seguito in Impostazioni › Sicurezza.</string>
+    <string name="setup_master_kept">Un codice principale è già impostato: lasciare vuoto per mantenerlo.</string>
 </resources>

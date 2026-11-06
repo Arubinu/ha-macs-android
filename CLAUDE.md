@@ -96,6 +96,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   d'arrivée/départ tirée de l'historique ; icônes des zones lues dans `zone.*`. Code d'accès : global
   (`members:main`, changer de membre) ou, s'il est désactivé, par membre (`member:<id>`). Plus de membres que la
   largeur n'en contient (avatar 80 dp) : flèches et défilement par page. Calendrier : défilement propre, fondu en bas.
+- **Code maître** (pref `master_code`, vide = aucun) : distinct du code d'accès (famille, blocs protégés). Demandé à
+  l'appui long du coin (`DashState.askSettings`) et pour le menu du kiosque (sinon code d'accès). Défini dans
+  Réglages › Sécurité (code actuel exigé pour changer/supprimer) ou à la dernière étape de l'assistant.
 - **Membre favori** : option `favorite` sur `members:main` (réglage « Membre favori » d'un membre), appliqué au
   démarrage et au retour sur l'accueil (`DashState.onHome`).
 - **Export** : le jeton HA y est chiffré (`config/DeviceSecret.kt`, AES-GCM, clé tirée d'`ANDROID_ID`) ; il ne se

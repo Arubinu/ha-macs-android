@@ -185,6 +185,13 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         prefs.edit().putString("access_code", code).apply()
     }
 
+    /** Code maître (vide = aucun) : demandé pour ouvrir les réglages et le menu du kiosque. */
+    fun masterCode(): String = prefs.getString("master_code", null).orEmpty()
+
+    fun setMasterCode(code: String) {
+        prefs.edit().putString("master_code", code).apply()
+    }
+
     // --- Assistant de premier démarrage -------------------------------------------------------
 
     private val _setupPending = MutableStateFlow(!prefs.getBoolean("setup_done", false))

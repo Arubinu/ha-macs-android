@@ -702,7 +702,73 @@ private fun SecuritySection() {
             }
         }
     }
+    MasterCodeGroup()
     KioskGroup()
+}
+
+/** Code maître : protège les réglages (et le menu du kiosque). Le code actuel est demandé pour le changer. */
+@Composable
+private fun MasterCodeGroup() {
+    val app = App.instance
+    var defined by remember { mutableStateOf(app.config.masterCode().isNotEmpty()) }
+    var current by remember { mutableStateOf("") }
+    var new1 by remember { mutableStateOf("") }
+    var new2 by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
+    val wrong = stringResource(R.string.access_code_wrong)
+    val mismatch = stringResource(R.string.access_code_mismatch)
+    val invalid = stringResource(R.string.access_code_invalid)
+    val saved = stringResource(R.string.access_code_saved)
+    val removed = stringResource(R.string.master_code_removed)
+    val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
+    val currentOk = { !defined || current == app.config.masterCode() }
+
+    Group {
+        SettingRow(stringResource(R.string.master_code), stringResource(R.string.master_code_help))
+        GroupDivider()
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (!defined) Text(stringResource(R.string.master_code_none), color = TextSecondary, fontSize = 14.sp)
+            if (defined) Field(current, { current = digits(it); message = null }, stringResource(R.string.access_code_current), null, null, secret = true)
+            Field(new1, { new1 = digits(it); message = null }, stringResource(R.string.access_code_new), null, null, secret = true)
+            Field(new2, { new2 = digits(it); message = null }, stringResource(R.string.access_code_confirm), null, null, secret = true)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(
+                    onClick = {
+                        message = when {
+                            !currentOk() -> wrong to true
+                            new1.length !in 4..8 -> invalid to true
+                            new1 != new2 -> mismatch to true
+                            else -> {
+                                app.config.setMasterCode(new1)
+                                defined = true
+                                current = ""; new1 = ""; new2 = ""
+                                saved to false
+                            }
+                        }
+                    },
+                    enabled = (!defined || current.isNotEmpty()) && new1.isNotEmpty() && new2.isNotEmpty(),
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) { Text(stringResource(R.string.master_code_save)) }
+                if (defined) {
+                    Spacer(Modifier.width(12.dp))
+                    OutlinedButton(
+                        onClick = {
+                            message = if (!currentOk()) wrong to true else {
+                                app.config.setMasterCode("")
+                                defined = false
+                                current = ""; new1 = ""; new2 = ""
+                                removed to false
+                            }
+                        },
+                        enabled = current.isNotEmpty(),
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) { Text(stringResource(R.string.master_code_remove)) }
+                }
+                Spacer(Modifier.width(16.dp))
+                Feedback(message?.first, message?.second == true)
+            }
+        }
+    }
 }
 
 /**

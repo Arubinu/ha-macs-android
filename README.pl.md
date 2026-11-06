@@ -35,7 +35,7 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 - 🎙️ **Lokalny asystent głosowy** (opcjonalnie): rozmawiaj z M.A.C.S., który odpowiada dzięki lokalnemu modelowi
   audio
 - ✏️ **Tryb edycji**: zmieniaj encje, pomieszczenia, karty i bloki bezpośrednio na tablecie
-- 🔒 **Tryb kiosku**: bez kodu dostępu nikt nie wyjdzie z aplikacji ani nie wyłączy tabletu
+- 🔒 **Tryb kiosku**: bez kodu głównego (lub kodu dostępu) nikt nie wyjdzie z aplikacji ani nie wyłączy tabletu
 - 🌍 **8 języków**: angielski, francuski, niemiecki, hiszpański, włoski, niderlandzki, portugalski, polski
 
 > 💡 **Żadnych czujników do tworzenia w Home Assistant**: obecność, dzień/noc, ostrzeżenia pogodowe, najlepsza cena…
@@ -65,6 +65,7 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 ## ⚙️ Na co dzień
 
 - ⚙️ **Ustawienia**: długie naciśnięcie lewego górnego rogu (połączenie, wyświetlanie, uśpienie, kod dostępu, język…)
+- 🔑 **Kod główny** (opcjonalnie, w kreatorze lub Ustawienia › Bezpieczeństwo): wymagany przed otwarciem ustawień
 - ✏️ **Tryb edycji**: Ustawienia › Panel › *Edytuj bloki*, a następnie dotknij bloku, aby go zmienić
 - 💾 **Kopia zapasowa**: Ustawienia › Panel › *Eksportuj* / *Importuj* (plik zawiera Twój token: przechowuj go w
   bezpiecznym miejscu)

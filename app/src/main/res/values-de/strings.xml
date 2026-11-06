@@ -265,7 +265,7 @@
     <string name="edit_mode">Blöcke bearbeiten</string>
     <string name="edit_mode_help">Dann einen Block des Dashboards antippen, um seine Optionen einzustellen (Zugangscode, immer live…).</string>
     <string name="section_security">Sicherheit</string>
-    <string name="section_security_desc">Zugangscode, Kioskmodus</string>
+    <string name="section_security_desc">Codes, Kioskmodus</string>
     <string name="access_code">Zugangscode</string>
     <string name="access_code_help">Wird von geschützten Blöcken verlangt. Welche Blöcke geschützt sind, wird im Bearbeitungsmodus festgelegt.</string>
     <string name="access_code_change">Code ändern</string>
@@ -284,7 +284,7 @@
     <string name="licenses">Open-Source-Ressourcen</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), Schriften Audiowide und Carlito (OFL), M.A.C.S. von Glyn Davidson (CC BY-NC-SA 4.0, Figurenseite unverändert eingebunden), AlertTicker Card von djdevil (MIT), smbj und nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Kioskmodus</string>
-    <string name="kiosk_help">Das Dashboard bleibt angezeigt: Zum Verlassen oder Ausschalten des Tablets wird der Zugangscode verlangt (Zurück-Taste oder langes Drücken in der oberen linken Ecke).</string>
+    <string name="kiosk_help">Das Dashboard bleibt angezeigt: Zum Verlassen oder Ausschalten des Tablets wird der Mastercode verlangt, ohne Mastercode der Zugangscode (Zurück-Taste oder langes Drücken in der oberen linken Ecke).</string>
     <string name="kiosk_level_full">Vollständige Sperre</string>
     <string name="kiosk_level_full_help">Startbildschirm- und Übersichtstaste, Benachrichtigungsleiste und Ein/Aus-Menü sind gesperrt. Die App ist der Startbildschirm und startet mit dem Tablet.</string>
     <string name="kiosk_level_pinning">Einfache Sperre (Bildschirmfixierung)</string>
@@ -594,4 +594,13 @@
     <string name="member_favorite_help">Wird beim Start und bei jeder Rückkehr vom Startbildschirm angezeigt.</string>
     <string name="import_token_needed">Konfiguration importiert. Diese Sicherung stammt von einem anderen Gerät: Gib das Home-Assistant-Token ein.</string>
     <string name="avatar_tight_photo">Auf diesem Foto ist der Kopf oben abgeschnitten: Es wird rund angezeigt. Du kannst es trotzdem freistellen.</string>
+    <string name="master_code">Mastercode</string>
+    <string name="master_code_help">Wird zum Öffnen der Einstellungen und des Kioskmenüs abgefragt. Ohne Mastercode öffnen sich die Einstellungen frei und der Kiosk nutzt den Zugangscode.</string>
+    <string name="master_code_none">Kein Mastercode</string>
+    <string name="master_code_save">Code speichern</string>
+    <string name="master_code_remove">Code entfernen</string>
+    <string name="master_code_removed">Mastercode entfernt</string>
+    <string name="setup_master_title">Mastercode (optional)</string>
+    <string name="setup_master_help">Schützt den Zugang zu den Einstellungen. Leer lassen für keinen; er kann später unter Einstellungen › Sicherheit festgelegt werden.</string>
+    <string name="setup_master_kept">Ein Mastercode ist bereits festgelegt: leer lassen, um ihn zu behalten.</string>
 </resources>

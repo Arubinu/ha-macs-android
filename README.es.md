@@ -36,7 +36,7 @@ personalizadas y sin nada que configurar en Home Assistant.
   barata
 - 🎙️ **Asistente de voz local** (opcional): habla con M.A.C.S., que responde con un modelo de audio local
 - ✏️ **Modo edición**: cambia entidades, habitaciones, pestañas y bloques directamente en la tablet
-- 🔒 **Modo quiosco**: nadie sale de la app ni apaga la tablet sin el código de acceso
+- 🔒 **Modo quiosco**: nadie sale de la app ni apaga la tablet sin el código maestro (o el de acceso)
 - 🌍 **8 idiomas**: inglés, francés, alemán, español, italiano, neerlandés, portugués, polaco
 
 > 💡 **Ningún sensor que crear en Home Assistant**: presencia, día/noche, avisos meteorológicos, mejor precio… la app
@@ -67,6 +67,7 @@ En el primer arranque, el **asistente** pide la dirección de Home Assistant y e
 
 - ⚙️ **Ajustes**: pulsación larga en la esquina superior izquierda (conexión, pantalla, reposo, código de acceso,
   idioma…)
+- 🔑 **Código maestro** (opcional, en el asistente o en Ajustes › Seguridad): se pide antes de abrir los ajustes
 - ✏️ **Modo edición**: Ajustes › Panel › *Editar los bloques*, y toca un bloque para cambiarlo
 - 💾 **Copia de seguridad**: Ajustes › Panel › *Exportar* / *Importar* (el archivo contiene tu token: guárdalo en un
   lugar seguro)

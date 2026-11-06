@@ -34,7 +34,7 @@ custom cards en zonder iets in te stellen in Home Assistant.
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation
 - 🎙️ **Lokale spraakassistent** (optioneel): praat met M.A.C.S., die antwoordt via een lokaal audiomodel
 - ✏️ **Bewerkmodus**: entiteiten, kamers, tabbladen en blokken direct op de tablet aanpassen
-- 🔒 **Kioskmodus**: niemand verlaat de app of zet de tablet uit zonder de toegangscode
+- 🔒 **Kioskmodus**: niemand verlaat de app of zet de tablet uit zonder de mastercode (of de toegangscode)
 - 🌍 **8 talen**: Engels, Frans, Duits, Spaans, Italiaans, Nederlands, Portugees, Pools
 
 > 💡 **Geen sensor aan te maken in Home Assistant**: aanwezigheid, dag/nacht, weerwaarschuwingen, beste prijs… de app
@@ -64,6 +64,7 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
 ## ⚙️ Dagelijks gebruik
 
 - ⚙️ **Instellingen**: lang drukken op de linkerbovenhoek (verbinding, weergave, slaapstand, toegangscode, taal…)
+- 🔑 **Mastercode** (optioneel, in de wizard of Instellingen › Beveiliging): gevraagd voordat de instellingen opengaan
 - ✏️ **Bewerkmodus**: Instellingen › Dashboard › *Blokken bewerken*, tik daarna op een blok om het te wijzigen
 - 💾 **Back-up**: Instellingen › Dashboard › *Exporteren* / *Importeren* (het bestand bevat je token: bewaar het
   veilig)

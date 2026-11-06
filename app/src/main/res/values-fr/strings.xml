@@ -282,7 +282,7 @@
     <string name="edit_mode_help">Touchez ensuite un bloc du tableau de bord pour régler ses options (code d\'accès, flux permanent…).</string>
 
     <string name="section_security">Sécurité</string>
-    <string name="section_security_desc">Code d\'accès, mode kiosque</string>
+    <string name="section_security_desc">Codes, mode kiosque</string>
     <string name="access_code">Code d\'accès</string>
     <string name="access_code_help">Demandé par les blocs protégés. Choisissez les blocs protégés dans le mode édition.</string>
     <string name="access_code_change">Modifier le code</string>
@@ -302,7 +302,7 @@
     <string name="licenses">Ressources open source</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), polices Audiowide et Carlito (OFL), M.A.C.S. par Glyn Davidson (CC BY-NC-SA 4.0, page du personnage embarquée sans modification), AlertTicker Card par djdevil (MIT), smbj et nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Mode kiosque</string>
-    <string name="kiosk_help">Le tableau de bord reste affiché : pour le quitter ou éteindre la tablette, le code d\'accès est demandé (bouton Retour, ou appui long dans le coin haut gauche).</string>
+    <string name="kiosk_help">Le tableau de bord reste affiché : pour le quitter ou éteindre la tablette, le code maître est demandé, ou le code d\'accès s\'il n\'y en a pas (bouton Retour, ou appui long dans le coin haut gauche).</string>
     <string name="kiosk_level_full">Verrouillage complet</string>
     <string name="kiosk_level_full_help">Boutons Accueil et Applications récentes, volet des notifications et menu d\'alimentation bloqués. L\'app est l\'écran d\'accueil et démarre avec la tablette.</string>
     <string name="kiosk_level_pinning">Verrouillage simple (épinglage d\'écran)</string>
@@ -612,4 +612,13 @@
     <string name="member_favorite_help">Affiché au démarrage et à chaque retour depuis l\'écran d\'accueil.</string>
     <string name="import_token_needed">Configuration importée. Cette sauvegarde vient d\'un autre appareil : saisissez le jeton Home Assistant.</string>
     <string name="avatar_tight_photo">Le haut de la tête est coupé sur cette photo : elle est affichée en rond. Vous pouvez quand même la détourer.</string>
+    <string name="master_code">Code maître</string>
+    <string name="master_code_help">Demandé pour ouvrir les réglages et le menu du kiosque. Sans code maître, les réglages s\'ouvrent librement et le kiosque utilise le code d\'accès.</string>
+    <string name="master_code_none">Aucun code maître</string>
+    <string name="master_code_save">Enregistrer le code</string>
+    <string name="master_code_remove">Supprimer le code</string>
+    <string name="master_code_removed">Code maître supprimé</string>
+    <string name="setup_master_title">Code maître (facultatif)</string>
+    <string name="setup_master_help">Protège l\'accès aux réglages. Laissez vide pour ne pas en mettre ; il peut être défini plus tard dans Réglages › Sécurité.</string>
+    <string name="setup_master_kept">Un code maître est déjà défini : laissez vide pour le garder.</string>
 </resources>

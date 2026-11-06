@@ -33,7 +33,7 @@ Custom Cards und ohne Einrichtung in Home Assistant.
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle
 - 🎙️ **Lokaler Sprachassistent** (optional): mit M.A.C.S. sprechen, Antwort von einem lokalen Audiomodell
 - ✏️ **Bearbeitungsmodus**: Entitäten, Räume, Tabs und Blöcke direkt auf dem Tablet ändern
-- 🔒 **Kioskmodus**: ohne Zugangscode lässt sich die App nicht verlassen und das Tablet nicht ausschalten
+- 🔒 **Kioskmodus**: ohne Mastercode (oder Zugangscode) lässt sich die App nicht verlassen und das Tablet nicht ausschalten
 - 🌍 **8 Sprachen**: Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch, Portugiesisch, Polnisch
 
 > 💡 **Kein Sensor in Home Assistant anzulegen**: Anwesenheit, Tag/Nacht, Wetterwarnungen, bester Preis… alles wird
@@ -64,6 +64,8 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
 
 - ⚙️ **Einstellungen**: lange auf die obere linke Ecke drücken (Verbindung, Anzeige, Ruhezustand, Zugangscode,
   Sprache…)
+- 🔑 **Mastercode** (optional, im Assistenten oder unter Einstellungen › Sicherheit): wird vor dem Öffnen der
+  Einstellungen abgefragt
 - ✏️ **Bearbeitungsmodus**: Einstellungen › Dashboard › *Blöcke bearbeiten*, dann einen Block antippen
 - 💾 **Sicherung**: Einstellungen › Dashboard › *Exportieren* / *Importieren* (die Datei enthält dein Token: sicher
   aufbewahren)

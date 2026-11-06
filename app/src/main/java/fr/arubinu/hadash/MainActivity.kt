@@ -182,8 +182,8 @@ class MainActivity : ComponentActivity() {
                             AlertOverlayHost()
                             // Zone cachée (coin haut-gauche) : appui long = réglages.
                             Box(Modifier.align(Alignment.TopStart).size(48.dp).tapHold(onTap = null, onHold = {
-                                // Kiosque : les réglages (qui permettent de le désactiver) demandent le code.
-                                if (app.config.settings.value.kioskEnabled) state.askKioskMenu() else state.showSettings = true
+                                // Kiosque ou code maître : les réglages demandent le code.
+                                state.askSettings()
                             }))
                             Overlays(dashboard)
                             AnimatedVisibility(

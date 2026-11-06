@@ -35,7 +35,7 @@ personalizados e sem nada para configurar no Home Assistant.
   barato
 - 🎙️ **Assistente de voz local** (opcional): fale com o M.A.C.S., que responde através de um modelo de áudio local
 - ✏️ **Modo de edição**: altere entidades, divisões, separadores e blocos diretamente no tablet
-- 🔒 **Modo quiosque**: ninguém sai da app nem desliga o tablet sem o código de acesso
+- 🔒 **Modo quiosque**: ninguém sai da app nem desliga o tablet sem o código mestre (ou o de acesso)
 - 🌍 **8 idiomas**: inglês, francês, alemão, espanhol, italiano, neerlandês, português, polaco
 
 > 💡 **Nenhum sensor para criar no Home Assistant**: presença, dia/noite, avisos meteorológicos, melhor preço… a app
@@ -64,6 +64,7 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
 ## ⚙️ No dia a dia
 
 - ⚙️ **Definições**: toque longo no canto superior esquerdo (ligação, ecrã, suspensão, código de acesso, idioma…)
+- 🔑 **Código mestre** (opcional, no assistente ou em Definições › Segurança): pedido antes de abrir as definições
 - ✏️ **Modo de edição**: Definições › Painel › *Editar os blocos*, depois toque num bloco para o alterar
 - 💾 **Cópia de segurança**: Definições › Painel › *Exportar* / *Importar* (o ficheiro contém o seu token: guarde-o em
   local seguro)

@@ -33,7 +33,7 @@ nothing to set up in Home Assistant.
 - 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station
 - 🎙️ **Local voice assistant** (optional): talk to M.A.C.S., answered by a local audio model
 - ✏️ **Edit mode**: change entities, rooms, tabs and blocks right on the tablet
-- 🔒 **Kiosk mode**: nobody leaves the app or turns the tablet off without the access code
+- 🔒 **Kiosk mode**: nobody leaves the app or turns the tablet off without the master code (or the access code)
 - 🌍 **8 languages**: English, French, German, Spanish, Italian, Dutch, Portuguese, Polish
 
 > 💡 **No sensor to create in Home Assistant**: presence, day/night, weather alerts, best price… everything is
@@ -62,6 +62,7 @@ home. Already have a backup? **Import** it on the first step and you are done.
 ## ⚙️ Everyday use
 
 - ⚙️ **Settings**: long press on the top-left corner (connection, display, sleep, access code, language…)
+- 🔑 **Master code** (optional, in the wizard or Settings › Security): asked before opening the settings
 - ✏️ **Edit mode**: Settings › Dashboard › *Edit blocks*, then touch any block to change it
 - 💾 **Backup**: Settings › Dashboard › *Export* / *Import* (the file contains your token: keep it safe)
 - 🧙 **Wizard**: can be run again from Settings › Dashboard

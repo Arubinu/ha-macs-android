@@ -99,6 +99,10 @@ class SetupPlan(
     val roles: List<RoleChoice>,
 ) {
     var keepLayout by mutableStateOf(keepLayout)
+    /** Code maître choisi dans l'assistant (vide = garder le réglage actuel). */
+    var masterCode by mutableStateOf("")
+    var masterConfirm by mutableStateOf("")
+    val masterValid get() = masterCode.isEmpty() || (masterCode.length in 4..8 && masterCode == masterConfirm)
 }
 
 /**

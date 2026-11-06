@@ -265,7 +265,7 @@
     <string name="edit_mode">Blokken bewerken</string>
     <string name="edit_mode_help">Tik daarna op een blok van het dashboard om de opties in te stellen (toegangscode, altijd live…).</string>
     <string name="section_security">Beveiliging</string>
-    <string name="section_security_desc">Toegangscode, kioskmodus</string>
+    <string name="section_security_desc">Codes, kioskmodus</string>
     <string name="access_code">Toegangscode</string>
     <string name="access_code_help">Gevraagd door beveiligde blokken. Kies in de bewerkmodus welke blokken beveiligd zijn.</string>
     <string name="access_code_change">Code wijzigen</string>
@@ -284,7 +284,7 @@
     <string name="licenses">Opensourcebronnen</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), lettertypen Audiowide en Carlito (OFL), M.A.C.S. door Glyn Davidson (CC BY-NC-SA 4.0, personagepagina ongewijzigd meegeleverd), AlertTicker Card door djdevil (MIT), smbj en nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Kioskmodus</string>
-    <string name="kiosk_help">Het dashboard blijft in beeld: om het te verlaten of de tablet uit te zetten wordt de toegangscode gevraagd (Terug-knop of lang drukken in de linkerbovenhoek).</string>
+    <string name="kiosk_help">Het dashboard blijft in beeld: om het te verlaten of de tablet uit te zetten wordt de mastercode gevraagd, of de toegangscode als er geen is (Terug-knop of lang drukken in de linkerbovenhoek).</string>
     <string name="kiosk_level_full">Volledige vergrendeling</string>
     <string name="kiosk_level_full_help">Start- en Recente-apps-knoppen, meldingenpaneel en aan/uit-menu geblokkeerd. De app is het startscherm en start met de tablet op.</string>
     <string name="kiosk_level_pinning">Eenvoudige vergrendeling (scherm vastzetten)</string>
@@ -594,4 +594,13 @@
     <string name="member_favorite_help">Getoond bij het opstarten en bij elke terugkeer van het startscherm.</string>
     <string name="import_token_needed">Configuratie geïmporteerd. Deze back-up komt van een ander apparaat: voer het Home Assistant-token in.</string>
     <string name="avatar_tight_photo">Op deze foto is de bovenkant van het hoofd afgesneden: hij wordt rond getoond. Je kunt hem toch uitknippen.</string>
+    <string name="master_code">Mastercode</string>
+    <string name="master_code_help">Gevraagd om de instellingen en het kioskmenu te openen. Zonder mastercode openen de instellingen vrij en gebruikt de kiosk de toegangscode.</string>
+    <string name="master_code_none">Geen mastercode</string>
+    <string name="master_code_save">Code opslaan</string>
+    <string name="master_code_remove">Code verwijderen</string>
+    <string name="master_code_removed">Mastercode verwijderd</string>
+    <string name="setup_master_title">Mastercode (optioneel)</string>
+    <string name="setup_master_help">Beschermt de toegang tot de instellingen. Laat leeg voor geen; hij kan later worden ingesteld in Instellingen › Beveiliging.</string>
+    <string name="setup_master_kept">Er is al een mastercode ingesteld: laat leeg om hem te behouden.</string>
 </resources>

@@ -35,7 +35,7 @@ card personalizzate e senza nulla da configurare in Home Assistant.
   economico
 - 🎙️ **Assistente vocale locale** (facoltativo): parla con M.A.C.S., che risponde con un modello audio locale
 - ✏️ **Modalità modifica**: entità, stanze, schede e blocchi si modificano direttamente sul tablet
-- 🔒 **Modalità kiosk**: nessuno esce dall'app o spegne il tablet senza il codice di accesso
+- 🔒 **Modalità kiosk**: nessuno esce dall'app o spegne il tablet senza il codice principale (o quello di accesso)
 - 🌍 **8 lingue**: inglese, francese, tedesco, spagnolo, italiano, olandese, portoghese, polacco
 
 > 💡 **Nessun sensore da creare in Home Assistant**: presenza, giorno/notte, allerte meteo, prezzo migliore… l'app
@@ -66,6 +66,8 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
 
 - ⚙️ **Impostazioni**: pressione prolungata sull'angolo in alto a sinistra (connessione, display, standby, codice di
   accesso, lingua…)
+- 🔑 **Codice principale** (facoltativo, nella procedura guidata o in Impostazioni › Sicurezza): richiesto prima
+  di aprire le impostazioni
 - ✏️ **Modalità modifica**: Impostazioni › Dashboard › *Modifica i blocchi*, poi tocca un blocco per cambiarlo
 - 💾 **Backup**: Impostazioni › Dashboard › *Esporta* / *Importa* (il file contiene il tuo token: conservalo al
   sicuro)

@@ -265,7 +265,7 @@
     <string name="edit_mode">Editar los bloques</string>
     <string name="edit_mode_help">Después toca un bloque del panel para ajustar sus opciones (código de acceso, siempre en directo…).</string>
     <string name="section_security">Seguridad</string>
-    <string name="section_security_desc">Código de acceso, modo quiosco</string>
+    <string name="section_security_desc">Códigos, modo quiosco</string>
     <string name="access_code">Código de acceso</string>
     <string name="access_code_help">Lo piden los bloques protegidos. Elige qué bloques están protegidos en el modo edición.</string>
     <string name="access_code_change">Cambiar el código</string>
@@ -284,7 +284,7 @@
     <string name="licenses">Recursos de código abierto</string>
     <string name="licenses_text">Material Design Icons (Apache 2.0), hass-hue-icons, Meteocons (MIT), fuentes Audiowide y Carlito (OFL), M.A.C.S. de Glyn Davidson (CC BY-NC-SA 4.0, página del personaje incluida sin modificar), AlertTicker Card de djdevil (MIT), smbj y nfs-client-java (Apache 2.0).</string>
     <string name="kiosk_title">Modo quiosco</string>
-    <string name="kiosk_help">El panel permanece en pantalla: para salir o apagar la tableta se pide el código de acceso (botón Atrás o pulsación larga en la esquina superior izquierda).</string>
+    <string name="kiosk_help">El panel permanece en pantalla: para salir o apagar la tableta se pide el código maestro, o el código de acceso si no hay ninguno (botón Atrás o pulsación larga en la esquina superior izquierda).</string>
     <string name="kiosk_level_full">Bloqueo completo</string>
     <string name="kiosk_level_full_help">Botones Inicio y Aplicaciones recientes, panel de notificaciones y menú de apagado bloqueados. La aplicación es la pantalla de inicio y arranca con la tableta.</string>
     <string name="kiosk_level_pinning">Bloqueo simple (fijar pantalla)</string>
@@ -594,4 +594,13 @@
     <string name="member_favorite_help">Se muestra al iniciar y cada vez que se vuelve de la pantalla de inicio.</string>
     <string name="import_token_needed">Configuración importada. Esta copia procede de otro dispositivo: introduce el token de Home Assistant.</string>
     <string name="avatar_tight_photo">En esta foto la parte superior de la cabeza está cortada: se muestra en un círculo. Aun así puedes recortarla.</string>
+    <string name="master_code">Código maestro</string>
+    <string name="master_code_help">Se pide para abrir los ajustes y el menú del quiosco. Sin código maestro, los ajustes se abren libremente y el quiosco usa el código de acceso.</string>
+    <string name="master_code_none">Sin código maestro</string>
+    <string name="master_code_save">Guardar el código</string>
+    <string name="master_code_remove">Eliminar el código</string>
+    <string name="master_code_removed">Código maestro eliminado</string>
+    <string name="setup_master_title">Código maestro (opcional)</string>
+    <string name="setup_master_help">Protege el acceso a los ajustes. Déjelo vacío para no poner ninguno; se puede definir más tarde en Ajustes › Seguridad.</string>
+    <string name="setup_master_kept">Ya hay un código maestro: déjelo vacío para conservarlo.</string>
 </resources>

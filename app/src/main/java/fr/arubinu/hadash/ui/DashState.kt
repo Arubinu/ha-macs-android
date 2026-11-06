@@ -138,11 +138,26 @@ class DashState(
         } else run()
     }
 
-    /** Kiosque : code d'accès, puis menu (réglages, quitter, redémarrer…). */
+    /** Kiosque : code maître (sinon code d'accès), puis menu (réglages, quitter, redémarrer…). */
     fun askKioskMenu() {
         lastInteraction = System.currentTimeMillis()
         val app = fr.arubinu.hadash.App.instance
-        pin = PinRequest(app.getString(fr.arubinu.hadash.R.string.kiosk_pin_title), app.config.accessCode()) { kioskMenu = true }
+        val code = app.config.masterCode().ifEmpty { app.config.accessCode() }
+        pin = PinRequest(app.getString(fr.arubinu.hadash.R.string.kiosk_pin_title), code) { kioskMenu = true }
+    }
+
+    /** Appui long sur le coin caché : menu du kiosque, sinon réglages (après le code maître s'il y en a un). */
+    fun askSettings() {
+        val app = fr.arubinu.hadash.App.instance
+        val master = app.config.masterCode()
+        when {
+            app.config.settings.value.kioskEnabled -> askKioskMenu()
+            master.isNotEmpty() -> {
+                lastInteraction = System.currentTimeMillis()
+                pin = PinRequest(app.getString(fr.arubinu.hadash.R.string.master_code), master) { showSettings = true }
+            }
+            else -> showSettings = true
+        }
     }
 
     fun registerSwitcher(id: String, pageIds: Set<String>) {

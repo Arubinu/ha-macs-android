@@ -35,7 +35,7 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
   moins chère
 - 🎙️ **Assistant vocal local** (facultatif) : parlez à M.A.C.S., qui répond grâce à un modèle audio local
 - ✏️ **Mode édition** : entités, pièces, onglets et blocs se modifient directement sur la tablette
-- 🔒 **Mode kiosque** : impossible de quitter l'app ou d'éteindre la tablette sans le code d'accès
+- 🔒 **Mode kiosque** : impossible de quitter l'app ou d'éteindre la tablette sans le code maître (ou le code d'accès)
 - 🌍 **8 langues** : anglais, français, allemand, espagnol, italien, néerlandais, portugais, polonais
 
 > 💡 **Aucun capteur à créer dans Home Assistant** : présence, jour/nuit, vigilance météo, meilleur prix… tout est
@@ -65,6 +65,7 @@ Au premier lancement, l'**assistant** demande l'adresse de Home Assistant et le 
 ## ⚙️ Au quotidien
 
 - ⚙️ **Réglages** : appui long sur le coin supérieur gauche (connexion, affichage, veille, code d'accès, langue…)
+- 🔑 **Code maître** (facultatif, dans l'assistant ou Réglages › Sécurité) : demandé avant d'ouvrir les réglages
 - ✏️ **Mode édition** : Réglages › Tableau de bord › *Modifier les blocs*, puis touchez un bloc pour le modifier
 - 💾 **Sauvegarde** : Réglages › Tableau de bord › *Exporter* / *Importer* (le fichier contient votre jeton : gardez-le
   en lieu sûr)

@@ -190,8 +190,9 @@ fun SetupWizard(onImport: () -> Unit, importError: String?, onDone: () -> Unit) 
                 if (index > 0) WizardButton(stringResource(R.string.setup_back), primary = false) { go(-1) }
                 Spacer(Modifier.weight(1f))
                 if (step == Step.Done) {
-                    WizardButton(stringResource(R.string.setup_finish), primary = true) {
+                    WizardButton(stringResource(R.string.setup_finish), primary = true, enabled = p?.masterValid != false) {
                         p?.let { HomeSetup.apply(ctx, it) }
+                        p?.masterCode?.takeIf { it.isNotEmpty() }?.let { App.instance.config.setMasterCode(it) }
                         onDone()
                     }
                 } else {
@@ -550,6 +551,29 @@ private fun DoneStep(plan: SetupPlan) {
         Summary("mdi:translate", stringResource(R.string.setup_done_tabs))
         Text(stringResource(R.string.setup_done_edit), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp))
     }
+    // Code maître facultatif (protège les réglages), modifiable ensuite dans Réglages › Sécurité.
+    Panel {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            HaIcon("mdi:shield-key-outline", size = 24.dp, tint = Dash.colors.accent)
+            Text(stringResource(R.string.setup_master_title), Modifier.padding(start = 12.dp), style = TextStyle(fontSize = 16.sp, color = TextPrimary, fontWeight = FontWeight.Medium))
+        }
+        Text(stringResource(R.string.setup_master_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp))
+        if (App.instance.config.masterCode().isNotEmpty()) {
+            Text(stringResource(R.string.setup_master_kept), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp))
+        }
+        val digits = { s: String -> s.filter { it.isDigit() }.take(8) }
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            Box(Modifier.weight(1f)) { Field(plan.masterCode, { plan.masterCode = digits(it) }, stringResource(R.string.access_code_new), null, secret = true, digits = true) }
+            Box(Modifier.weight(1f)) { Field(plan.masterConfirm, { plan.masterConfirm = digits(it) }, stringResource(R.string.access_code_confirm), null, secret = true, digits = true) }
+        }
+        val error = when {
+            plan.masterCode.isEmpty() -> null
+            plan.masterCode.length !in 4..8 -> stringResource(R.string.access_code_invalid)
+            plan.masterConfirm.isNotEmpty() && plan.masterConfirm != plan.masterCode -> stringResource(R.string.access_code_mismatch)
+            else -> null
+        }
+        if (error != null) Text(error, style = TextStyle(fontSize = 13.sp, color = Color(0xFFFF6B6B)))
+    }
 }
 
 // --- Éléments ----------------------------------------------------------------------------------------------------
@@ -672,12 +696,12 @@ private fun StatusLine(color: Color, text: String) {
 }
 
 @Composable
-private fun Field(value: String, onChange: (String) -> Unit, label: String, hint: String?, secret: Boolean = false) {
+private fun Field(value: String, onChange: (String) -> Unit, label: String, hint: String?, secret: Boolean = false, digits: Boolean = false) {
     OutlinedTextField(
         value, onChange, Modifier.fillMaxWidth(), label = { Text(label) }, singleLine = true,
         placeholder = hint?.let { { Text(it, color = TextSecondary.copy(alpha = 0.5f)) } },
         visualTransformation = if (secret) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = if (secret) KeyboardType.Password else KeyboardType.Uri),
+        keyboardOptions = KeyboardOptions(keyboardType = if (digits) KeyboardType.NumberPassword else if (secret) KeyboardType.Password else KeyboardType.Uri),
         colors = OutlinedTextFieldDefaults.colors(focusedTextColor = TextPrimary, unfocusedTextColor = TextPrimary, focusedBorderColor = Dash.colors.accent),
     )
 }
