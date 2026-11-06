@@ -73,6 +73,8 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
   (esquema, fotografias dos avatares)
 - 🔄 **Atualizações**: Definições › Acerca de › *Atualizações*; as novas versões (e as pré-versões, se quiser)
   instalam-se sozinhas, a app volta a abrir após uma atualização ou uma falha
+- 🌙 **Modo noturno**: Definições › Repouso e presença › *Modo noturno*; do pôr ao nascer do sol (ou a horas fixas),
+  o ecrã fica preto mais depressa e acende-se com um toque ou uma presença
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque

@@ -700,4 +700,16 @@
     <string name="update_available_pre">Pre-release %1$s is available.</string>
     <string name="update_prereleases">Include pre-releases</string>
     <string name="update_prereleases_help">Test versions published before the stable ones: newer, but less proven.</string>
+    <string name="ok">OK</string>
+    <string name="night_title">Night mode</string>
+    <string name="night_help">At night, the screen goes black (or very dim) sooner; a touch or presence in front of the camera wakes it.</string>
+    <string name="night_from">From</string>
+    <string name="night_to">To</string>
+    <string name="night_sunset">Sunset (%1$s)</string>
+    <string name="night_sunrise">Sunrise (%1$s)</string>
+    <string name="night_time">Time…</string>
+    <string name="night_after">After this inactivity:</string>
+    <string name="night_black">Black screen</string>
+    <string name="night_black_help">The first touch only wakes the screen, nothing underneath is triggered. Otherwise the brightness is lowered.</string>
+    <string name="night_level">Brightness at night</string>
 </resources>

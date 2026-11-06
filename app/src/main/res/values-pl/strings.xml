@@ -689,4 +689,16 @@
     <string name="update_available_pre">Dostępna jest wersja wstępna %1$s.</string>
     <string name="update_prereleases">Uwzględniaj wersje wstępne</string>
     <string name="update_prereleases_help">Wersje testowe publikowane przed stabilnymi: nowsze, ale mniej sprawdzone.</string>
+    <string name="ok">OK</string>
+    <string name="night_title">Tryb nocny</string>
+    <string name="night_help">W nocy ekran szybciej robi się czarny (lub bardzo ciemny); dotyk lub obecność przed kamerą go budzi.</string>
+    <string name="night_from">Od</string>
+    <string name="night_to">Do</string>
+    <string name="night_sunset">Zachód słońca (%1$s)</string>
+    <string name="night_sunrise">Wschód słońca (%1$s)</string>
+    <string name="night_time">Godzina…</string>
+    <string name="night_after">Po tym czasie bezczynności:</string>
+    <string name="night_black">Czarny ekran</string>
+    <string name="night_black_help">Pierwszy dotyk tylko budzi ekran, nic pod spodem nie zostaje uruchomione. W przeciwnym razie jasność jest zmniejszana.</string>
+    <string name="night_level">Jasność w nocy</string>
 </resources>

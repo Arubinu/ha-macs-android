@@ -74,6 +74,8 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
   reste personnel (agencement, photos des avatars)
 - 🔄 **Mises à jour** : Réglages › À propos › *Mises à jour* ; les nouvelles versions (et les préversions si on le
   souhaite) s'installent automatiquement, l'app se rouvre d'elle-même après une mise à jour ou un plantage
+- 🌙 **Mode nuit** : Réglages › Veille et présence › *Mode nuit* ; du coucher au lever du soleil (ou à heures fixes),
+  l'écran devient noir plus vite et se rallume au toucher ou à une présence
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque

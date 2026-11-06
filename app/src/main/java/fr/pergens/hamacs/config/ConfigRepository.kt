@@ -40,6 +40,16 @@ data class Settings(
     val accentColor: String = "",
     /** Kiosk mode: the app cannot be left (nor the tablet switched off) without the access code. */
     val kioskEnabled: Boolean = false,
+    /** Mode nuit : écran noir (ou très atténué) plus vite la nuit ; un contact ou une présence le rallume. */
+    val nightEnabled: Boolean = false,
+    /** Début / fin de la nuit : "sun" (coucher / lever du soleil, lus dans sun.sun) ou "HH:MM". */
+    val nightStart: String = "sun",
+    val nightEnd: String = "sun",
+    /** Inactivité avant la mise en veille de nuit. */
+    val nightSeconds: Int = 30,
+    /** Écran noir (sinon luminosité [nightLevel]). */
+    val nightBlack: Boolean = true,
+    val nightLevel: Float = 0.02f,
 )
 
 /**
@@ -75,6 +85,12 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         fullscreenFill = prefs.getBoolean("fullscreen_fill", false),
         accentColor = prefs.getString("accent_color", null) ?: "",
         kioskEnabled = prefs.getBoolean("kiosk_enabled", false),
+        nightEnabled = prefs.getBoolean("night_enabled", false),
+        nightStart = prefs.getString("night_start", null) ?: "sun",
+        nightEnd = prefs.getString("night_end", null) ?: "sun",
+        nightSeconds = prefs.getInt("night_seconds", 30),
+        nightBlack = prefs.getBoolean("night_black", true),
+        nightLevel = prefs.getFloat("night_level", 0.02f),
     )
 
     fun save(s: Settings) {
@@ -93,6 +109,12 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             .putBoolean("fullscreen_fill", s.fullscreenFill)
             .putString("accent_color", s.accentColor)
             .putBoolean("kiosk_enabled", s.kioskEnabled)
+            .putBoolean("night_enabled", s.nightEnabled)
+            .putString("night_start", s.nightStart)
+            .putString("night_end", s.nightEnd)
+            .putInt("night_seconds", s.nightSeconds)
+            .putBoolean("night_black", s.nightBlack)
+            .putFloat("night_level", s.nightLevel)
             .apply()
         _settings.value = readSettings()
     }
@@ -196,6 +218,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         // Nombres : type lu par l'app (Float ou Int). Oui/non : valeur JSON non textuelle (true/false).
         val types = mapOf(
             "text_scale" to "f", "dim_level" to "f", "idle_seconds" to "i", "presence_sensitivity" to "i", "dim_seconds" to "i",
+            "night_seconds" to "i", "night_level" to "f",
         )
         prefs.edit().apply {
             clear()

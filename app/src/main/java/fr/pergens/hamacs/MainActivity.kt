@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,6 +90,9 @@ class MainActivity : ComponentActivity() {
         applyImport(runCatching { contentResolver.openInputStream(uri)!!.bufferedReader().use { it.readText() } }.getOrNull())
     }
 
+    /** Mode nuit : écran noir affiché (au-dessus de tout, absorbe le premier contact). */
+    private val nightBlackout = mutableStateOf(false)
+
     /** Sauvegarde envoyée par un téléphone (QR code) : fenêtre ouverte depuis les réglages ou l'assistant. */
     private val phoneTransfer = mutableStateOf(false)
 
@@ -134,6 +138,8 @@ class MainActivity : ComponentActivity() {
         app.macs.attach(macsLayer)
 
         compose.setContent {
+            // Mode nuit, écran noir : M.A.C.S. (couche native au-dessus) est masqué lui aussi.
+            LaunchedEffect(nightBlackout.value) { macsLayer.animate().alpha(if (nightBlackout.value) 0f else 1f).setDuration(400).start() }
             val dashboard by app.config.dashboard.collectAsState()
             val settings by app.config.settings.collectAsState()
             val theme = remember(dashboard, settings.accentColor) { themeFromConfig(dashboard.o("theme")).withAccent(settings.accentColor) }
@@ -149,9 +155,22 @@ class MainActivity : ComponentActivity() {
             // Atténuation de l'écran : contact ou mouvement devant la caméra = activité.
             val lastMotion by app.presence.lastMotion.collectAsState()
             val lastActivity = maxOf(state.lastInteraction, if (settings.presenceDetection) lastMotion else 0L)
-            LaunchedEffect(lastActivity, settings.dimSeconds, settings.dimLevel) {
+            // Mode nuit : recalculé chaque minute (heures fixes ou soleil de sun.sun).
+            var night by remember { mutableStateOf(false) }
+            LaunchedEffect(settings) {
+                while (true) {
+                    night = fr.pergens.hamacs.ui.NightMode.isNight(settings, app.ha.states.value)
+                    delay(30_000)
+                }
+            }
+            LaunchedEffect(lastActivity, settings.dimSeconds, settings.dimLevel, night, settings.nightSeconds, settings.nightBlack, settings.nightLevel) {
                 animateBrightness(null)
-                if (settings.dimSeconds > 0) {
+                nightBlackout.value = false
+                if (night) {
+                    // La nuit : écran noir (ou très atténué) après une inactivité plus courte.
+                    delay((lastActivity + settings.nightSeconds * 1000L - System.currentTimeMillis()).coerceAtLeast(0))
+                    if (settings.nightBlack) { nightBlackout.value = true; animateBrightness(0.01f) } else animateBrightness(settings.nightLevel)
+                } else if (settings.dimSeconds > 0) {
                     delay((lastActivity + settings.dimSeconds * 1000L - System.currentTimeMillis()).coerceAtLeast(0))
                     animateBrightness(settings.dimLevel)
                 }
@@ -248,6 +267,18 @@ class MainActivity : ComponentActivity() {
                                     state.editMode = false
                                 }
                             }
+                            // Mode nuit, écran noir : le premier contact rallume seulement (rien n'est actionné dessous).
+                            if (nightBlackout.value) Box(
+                                Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color.Black).pointerInput(Unit) {
+                                    awaitPointerEventScope {
+                                        while (true) {
+                                            awaitPointerEvent().changes.forEach { it.consume() }
+                                            state.lastInteraction = System.currentTimeMillis()
+                                            nightBlackout.value = false
+                                        }
+                                    }
+                                }
+                            )
                             // Sauvegarde d'une autre tablette : nouveaux codes à définir (codes chiffrés illisibles ici).
                             // Sauvegarde par le téléphone (QR code) : téléchargement ou envoi d'un fichier.
                             if (phoneTransfer.value) fr.pergens.hamacs.ui.PhoneTransferDialog(

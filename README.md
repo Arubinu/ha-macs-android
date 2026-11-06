@@ -69,6 +69,8 @@ home. Already have a backup? **Import** it on the first step and you are done.
   encrypted for this tablet (on another one, new codes are asked), but the file stays personal (layout, avatar photos)
 - 🔄 **Updates**: Settings › About › *Updates*; new versions (and pre-releases if wanted) are installed
   automatically, the app reopens by itself after an update or a crash
+- 🌙 **Night mode**: Settings › Standby & presence › *Night mode*; from sunset to sunrise (or set times), the
+  screen goes black sooner and wakes on a touch or a presence
 - 🧙 **Wizard**: can be run again from Settings › Dashboard
 
 ## 🔒 Kiosk mode

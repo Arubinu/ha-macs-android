@@ -669,4 +669,16 @@
     <string name="update_available_pre">Voorlopige versie %1$s is beschikbaar.</string>
     <string name="update_prereleases">Voorlopige versies meenemen</string>
     <string name="update_prereleases_help">Testversies die vóór de stabiele versies verschijnen: nieuwer, maar minder beproefd.</string>
+    <string name="ok">OK</string>
+    <string name="night_title">Nachtmodus</string>
+    <string name="night_help">\'s Nachts wordt het scherm sneller zwart (of heel donker); een aanraking of aanwezigheid voor de camera maakt het wakker.</string>
+    <string name="night_from">Begin</string>
+    <string name="night_to">Einde</string>
+    <string name="night_sunset">Zonsondergang (%1$s)</string>
+    <string name="night_sunrise">Zonsopkomst (%1$s)</string>
+    <string name="night_time">Tijd…</string>
+    <string name="night_after">Na deze inactiviteit:</string>
+    <string name="night_black">Zwart scherm</string>
+    <string name="night_black_help">De eerste aanraking maakt alleen het scherm wakker, eronder wordt niets bediend. Anders wordt de helderheid verlaagd.</string>
+    <string name="night_level">Helderheid \'s nachts</string>
 </resources>

@@ -136,6 +136,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   Version = tag (`-PappVersion`, release.yml), `versionCode` = 10000·maj + 100·min + patch. Test (débogage) : pref
   `update_url` vers un faux JSON servi depuis le PC (`http://10.0.2.2:…`), APK construit avec `-PappVersion=1.0.1` ;
   revenir ensuite avec `adb install -r -d`. Une release ne met à jour qu'une app signée avec la même clé.
+- **Mode nuit** (`ui/NightMode.kt`, prefs `night_*`) : début / fin = `sun` (heure de `next_setting` / `next_rising` de
+  `sun.sun`, sinon 21:30 / 7:00) ou `HH:MM`. La nuit, après `night_seconds` : écran noir (`MainActivity.nightBlackout`,
+  au-dessus de tout, M.A.C.S. masqué, absorbe le premier contact) ou luminosité `night_level`. En test, couper la
+  détection de présence : la caméra émulée bouge et relance l'activité sans cesse.
 - **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
   (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en

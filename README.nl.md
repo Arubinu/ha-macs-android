@@ -73,6 +73,8 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
   persoonlijk (indeling, avatarfoto's)
 - 🔄 **Updates**: Instellingen › Over › *Updates*; nieuwe versies (en desgewenst voorlopige versies) worden automatisch
   geïnstalleerd, de app opent vanzelf opnieuw na een update of crash
+- 🌙 **Nachtmodus**: Instellingen › Stand-by & aanwezigheid › *Nachtmodus*; van zonsondergang tot zonsopkomst (of op
+  vaste tijden) wordt het scherm sneller zwart en gaat het aan bij aanraking of aanwezigheid
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus

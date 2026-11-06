@@ -74,6 +74,8 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
   persönlich (Layout, Avatarfotos)
 - 🔄 **Updates**: Einstellungen › Über › *Updates*; neue Versionen (und auf Wunsch Vorabversionen) werden automatisch
   installiert, die App öffnet sich nach einem Update oder Absturz von selbst wieder
+- 🌙 **Nachtmodus**: Einstellungen › Ruhezustand & Anwesenheit › *Nachtmodus*; von Sonnenuntergang bis -aufgang (oder
+  zu festen Zeiten) wird der Bildschirm früher schwarz und wacht bei Berührung oder Anwesenheit auf
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus

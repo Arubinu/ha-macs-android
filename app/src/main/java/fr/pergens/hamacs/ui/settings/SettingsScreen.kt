@@ -58,6 +58,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -370,9 +373,9 @@ private fun Field(value: String, onChange: (String) -> Unit, label: String, hint
 /** Choix d'un délai : Jamais, 30 s, 1, 2, 5, 10 ou 30 min. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun DelayChips(selected: Int, onSelect: (Int) -> Unit) {
+private fun DelayChips(selected: Int, options: List<Int> = listOf(0, 30, 60, 120, 300, 600, 1800), onSelect: (Int) -> Unit) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        listOf(0, 30, 60, 120, 300, 600, 1800).forEach { sec ->
+        options.forEach { sec ->
             val label = when {
                 sec == 0 -> stringResource(R.string.idle_never)
                 sec < 60 -> stringResource(R.string.idle_seconds, sec)
@@ -386,6 +389,93 @@ private fun DelayChips(selected: Int, onSelect: (Int) -> Unit) {
                 colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
             )
         }
+    }
+}
+
+/**
+ * Mode nuit : début et fin (soleil ou heure), inactivité avant la veille de nuit, écran noir ou luminosité réduite.
+ */
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+private fun NightGroup() {
+    val app = App.instance
+    val settings by app.config.settings.collectAsState()
+    val sun = app.ha.states.collectAsState().value["sun.sun"]
+    // Bornes en cours d'édition : 0 = début, 1 = fin.
+    var editing by remember { mutableStateOf<Int?>(null) }
+    Group {
+        SwitchRow(stringResource(R.string.night_title), stringResource(R.string.night_help), settings.nightEnabled) { on ->
+            app.config.update { it.copy(nightEnabled = on) }
+        }
+        if (settings.nightEnabled) {
+            GroupDivider()
+            Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                listOf(0, 1).forEach { which ->
+                    val spec = if (which == 0) settings.nightStart else settings.nightEnd
+                    val sunIso = sun?.attrString(if (which == 0) "next_setting" else "next_rising")
+                    val sunMin = fr.pergens.hamacs.ui.NightMode.minutes("sun", sunIso, if (which == 0) 21 * 60 + 30 else 7 * 60)
+                    val fixed = fr.pergens.hamacs.ui.NightMode.parse(spec)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(
+                            stringResource(if (which == 0) R.string.night_from else R.string.night_to), Modifier.width(80.dp),
+                            style = TextStyle(fontSize = 15.sp, color = TextPrimary, fontWeight = FontWeight.Medium),
+                        )
+                        FilterChip(
+                            selected = spec == "sun",
+                            onClick = { app.config.update { if (which == 0) it.copy(nightStart = "sun") else it.copy(nightEnd = "sun") } },
+                            label = { Text(stringResource(if (which == 0) R.string.night_sunset else R.string.night_sunrise, fr.pergens.hamacs.ui.NightMode.format(sunMin))) },
+                            modifier = Modifier.heightIn(min = 40.dp),
+                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+                        )
+                        FilterChip(
+                            selected = fixed != null,
+                            onClick = { editing = which },
+                            label = { Text(fixed?.let { fr.pergens.hamacs.ui.NightMode.format(it) } ?: stringResource(R.string.night_time)) },
+                            modifier = Modifier.heightIn(min = 40.dp),
+                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+                        )
+                    }
+                }
+                Text(stringResource(R.string.night_after), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+                DelayChips(settings.nightSeconds, listOf(10, 30, 60, 120, 300)) { sec -> app.config.update { it.copy(nightSeconds = sec) } }
+            }
+            GroupDivider()
+            SwitchRow(stringResource(R.string.night_black), stringResource(R.string.night_black_help), settings.nightBlack) { on ->
+                app.config.update { it.copy(nightBlack = on) }
+            }
+            if (!settings.nightBlack) {
+                GroupDivider()
+                SliderRow(
+                    stringResource(R.string.night_level), null, settings.nightLevel, 0.01f..0.3f, steps = 28,
+                    format = { "${(it * 100).roundToInt()} %" },
+                ) { v -> app.config.update { it.copy(nightLevel = (v * 100).roundToInt() / 100f) } }
+            }
+        }
+    }
+    editing?.let { which ->
+        val current = fr.pergens.hamacs.ui.NightMode.parse(if (which == 0) settings.nightStart else settings.nightEnd) ?: if (which == 0) 22 * 60 else 7 * 60
+        val picker = rememberTimePickerState(current / 60, current % 60, is24Hour = true)
+        AlertDialog(
+            onDismissRequest = { editing = null },
+            confirmButton = {
+                TextButton(onClick = {
+                    val v = fr.pergens.hamacs.ui.NightMode.format(picker.hour * 60 + picker.minute)
+                    app.config.update { if (which == 0) it.copy(nightStart = v) else it.copy(nightEnd = v) }
+                    editing = null
+                }) { Text(stringResource(R.string.ok)) }
+            },
+            dismissButton = { TextButton(onClick = { editing = null }) { Text(stringResource(R.string.cancel)) } },
+            text = {
+                TimePicker(
+                    picker,
+                    colors = androidx.compose.material3.TimePickerDefaults.colors(
+                        timeSelectorSelectedContainerColor = Dash.colors.accent.copy(alpha = 0.3f),
+                        timeSelectorSelectedContentColor = TextPrimary,
+                        selectorColor = Dash.colors.accent,
+                    ),
+                )
+            },
+        )
     }
 }
 
@@ -572,6 +662,7 @@ private fun IdleSection(cameraPermissionTick: Int, requestCamera: () -> Unit) {
             ) { v -> app.config.update { it.copy(dimLevel = (v * 50).roundToInt() / 50f) } }
         }
     }
+    NightGroup()
     Group {
         SwitchRow(stringResource(R.string.presence), stringResource(R.string.presence_help), settings.presenceDetection) { on ->
             app.config.update { it.copy(presenceDetection = on) }

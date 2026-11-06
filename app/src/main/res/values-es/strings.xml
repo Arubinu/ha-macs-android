@@ -669,4 +669,16 @@
     <string name="update_available_pre">La versión preliminar %1$s está disponible.</string>
     <string name="update_prereleases">Incluir versiones preliminares</string>
     <string name="update_prereleases_help">Versiones de prueba publicadas antes de las estables: más recientes, pero menos probadas.</string>
+    <string name="ok">Aceptar</string>
+    <string name="night_title">Modo noche</string>
+    <string name="night_help">Por la noche, la pantalla se pone negra (o muy oscura) antes; un toque o una presencia ante la cámara la enciende.</string>
+    <string name="night_from">Inicio</string>
+    <string name="night_to">Fin</string>
+    <string name="night_sunset">Puesta de sol (%1$s)</string>
+    <string name="night_sunrise">Amanecer (%1$s)</string>
+    <string name="night_time">Hora…</string>
+    <string name="night_after">Tras esta inactividad:</string>
+    <string name="night_black">Pantalla negra</string>
+    <string name="night_black_help">El primer toque solo enciende la pantalla, no se acciona nada debajo. Si no, se reduce el brillo.</string>
+    <string name="night_level">Brillo de noche</string>
 </resources>

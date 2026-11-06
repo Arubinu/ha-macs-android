@@ -687,4 +687,16 @@
     <string name="update_available_pre">La préversion %1$s est disponible.</string>
     <string name="update_prereleases">Inclure les préversions</string>
     <string name="update_prereleases_help">Versions de test publiées avant les versions stables : plus récentes, mais moins éprouvées.</string>
+    <string name="ok">OK</string>
+    <string name="night_title">Mode nuit</string>
+    <string name="night_help">La nuit, l\'écran devient noir (ou très sombre) plus vite ; un contact ou une présence devant la caméra le rallume.</string>
+    <string name="night_from">Début</string>
+    <string name="night_to">Fin</string>
+    <string name="night_sunset">Coucher du soleil (%1$s)</string>
+    <string name="night_sunrise">Lever du soleil (%1$s)</string>
+    <string name="night_time">Heure…</string>
+    <string name="night_after">Après cette inactivité :</string>
+    <string name="night_black">Écran noir</string>
+    <string name="night_black_help">Le premier contact rallume seulement l\'écran, rien n\'est actionné dessous. Sinon, la luminosité est réduite.</string>
+    <string name="night_level">Luminosité la nuit</string>
 </resources>

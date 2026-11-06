@@ -76,6 +76,8 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
   degli avatar)
 - 🔄 **Aggiornamenti**: Impostazioni › Informazioni › *Aggiornamenti*; le nuove versioni (e quelle preliminari se si
   vuole) si installano da sole, l'app si riapre dopo un aggiornamento o un arresto anomalo
+- 🌙 **Modalità notte**: Impostazioni › Standby e presenza › *Modalità notte*; dal tramonto all'alba (o a orari fissi)
+  lo schermo diventa nero prima e si riaccende al tocco o a una presenza
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk

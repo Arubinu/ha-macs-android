@@ -669,4 +669,16 @@
     <string name="update_available_pre">Vorabversion %1$s ist verfügbar.</string>
     <string name="update_prereleases">Vorabversionen einbeziehen</string>
     <string name="update_prereleases_help">Testversionen, die vor den stabilen veröffentlicht werden: neuer, aber weniger erprobt.</string>
+    <string name="ok">OK</string>
+    <string name="night_title">Nachtmodus</string>
+    <string name="night_help">Nachts wird der Bildschirm früher schwarz (oder sehr dunkel); eine Berührung oder Anwesenheit vor der Kamera weckt ihn.</string>
+    <string name="night_from">Beginn</string>
+    <string name="night_to">Ende</string>
+    <string name="night_sunset">Sonnenuntergang (%1$s)</string>
+    <string name="night_sunrise">Sonnenaufgang (%1$s)</string>
+    <string name="night_time">Uhrzeit…</string>
+    <string name="night_after">Nach dieser Inaktivität:</string>
+    <string name="night_black">Schwarzer Bildschirm</string>
+    <string name="night_black_help">Die erste Berührung weckt nur den Bildschirm, darunter wird nichts ausgelöst. Sonst wird die Helligkeit verringert.</string>
+    <string name="night_level">Helligkeit nachts</string>
 </resources>

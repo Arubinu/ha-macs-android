@@ -76,6 +76,8 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   (diseño, fotos de los avatares)
 - 🔄 **Actualizaciones**: Ajustes › Acerca de › *Actualizaciones*; las nuevas versiones (y las preliminares si se
   desea) se instalan solas, la app se vuelve a abrir tras una actualización o un fallo
+- 🌙 **Modo noche**: Ajustes › Reposo y presencia › *Modo noche*; de la puesta de sol al amanecer (o a horas fijas),
+  la pantalla se pone negra antes y se enciende con un toque o una presencia
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco
