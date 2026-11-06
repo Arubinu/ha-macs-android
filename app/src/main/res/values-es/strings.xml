@@ -633,4 +633,12 @@
     <string name="codes_replace_help">Esta copia viene de otra tableta: sus códigos están cifrados para ella y no se pueden leer aquí. Elige un código nuevo para cada uno.</string>
     <string name="code_defined">Definido</string>
     <string name="code_undefined">Ninguno</string>
+    <string name="transfer_phone">Con el teléfono</string>
+    <string name="transfer_phone_title">Copia de seguridad con el teléfono</string>
+    <string name="transfer_phone_help">Escanee este código QR con un teléfono conectado a la misma red: puede descargar la copia de esta tableta o enviarle una.</string>
+    <string name="transfer_page_title">Copia de seguridad de la tableta HA-MACS</string>
+    <string name="transfer_page_download">Descargar la copia</string>
+    <string name="transfer_page_upload">Enviar una copia a la tableta</string>
+    <string name="transfer_page_sending">Enviando…</string>
+    <string name="transfer_page_note">El token y los códigos están cifrados para la tableta que hizo la copia.</string>
 </resources>

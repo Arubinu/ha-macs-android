@@ -633,4 +633,12 @@
     <string name="codes_replace_help">Diese Sicherung stammt von einem anderen Tablet: Ihre Codes sind für dieses verschlüsselt und hier nicht lesbar. Wähle für jeden einen neuen Code.</string>
     <string name="code_defined">Festgelegt</string>
     <string name="code_undefined">Keiner</string>
+    <string name="transfer_phone">Mit dem Handy</string>
+    <string name="transfer_phone_title">Sicherung mit dem Handy</string>
+    <string name="transfer_phone_help">Diesen QR-Code mit einem Handy im selben Netzwerk scannen: Es kann die Sicherung dieses Tablets herunterladen oder ihm eine senden.</string>
+    <string name="transfer_page_title">Sicherung des HA-MACS-Tablets</string>
+    <string name="transfer_page_download">Sicherung herunterladen</string>
+    <string name="transfer_page_upload">Sicherung an das Tablet senden</string>
+    <string name="transfer_page_sending">Wird gesendet…</string>
+    <string name="transfer_page_note">Token und Codes sind für das Tablet verschlüsselt, das die Sicherung erstellt hat.</string>
 </resources>

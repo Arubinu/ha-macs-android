@@ -86,18 +86,29 @@ class MainActivity : ComponentActivity() {
 
     private val importFile = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri == null) return@registerForActivityResult
-        val text = runCatching { contentResolver.openInputStream(uri)!!.bufferedReader().use { it.readText() } }.getOrNull()
+        applyImport(runCatching { contentResolver.openInputStream(uri)!!.bufferedReader().use { it.readText() } }.getOrNull())
+    }
+
+    /** Sauvegarde envoyée par un téléphone (QR code) : fenêtre ouverte depuis les réglages ou l'assistant. */
+    private val phoneTransfer = mutableStateOf(false)
+
+    /**
+     * Applique un fichier de sauvegarde (sélecteur de fichiers ou téléphone) ; retourne le message affiché (erreur ?).
+     * Import réussi depuis l'assistant : la configuration est complète, l'assistant se ferme. Jeton à saisir
+     * (sauvegarde d'un autre appareil) : l'assistant reste ouvert sur la connexion.
+     */
+    private fun applyImport(text: String?): Pair<String, Boolean> {
         // null = import réussi (importAll renvoie le message d'erreur éventuel).
         val error = if (text == null) getString(R.string.import_unreadable) else App.instance.config.importAll(text)
         val needsToken = error == null && App.instance.config.importNeedsToken
-        transferMessage.value = when {
+        val message = when {
             needsToken -> getString(R.string.import_token_needed) to true
             error == null -> getString(R.string.import_done) to false
             else -> getString(R.string.import_error, error) to true
         }
-        // Import réussi depuis l'assistant : la configuration est complète, l'assistant se ferme. Jeton à saisir
-        // (sauvegarde d'un autre appareil) : l'assistant reste ouvert sur la connexion.
+        transferMessage.value = message
         if (error == null && !needsToken) App.instance.config.finishSetup()
+        return message
     }
 
     override fun attachBaseContext(newBase: android.content.Context) {
@@ -205,6 +216,7 @@ class MainActivity : ComponentActivity() {
                                         transferMessage.value = null
                                         importFile.launch(arrayOf("application/json", "text/plain", "application/octet-stream"))
                                     },
+                                    onPhone = { transferMessage.value = null; phoneTransfer.value = true },
                                     onEditBlocks = {
                                         state.showSettings = false
                                         // L'écran affiché reste le même : on navigue ensuite si on le souhaite.
@@ -228,6 +240,7 @@ class MainActivity : ComponentActivity() {
                                         importFile.launch(arrayOf("application/json", "text/plain", "application/octet-stream"))
                                     },
                                     importError = transferMessage.value?.takeIf { it.second }?.first,
+                                    onPhone = { transferMessage.value = null; phoneTransfer.value = true },
                                 ) {
                                     app.config.finishSetup()
                                     // Retour direct au tableau de bord, même si l'assistant a été lancé depuis les réglages.
@@ -236,6 +249,12 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                             // Sauvegarde d'une autre tablette : nouveaux codes à définir (codes chiffrés illisibles ici).
+                            // Sauvegarde par le téléphone (QR code) : téléchargement ou envoi d'un fichier.
+                            if (phoneTransfer.value) fr.pergens.hamacs.ui.PhoneTransferDialog(
+                                onClose = { phoneTransfer.value = false },
+                                export = { app.config.exportAll() },
+                                onImport = { applyImport(it) },
+                            )
                             fr.pergens.hamacs.ui.CodeReplaceDialog()
                         }
                     }

@@ -132,6 +132,7 @@ fun SettingsScreen(
     transferMessage: Pair<String, Boolean>?,
     onExport: () -> Unit,
     onImport: () -> Unit,
+    onPhone: () -> Unit,
 ) {
     val accent = Dash.colors.accent
     var section by rememberSaveable { mutableStateOf(Section.Connection) }
@@ -191,7 +192,7 @@ fun SettingsScreen(
                                 Section.Display -> DisplaySection()
                                 Section.Idle -> IdleSection(cameraPermissionTick, requestCamera)
                                 Section.Voice -> VoiceSection(requestMic)
-                                Section.Dashboard -> DashboardSection(onEditBlocks, transferMessage, onExport, onImport)
+                                Section.Dashboard -> DashboardSection(onEditBlocks, transferMessage, onExport, onImport, onPhone)
                                 Section.Security -> SecuritySection()
                                 Section.About -> AboutSection()
                             }
@@ -647,6 +648,7 @@ private fun DashboardSection(
     transferMessage: Pair<String, Boolean>?,
     onExport: () -> Unit,
     onImport: () -> Unit,
+    onPhone: () -> Unit,
 ) {
     Group {
         SettingRow(stringResource(R.string.edit_mode), stringResource(R.string.edit_mode_help)) {
@@ -677,6 +679,14 @@ private fun DashboardSection(
                     HaIcon("mdi:import", size = 18.dp, tint = TextPrimary)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.action_import))
+                }
+                OutlinedButton(
+                    onClick = onPhone, Modifier.heightIn(min = 48.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                ) {
+                    HaIcon("mdi:cellphone-arrow-down", size = 18.dp, tint = TextPrimary)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.transfer_phone))
                 }
                 // Résultat de l'export / import à droite des boutons.
                 Box(Modifier.weight(1f)) { Feedback(transferMessage?.first, transferMessage?.second == true) }

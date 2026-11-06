@@ -664,4 +664,12 @@
     <string name="codes_replace_help">This backup comes from another tablet: its codes are encrypted for it and cannot be read here. Choose a new code for each one.</string>
     <string name="code_defined">Set</string>
     <string name="code_undefined">None</string>
+    <string name="transfer_phone">With the phone</string>
+    <string name="transfer_phone_title">Backup with the phone</string>
+    <string name="transfer_phone_help">Scan this QR code with a phone on the same network: it can download this tablet\'s backup or send one to it.</string>
+    <string name="transfer_page_title">HA-MACS tablet backup</string>
+    <string name="transfer_page_download">Download the backup</string>
+    <string name="transfer_page_upload">Send a backup to the tablet</string>
+    <string name="transfer_page_sending">Sending…</string>
+    <string name="transfer_page_note">The token and the codes are encrypted for the tablet that made the backup.</string>
 </resources>

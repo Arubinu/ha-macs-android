@@ -71,8 +71,9 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
 - 🔑 **Codice principale** (facoltativo, nella procedura guidata o in Impostazioni › Sicurezza): richiesto prima
   di aprire le impostazioni
 - ✏️ **Modalità modifica**: Impostazioni › Dashboard › *Modifica i blocchi*, poi tocca un blocco per cambiarlo
-- 💾 **Backup**: Impostazioni › Dashboard › *Esporta* / *Importa*; il token e i codici sono cifrati per questo tablet
-  (su un altro vengono chiesti nuovi codici), ma il file resta personale (layout, foto degli avatar)
+- 💾 **Backup**: Impostazioni › Dashboard › *Esporta* / *Importa* / *Con il telefono* (codice QR); il token e i codici
+  sono cifrati per questo tablet (su un altro vengono chiesti nuovi codici), ma il file resta personale (layout, foto
+  degli avatar)
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk

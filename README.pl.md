@@ -68,8 +68,9 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 - ⚙️ **Ustawienia**: długie naciśnięcie lewego górnego rogu (połączenie, wyświetlanie, uśpienie, kod dostępu, język…)
 - 🔑 **Kod główny** (opcjonalnie, w kreatorze lub Ustawienia › Bezpieczeństwo): wymagany przed otwarciem ustawień
 - ✏️ **Tryb edycji**: Ustawienia › Panel › *Edytuj bloki*, a następnie dotknij bloku, aby go zmienić
-- 💾 **Kopia zapasowa**: Ustawienia › Panel › *Eksportuj* / *Importuj*; token i kody są zaszyfrowane dla tego tabletu
-  (na innym wymagane są nowe kody), ale plik pozostaje osobisty (układ, zdjęcia awatarów)
+- 💾 **Kopia zapasowa**: Ustawienia › Panel › *Eksportuj* / *Importuj* / *Telefonem* (kod QR); token i kody są
+  zaszyfrowane dla tego tabletu (na innym wymagane są nowe kody), ale plik pozostaje osobisty (układ, zdjęcia
+  awatarów)
 - 🧙 **Kreator**: można go uruchomić ponownie w Ustawienia › Panel
 
 ## 🔒 Tryb kiosku

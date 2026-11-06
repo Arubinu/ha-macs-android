@@ -71,8 +71,9 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   idioma…)
 - 🔑 **Código maestro** (opcional, en el asistente o en Ajustes › Seguridad): se pide antes de abrir los ajustes
 - ✏️ **Modo edición**: Ajustes › Panel › *Editar los bloques*, y toca un bloque para cambiarlo
-- 💾 **Copia de seguridad**: Ajustes › Panel › *Exportar* / *Importar*; el token y los códigos están cifrados para esta
-  tableta (en otra se piden códigos nuevos), pero el archivo sigue siendo personal (diseño, fotos de los avatares)
+- 💾 **Copia de seguridad**: Ajustes › Panel › *Exportar* / *Importar* / *Con el teléfono* (código QR); el token y los
+  códigos están cifrados para esta tableta (en otra se piden códigos nuevos), pero el archivo sigue siendo personal
+  (diseño, fotos de los avatares)
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco

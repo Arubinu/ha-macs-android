@@ -99,7 +99,7 @@ private enum class Step(val icon: String, val title: Int, val desc: Int) {
  * automatiquement et reste modifiable ensuite en mode édition.
  */
 @Composable
-fun SetupWizard(onImport: () -> Unit, importError: String?, onDone: () -> Unit) {
+fun SetupWizard(onImport: () -> Unit, importError: String?, onPhone: () -> Unit, onDone: () -> Unit) {
     val app = App.instance
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -180,7 +180,7 @@ fun SetupWizard(onImport: () -> Unit, importError: String?, onDone: () -> Unit) 
                     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         tick
                         when (s) {
-                            Step.Welcome -> WelcomeStep(conn, scanning, p, onImport, importError)
+                            Step.Welcome -> WelcomeStep(conn, scanning, p, onImport, importError, onPhone)
                             Step.Layout -> if (p != null) LayoutStep(p) { tick++ }
                             Step.Rooms -> if (p != null) RoomsStep(p) { tick++ }
                             Step.Members -> if (p != null) MembersStep(p) { tick++ }
@@ -213,7 +213,7 @@ fun SetupWizard(onImport: () -> Unit, importError: String?, onDone: () -> Unit) 
 
 
 @Composable
-private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, onImport: () -> Unit, importError: String?) {
+private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, onImport: () -> Unit, importError: String?, onPhone: () -> Unit) {
     val app = App.instance
     val settings by app.config.settings.collectAsState()
     Panel {
@@ -286,6 +286,8 @@ private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, on
         Text(stringResource(R.string.setup_restore_help), style = TextStyle(fontSize = 14.sp, color = TextSecondary, lineHeight = 20.sp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             WizardButton(stringResource(R.string.setup_restore_action), primary = false) { onImport() }
+            Spacer(Modifier.width(12.dp))
+            WizardButton(stringResource(R.string.transfer_phone), primary = false) { onPhone() }
             if (importError != null) {
                 Spacer(Modifier.width(16.dp))
                 StatusLine(Danger, importError)

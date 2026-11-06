@@ -651,4 +651,12 @@
     <string name="codes_replace_help">Ta kopia pochodzi z innego tabletu: jej kody są zaszyfrowane dla niego i nie można ich tu odczytać. Wybierz nowy kod dla każdego z nich.</string>
     <string name="code_defined">Ustawiony</string>
     <string name="code_undefined">Brak</string>
+    <string name="transfer_phone">Telefonem</string>
+    <string name="transfer_phone_title">Kopia zapasowa telefonem</string>
+    <string name="transfer_phone_help">Zeskanuj ten kod QR telefonem podłączonym do tej samej sieci: może pobrać kopię tego tabletu lub wysłać do niego kopię.</string>
+    <string name="transfer_page_title">Kopia zapasowa tabletu HA-MACS</string>
+    <string name="transfer_page_download">Pobierz kopię</string>
+    <string name="transfer_page_upload">Wyślij kopię do tabletu</string>
+    <string name="transfer_page_sending">Wysyłanie…</string>
+    <string name="transfer_page_note">Token i kody są zaszyfrowane dla tabletu, który utworzył kopię.</string>
 </resources>

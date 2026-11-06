@@ -69,8 +69,9 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
 - 🔑 **Mastercode** (optional, im Assistenten oder unter Einstellungen › Sicherheit): wird vor dem Öffnen der
   Einstellungen abgefragt
 - ✏️ **Bearbeitungsmodus**: Einstellungen › Dashboard › *Blöcke bearbeiten*, dann einen Block antippen
-- 💾 **Sicherung**: Einstellungen › Dashboard › *Exportieren* / *Importieren*; Token und Codes sind für dieses Tablet
-  verschlüsselt (auf einem anderen werden neue Codes abgefragt), die Datei bleibt aber persönlich (Layout, Avatarfotos)
+- 💾 **Sicherung**: Einstellungen › Dashboard › *Exportieren* / *Importieren* / *Mit dem Handy* (QR-Code); Token und
+  Codes sind für dieses Tablet verschlüsselt (auf einem anderen werden neue Codes abgefragt), die Datei bleibt aber
+  persönlich (Layout, Avatarfotos)
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus

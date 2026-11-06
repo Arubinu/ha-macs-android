@@ -633,4 +633,12 @@
     <string name="codes_replace_help">Deze back-up komt van een andere tablet: de codes zijn voor die tablet versleuteld en hier niet leesbaar. Kies voor elk een nieuwe code.</string>
     <string name="code_defined">Ingesteld</string>
     <string name="code_undefined">Geen</string>
+    <string name="transfer_phone">Met de telefoon</string>
+    <string name="transfer_phone_title">Back-up met de telefoon</string>
+    <string name="transfer_phone_help">Scan deze QR-code met een telefoon op hetzelfde netwerk: hij kan de back-up van deze tablet downloaden of er een naartoe sturen.</string>
+    <string name="transfer_page_title">Back-up van de HA-MACS-tablet</string>
+    <string name="transfer_page_download">Back-up downloaden</string>
+    <string name="transfer_page_upload">Back-up naar de tablet sturen</string>
+    <string name="transfer_page_sending">Verzenden…</string>
+    <string name="transfer_page_note">Het token en de codes zijn versleuteld voor de tablet die de back-up heeft gemaakt.</string>
 </resources>

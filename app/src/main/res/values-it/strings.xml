@@ -633,4 +633,12 @@
     <string name="codes_replace_help">Questo backup proviene da un altro tablet: i suoi codici sono cifrati per quel tablet e non sono leggibili qui. Scegli un nuovo codice per ciascuno.</string>
     <string name="code_defined">Impostato</string>
     <string name="code_undefined">Nessuno</string>
+    <string name="transfer_phone">Con il telefono</string>
+    <string name="transfer_phone_title">Backup con il telefono</string>
+    <string name="transfer_phone_help">Scansiona questo codice QR con un telefono connesso alla stessa rete: può scaricare il backup di questo tablet o inviargliene uno.</string>
+    <string name="transfer_page_title">Backup del tablet HA-MACS</string>
+    <string name="transfer_page_download">Scarica il backup</string>
+    <string name="transfer_page_upload">Invia un backup al tablet</string>
+    <string name="transfer_page_sending">Invio…</string>
+    <string name="transfer_page_note">Il token e i codici sono cifrati per il tablet che ha creato il backup.</string>
 </resources>

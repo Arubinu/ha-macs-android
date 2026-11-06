@@ -651,4 +651,12 @@
     <string name="codes_replace_help">Cette sauvegarde vient d\'une autre tablette : ses codes sont chiffrés pour elle et ne peuvent pas être lus ici. Choisissez un nouveau code pour chacun.</string>
     <string name="code_defined">Défini</string>
     <string name="code_undefined">Aucun</string>
+    <string name="transfer_phone">Avec le téléphone</string>
+    <string name="transfer_phone_title">Sauvegarde avec le téléphone</string>
+    <string name="transfer_phone_help">Scannez ce QR code avec un téléphone connecté au même réseau : il peut télécharger la sauvegarde de cette tablette ou lui en envoyer une.</string>
+    <string name="transfer_page_title">Sauvegarde de la tablette HA-MACS</string>
+    <string name="transfer_page_download">Télécharger la sauvegarde</string>
+    <string name="transfer_page_upload">Envoyer une sauvegarde à la tablette</string>
+    <string name="transfer_page_sending">Envoi…</string>
+    <string name="transfer_page_note">Le jeton et les codes sont chiffrés pour la tablette qui a fait la sauvegarde.</string>
 </resources>
