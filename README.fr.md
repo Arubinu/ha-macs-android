@@ -69,8 +69,9 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
 - ⚙️ **Réglages** : appui long sur le coin supérieur gauche (connexion, affichage, veille, code d'accès, langue…)
 - 🔑 **Code maître** (facultatif, dans l'assistant ou Réglages › Sécurité) : demandé avant d'ouvrir les réglages
 - ✏️ **Mode édition** : Réglages › Tableau de bord › *Modifier les blocs*, puis touchez un bloc pour le modifier
-- 💾 **Sauvegarde** : Réglages › Tableau de bord › *Exporter* / *Importer* (le fichier contient votre jeton : gardez-le
-  en lieu sûr)
+- 💾 **Sauvegarde** : Réglages › Tableau de bord › *Exporter* / *Importer* ; le jeton et les codes y sont chiffrés pour
+  cette tablette (sur une autre, de nouveaux codes sont demandés), mais le fichier reste personnel (agencement, photos
+  des avatars)
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque

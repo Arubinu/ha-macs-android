@@ -65,7 +65,8 @@ home. Already have a backup? **Import** it on the first step and you are done.
 - ⚙️ **Settings**: long press on the top-left corner (connection, display, sleep, access code, language…)
 - 🔑 **Master code** (optional, in the wizard or Settings › Security): asked before opening the settings
 - ✏️ **Edit mode**: Settings › Dashboard › *Edit blocks*, then touch any block to change it
-- 💾 **Backup**: Settings › Dashboard › *Export* / *Import* (the file contains your token: keep it safe)
+- 💾 **Backup**: Settings › Dashboard › *Export* / *Import*; the token and the codes are encrypted for this tablet
+  (on another one, new codes are asked), but the file stays personal (layout, avatar photos)
 - 🧙 **Wizard**: can be run again from Settings › Dashboard
 
 ## 🔒 Kiosk mode

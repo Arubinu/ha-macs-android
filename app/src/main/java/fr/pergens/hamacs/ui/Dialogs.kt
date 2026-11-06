@@ -203,10 +203,13 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                 }
                 if (!all) {
                     val memberKey = remember(target) { app.config.resolveKey(target.key) }
+                    val one = raw[memberKey]?.b("protected") == true
                     EditSwitch(
                         stringResource(R.string.member_protect_one), stringResource(R.string.member_protect_one_help),
-                        raw[memberKey]?.b("protected") == true,
+                        one,
                     ) { app.config.setBlockOption(memberKey, "protected", it.takeIf { v -> v }) }
+                    // Code propre au membre (sinon le code d'accès).
+                    if (one) MemberCodeEditor(memberId)
                 }
             }
             if (target is EditTarget.Graph) {

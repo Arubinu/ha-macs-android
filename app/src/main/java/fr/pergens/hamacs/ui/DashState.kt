@@ -130,11 +130,12 @@ class DashState(
      * Interaction directe d'une carte avec [entity] (télécommande, lecteur, alarme, membres…) :
      * en mode édition, ouvre les réglages du bloc ; sinon demande le code d'accès si le bloc est protégé.
      */
-    fun guard(entity: String?, configDefault: Boolean = false, run: () -> Unit) {
+    fun guard(entity: String?, configDefault: Boolean = false, code: String? = null, title: String? = null, run: () -> Unit) {
         lastInteraction = System.currentTimeMillis()
         if (editInstead(entity?.let { EditTarget.Entity(it) })) return
         if (isProtected(entity, configDefault)) {
-            pin = PinRequest(null, fr.pergens.hamacs.App.instance.config.accessCode()) { run() }
+            // [code] : code propre (membre) ; sinon le code d'accès.
+            pin = PinRequest(title, code ?: fr.pergens.hamacs.App.instance.config.accessCode()) { run() }
         } else run()
     }
 

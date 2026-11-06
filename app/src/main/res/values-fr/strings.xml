@@ -69,10 +69,10 @@
     <string name="tap_fullscreen">Caméras : plein écran dès le premier appui</string>
     <string name="tap_fullscreen_help">Concerne les caméras et les captures de détection. Désactivé : le premier appui lance le direct (ou la vidéo) dans la carte, le second ouvre le plein écran avec le son.</string>
     <string name="config_transfer">Sauvegarde de la configuration</string>
-    <string name="config_transfer_help">Exporte ou importe tous les réglages (y compris le jeton d\'accès et le code), l\'agencement et les réglages des blocs dans un fichier. Gardez ce fichier en lieu sûr.</string>
+    <string name="config_transfer_help">Exporte ou importe tous les réglages, l\'agencement, les réglages des blocs et les avatars des membres dans un fichier. Le jeton Home Assistant et les codes y sont chiffrés pour cette tablette : partager le fichier ne les expose pas, mais il reste personnel (agencement, photos).</string>
     <string name="action_export">Exporter</string>
     <string name="action_import">Importer</string>
-    <string name="export_done">Configuration exportée</string>
+    <string name="export_done">Exporté. 🔒 Jeton et codes chiffrés pour cette tablette</string>
     <string name="import_done">Configuration importée</string>
     <string name="import_error">Fichier invalide : %1$s</string>
 
@@ -606,7 +606,7 @@
     <string name="member_protect_all">Code pour tous les membres</string>
     <string name="member_protect_all_help">Le code d\'accès est demandé avant d\'afficher n\'importe quel autre membre.</string>
     <string name="member_protect_one">Code pour ce membre</string>
-    <string name="member_protect_one_help">Le code d\'accès est demandé seulement avant d\'afficher ce membre.</string>
+    <string name="member_protect_one_help">Un code est demandé seulement avant d\'afficher ce membre : son code propre, ou le code d\'accès s\'il n\'en a pas.</string>
     <string name="pages_favorite_help">Onglet favori (★) : réaffiché à chaque retour depuis l\'écran d\'accueil. Sans favori, l\'onglet en cours est conservé.</string>
     <string name="member_favorite">Membre favori</string>
     <string name="member_favorite_help">Affiché au démarrage et à chaque retour depuis l\'écran d\'accueil.</string>
@@ -644,4 +644,10 @@
     <string name="ha_login_token_desc">Collez un jeton longue durée créé dans Home Assistant.</string>
     <string name="ha_login_phone_open">Afficher le QR code</string>
     <string name="ha_login_tablet_open">Ouvrir la page de connexion</string>
+    <string name="member_code_defined">Ce membre a son propre code.</string>
+    <string name="member_code_none">Pas de code propre : le code d\'accès est demandé.</string>
+    <string name="member_code_removed">Code propre retiré</string>
+    <string name="member_code_of">Code de %1$s</string>
+    <string name="codes_replace_title">Nouveaux codes</string>
+    <string name="codes_replace_help">Cette sauvegarde vient d\'une autre tablette : ses codes sont chiffrés pour elle et ne peuvent pas être lus ici. Choisissez un nouveau code pour chacun.</string>
 </resources>

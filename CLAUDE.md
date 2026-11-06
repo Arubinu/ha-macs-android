@@ -114,7 +114,12 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   démarrage et au retour sur l'accueil (`DashState.onHome`).
 - **Export** : le jeton HA y est chiffré (`config/DeviceSecret.kt`, AES-GCM, clé tirée d'`ANDROID_ID`) ; il ne se
   déchiffre que sur l'appareil d'origine, ailleurs il est vidé et demandé (`importNeedsToken`). Un jeton en clair
-  dans un fichier reste accepté.
+  dans un fichier reste accepté. Les codes (`access_code`, `master_code`, `member_code:<id>`, plus le `access_code`
+  racine de l'agencement, retiré de l'agencement exporté) sont chiffrés de la même façon ; `code_groups` regroupe
+  les codes identiques. Ailleurs, rien n'est écrit pour eux (pas de 0000) : `codes_to_replace` (pref, conservée
+  jusqu'au bout) fait afficher `CodeReplaceDialog` (non fermable), un nouveau code par groupe.
+- **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
+  (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en
   mode édition). Affiché au démarrage et à chaque retour sur l'écran d'accueil (`start_screen`) ; sans favori,
   l'onglet en cours est gardé.

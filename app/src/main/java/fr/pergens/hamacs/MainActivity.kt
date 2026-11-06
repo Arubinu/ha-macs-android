@@ -235,6 +235,8 @@ class MainActivity : ComponentActivity() {
                                     state.editMode = false
                                 }
                             }
+                            // Sauvegarde d'une autre tablette : nouveaux codes à définir (codes chiffrés illisibles ici).
+                            fr.pergens.hamacs.ui.CodeReplaceDialog()
                         }
                     }
                 }

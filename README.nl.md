@@ -68,8 +68,8 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
 - ⚙️ **Instellingen**: lang drukken op de linkerbovenhoek (verbinding, weergave, slaapstand, toegangscode, taal…)
 - 🔑 **Mastercode** (optioneel, in de wizard of Instellingen › Beveiliging): gevraagd voordat de instellingen opengaan
 - ✏️ **Bewerkmodus**: Instellingen › Dashboard › *Blokken bewerken*, tik daarna op een blok om het te wijzigen
-- 💾 **Back-up**: Instellingen › Dashboard › *Exporteren* / *Importeren* (het bestand bevat je token: bewaar het
-  veilig)
+- 💾 **Back-up**: Instellingen › Dashboard › *Exporteren* / *Importeren*; het token en de codes zijn versleuteld voor
+  deze tablet (op een andere worden nieuwe codes gevraagd), maar het bestand blijft persoonlijk (indeling, avatarfoto's)
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus

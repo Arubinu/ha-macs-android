@@ -167,8 +167,12 @@ fun MembersCard(card: Card, modifier: Modifier) {
                         // Mode édition : réglages du membre (personne, capteurs) et code d'accès du sélecteur.
                         if (state.editMode) { state.editTarget = fr.pergens.hamacs.ui.EditTarget.Member("member:$id", guardKey); return@tapHold }
                         if (id == member?.s("id")) return@tapHold
-                        // Code global (tous les membres) s'il est activé, sinon code propre au membre choisi.
-                        state.guard(if (state.isProtected(guardKey, false)) guardKey else "member:$id") {
+                        // Code global (tous les membres) s'il est activé, sinon code propre au membre choisi (à défaut,
+                        // le code d'accès).
+                        val all = state.isProtected(guardKey, false)
+                        val own = if (all) null else fr.pergens.hamacs.App.instance.config.memberCode(id)
+                        state.guard(if (all) guardKey else "member:$id", code = own,
+                            title = own?.let { fr.pergens.hamacs.App.instance.getString(fr.pergens.hamacs.R.string.member_code_of, person?.name ?: id) }) {
                             selected = id
                             prefs.edit().putString("selected", id).apply()
                         }

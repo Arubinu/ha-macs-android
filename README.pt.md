@@ -68,8 +68,8 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
 - ⚙️ **Definições**: toque longo no canto superior esquerdo (ligação, ecrã, suspensão, código de acesso, idioma…)
 - 🔑 **Código mestre** (opcional, no assistente ou em Definições › Segurança): pedido antes de abrir as definições
 - ✏️ **Modo de edição**: Definições › Painel › *Editar os blocos*, depois toque num bloco para o alterar
-- 💾 **Cópia de segurança**: Definições › Painel › *Exportar* / *Importar* (o ficheiro contém o seu token: guarde-o em
-  local seguro)
+- 💾 **Cópia de segurança**: Definições › Painel › *Exportar* / *Importar*; o token e os códigos são cifrados para este
+  tablet (noutro são pedidos novos códigos), mas o ficheiro continua pessoal (esquema, fotografias dos avatares)
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque

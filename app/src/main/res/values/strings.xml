@@ -79,10 +79,10 @@
     <string name="tap_fullscreen">Cameras: full screen on first tap</string>
     <string name="tap_fullscreen_help">Applies to cameras and detection captures. Off: the first tap starts the live view (or video) in the card, the second opens full screen with sound.</string>
     <string name="config_transfer">Configuration backup</string>
-    <string name="config_transfer_help">Exports or imports all settings (including the access token and code), the layout and block settings to a file. Keep this file somewhere safe.</string>
+    <string name="config_transfer_help">Exports or imports all settings, the layout, block settings and member avatars to a file. The Home Assistant token and the codes are encrypted for this tablet: sharing the file does not expose them, but it stays personal (layout, photos).</string>
     <string name="action_export">Export</string>
     <string name="action_import">Import</string>
-    <string name="export_done">Configuration exported</string>
+    <string name="export_done">Exported. 🔒 Token and codes encrypted for this tablet</string>
     <string name="import_done">Configuration imported</string>
     <string name="import_error">Invalid file: %1$s</string>
 
@@ -619,7 +619,7 @@
     <string name="member_protect_all">Code for all members</string>
     <string name="member_protect_all_help">The access code is asked before showing any other member.</string>
     <string name="member_protect_one">Code for this member</string>
-    <string name="member_protect_one_help">The access code is asked only before showing this member.</string>
+    <string name="member_protect_one_help">A code is asked only before showing this member: its own code, or the access code if it has none.</string>
     <string name="pages_favorite_help">Favourite tab (★): shown again each time you come back from the home screen. Without one, the current tab is kept.</string>
     <string name="member_favorite">Favourite member</string>
     <string name="member_favorite_help">Shown at start-up and each time you come back from the home screen.</string>
@@ -657,4 +657,10 @@
     <string name="ha_login_token_desc">Paste a long-lived token created in Home Assistant.</string>
     <string name="ha_login_phone_open">Show the QR code</string>
     <string name="ha_login_tablet_open">Open the sign-in page</string>
+    <string name="member_code_defined">This member has its own code.</string>
+    <string name="member_code_none">No code of its own: the access code is asked.</string>
+    <string name="member_code_removed">Own code removed</string>
+    <string name="member_code_of">Code of %1$s</string>
+    <string name="codes_replace_title">New codes</string>
+    <string name="codes_replace_help">This backup comes from another tablet: its codes are encrypted for it and cannot be read here. Choose a new code for each one.</string>
 </resources>

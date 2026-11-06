@@ -62,10 +62,10 @@
     <string name="tap_fullscreen">Câmaras: ecrã inteiro ao primeiro toque</string>
     <string name="tap_fullscreen_help">Aplica-se às câmaras e às capturas de deteção. Desligado: o primeiro toque inicia o vídeo ao vivo (ou a gravação) no cartão, o segundo abre o ecrã inteiro com som.</string>
     <string name="config_transfer">Cópia de segurança da configuração</string>
-    <string name="config_transfer_help">Exporta ou importa para um ficheiro todas as definições (incluindo o token de acesso e o código), o layout e as definições dos blocos. Guarde este ficheiro num local seguro.</string>
+    <string name="config_transfer_help">Exporta ou importa todas as definições, o esquema, as definições dos blocos e os avatares dos membros para um ficheiro. O token do Home Assistant e os códigos são cifrados para este tablet: partilhar o ficheiro não os expõe, mas continua pessoal (esquema, fotografias).</string>
     <string name="action_export">Exportar</string>
     <string name="action_import">Importar</string>
-    <string name="export_done">Configuração exportada</string>
+    <string name="export_done">Exportado. 🔒 Token e códigos cifrados para este tablet</string>
     <string name="import_done">Configuração importada</string>
     <string name="import_error">Ficheiro inválido: %1$s</string>
     <string name="no_screen">Nenhum ecrã «%1$s» na configuração</string>
@@ -588,7 +588,7 @@
     <string name="member_protect_all">Código para todos os membros</string>
     <string name="member_protect_all_help">O código de acesso é pedido antes de mostrar qualquer outro membro.</string>
     <string name="member_protect_one">Código para este membro</string>
-    <string name="member_protect_one_help">O código de acesso é pedido apenas antes de mostrar este membro.</string>
+    <string name="member_protect_one_help">Só é pedido um código antes de mostrar este membro: o seu próprio código ou, se não tiver, o código de acesso.</string>
     <string name="pages_favorite_help">Separador favorito (★): volta a ser mostrado sempre que se regressa do ecrã inicial. Sem favorito, mantém-se o separador atual.</string>
     <string name="member_favorite">Membro favorito</string>
     <string name="member_favorite_help">Mostrado no arranque e sempre que se regressa do ecrã inicial.</string>
@@ -626,4 +626,10 @@
     <string name="ha_login_token_desc">Cole um token de longa duração criado no Home Assistant.</string>
     <string name="ha_login_phone_open">Mostrar o código QR</string>
     <string name="ha_login_tablet_open">Abrir a página de início de sessão</string>
+    <string name="member_code_defined">Este membro tem o seu próprio código.</string>
+    <string name="member_code_none">Sem código próprio: é pedido o código de acesso.</string>
+    <string name="member_code_removed">Código próprio removido</string>
+    <string name="member_code_of">Código de %1$s</string>
+    <string name="codes_replace_title">Novos códigos</string>
+    <string name="codes_replace_help">Esta cópia vem de outro tablet: os seus códigos estão cifrados para ele e não podem ser lidos aqui. Escolha um novo código para cada um.</string>
 </resources>

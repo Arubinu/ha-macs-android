@@ -62,10 +62,10 @@
     <string name="tap_fullscreen">Camera\'s: volledig scherm bij de eerste tik</string>
     <string name="tap_fullscreen_help">Geldt voor camera\'s en detectiebeelden. Uit: de eerste tik start het live beeld (of de video) in de kaart, de tweede opent het volledige scherm met geluid.</string>
     <string name="config_transfer">Back-up van de configuratie</string>
-    <string name="config_transfer_help">Exporteert of importeert alle instellingen (inclusief toegangstoken en code), de indeling en de blokinstellingen naar een bestand. Bewaar dit bestand op een veilige plek.</string>
+    <string name="config_transfer_help">Exporteert of importeert alle instellingen, de indeling, de blokinstellingen en de avatars van de leden naar een bestand. Het Home Assistant-token en de codes zijn voor deze tablet versleuteld: het bestand delen geeft ze niet prijs, maar het blijft persoonlijk (indeling, foto\'s).</string>
     <string name="action_export">Exporteren</string>
     <string name="action_import">Importeren</string>
-    <string name="export_done">Configuratie geëxporteerd</string>
+    <string name="export_done">Geëxporteerd. 🔒 Token en codes versleuteld voor deze tablet</string>
     <string name="import_done">Configuratie geïmporteerd</string>
     <string name="import_error">Ongeldig bestand: %1$s</string>
     <string name="no_screen">Geen scherm „%1$s” in de configuratie</string>
@@ -588,7 +588,7 @@
     <string name="member_protect_all">Code voor alle leden</string>
     <string name="member_protect_all_help">De toegangscode wordt gevraagd voordat een ander lid wordt getoond.</string>
     <string name="member_protect_one">Code voor dit lid</string>
-    <string name="member_protect_one_help">De toegangscode wordt alleen gevraagd voordat dit lid wordt getoond.</string>
+    <string name="member_protect_one_help">Er wordt alleen een code gevraagd voordat dit lid wordt getoond: zijn eigen code, of de toegangscode als het er geen heeft.</string>
     <string name="pages_favorite_help">Favoriete tab (★): opnieuw getoond bij elke terugkeer van het startscherm. Zonder favoriet blijft de huidige tab staan.</string>
     <string name="member_favorite">Favoriet lid</string>
     <string name="member_favorite_help">Getoond bij het opstarten en bij elke terugkeer van het startscherm.</string>
@@ -626,4 +626,10 @@
     <string name="ha_login_token_desc">Plak een langlevend token dat in Home Assistant is aangemaakt.</string>
     <string name="ha_login_phone_open">QR-code tonen</string>
     <string name="ha_login_tablet_open">Inlogpagina openen</string>
+    <string name="member_code_defined">Dit lid heeft een eigen code.</string>
+    <string name="member_code_none">Geen eigen code: de toegangscode wordt gevraagd.</string>
+    <string name="member_code_removed">Eigen code verwijderd</string>
+    <string name="member_code_of">Code van %1$s</string>
+    <string name="codes_replace_title">Nieuwe codes</string>
+    <string name="codes_replace_help">Deze back-up komt van een andere tablet: de codes zijn voor die tablet versleuteld en hier niet leesbaar. Kies voor elk een nieuwe code.</string>
 </resources>

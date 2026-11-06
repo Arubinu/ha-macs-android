@@ -62,10 +62,10 @@
     <string name="tap_fullscreen">Kameras: Vollbild beim ersten Tippen</string>
     <string name="tap_fullscreen_help">Gilt für Kameras und Erkennungsbilder. Aus: das erste Tippen startet die Live-Ansicht (oder das Video) in der Karte, das zweite öffnet das Vollbild mit Ton.</string>
     <string name="config_transfer">Sicherung der Konfiguration</string>
-    <string name="config_transfer_help">Exportiert oder importiert alle Einstellungen (einschließlich Zugriffstoken und Code), das Layout und die Blockeinstellungen in eine Datei. Diese Datei sicher aufbewahren.</string>
+    <string name="config_transfer_help">Exportiert oder importiert alle Einstellungen, das Layout, die Blockeinstellungen und die Avatare der Mitglieder in eine Datei. Home-Assistant-Token und Codes sind für dieses Tablet verschlüsselt: Das Teilen der Datei legt sie nicht offen, sie bleibt aber persönlich (Layout, Fotos).</string>
     <string name="action_export">Exportieren</string>
     <string name="action_import">Importieren</string>
-    <string name="export_done">Konfiguration exportiert</string>
+    <string name="export_done">Exportiert. 🔒 Token und Codes für dieses Tablet verschlüsselt</string>
     <string name="import_done">Konfiguration importiert</string>
     <string name="import_error">Ungültige Datei: %1$s</string>
     <string name="no_screen">Kein Bildschirm „%1$s“ in der Konfiguration</string>
@@ -588,7 +588,7 @@
     <string name="member_protect_all">Code für alle Mitglieder</string>
     <string name="member_protect_all_help">Der Zugangscode wird vor dem Anzeigen jedes anderen Mitglieds abgefragt.</string>
     <string name="member_protect_one">Code für dieses Mitglied</string>
-    <string name="member_protect_one_help">Der Zugangscode wird nur vor dem Anzeigen dieses Mitglieds abgefragt.</string>
+    <string name="member_protect_one_help">Ein Code wird nur vor dem Anzeigen dieses Mitglieds verlangt: sein eigener Code oder, falls keiner, der Zugangscode.</string>
     <string name="pages_favorite_help">Lieblings-Tab (★): wird bei jeder Rückkehr vom Startbildschirm wieder angezeigt. Ohne Favorit bleibt der aktuelle Tab.</string>
     <string name="member_favorite">Lieblingsmitglied</string>
     <string name="member_favorite_help">Wird beim Start und bei jeder Rückkehr vom Startbildschirm angezeigt.</string>
@@ -626,4 +626,10 @@
     <string name="ha_login_token_desc">Ein in Home Assistant erstelltes langlebiges Token einfügen.</string>
     <string name="ha_login_phone_open">QR-Code anzeigen</string>
     <string name="ha_login_tablet_open">Anmeldeseite öffnen</string>
+    <string name="member_code_defined">Dieses Mitglied hat einen eigenen Code.</string>
+    <string name="member_code_none">Kein eigener Code: Der Zugangscode wird verlangt.</string>
+    <string name="member_code_removed">Eigener Code entfernt</string>
+    <string name="member_code_of">Code von %1$s</string>
+    <string name="codes_replace_title">Neue Codes</string>
+    <string name="codes_replace_help">Diese Sicherung stammt von einem anderen Tablet: Ihre Codes sind für dieses verschlüsselt und hier nicht lesbar. Wähle für jeden einen neuen Code.</string>
 </resources>

@@ -107,23 +107,32 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
      * code, réglages des blocs…) et agencement du tableau de bord.
      */
     fun exportAll(): String {
-        // Compteur d'erreurs de code : propre à l'appareil, non exporté.
-        val values = prefs.all.filterKeys { it != "pin_fails" && it != "pin_lock_until" }.mapValues { (k, v) ->
+        val P = { v: Any? -> kotlinx.serialization.json.JsonPrimitive(v?.toString()) }
+        // Compteur d'erreurs et codes à redéfinir : propres à l'appareil, non exportés.
+        val local = prefs.all.filterKeys { it != "pin_fails" && it != "pin_lock_until" && it != CODES_TO_REPLACE }
+        // Code d'accès venu de l'agencement (racine `access_code`) : exporté chiffré avec les autres, pas en clair.
+        val codes = local.filter { (k, v) -> isCode(k) && v is String && v.isNotEmpty() }.mapValues { it.value as String }.toMutableMap()
+        if ("access_code" !in codes) _dashboard.value.s("access_code")?.takeIf { it.isNotEmpty() }?.let { codes["access_code"] = it }
+        val values = local.filterKeys { !isCode(it) }.mapValues { (k, v) ->
             when {
-                // Jeton Home Assistant chiffré avec une clé propre à cet appareil : il ne se déchiffre qu'ici.
-                k == "ha_token" && v is String && v.isNotBlank() -> kotlinx.serialization.json.JsonPrimitive(DeviceSecret.encrypt(context, v))
+                // Jeton Home Assistant et codes chiffrés avec une clé propre à cet appareil : ils ne se déchiffrent qu'ici.
+                k == "ha_token" && v is String && v.isNotBlank() -> P(DeviceSecret.encrypt(context, v))
                 v is Boolean -> kotlinx.serialization.json.JsonPrimitive(v)
                 v is Number -> kotlinx.serialization.json.JsonPrimitive(v)
-                else -> kotlinx.serialization.json.JsonPrimitive(v?.toString())
+                else -> P(v)
             }
-        }
+        } + codes.mapValues { P(DeviceSecret.encrypt(context, it.value)) }
+        // Codes identiques regroupés : sur une autre tablette, un seul code de remplacement est demandé par groupe.
+        val distinct = codes.values.distinct()
+        val groups = codes.mapValues { kotlinx.serialization.json.JsonPrimitive(distinct.indexOf(it.value)) }
         val doc = JsonObject(
             mapOf(
-                "format" to kotlinx.serialization.json.JsonPrimitive(EXPORT_FORMAT),
+                "format" to P(EXPORT_FORMAT),
                 "version" to kotlinx.serialization.json.JsonPrimitive(1),
-                "app_version" to kotlinx.serialization.json.JsonPrimitive(BuildConfig.VERSION_NAME),
+                "app_version" to P(BuildConfig.VERSION_NAME),
                 "settings" to JsonObject(values),
-                "dashboard" to _dashboard.value,
+                "code_groups" to JsonObject(groups),
+                "dashboard" to JsonObject(_dashboard.value - "access_code"),
                 "avatars" to avatars.export(),
             )
         )
@@ -136,6 +145,39 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
     var importNeedsToken = false
         private set
 
+    // --- Codes ---------------------------------------------------------------------------------
+
+    /** Clés des codes (chiffrés à l'export) : accès, maître, codes propres aux membres. */
+    private fun isCode(key: String) = key == "access_code" || key == "master_code" || key.startsWith("member_code:")
+
+    /**
+     * Codes à redéfinir après l'import d'une sauvegarde d'une autre tablette (illisibles ici), regroupés : un code de
+     * remplacement par groupe de codes identiques. Conservé jusqu'à ce qu'ils soient tous redéfinis.
+     */
+    private val _codesToReplace = MutableStateFlow(readCodesToReplace())
+    val codesToReplace: StateFlow<List<List<String>>> = _codesToReplace.asStateFlow()
+
+    private fun readCodesToReplace(): List<List<String>> =
+        prefs.getString(CODES_TO_REPLACE, null).orEmpty().split('|').filter { it.isNotEmpty() }.map { it.split(',') }
+
+    private fun writeCodesToReplace(groups: List<List<String>>) {
+        prefs.edit().putString(CODES_TO_REPLACE, groups.joinToString("|") { it.joinToString(",") }).apply()
+        _codesToReplace.value = groups
+    }
+
+    /** Donne [code] à toutes les clés du premier groupe à redéfinir. */
+    fun replaceCodes(group: List<String>, code: String) {
+        prefs.edit().apply { group.forEach { putString(it, code) } }.apply()
+        writeCodesToReplace(_codesToReplace.value.filter { it != group })
+    }
+
+    /** Code propre à un membre (null = aucun : le code d'accès est demandé). */
+    fun memberCode(id: String): String? = prefs.getString("member_code:$id", null)?.takeIf { it.isNotEmpty() }
+
+    fun setMemberCode(id: String, code: String?) {
+        prefs.edit().apply { if (code.isNullOrEmpty()) remove("member_code:$id") else putString("member_code:$id", code) }.apply()
+    }
+
     /** Remplace toute la configuration par celle du fichier. Retourne un message d'erreur éventuel. */
     fun importAll(text: String): String? = runCatching {
         importNeedsToken = false
@@ -143,6 +185,14 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         require(doc.s("format") == EXPORT_FORMAT) { context.getString(fr.pergens.hamacs.R.string.import_unknown_format) }
         val dashboard = doc.o("dashboard") ?: error(context.getString(fr.pergens.hamacs.R.string.import_missing_layout))
         val settings = doc.o("settings") ?: JsonObject(emptyMap())
+        val groupOf = doc.o("code_groups")
+        // Codes chiffrés pour une autre tablette : à redéfinir, un code de remplacement par groupe de codes identiques.
+        val unreadable = settings.filter { (k, v) ->
+            isCode(k) && (v as? kotlinx.serialization.json.JsonPrimitive)?.content?.let { DeviceSecret.isEncrypted(it) && DeviceSecret.decrypt(context, it) == null } == true
+        }.keys
+        val missing = unreadable.groupBy { (groupOf?.get(it) as? kotlinx.serialization.json.JsonPrimitive)?.content ?: it }.values
+            .map { keys -> keys.sortedBy { if (it == "access_code") 0 else if (it == "master_code") 1 else 2 } }
+            .sortedBy { g -> if ("access_code" in g) 0 else if ("master_code" in g) 1 else 2 }
         // Nombres : type lu par l'app (Float ou Int). Oui/non : valeur JSON non textuelle (true/false).
         val types = mapOf(
             "text_scale" to "f", "dim_level" to "f", "idle_seconds" to "i", "presence_sensitivity" to "i", "dim_seconds" to "i",
@@ -154,6 +204,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                 when {
                     // Jeton chiffré : déchiffré avec la clé de cet appareil ; autre appareil → vide (à saisir).
                     k == "ha_token" && DeviceSecret.isEncrypted(p.content) -> putString(k, DeviceSecret.decrypt(context, p.content).orEmpty())
+                    // Codes chiffrés : déchiffrés ici, sinon à redéfinir (rien n'est écrit, pas de code par défaut).
+                    isCode(k) && DeviceSecret.isEncrypted(p.content) -> DeviceSecret.decrypt(context, p.content)?.let { putString(k, it) }
                     types[k] == "f" -> putFloat(k, p.content.toFloat())
                     types[k] == "i" -> putInt(k, p.content.toDouble().toInt())
                     !p.isString && (p.content == "true" || p.content == "false") -> putBoolean(k, p.content.toBoolean())
@@ -166,7 +218,9 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                 putString("ha_token", "")
                 importNeedsToken = true
             }
+            putString(CODES_TO_REPLACE, missing.joinToString("|") { it.joinToString(",") })
         }.apply()
+        _codesToReplace.value = missing
         cache.writeText(dashboard.toString())
         avatars.import(doc.o("avatars"))
         _dashboard.value = dashboard
@@ -326,5 +380,6 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         private const val TAG = "ConfigRepository"
         private const val EXPORT_FORMAT = "ha-android-dashboard"
         private const val PIN_MAX_LOCK = 15 * 60_000L
+        private const val CODES_TO_REPLACE = "codes_to_replace"
     }
 }

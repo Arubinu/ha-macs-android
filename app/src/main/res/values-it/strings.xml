@@ -62,10 +62,10 @@
     <string name="tap_fullscreen">Telecamere: schermo intero al primo tocco</string>
     <string name="tap_fullscreen_help">Vale per le telecamere e le catture dei rilevamenti. Disattivato: il primo tocco avvia la diretta (o il video) nella scheda, il secondo apre lo schermo intero con audio.</string>
     <string name="config_transfer">Backup della configurazione</string>
-    <string name="config_transfer_help">Esporta o importa in un file tutte le impostazioni (compresi il token di accesso e il codice), il layout e le impostazioni dei blocchi. Conserva questo file in un luogo sicuro.</string>
+    <string name="config_transfer_help">Esporta o importa tutte le impostazioni, il layout, le impostazioni dei blocchi e gli avatar dei membri in un file. Il token di Home Assistant e i codici sono cifrati per questo tablet: condividere il file non li espone, ma resta personale (layout, foto).</string>
     <string name="action_export">Esporta</string>
     <string name="action_import">Importa</string>
-    <string name="export_done">Configurazione esportata</string>
+    <string name="export_done">Esportato. 🔒 Token e codici cifrati per questo tablet</string>
     <string name="import_done">Configurazione importata</string>
     <string name="import_error">File non valido: %1$s</string>
     <string name="no_screen">Nessuna schermata «%1$s» nella configurazione</string>
@@ -588,7 +588,7 @@
     <string name="member_protect_all">Codice per tutti i membri</string>
     <string name="member_protect_all_help">Il codice di accesso viene chiesto prima di mostrare qualsiasi altro membro.</string>
     <string name="member_protect_one">Codice per questo membro</string>
-    <string name="member_protect_one_help">Il codice di accesso viene chiesto solo prima di mostrare questo membro.</string>
+    <string name="member_protect_one_help">Un codice viene chiesto solo prima di mostrare questo membro: il suo codice o, se non ne ha, il codice di accesso.</string>
     <string name="pages_favorite_help">Scheda preferita (★): mostrata di nuovo a ogni ritorno dalla schermata iniziale. Senza preferita, resta la scheda attuale.</string>
     <string name="member_favorite">Membro preferito</string>
     <string name="member_favorite_help">Mostrato all\'avvio e a ogni ritorno dalla schermata iniziale.</string>
@@ -626,4 +626,10 @@
     <string name="ha_login_token_desc">Incolla un token di lunga durata creato in Home Assistant.</string>
     <string name="ha_login_phone_open">Mostra il codice QR</string>
     <string name="ha_login_tablet_open">Apri la pagina di accesso</string>
+    <string name="member_code_defined">Questo membro ha un proprio codice.</string>
+    <string name="member_code_none">Nessun codice proprio: viene chiesto il codice di accesso.</string>
+    <string name="member_code_removed">Codice proprio rimosso</string>
+    <string name="member_code_of">Codice di %1$s</string>
+    <string name="codes_replace_title">Nuovi codici</string>
+    <string name="codes_replace_help">Questo backup proviene da un altro tablet: i suoi codici sono cifrati per quel tablet e non sono leggibili qui. Scegli un nuovo codice per ciascuno.</string>
 </resources>
