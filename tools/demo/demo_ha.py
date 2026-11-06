@@ -114,7 +114,9 @@ def build_states() -> dict[str, dict]:
                 put(eid, 'playing', media_title='Voyage en Patagonie', media_artist='Documentaire', app_name='TV',
                     friendly_name='Apple TV du salon', volume_level=0.4)
             else:
-                put(eid, 'idle', friendly_name='Kiosque')
+                put(eid, 'playing', friendly_name='Kiosque', media_title='Clair de lune', media_artist='Claude Debussy',
+                    media_album_name='Suite bergamasque', media_duration=300, media_position=92, volume_level=0.35,
+                    is_volume_muted=False, shuffle=False, repeat='all', source='Radio Classique')
         elif dom == 'remote':
             put(eid, 'on', friendly_name='Télécommande')
         elif dom == 'calendar':
