@@ -653,4 +653,5 @@
     <string name="relaunch_help">Na een crash opent de app vanzelf opnieuw. Android staat dat toe als ze apparaateigenaar of startscherm is, of over andere apps mag worden weergegeven.</string>
     <string name="relaunch_on">Actief</string>
     <string name="relaunch_allow">Toestaan</string>
+    <string name="transfer_page_crashes">Crashlogboek downloaden</string>
 </resources>

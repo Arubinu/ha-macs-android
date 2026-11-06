@@ -653,4 +653,5 @@
     <string name="relaunch_help">Dopo un arresto anomalo, l\'app si riapre da sola. Android lo consente se è proprietaria del dispositivo, schermata Home o autorizzata a comparire sopra altre app.</string>
     <string name="relaunch_on">Attivo</string>
     <string name="relaunch_allow">Consenti</string>
+    <string name="transfer_page_crashes">Scarica il registro degli arresti anomali</string>
 </resources>

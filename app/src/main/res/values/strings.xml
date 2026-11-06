@@ -684,4 +684,5 @@
     <string name="relaunch_help">After a crash, the app reopens by itself. Android allows it when the app is device owner, the home screen, or allowed to display over other apps.</string>
     <string name="relaunch_on">Active</string>
     <string name="relaunch_allow">Allow</string>
+    <string name="transfer_page_crashes">Download the crash log</string>
 </resources>

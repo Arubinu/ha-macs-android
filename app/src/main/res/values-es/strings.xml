@@ -653,4 +653,5 @@
     <string name="relaunch_help">Tras un fallo, la app se vuelve a abrir sola. Android lo permite si es propietaria del dispositivo, pantalla de inicio o puede mostrarse sobre otras apps.</string>
     <string name="relaunch_on">Activo</string>
     <string name="relaunch_allow">Permitir</string>
+    <string name="transfer_page_crashes">Descargar el registro de fallos</string>
 </resources>

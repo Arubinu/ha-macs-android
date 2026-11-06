@@ -673,4 +673,5 @@
     <string name="relaunch_help">Po awarii aplikacja otwiera się sama. Android na to pozwala, gdy jest właścicielem urządzenia, ekranem głównym lub może wyświetlać się nad innymi aplikacjami.</string>
     <string name="relaunch_on">Aktywne</string>
     <string name="relaunch_allow">Zezwól</string>
+    <string name="transfer_page_crashes">Pobierz dziennik awarii</string>
 </resources>

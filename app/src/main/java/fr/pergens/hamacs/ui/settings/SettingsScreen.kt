@@ -195,7 +195,7 @@ fun SettingsScreen(
                                 Section.Voice -> VoiceSection(requestMic)
                                 Section.Dashboard -> DashboardSection(onEditBlocks, transferMessage, onExport, onImport, onPhone)
                                 Section.Security -> SecuritySection()
-                                Section.About -> AboutSection()
+                                Section.About -> AboutSection(onPhone)
                             }
                         }
                     }
@@ -959,7 +959,7 @@ private fun LanguageRow() {
 }
 
 @Composable
-private fun AboutSection() {
+private fun AboutSection(onPhone: () -> Unit) {
     Group {
         SettingRow(stringResource(R.string.version)) {
             Text(BuildConfig.VERSION_NAME, style = TextStyle(fontSize = 15.sp, color = TextSecondary))
@@ -969,13 +969,13 @@ private fun AboutSection() {
         GroupDivider()
         SettingRow(stringResource(R.string.licenses), stringResource(R.string.licenses_text))
     }
-    CrashLogGroup()
+    CrashLogGroup(onPhone)
     Spacer(Modifier.height(8.dp))
 }
 
 /** Journal des plantages (l'app se relance seule) : enroulé, à copier pour le signaler, ou à effacer. */
 @Composable
-private fun CrashLogGroup() {
+private fun CrashLogGroup(onPhone: () -> Unit) {
     val ctx = LocalContext.current
     var entries by remember { mutableStateOf(fr.pergens.hamacs.CrashGuard.entries(ctx)) }
     var open by remember { mutableStateOf(false) }
@@ -1004,6 +1004,15 @@ private fun CrashLogGroup() {
                         onClick = { fr.pergens.hamacs.CrashGuard.clear(ctx); entries = emptyList(); open = false },
                         Modifier.heightIn(min = 48.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
                     ) { Text(stringResource(R.string.crash_log_clear)) }
+                    // Journal aussi téléchargeable depuis un téléphone (page de sauvegarde par QR code).
+                    OutlinedButton(
+                        onClick = onPhone, Modifier.heightIn(min = 48.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                    ) {
+                        HaIcon("mdi:cellphone-arrow-down", size = 18.dp, tint = TextPrimary)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.transfer_phone))
+                    }
                     Feedback(if (copied) stringResource(R.string.crash_log_copied) else null)
                 }
             }

@@ -46,6 +46,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun PhoneTransferDialog(onClose: () -> Unit, export: () -> String, onImport: (String) -> Pair<String, Boolean>) {
     val scope = rememberCoroutineScope()
+    val ctx = androidx.compose.ui.platform.LocalContext.current.applicationContext
     var address by remember { mutableStateOf<String?>(null) }
     var started by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
@@ -53,12 +54,13 @@ fun PhoneTransferDialog(onClose: () -> Unit, export: () -> String, onImport: (St
         stringResource(R.string.transfer_page_title), stringResource(R.string.transfer_page_download),
         stringResource(R.string.transfer_page_upload), stringResource(R.string.transfer_page_sending),
         stringResource(R.string.transfer_page_note), stringResource(R.string.avatar_phone_page_error),
+        stringResource(R.string.transfer_page_crashes),
     )
     val server = remember {
         lateinit var self: LocalHttpServer
         self = LocalHttpServer(maxBody = 64_000_000) { req ->
             when {
-                req.method == "GET" && req.path == "/" -> Response.html(page(t, self.key))
+                req.method == "GET" && req.path == "/" -> Response.html(page(t, self.key, fr.pergens.hamacs.CrashGuard.entries(ctx).isNotEmpty()))
                 // Fichier nommé comme l'export des réglages.
                 req.method == "GET" && req.path == "/export" -> {
                     val body = withContext(Dispatchers.Main) { export() }.toByteArray()
@@ -67,6 +69,12 @@ fun PhoneTransferDialog(onClose: () -> Unit, export: () -> String, onImport: (St
                         mapOf("Content-Disposition" to "attachment; filename=\"ha-dashboard-${java.time.LocalDate.now()}.json\""),
                     )
                 }
+                // Journal des plantages (s'il y en a), pour le transmettre.
+                req.method == "GET" && req.path == "/crashes" -> Response(
+                    "200 OK", "text/plain; charset=utf-8",
+                    fr.pergens.hamacs.CrashGuard.entries(ctx).joinToString("\n\n").toByteArray(),
+                    mapOf("Content-Disposition" to "attachment; filename=\"ha-macs-crashes-${java.time.LocalDate.now()}.txt\""),
+                )
                 req.method == "POST" && req.path == "/import" -> {
                     val r = withContext(Dispatchers.Main) { onImport(req.body.toString(Charsets.UTF_8)).also { result = it } }
                     Response.text(if (r.second) "400 Bad Request" else "200 OK", r.first)
@@ -109,10 +117,10 @@ fun PhoneTransferDialog(onClose: () -> Unit, export: () -> String, onImport: (St
     }
 }
 
-private class TransferTexts(val title: String, val download: String, val upload: String, val sending: String, val note: String, val error: String)
+private class TransferTexts(val title: String, val download: String, val upload: String, val sending: String, val note: String, val error: String, val crashes: String)
 
 /** Page du téléphone : télécharger la sauvegarde de la tablette, ou lui en envoyer une. */
-private fun page(t: TransferTexts, key: String): String = """
+private fun page(t: TransferTexts, key: String, crashes: Boolean): String = """
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(t.title)}</title>
 <style>
@@ -121,12 +129,13 @@ background:#111;color:#fff;font-family:system-ui,sans-serif;padding:24px;box-siz
 h1{font-size:22px;font-weight:600;margin:0 0 8px}
 a,label{display:block;width:100%;max-width:340px;box-sizing:border-box;padding:18px;border-radius:16px;
 background:#8cf5ff;color:#000;font-size:18px;font-weight:600;text-decoration:none}
-label{background:#2a2a2a;color:#fff}
+label,a.alt{background:#2a2a2a;color:#fff}
 input{display:none}#s{min-height:24px;color:#aaa;max-width:340px}p{color:#888;font-size:14px;max-width:340px;margin:0}
 </style></head><body>
 <h1>${esc(t.title)}</h1>
 <a href="/$key/export" download>⬇️ ${esc(t.download)}</a>
 <label>⬆️ ${esc(t.upload)}<input id="f" type="file" accept=".json,application/json,text/plain"></label>
+${if (crashes) "<a class=\"alt\" href=\"/$key/crashes\" download>📄 ${esc(t.crashes)}</a>" else ""}
 <div id="s"></div>
 <p>🔒 ${esc(t.note)}</p>
 <script>

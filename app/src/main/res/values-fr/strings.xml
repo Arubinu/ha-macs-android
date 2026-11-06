@@ -671,4 +671,5 @@
     <string name="relaunch_help">Après un plantage, l\'app se rouvre d\'elle-même. Android le permet si elle est propriétaire de l\'appareil, écran d\'accueil ou autorisée à s\'afficher par-dessus les autres apps.</string>
     <string name="relaunch_on">Active</string>
     <string name="relaunch_allow">Autoriser</string>
+    <string name="transfer_page_crashes">Télécharger le journal des plantages</string>
 </resources>

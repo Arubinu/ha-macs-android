@@ -653,4 +653,5 @@
     <string name="relaunch_help">Nach einem Absturz öffnet sich die App von selbst. Android erlaubt das, wenn sie Geräteinhaber oder Startbildschirm ist oder über anderen Apps angezeigt werden darf.</string>
     <string name="relaunch_on">Aktiv</string>
     <string name="relaunch_allow">Erlauben</string>
+    <string name="transfer_page_crashes">Absturzprotokoll herunterladen</string>
 </resources>
