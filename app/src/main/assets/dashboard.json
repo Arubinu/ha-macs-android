@@ -481,7 +481,7 @@
           "type": "image",
           "position": "bottom_center",
           "margin": 8,
-          "image": "file:///android_asset/images/dashboard-button.gif",
+          "image": "file:///android_asset/images/dashboard-button.webp",
           "accent_hue": true,
           "tap_action": {
             "action": "screen",
