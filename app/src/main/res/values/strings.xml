@@ -712,4 +712,17 @@
     <string name="night_black">Black screen</string>
     <string name="night_black_help">The first touch only wakes the screen, nothing underneath is triggered. Otherwise the brightness is lowered.</string>
     <string name="night_level">Brightness at night</string>
+    <string name="camera_event_title">Open on an event</string>
+    <string name="camera_event_help">Doorbell, motion sensor…: the camera opens fullscreen when this entity is triggered, wakes the screen, then closes by itself. Not opened if the camera is protected by the code.</string>
+    <string name="camera_event_choose">Choose the entity…</string>
+    <string name="camera_event_duration">Closes after:</string>
+    <string name="camera_event_sound">Play a sound</string>
+    <string name="ha_device_title">Tablet in Home Assistant</string>
+    <string name="ha_device_help">The tablet registers like the official mobile app: Home Assistant sees its battery, screen and detected presence, and can send it notifications.</string>
+    <string name="ha_device_name">Device name</string>
+    <string name="ha_device_rename">Rename</string>
+    <string name="ha_device_registered">Registered</string>
+    <string name="ha_device_registering">Registering…</string>
+    <string name="ha_device_failed">Failed: %1$s</string>
+    <string name="ha_device_usage">Notification service: %1$s. Text: banner on the screen. message: TTS with data.tts_text: read aloud. message: command_screen_on: wakes the screen. message: command_camera with data.entity: camera fullscreen.</string>
 </resources>

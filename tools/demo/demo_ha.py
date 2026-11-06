@@ -317,12 +317,16 @@ async def websocket(request):
             kind, mid = m.get('type'), m.get('id')
             if kind == 'auth':
                 await ws.send_json({'type': 'auth_ok', 'ha_version': VERSION})
+            elif kind == 'mobile_app/push_notification_channel':
+                PUSH.append((ws, mid))
+                await result(mid)
             elif kind == 'auth/long_lived_access_token':
                 print('jeton longue duree cree :', m.get('client_name'), m.get('lifespan'))
                 await result(mid, 'demo-long-lived-token-0123456789')
             elif kind == 'supported_features':
                 await result(mid)
             elif kind == 'subscribe_entities':
+                SUBSCRIBERS.append((ws, mid))
                 await result(mid)
                 await ws.send_json({'id': mid, 'type': 'event', 'event': {'a': {e: compressed(e) for e in STATES}}})
             elif kind == 'weather/subscribe_forecast':
@@ -378,6 +382,49 @@ async def calendars(request):
     return web.json_response(calendar(request.match_info['entity']))
 
 
+# Tests : change l'etat d'une entite et le pousse aux abonnes (ex. sonnette : /demo/set?entity=binary_sensor.x&state=on).
+SUBSCRIBERS = []
+
+
+async def demo_set(request):
+    eid, state = request.query.get('entity', ''), request.query.get('state', '')
+    if eid not in STATES:
+        return web.Response(status=404, text='unknown entity')
+    STATES[eid]['state'] = state
+    for ws, mid in list(SUBSCRIBERS):
+        if ws.closed:
+            SUBSCRIBERS.remove((ws, mid))
+            continue
+        await ws.send_json({'id': mid, 'type': 'event', 'event': {'c': {eid: {'+': {'s': state}}}}})
+    return web.Response(text=f'{eid} = {state}')
+
+
+# Integration mobile_app (simplifiee) : enregistrement, webhook (affiche ce que l'app envoie), canal de notifications.
+PUSH = []
+
+
+async def mobile_register(request):
+    print('mobile_app/registrations :', await request.json())
+    return web.json_response({'webhook_id': 'demo-webhook', 'secret': None, 'cloudhook_url': None, 'remote_ui_url': None})
+
+
+async def mobile_webhook(request):
+    print('webhook', request.match_info['id'], ':', await request.json())
+    return web.json_response({})
+
+
+async def demo_notify(request):
+    """Notification de test : /demo/notify?message=...&title=...&tts_text=...&entity=..."""
+    q = request.query
+    data = {k: q[k] for k in ('tts_text', 'entity') if k in q}
+    for ws, mid in list(PUSH):
+        if ws.closed:
+            PUSH.remove((ws, mid))
+            continue
+        await ws.send_json({'id': mid, 'type': 'event', 'event': {'message': q.get('message', ''), 'title': q.get('title'), 'data': data}})
+    return web.Response(text=f'{len(PUSH)} abonne(s)')
+
+
 async def api_root(request):
     return web.json_response({'message': 'API running.'})
 
@@ -428,6 +475,10 @@ def app() -> web.Application:
     a.router.add_route('*', '/auth/authorize', authorize)
     a.router.add_post('/auth/token', auth_token)
     a.router.add_post('/auth/revoke', auth_revoke)
+    a.router.add_get('/demo/set', demo_set)
+    a.router.add_post('/api/mobile_app/registrations', mobile_register)
+    a.router.add_post('/api/webhook/{id}', mobile_webhook)
+    a.router.add_get('/demo/notify', demo_notify)
     a.router.add_get('/api/camera_proxy/{entity}', camera_proxy)
     a.router.add_get('/api/calendars/{entity}', calendars)
     a.router.add_static('/demo/stream/', HERE / 'stream')

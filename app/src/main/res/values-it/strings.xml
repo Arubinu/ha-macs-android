@@ -681,4 +681,17 @@
     <string name="night_black">Schermo nero</string>
     <string name="night_black_help">Il primo tocco riaccende solo lo schermo, sotto non viene attivato nulla. Altrimenti la luminosità viene ridotta.</string>
     <string name="night_level">Luminosità di notte</string>
+    <string name="camera_event_title">Apri a un evento</string>
+    <string name="camera_event_help">Campanello, sensore…: la telecamera si apre a schermo intero quando questa entità si attiva, riaccende lo schermo e poi si chiude da sola. Non si apre se la telecamera è protetta dal codice.</string>
+    <string name="camera_event_choose">Scegli l\'entità…</string>
+    <string name="camera_event_duration">Si chiude dopo:</string>
+    <string name="camera_event_sound">Riproduci un suono</string>
+    <string name="ha_device_title">Tablet in Home Assistant</string>
+    <string name="ha_device_help">Il tablet si registra come l\'app mobile ufficiale: Home Assistant vede la batteria, lo schermo e la presenza rilevata, e può inviargli notifiche.</string>
+    <string name="ha_device_name">Nome del dispositivo</string>
+    <string name="ha_device_rename">Rinomina</string>
+    <string name="ha_device_registered">Registrato</string>
+    <string name="ha_device_registering">Registrazione…</string>
+    <string name="ha_device_failed">Errore: %1$s</string>
+    <string name="ha_device_usage">Servizio di notifica: %1$s. Testo: banner sullo schermo. message: TTS con data.tts_text: lettura ad alta voce. message: command_screen_on: accende lo schermo. message: command_camera con data.entity: telecamera a schermo intero.</string>
 </resources>

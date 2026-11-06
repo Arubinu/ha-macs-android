@@ -78,6 +78,10 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   desea) se instalan solas, la app se vuelve a abrir tras una actualización o un fallo
 - 🌙 **Modo noche**: Ajustes › Reposo y presencia › *Modo noche*; de la puesta de sol al amanecer (o a horas fijas),
   la pantalla se pone negra antes y se enciende con un toque o una presencia
+- 🔔 **Timbre**: en modo edición, *Abrir con un evento* de una cámara la muestra a pantalla completa cuando un timbre
+  o un detector se activa, con un sonido
+- 📡 **Tableta en Home Assistant**: Ajustes › Home Assistant; sensores de batería, pantalla y presencia, y
+  notificaciones (banner, lectura en voz alta, encendido de la pantalla, cámara a pantalla completa)
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco

@@ -40,6 +40,8 @@ class App : Application(), ImageLoaderFactory {
         private set
     lateinit var updater: fr.pergens.hamacs.update.Updater
         private set
+    lateinit var link: fr.pergens.hamacs.ha.MobileAppLink
+        private set
 
     override fun attachBaseContext(base: android.content.Context) {
         super.attachBaseContext(fr.pergens.hamacs.config.AppLocale.wrap(base))
@@ -64,6 +66,11 @@ class App : Application(), ImageLoaderFactory {
         alerts = fr.pergens.hamacs.ui.cards.alerts.AlertHub(this, ha, config).also { it.start() }
         // Mises à jour depuis les Releases GitHub (vérification toutes les 12 h).
         updater = fr.pergens.hamacs.update.Updater(this, http, scope).also { it.start() }
+        // La tablette vue par Home Assistant (intégration mobile_app) : capteurs et notifications.
+        link = fr.pergens.hamacs.ha.MobileAppLink(this, http, ha, config, scope).also {
+            it.lastMotion = { presence.lastMotion.value }
+            it.start()
+        }
 
         scope.launch {
             config.settings.map { it.haUrl to it.haToken }.distinctUntilChanged().collect { (url, token) ->

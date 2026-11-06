@@ -76,6 +76,10 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
   souhaite) s'installent automatiquement, l'app se rouvre d'elle-même après une mise à jour ou un plantage
 - 🌙 **Mode nuit** : Réglages › Veille et présence › *Mode nuit* ; du coucher au lever du soleil (ou à heures fixes),
   l'écran devient noir plus vite et se rallume au toucher ou à une présence
+- 🔔 **Sonnette** : en mode édition, *Ouvrir sur un événement* d'une caméra l'affiche en plein écran quand une sonnette
+  ou un détecteur se déclenche, avec un son
+- 📡 **Tablette dans Home Assistant** : Réglages › Home Assistant ; capteurs de batterie, d'écran et de présence, et
+  notifications (bandeau, lecture à voix haute, allumage de l'écran, caméra en plein écran)
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque

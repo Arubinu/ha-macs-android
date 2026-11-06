@@ -699,4 +699,17 @@
     <string name="night_black">Écran noir</string>
     <string name="night_black_help">Le premier contact rallume seulement l\'écran, rien n\'est actionné dessous. Sinon, la luminosité est réduite.</string>
     <string name="night_level">Luminosité la nuit</string>
+    <string name="camera_event_title">Ouvrir sur un événement</string>
+    <string name="camera_event_help">Sonnette, détecteur… : la caméra s\'ouvre en plein écran quand cette entité se déclenche, rallume l\'écran, puis se referme seule. Pas d\'ouverture si la caméra est protégée par le code.</string>
+    <string name="camera_event_choose">Choisir l\'entité…</string>
+    <string name="camera_event_duration">Se referme après :</string>
+    <string name="camera_event_sound">Jouer un son</string>
+    <string name="ha_device_title">Tablette dans Home Assistant</string>
+    <string name="ha_device_help">La tablette s\'enregistre comme l\'app mobile officielle : Home Assistant voit sa batterie, l\'écran et la présence détectée, et peut lui envoyer des notifications.</string>
+    <string name="ha_device_name">Nom de l\'appareil</string>
+    <string name="ha_device_rename">Renommer</string>
+    <string name="ha_device_registered">Enregistrée</string>
+    <string name="ha_device_registering">Enregistrement…</string>
+    <string name="ha_device_failed">Échec : %1$s</string>
+    <string name="ha_device_usage">Service de notification : %1$s. Texte : bandeau à l\'écran. message: TTS avec data.tts_text : lecture à voix haute. message: command_screen_on : allume l\'écran. message: command_camera avec data.entity : caméra en plein écran.</string>
 </resources>

@@ -238,6 +238,8 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                     stringResource(R.string.edit_always_live), stringResource(R.string.edit_always_live_help),
                     options?.b("always_live") ?: configAlwaysLive,
                 ) { app.config.setBlockOption(optionKey, "always_live", it.takeIf { v -> v != configAlwaysLive }) }
+                // Sonnette, détecteur : ouverture en plein écran quand une entité se déclenche.
+                CameraEventFields(optionKey, options)
             }
             when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> EntityFields(objKey, graphType) }
             }

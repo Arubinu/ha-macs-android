@@ -565,6 +565,45 @@ private fun ConnectionSection() {
             }
         }
     }
+    HaDeviceGroup()
+}
+
+/** La tablette vue par Home Assistant (intégration mobile_app) : activation, nom, service de notification. */
+@Composable
+private fun HaDeviceGroup() {
+    val link = App.instance.link
+    val status by link.status.collectAsState()
+    var on by remember { mutableStateOf(link.enabled) }
+    var name by remember { mutableStateOf(link.deviceName) }
+    Group {
+        SwitchRow(stringResource(R.string.ha_device_title), stringResource(R.string.ha_device_help), on) { on = it; link.enabled = it }
+        if (on) {
+            GroupDivider()
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Field(name, { name = it }, stringResource(R.string.ha_device_name), null, null, keyboard = KeyboardType.Text)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedButton(
+                        onClick = { link.deviceName = name },
+                        enabled = name.isNotBlank() && name.trim() != link.deviceName,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                    ) { Text(stringResource(R.string.ha_device_rename)) }
+                    Spacer(Modifier.width(16.dp))
+                    when (val s = status) {
+                        is fr.pergens.hamacs.ha.MobileAppLink.Status.Registered -> StatusChip(Success, stringResource(R.string.ha_device_registered))
+                        is fr.pergens.hamacs.ha.MobileAppLink.Status.Failed -> StatusChip(Danger, stringResource(R.string.ha_device_failed, s.message))
+                        else -> StatusChip(Warning, stringResource(R.string.ha_device_registering))
+                    }
+                }
+                (status as? fr.pergens.hamacs.ha.MobileAppLink.Status.Registered)?.let { r ->
+                    Text(
+                        stringResource(R.string.ha_device_usage, r.service),
+                        style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp),
+                    )
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

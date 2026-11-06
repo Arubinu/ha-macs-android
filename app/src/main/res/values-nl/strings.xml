@@ -681,4 +681,17 @@
     <string name="night_black">Zwart scherm</string>
     <string name="night_black_help">De eerste aanraking maakt alleen het scherm wakker, eronder wordt niets bediend. Anders wordt de helderheid verlaagd.</string>
     <string name="night_level">Helderheid \'s nachts</string>
+    <string name="camera_event_title">Openen bij een gebeurtenis</string>
+    <string name="camera_event_help">Deurbel, sensor…: de camera opent schermvullend wanneer deze entiteit afgaat, maakt het scherm wakker en sluit daarna vanzelf. Niet geopend als de camera met de code beveiligd is.</string>
+    <string name="camera_event_choose">Entiteit kiezen…</string>
+    <string name="camera_event_duration">Sluit na:</string>
+    <string name="camera_event_sound">Geluid afspelen</string>
+    <string name="ha_device_title">Tablet in Home Assistant</string>
+    <string name="ha_device_help">De tablet registreert zich als de officiële mobiele app: Home Assistant ziet de batterij, het scherm en gedetecteerde aanwezigheid en kan er meldingen naartoe sturen.</string>
+    <string name="ha_device_name">Apparaatnaam</string>
+    <string name="ha_device_rename">Hernoemen</string>
+    <string name="ha_device_registered">Geregistreerd</string>
+    <string name="ha_device_registering">Registreren…</string>
+    <string name="ha_device_failed">Mislukt: %1$s</string>
+    <string name="ha_device_usage">Meldingsdienst: %1$s. Tekst: banner op het scherm. message: TTS met data.tts_text: voorlezen. message: command_screen_on: maakt het scherm wakker. message: command_camera met data.entity: camera schermvullend.</string>
 </resources>

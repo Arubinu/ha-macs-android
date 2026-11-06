@@ -131,7 +131,9 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
     fun exportAll(): String {
         val P = { v: Any? -> kotlinx.serialization.json.JsonPrimitive(v?.toString()) }
         // Compteur d'erreurs et codes à redéfinir : propres à l'appareil, non exportés.
-        val local = prefs.all.filterKeys { it != "pin_fails" && it != "pin_lock_until" && it != CODES_TO_REPLACE }
+        val local = prefs.all.filterKeys {
+            it != "pin_fails" && it != "pin_lock_until" && it != CODES_TO_REPLACE && it !in fr.pergens.hamacs.ha.MobileAppLink.LOCAL_KEYS
+        }
         // Code d'accès venu de l'agencement (racine `access_code`) : exporté chiffré avec les autres, pas en clair.
         val codes = local.filter { (k, v) -> isCode(k) && v is String && v.isNotEmpty() }.mapValues { it.value as String }.toMutableMap()
         if ("access_code" !in codes) _dashboard.value.s("access_code")?.takeIf { it.isNotEmpty() }?.let { codes["access_code"] = it }

@@ -681,4 +681,17 @@
     <string name="night_black">Schwarzer Bildschirm</string>
     <string name="night_black_help">Die erste Berührung weckt nur den Bildschirm, darunter wird nichts ausgelöst. Sonst wird die Helligkeit verringert.</string>
     <string name="night_level">Helligkeit nachts</string>
+    <string name="camera_event_title">Bei einem Ereignis öffnen</string>
+    <string name="camera_event_help">Türklingel, Melder…: Die Kamera öffnet sich im Vollbild, wenn diese Entität auslöst, weckt den Bildschirm und schließt sich dann von selbst. Nicht geöffnet, wenn die Kamera durch den Code geschützt ist.</string>
+    <string name="camera_event_choose">Entität wählen…</string>
+    <string name="camera_event_duration">Schließt sich nach:</string>
+    <string name="camera_event_sound">Ton abspielen</string>
+    <string name="ha_device_title">Tablet in Home Assistant</string>
+    <string name="ha_device_help">Das Tablet meldet sich wie die offizielle mobile App an: Home Assistant sieht Akku, Bildschirm und erkannte Anwesenheit und kann ihm Benachrichtigungen senden.</string>
+    <string name="ha_device_name">Gerätename</string>
+    <string name="ha_device_rename">Umbenennen</string>
+    <string name="ha_device_registered">Registriert</string>
+    <string name="ha_device_registering">Registrierung…</string>
+    <string name="ha_device_failed">Fehlgeschlagen: %1$s</string>
+    <string name="ha_device_usage">Benachrichtigungsdienst: %1$s. Text: Banner auf dem Bildschirm. message: TTS mit data.tts_text: Vorlesen. message: command_screen_on: weckt den Bildschirm. message: command_camera mit data.entity: Kamera im Vollbild.</string>
 </resources>

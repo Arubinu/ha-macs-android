@@ -78,6 +78,10 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
   vuole) si installano da sole, l'app si riapre dopo un aggiornamento o un arresto anomalo
 - 🌙 **Modalità notte**: Impostazioni › Standby e presenza › *Modalità notte*; dal tramonto all'alba (o a orari fissi)
   lo schermo diventa nero prima e si riaccende al tocco o a una presenza
+- 🔔 **Campanello**: in modalità modifica, *Apri a un evento* di una telecamera la mostra a schermo intero quando un
+  campanello o un sensore si attiva, con un suono
+- 📡 **Tablet in Home Assistant**: Impostazioni › Home Assistant; sensori di batteria, schermo e presenza, e notifiche
+  (banner, lettura ad alta voce, accensione dello schermo, telecamera a schermo intero)
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk

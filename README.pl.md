@@ -75,6 +75,10 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
   się same, aplikacja otwiera się ponownie po aktualizacji lub awarii
 - 🌙 **Tryb nocny**: Ustawienia › Czuwanie i obecność › *Tryb nocny*; od zachodu do wschodu słońca (lub w ustalonych
   godzinach) ekran szybciej robi się czarny i budzi się po dotyku lub wykryciu obecności
+- 🔔 **Dzwonek**: w trybie edycji *Otwórz przy zdarzeniu* kamery pokazuje ją na pełnym ekranie, gdy uruchomi się dzwonek
+  lub czujnik, z dźwiękiem
+- 📡 **Tablet w Home Assistant**: Ustawienia › Home Assistant; czujniki baterii, ekranu i obecności oraz powiadomienia
+  (baner, czytanie na głos, włączenie ekranu, kamera na pełnym ekranie)
 - 🧙 **Kreator**: można go uruchomić ponownie w Ustawienia › Panel
 
 ## 🔒 Tryb kiosku

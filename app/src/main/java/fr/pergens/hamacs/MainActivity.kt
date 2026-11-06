@@ -90,6 +90,9 @@ class MainActivity : ComponentActivity() {
         applyImport(runCatching { contentResolver.openInputStream(uri)!!.bufferedReader().use { it.readText() } }.getOrNull())
     }
 
+    /** Notification de Home Assistant affichée en bandeau. */
+    private val haBanner = mutableStateOf<fr.pergens.hamacs.ha.MobileAppLink.Command.Banner?>(null)
+
     /** Mode nuit : écran noir affiché (au-dessus de tout, absorbe le premier contact). */
     private val nightBlackout = mutableStateOf(false)
 
@@ -155,6 +158,18 @@ class MainActivity : ComponentActivity() {
             // Atténuation de l'écran : contact ou mouvement devant la caméra = activité.
             val lastMotion by app.presence.lastMotion.collectAsState()
             val lastActivity = maxOf(state.lastInteraction, if (settings.presenceDetection) lastMotion else 0L)
+            // Home Assistant (notifications de l'intégration mobile_app) : écran, caméra, bandeau.
+            LaunchedEffect(Unit) {
+                app.link.commands.collect { c ->
+                    state.lastInteraction = System.currentTimeMillis()
+                    when (c) {
+                        is fr.pergens.hamacs.ha.MobileAppLink.Command.Camera -> state.player = c.entity
+                        is fr.pergens.hamacs.ha.MobileAppLink.Command.Banner -> haBanner.value = c
+                        else -> Unit
+                    }
+                }
+            }
+            LaunchedEffect(nightBlackout.value) { app.link.screenOn.value = !nightBlackout.value }
             // Mode nuit : recalculé chaque minute (heures fixes ou soleil de sun.sun).
             var night by remember { mutableStateOf(false) }
             LaunchedEffect(settings) {
@@ -287,6 +302,10 @@ class MainActivity : ComponentActivity() {
                                 onImport = { applyImport(it) },
                             )
                             fr.pergens.hamacs.ui.CodeReplaceDialog()
+                            // Sonnette, détecteurs : caméra en plein écran sur un événement (option du bloc caméra).
+                            fr.pergens.hamacs.ui.CameraEventWatcher()
+                            // Notification de Home Assistant : bandeau en haut (refermé au toucher ou après 15 s).
+                            haBanner.value?.let { b -> fr.pergens.hamacs.ui.HaBanner(b.title, b.message) { haBanner.value = null } }
                         }
                     }
                 }

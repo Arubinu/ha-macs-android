@@ -75,6 +75,10 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
   geïnstalleerd, de app opent vanzelf opnieuw na een update of crash
 - 🌙 **Nachtmodus**: Instellingen › Stand-by & aanwezigheid › *Nachtmodus*; van zonsondergang tot zonsopkomst (of op
   vaste tijden) wordt het scherm sneller zwart en gaat het aan bij aanraking of aanwezigheid
+- 🔔 **Deurbel**: in de bewerkmodus toont *Openen bij een gebeurtenis* een camera schermvullend wanneer een deurbel
+  of sensor afgaat, met geluid
+- 📡 **Tablet in Home Assistant**: Instellingen › Home Assistant; sensoren voor batterij, scherm en aanwezigheid, en
+  meldingen (banner, voorlezen, scherm aan, camera schermvullend)
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus

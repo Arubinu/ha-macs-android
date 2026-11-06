@@ -681,4 +681,17 @@
     <string name="night_black">Ecrã preto</string>
     <string name="night_black_help">O primeiro toque apenas acende o ecrã, nada é acionado por baixo. Caso contrário, o brilho é reduzido.</string>
     <string name="night_level">Brilho à noite</string>
+    <string name="camera_event_title">Abrir num evento</string>
+    <string name="camera_event_help">Campainha, detetor…: a câmara abre em ecrã inteiro quando esta entidade é acionada, acende o ecrã e depois fecha sozinha. Não abre se a câmara estiver protegida pelo código.</string>
+    <string name="camera_event_choose">Escolher a entidade…</string>
+    <string name="camera_event_duration">Fecha após:</string>
+    <string name="camera_event_sound">Reproduzir um som</string>
+    <string name="ha_device_title">Tablet no Home Assistant</string>
+    <string name="ha_device_help">O tablet regista-se como a app móvel oficial: o Home Assistant vê a bateria, o ecrã e a presença detetada, e pode enviar-lhe notificações.</string>
+    <string name="ha_device_name">Nome do dispositivo</string>
+    <string name="ha_device_rename">Mudar o nome</string>
+    <string name="ha_device_registered">Registado</string>
+    <string name="ha_device_registering">A registar…</string>
+    <string name="ha_device_failed">Falha: %1$s</string>
+    <string name="ha_device_usage">Serviço de notificação: %1$s. Texto: faixa no ecrã. message: TTS com data.tts_text: leitura em voz alta. message: command_screen_on: acende o ecrã. message: command_camera com data.entity: câmara em ecrã inteiro.</string>
 </resources>

@@ -75,6 +75,10 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
   instalam-se sozinhas, a app volta a abrir após uma atualização ou uma falha
 - 🌙 **Modo noturno**: Definições › Repouso e presença › *Modo noturno*; do pôr ao nascer do sol (ou a horas fixas),
   o ecrã fica preto mais depressa e acende-se com um toque ou uma presença
+- 🔔 **Campainha**: no modo de edição, *Abrir num evento* de uma câmara mostra-a em ecrã inteiro quando uma campainha
+  ou um detetor é acionado, com um som
+- 📡 **Tablet no Home Assistant**: Definições › Home Assistant; sensores de bateria, ecrã e presença, e notificações
+  (faixa, leitura em voz alta, ecrã aceso, câmara em ecrã inteiro)
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque

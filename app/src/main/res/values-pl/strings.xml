@@ -701,4 +701,17 @@
     <string name="night_black">Czarny ekran</string>
     <string name="night_black_help">Pierwszy dotyk tylko budzi ekran, nic pod spodem nie zostaje uruchomione. W przeciwnym razie jasność jest zmniejszana.</string>
     <string name="night_level">Jasność w nocy</string>
+    <string name="camera_event_title">Otwórz przy zdarzeniu</string>
+    <string name="camera_event_help">Dzwonek, czujnik…: kamera otwiera się na pełnym ekranie, gdy ta encja się uruchomi, budzi ekran, a potem zamyka się sama. Nie otwiera się, jeśli kamera jest chroniona kodem.</string>
+    <string name="camera_event_choose">Wybierz encję…</string>
+    <string name="camera_event_duration">Zamyka się po:</string>
+    <string name="camera_event_sound">Odtwórz dźwięk</string>
+    <string name="ha_device_title">Tablet w Home Assistant</string>
+    <string name="ha_device_help">Tablet rejestruje się jak oficjalna aplikacja mobilna: Home Assistant widzi baterię, ekran i wykrytą obecność oraz może wysyłać do niego powiadomienia.</string>
+    <string name="ha_device_name">Nazwa urządzenia</string>
+    <string name="ha_device_rename">Zmień nazwę</string>
+    <string name="ha_device_registered">Zarejestrowany</string>
+    <string name="ha_device_registering">Rejestracja…</string>
+    <string name="ha_device_failed">Błąd: %1$s</string>
+    <string name="ha_device_usage">Usługa powiadomień: %1$s. Tekst: baner na ekranie. message: TTS z data.tts_text: czytanie na głos. message: command_screen_on: budzi ekran. message: command_camera z data.entity: kamera na pełnym ekranie.</string>
 </resources>

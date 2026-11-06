@@ -140,6 +140,16 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   `sun.sun`, sinon 21:30 / 7:00) ou `HH:MM`. La nuit, après `night_seconds` : écran noir (`MainActivity.nightBlackout`,
   au-dessus de tout, M.A.C.S. masqué, absorbe le premier contact) ou luminosité `night_level`. En test, couper la
   détection de présence : la caméra émulée bouge et relance l'activité sans cesse.
+- **Caméra sur événement** (`ui/CameraEvents.kt`) : options du bloc caméra `event_entity`, `event_seconds`, `event_sound`
+  (éditeur de la caméra en mode édition). `CameraEventWatcher` compare l'état précédent complet ; `on` pour un
+  binary_sensor, tout nouvel état sinon ; caméra protégée non ouverte ; fermeture si personne n'a touché l'écran.
+  Test : `demo_ha.py` → `/demo/set?entity=…&state=…` pousse un changement d'état.
+- **Tablette dans HA** (`ha/MobileAppLink.kt`) : intégration `mobile_app` (`/api/mobile_app/registrations`, webhook,
+  `register_sensor` / `update_sensor_states` toutes les 60 s), notifications par la WebSocket
+  (`mobile_app/push_notification_channel`) : texte → bandeau (`ui/HaBanner.kt`), `TTS` + `tts_text`,
+  `command_screen_on`, `command_camera` + `entity`. Webhook et identifiant non exportés (`LOCAL_KEYS`). Test :
+  `demo_ha.py` simule l'enregistrement et `/demo/notify?message=…`. Ne pas activer sur le vrai HA sans accord
+  (crée un appareil).
 - **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
   (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en

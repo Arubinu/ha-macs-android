@@ -76,6 +76,10 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
   installiert, die App öffnet sich nach einem Update oder Absturz von selbst wieder
 - 🌙 **Nachtmodus**: Einstellungen › Ruhezustand & Anwesenheit › *Nachtmodus*; von Sonnenuntergang bis -aufgang (oder
   zu festen Zeiten) wird der Bildschirm früher schwarz und wacht bei Berührung oder Anwesenheit auf
+- 🔔 **Türklingel**: im Bearbeitungsmodus zeigt *Bei einem Ereignis öffnen* eine Kamera im Vollbild, wenn eine
+  Klingel oder ein Melder auslöst, mit Ton
+- 📡 **Tablet in Home Assistant**: Einstellungen › Home Assistant; Sensoren für Akku, Bildschirm und Anwesenheit sowie
+  Benachrichtigungen (Banner, Vorlesen, Bildschirm an, Kamera im Vollbild)
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus
