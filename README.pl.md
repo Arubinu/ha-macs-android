@@ -71,6 +71,8 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 - 💾 **Kopia zapasowa**: Ustawienia › Panel › *Eksportuj* / *Importuj* / *Telefonem* (kod QR); token i kody są
   zaszyfrowane dla tego tabletu (na innym wymagane są nowe kody), ale plik pozostaje osobisty (układ, zdjęcia
   awatarów)
+- 🔄 **Aktualizacje**: Ustawienia › Informacje › *Aktualizacje*; nowe wersje (i na życzenie wersje wstępne) instalują
+  się same, aplikacja otwiera się ponownie po aktualizacji lub awarii
 - 🧙 **Kreator**: można go uruchomić ponownie w Ustawienia › Panel
 
 ## 🔒 Tryb kiosku

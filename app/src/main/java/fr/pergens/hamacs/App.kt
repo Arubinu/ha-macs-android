@@ -38,6 +38,8 @@ class App : Application(), ImageLoaderFactory {
         private set
     lateinit var alerts: fr.pergens.hamacs.ui.cards.alerts.AlertHub
         private set
+    lateinit var updater: fr.pergens.hamacs.update.Updater
+        private set
 
     override fun attachBaseContext(base: android.content.Context) {
         super.attachBaseContext(fr.pergens.hamacs.config.AppLocale.wrap(base))
@@ -60,6 +62,8 @@ class App : Application(), ImageLoaderFactory {
         macs = MacsController(this, ha, config, voice, scope).also { it.start() }
         presence = PresenceDetector(this)
         alerts = fr.pergens.hamacs.ui.cards.alerts.AlertHub(this, ha, config).also { it.start() }
+        // Mises à jour depuis les Releases GitHub (vérification toutes les 12 h).
+        updater = fr.pergens.hamacs.update.Updater(this, http, scope).also { it.start() }
 
         scope.launch {
             config.settings.map { it.haUrl to it.haToken }.distinctUntilChanged().collect { (url, token) ->

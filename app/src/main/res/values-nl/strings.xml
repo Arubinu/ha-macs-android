@@ -654,4 +654,19 @@
     <string name="relaunch_on">Actief</string>
     <string name="relaunch_allow">Toestaan</string>
     <string name="transfer_page_crashes">Crashlogboek downloaden</string>
+    <string name="update_title">Updates</string>
+    <string name="update_checking">Controleren…</string>
+    <string name="update_up_to_date">Versie %1$s is up-to-date.</string>
+    <string name="update_available">Versie %1$s is beschikbaar.</string>
+    <string name="update_downloading">Versie %1$s downloaden… %2$d %%</string>
+    <string name="update_installing">Versie %1$s installeren…</string>
+    <string name="update_failed">Update mislukt: %1$s</string>
+    <string name="update_install">Installeren</string>
+    <string name="update_check">Controleren</string>
+    <string name="update_auto">Updates automatisch installeren</string>
+    <string name="update_auto_help">Elke 12 uur gecontroleerd. Android vraagt elke installatie te bevestigen (de app is geen apparaateigenaar).</string>
+    <string name="update_auto_help_owner">Elke 12 uur gecontroleerd, zonder bevestiging geïnstalleerd (de app is apparaateigenaar), daarna opent de app opnieuw.</string>
+    <string name="update_available_pre">Voorlopige versie %1$s is beschikbaar.</string>
+    <string name="update_prereleases">Voorlopige versies meenemen</string>
+    <string name="update_prereleases_help">Testversies die vóór de stabiele versies verschijnen: nieuwer, maar minder beproefd.</string>
 </resources>

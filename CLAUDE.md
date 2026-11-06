@@ -124,6 +124,18 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   racine de l'agencement, retiré de l'agencement exporté) sont chiffrés de la même façon ; `code_groups` regroupe
   les codes identiques. Ailleurs, rien n'est écrit pour eux (pas de 0000) : `codes_to_replace` (pref, conservée
   jusqu'au bout) fait afficher `CodeReplaceDialog` (non fermable), un nouveau code par groupe.
+- **Sauvegarde par téléphone** (`ui/PhoneTransferUi.kt`) : QR → `LocalHttpServer` ; la page télécharge l'export
+  (`/clé/export`), en envoie un (`/clé/import`, même traitement que l'import de fichier : `MainActivity.applyImport`)
+  et propose le journal des plantages (`/clé/crashes`). Boutons dans Réglages › Tableau de bord, l'assistant et le journal.
+- **Plantages** (`CrashGuard.kt`) : journal `files/crashes.log` (20 entrées, Réglages › À propos), relance par alarme →
+  `RestartReceiver` (sauf 3 plantages en 2 min). Android ne laisse rouvrir l'écran que si l'app est propriétaire,
+  écran d'accueil ou autorisée à se superposer (ligne « Relance automatique » de Sécurité). Test (débogage) :
+  `am start -n fr.pergens.hamacs/.MainActivity --ez debug_crash true` (`am crash` ne passe pas par le gestionnaire).
+- **Mises à jour** (`update/Updater.kt`) : Releases GitHub (`/releases`, préversions si « Inclure les préversions »),
+  APK de l'ABI sinon universel, `PackageInstaller` (sans confirmation si propriétaire), `UpdatedReceiver` rouvre l'app.
+  Version = tag (`-PappVersion`, release.yml), `versionCode` = 10000·maj + 100·min + patch. Test (débogage) : pref
+  `update_url` vers un faux JSON servi depuis le PC (`http://10.0.2.2:…`), APK construit avec `-PappVersion=1.0.1` ;
+  revenir ensuite avec `adb install -r -d`. Une release ne met à jour qu'une app signée avec la même clé.
 - **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
   (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en

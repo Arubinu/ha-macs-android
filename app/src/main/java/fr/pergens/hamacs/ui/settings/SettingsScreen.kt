@@ -76,6 +76,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.CircularProgressIndicator
+import fr.pergens.hamacs.update.Updater.State as UpdateState
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -969,8 +971,59 @@ private fun AboutSection(onPhone: () -> Unit) {
         GroupDivider()
         SettingRow(stringResource(R.string.licenses), stringResource(R.string.licenses_text))
     }
+    UpdateGroup()
     CrashLogGroup(onPhone)
     Spacer(Modifier.height(8.dp))
+}
+
+/** Mises à jour (Releases GitHub) : état, installation, installation automatique. */
+@Composable
+private fun UpdateGroup() {
+    val updater = App.instance.updater
+    val state by updater.state.collectAsState()
+    var auto by remember { mutableStateOf(updater.autoInstall) }
+    var pre by remember { mutableStateOf(updater.prereleases) }
+    val owner = remember { fr.pergens.hamacs.kiosk.Kiosk.isDeviceOwner(App.instance) }
+    // Vérifie en ouvrant la section (si rien n'est en cours).
+    LaunchedEffect(Unit) { if (state is UpdateState.Idle) updater.check() }
+    Group {
+        val text = when (val s = state) {
+            UpdateState.Idle, UpdateState.Checking -> stringResource(R.string.update_checking)
+            UpdateState.UpToDate -> stringResource(R.string.update_up_to_date, BuildConfig.VERSION_NAME)
+            is UpdateState.Available -> stringResource(if (s.release.prerelease) R.string.update_available_pre else R.string.update_available, s.release.version)
+            is UpdateState.Downloading -> stringResource(R.string.update_downloading, s.release.version, (s.progress * 100).toInt())
+            is UpdateState.Installing -> stringResource(R.string.update_installing, s.release.version)
+            is UpdateState.Failed -> stringResource(R.string.update_failed, s.message)
+        }
+        SettingRow(stringResource(R.string.update_title), text) {
+            when (val s = state) {
+                is UpdateState.Available -> Button(onClick = { updater.install(s.release) }, Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.update_install)) }
+                is UpdateState.Downloading, is UpdateState.Installing, UpdateState.Checking -> CircularProgressIndicator(Modifier.size(24.dp), color = Dash.colors.accent, strokeWidth = 2.5.dp)
+                else -> OutlinedButton(
+                    onClick = { updater.check() }, Modifier.heightIn(min = 48.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                ) { Text(stringResource(R.string.update_check)) }
+            }
+        }
+        (state as? UpdateState.Available)?.release?.notes?.takeIf { it.isNotBlank() }?.let { notes ->
+            Text(
+                notes.lines().filter { it.isNotBlank() }.take(8).joinToString("\n"),
+                Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp),
+                style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp),
+            )
+        }
+        GroupDivider()
+        SwitchRow(
+            stringResource(R.string.update_auto),
+            stringResource(if (owner) R.string.update_auto_help_owner else R.string.update_auto_help),
+            auto,
+        ) { auto = it; updater.autoInstall = it }
+        GroupDivider()
+        // Canal : versions stables seules, ou aussi les préversions (nouvelle vérification au changement).
+        SwitchRow(stringResource(R.string.update_prereleases), stringResource(R.string.update_prereleases_help), pre) {
+            pre = it; updater.prereleases = it; updater.check()
+        }
+    }
 }
 
 /** Journal des plantages (l'app se relance seule) : enroulé, à copier pour le signaler, ou à effacer. */

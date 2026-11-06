@@ -74,6 +74,8 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
 - 💾 **Backup**: Impostazioni › Dashboard › *Esporta* / *Importa* / *Con il telefono* (codice QR); il token e i codici
   sono cifrati per questo tablet (su un altro vengono chiesti nuovi codici), ma il file resta personale (layout, foto
   degli avatar)
+- 🔄 **Aggiornamenti**: Impostazioni › Informazioni › *Aggiornamenti*; le nuove versioni (e quelle preliminari se si
+  vuole) si installano da sole, l'app si riapre dopo un aggiornamento o un arresto anomalo
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk

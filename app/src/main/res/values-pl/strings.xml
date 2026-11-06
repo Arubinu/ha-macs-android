@@ -674,4 +674,19 @@
     <string name="relaunch_on">Aktywne</string>
     <string name="relaunch_allow">Zezwól</string>
     <string name="transfer_page_crashes">Pobierz dziennik awarii</string>
+    <string name="update_title">Aktualizacje</string>
+    <string name="update_checking">Sprawdzanie…</string>
+    <string name="update_up_to_date">Wersja %1$s jest aktualna.</string>
+    <string name="update_available">Dostępna jest wersja %1$s.</string>
+    <string name="update_downloading">Pobieranie wersji %1$s… %2$d %%</string>
+    <string name="update_installing">Instalowanie wersji %1$s…</string>
+    <string name="update_failed">Aktualizacja nie powiodła się: %1$s</string>
+    <string name="update_install">Zainstaluj</string>
+    <string name="update_check">Sprawdź</string>
+    <string name="update_auto">Instaluj aktualizacje automatycznie</string>
+    <string name="update_auto_help">Sprawdzanie co 12 godzin. Android prosi o potwierdzenie każdej instalacji (aplikacja nie jest właścicielem urządzenia).</string>
+    <string name="update_auto_help_owner">Sprawdzanie co 12 godzin, instalacja bez potwierdzenia (aplikacja jest właścicielem urządzenia), potem aplikacja otwiera się ponownie.</string>
+    <string name="update_available_pre">Dostępna jest wersja wstępna %1$s.</string>
+    <string name="update_prereleases">Uwzględniaj wersje wstępne</string>
+    <string name="update_prereleases_help">Wersje testowe publikowane przed stabilnymi: nowsze, ale mniej sprawdzone.</string>
 </resources>

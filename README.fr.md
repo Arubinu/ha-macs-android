@@ -72,6 +72,8 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
 - 💾 **Sauvegarde** : Réglages › Tableau de bord › *Exporter* / *Importer* / *Avec le téléphone* (QR code) ; le jeton
   et les codes y sont chiffrés pour cette tablette (sur une autre, de nouveaux codes sont demandés), mais le fichier
   reste personnel (agencement, photos des avatars)
+- 🔄 **Mises à jour** : Réglages › À propos › *Mises à jour* ; les nouvelles versions (et les préversions si on le
+  souhaite) s'installent automatiquement, l'app se rouvre d'elle-même après une mise à jour ou un plantage
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque

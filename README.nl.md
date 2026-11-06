@@ -71,6 +71,8 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
 - 💾 **Back-up**: Instellingen › Dashboard › *Exporteren* / *Importeren* / *Met de telefoon* (QR-code); het token en de
   codes zijn versleuteld voor deze tablet (op een andere worden nieuwe codes gevraagd), maar het bestand blijft
   persoonlijk (indeling, avatarfoto's)
+- 🔄 **Updates**: Instellingen › Over › *Updates*; nieuwe versies (en desgewenst voorlopige versies) worden automatisch
+  geïnstalleerd, de app opent vanzelf opnieuw na een update of crash
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus

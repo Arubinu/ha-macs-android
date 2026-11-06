@@ -71,6 +71,8 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
 - 💾 **Cópia de segurança**: Definições › Painel › *Exportar* / *Importar* / *Com o telemóvel* (código QR); o token e
   os códigos são cifrados para este tablet (noutro são pedidos novos códigos), mas o ficheiro continua pessoal
   (esquema, fotografias dos avatares)
+- 🔄 **Atualizações**: Definições › Acerca de › *Atualizações*; as novas versões (e as pré-versões, se quiser)
+  instalam-se sozinhas, a app volta a abrir após uma atualização ou uma falha
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque

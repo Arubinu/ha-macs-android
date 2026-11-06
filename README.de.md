@@ -72,6 +72,8 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
 - 💾 **Sicherung**: Einstellungen › Dashboard › *Exportieren* / *Importieren* / *Mit dem Handy* (QR-Code); Token und
   Codes sind für dieses Tablet verschlüsselt (auf einem anderen werden neue Codes abgefragt), die Datei bleibt aber
   persönlich (Layout, Avatarfotos)
+- 🔄 **Updates**: Einstellungen › Über › *Updates*; neue Versionen (und auf Wunsch Vorabversionen) werden automatisch
+  installiert, die App öffnet sich nach einem Update oder Absturz von selbst wieder
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus

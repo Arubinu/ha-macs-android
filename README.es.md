@@ -74,6 +74,8 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
 - 💾 **Copia de seguridad**: Ajustes › Panel › *Exportar* / *Importar* / *Con el teléfono* (código QR); el token y los
   códigos están cifrados para esta tableta (en otra se piden códigos nuevos), pero el archivo sigue siendo personal
   (diseño, fotos de los avatares)
+- 🔄 **Actualizaciones**: Ajustes › Acerca de › *Actualizaciones*; las nuevas versiones (y las preliminares si se
+  desea) se instalan solas, la app se vuelve a abrir tras una actualización o un fallo
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco

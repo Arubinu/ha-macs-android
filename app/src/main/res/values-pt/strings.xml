@@ -654,4 +654,19 @@
     <string name="relaunch_on">Ativo</string>
     <string name="relaunch_allow">Permitir</string>
     <string name="transfer_page_crashes">Transferir o registo de falhas</string>
+    <string name="update_title">Atualizações</string>
+    <string name="update_checking">A verificar…</string>
+    <string name="update_up_to_date">A versão %1$s está atualizada.</string>
+    <string name="update_available">A versão %1$s está disponível.</string>
+    <string name="update_downloading">A transferir a versão %1$s… %2$d %%</string>
+    <string name="update_installing">A instalar a versão %1$s…</string>
+    <string name="update_failed">Falha na atualização: %1$s</string>
+    <string name="update_install">Instalar</string>
+    <string name="update_check">Verificar</string>
+    <string name="update_auto">Instalar atualizações automaticamente</string>
+    <string name="update_auto_help">Verificação a cada 12 horas. O Android pede para confirmar cada instalação (a app não é proprietária do dispositivo).</string>
+    <string name="update_auto_help_owner">Verificação a cada 12 horas, instalação sem confirmação (a app é proprietária do dispositivo) e a app volta a abrir.</string>
+    <string name="update_available_pre">A pré-versão %1$s está disponível.</string>
+    <string name="update_prereleases">Incluir pré-versões</string>
+    <string name="update_prereleases_help">Versões de teste publicadas antes das estáveis: mais recentes, mas menos testadas.</string>
 </resources>

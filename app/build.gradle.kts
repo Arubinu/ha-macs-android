@@ -22,8 +22,12 @@ android {
         // Android 8.0+ : couvre les Galaxy Tab A8 (Android 11 → 14) et des tablettes plus anciennes.
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        // Version donnée par le tag de la Release (-PappVersion=1.2.3, cf. release.yml), sinon celle-ci.
+        // versionCode croissant tiré de la version (1.2.3 → 10203) : une mise à jour remplace l'app installée.
+        val appVersion = (project.findProperty("appVersion") as String?)?.removePrefix("v") ?: "1.0.0"
+        val parts = appVersion.split('.', '-').mapNotNull { it.toIntOrNull() } + listOf(0, 0, 0)
+        versionCode = parts[0] * 10000 + parts[1] * 100 + parts[2]
+        versionName = appVersion
 
         buildConfigField("String", "DEFAULT_HA_URL", "\"${localProp("ha.url", "http://homeassistant.local:8123")}\"")
         buildConfigField("String", "DEFAULT_HA_TOKEN", "\"${localProp("ha.token")}\"")

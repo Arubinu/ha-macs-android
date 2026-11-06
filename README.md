@@ -67,6 +67,8 @@ home. Already have a backup? **Import** it on the first step and you are done.
 - ✏️ **Edit mode**: Settings › Dashboard › *Edit blocks*, then touch any block to change it
 - 💾 **Backup**: Settings › Dashboard › *Export* / *Import* / *With the phone* (QR code); the token and the codes are
   encrypted for this tablet (on another one, new codes are asked), but the file stays personal (layout, avatar photos)
+- 🔄 **Updates**: Settings › About › *Updates*; new versions (and pre-releases if wanted) are installed
+  automatically, the app reopens by itself after an update or a crash
 - 🧙 **Wizard**: can be run again from Settings › Dashboard
 
 ## 🔒 Kiosk mode
