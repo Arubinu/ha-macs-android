@@ -14,11 +14,11 @@ val localProps = Properties().apply {
 fun localProp(key: String, default: String = "") = localProps.getProperty(key, default)
 
 android {
-    namespace = "fr.arubinu.hadash"
+    namespace = "fr.pergens.hamacs"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "fr.arubinu.hadash"
+        applicationId = "fr.pergens.hamacs"
         // Android 8.0+ : couvre les Galaxy Tab A8 (Android 11 → 14) et des tablettes plus anciennes.
         minSdk = 26
         targetSdk = 35

@@ -1,7 +1,7 @@
 -keepattributes *Annotation*, InnerClasses
--keep,includedescriptorclasses class fr.arubinu.hadash.**$$serializer { *; }
--keepclassmembers class fr.arubinu.hadash.** { *** Companion; }
--keepclasseswithmembers class fr.arubinu.hadash.** { kotlinx.serialization.KSerializer serializer(...); }
+-keep,includedescriptorclasses class fr.pergens.hamacs.**$$serializer { *; }
+-keepclassmembers class fr.pergens.hamacs.** { *** Companion; }
+-keepclasseswithmembers class fr.pergens.hamacs.** { kotlinx.serialization.KSerializer serializer(...); }
 -keepclassmembers class * { @android.webkit.JavascriptInterface <methods>; }
 -dontwarn org.slf4j.**
 

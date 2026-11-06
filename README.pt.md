@@ -77,7 +77,7 @@ energia bloqueados), torne a app *proprietária do dispositivo* uma única vez, 
 conta ligada no tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Antes de desinstalar: Definições › Segurança › *Retirar os direitos de proprietário*.

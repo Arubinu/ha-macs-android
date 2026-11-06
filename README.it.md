@@ -80,7 +80,7 @@ spegnimento bloccati), rendi l'app *proprietaria del dispositivo* una sola volta
 collegato sul tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Prima di disinstallare: Impostazioni › Sicurezza › *Rimuovi i diritti di proprietario*.

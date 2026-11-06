@@ -78,7 +78,7 @@ Ein/Aus-Menü gesperrt) die App einmalig vom Computer aus zum *Geräteinhaber* m
 Tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Vor dem Deinstallieren: Einstellungen › Sicherheit › *Geräteinhaber-Rechte entfernen*.

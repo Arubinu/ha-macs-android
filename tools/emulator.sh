@@ -38,9 +38,9 @@ for m in re.finditer(r'<node [^>]*>', sys.stdin.read()):
 shot() { "$ADB" exec-out screencap -p > "$SHOTS/$1.png"; }
 
 open_dashboard() {
-  "$ADB" shell am force-stop fr.arubinu.hadash
+  "$ADB" shell am force-stop fr.pergens.hamacs
   # Lancement explicite : `monkey` ouvre parfois le choix de l'écran d'accueil (l'app se déclare HOME).
-  "$ADB" shell am start -n fr.arubinu.hadash/.MainActivity >/dev/null 2>&1; sleep 8
+  "$ADB" shell am start -n fr.pergens.hamacs/.MainActivity >/dev/null 2>&1; sleep 8
   "$ADB" shell input tap 960 1090; sleep 3          # bouton « Dashboard » de l'accueil
 }
 

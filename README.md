@@ -73,7 +73,7 @@ Settings › Security › **Kiosk mode**. For a full lock (Home, recent apps, no
 make the app *device owner* once, from a computer, with no account signed in on the tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Before uninstalling: Settings › Security › *Remove device owner rights*.

@@ -78,7 +78,7 @@ menu d'alimentation bloqués), faites de l'app le *propriétaire de l'appareil*,
 sans aucun compte connecté sur la tablette :
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Avant de désinstaller : Réglages › Sécurité › *Retirer les droits de propriétaire*.

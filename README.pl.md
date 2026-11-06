@@ -78,7 +78,7 @@ powiadomienia i menu zasilania zablokowane), jednorazowo ustaw aplikację jako *
 żadnego zalogowanego konta na tablecie:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Przed odinstalowaniem: Ustawienia › Bezpieczeństwo › *Usuń uprawnienia właściciela*.

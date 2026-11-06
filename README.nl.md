@@ -77,7 +77,7 @@ aan/uit-menu geblokkeerd) maak je de app eenmalig *apparaateigenaar*, vanaf een 
 tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Voor het verwijderen: Instellingen › Beveiliging › *Rechten van apparaateigenaar intrekken*.

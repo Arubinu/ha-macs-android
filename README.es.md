@@ -80,7 +80,7 @@ menú de apagado bloqueados), convierte la app en *propietaria del dispositivo* 
 ninguna cuenta conectada en la tablet:
 
 ```sh
-adb shell dpm set-device-owner fr.arubinu.hadash/.kiosk.KioskAdmin
+adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Antes de desinstalar: Ajustes › Seguridad › *Quitar los derechos de propietario*.

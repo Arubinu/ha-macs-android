@@ -1,6 +1,6 @@
 # HA Dash — notes pour Claude
 
-App Android native (Kotlin / Jetpack Compose, `fr.arubinu.hadash`) pour tablette, qui reproduit le
+App Android native (Kotlin / Jetpack Compose, `fr.pergens.hamacs`) pour tablette, qui reproduit le
 dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni de capteurs créés dans HA.
 
 ## Règles
@@ -65,9 +65,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   temps à se télécharger la première fois : en attendant, c'est le détourage « selfie » embarqué qui sert
   (contours moins propres). Après une réinstallation propre, il peut falloir l'attendre à nouveau.
 - Sauvegarder les prefs (`run-as … cat shared_prefs/settings.xml`) avant un test destructif et les restaurer après.
-  Pour tout l'état de l'app : `adb exec-out run-as fr.arubinu.hadash tar cf - shared_prefs files > sauvegarde.tar`,
+  Pour tout l'état de l'app : `adb exec-out run-as fr.pergens.hamacs tar cf - shared_prefs files > sauvegarde.tar`,
   restauration par `push` puis `run-as … tar xf`. Après `pm clear`, redonner l'autorisation caméra.
-- Lancer l'app avec `am start -n fr.arubinu.hadash/.MainActivity` : `monkey` ouvre parfois le choix de l'écran
+- Lancer l'app avec `am start -n fr.pergens.hamacs/.MainActivity` : `monkey` ouvre parfois le choix de l'écran
   d'accueil (l'app se déclare HOME pour le kiosque).
 - Une liste qui défile (`verticalScroll`) dans une colonne qui défile déjà doit toujours avoir une hauteur maximale
   finie, même provisoire, sinon Compose plante (c'est arrivé avec le calendrier des membres).

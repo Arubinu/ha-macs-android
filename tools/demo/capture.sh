@@ -16,14 +16,14 @@ shot() { "$ADB" exec-out screencap -p > "$OUT/$1.png"; }
 
 # État de démo + langue de l'app + config traduite, avec la page centrale $1 affichée d'office.
 prepare() {
-  "$ADB" shell am force-stop fr.arubinu.hadash
+  "$ADB" shell am force-stop fr.pergens.hamacs
   python "$REPO/tools/demo/translate_dashboard.py" "$L" "$WORK/dash_tmp.json" "$1"
   "$ADB" push "$WORK/demo_base.tar" /data/local/tmp/app.tar >/dev/null
   "$ADB" push "$WORK/dash_tmp.json" /data/local/tmp/dash.json >/dev/null
-  "$ADB" shell "chmod 644 /data/local/tmp/app.tar /data/local/tmp/dash.json; run-as fr.arubinu.hadash tar xf /data/local/tmp/app.tar; run-as fr.arubinu.hadash cp /data/local/tmp/dash.json files/dashboard.json"
-  "$ADB" shell "run-as fr.arubinu.hadash sed -i 's#</map>#    <string name=\"app_language\">$L</string>\n</map>#' shared_prefs/settings.xml"
+  "$ADB" shell "chmod 644 /data/local/tmp/app.tar /data/local/tmp/dash.json; run-as fr.pergens.hamacs tar xf /data/local/tmp/app.tar; run-as fr.pergens.hamacs cp /data/local/tmp/dash.json files/dashboard.json"
+  "$ADB" shell "run-as fr.pergens.hamacs sed -i 's#</map>#    <string name=\"app_language\">$L</string>\n</map>#' shared_prefs/settings.xml"
   # Lancement explicite (monkey peut ouvrir le choix de l'écran d'accueil).
-  "$ADB" shell am start -n fr.arubinu.hadash/.MainActivity >/dev/null
+  "$ADB" shell am start -n fr.pergens.hamacs/.MainActivity >/dev/null
   sleep 12
 }
 
@@ -61,7 +61,7 @@ done
 "$ADB" shell input tap 600 757; sleep 16          # première photo, détourage
 shot avatar-editor
 
-"$ADB" shell am force-stop fr.arubinu.hadash
+"$ADB" shell am force-stop fr.pergens.hamacs
 kill $SRV 2>/dev/null
 taskkill //F //PID $SRV >/dev/null 2>&1
 echo "done $L"
