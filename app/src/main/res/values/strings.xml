@@ -635,4 +635,27 @@
     <string name="setup_master_help">Protects access to the settings. Leave empty for none; it can be set later in Settings › Security.</string>
     <string name="setup_master_kept">A master code is already set: leave empty to keep it.</string>
     <string name="pin_locked">Too many attempts. Try again in %1$s</string>
+    <string name="ha_discovered">Found on the network:</string>
+    <string name="ha_login_with">Sign in to Home Assistant:</string>
+    <string name="ha_login_phone">With the phone</string>
+    <string name="ha_login_tablet">On the tablet</string>
+    <string name="ha_login_or_token">Or paste a long-lived access token:</string>
+    <string name="ha_login_phone_title">Sign in with the phone</string>
+    <string name="ha_login_phone_help">Scan this QR code with a phone on the same network, then sign in to Home Assistant (the phone\'s password manager can fill in the fields) or paste a token.</string>
+    <string name="ha_login_waiting_phone">Waiting for the phone…</string>
+    <string name="ha_login_tablet_title">Sign in to Home Assistant</string>
+    <string name="ha_login_creating">Creating the tablet\'s token…</string>
+    <string name="ha_login_error">Sign-in failed: %1$s</string>
+    <string name="ha_phone_page_title">HA-MACS tablet</string>
+    <string name="ha_phone_page_login">Sign in to Home Assistant</string>
+    <string name="ha_phone_page_token">Or paste a long-lived access token:</string>
+    <string name="ha_phone_page_send">Send to the tablet</string>
+    <string name="ha_phone_page_done">Done, the tablet is connected. You can close this page.</string>
+    <string name="ha_phone_page_error">That did not work, please try again.</string>
+    <string name="ha_login_phone_desc">Scan a QR code and sign in from your phone: its password manager fills in the fields.</string>
+    <string name="ha_login_tablet_desc">Home Assistant\'s sign-in page, right here on the tablet.</string>
+    <string name="ha_login_token_title">Access token</string>
+    <string name="ha_login_token_desc">Paste a long-lived token created in Home Assistant.</string>
+    <string name="ha_login_phone_open">Show the QR code</string>
+    <string name="ha_login_tablet_open">Open the sign-in page</string>
 </resources>

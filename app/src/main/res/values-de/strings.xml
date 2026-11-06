@@ -604,4 +604,27 @@
     <string name="setup_master_help">Schützt den Zugang zu den Einstellungen. Leer lassen für keinen; er kann später unter Einstellungen › Sicherheit festgelegt werden.</string>
     <string name="setup_master_kept">Ein Mastercode ist bereits festgelegt: leer lassen, um ihn zu behalten.</string>
     <string name="pin_locked">Zu viele Versuche. Erneut versuchen in %1$s</string>
+    <string name="ha_discovered">Im Netzwerk gefunden:</string>
+    <string name="ha_login_with">Bei Home Assistant anmelden:</string>
+    <string name="ha_login_phone">Mit dem Handy</string>
+    <string name="ha_login_tablet">Auf dem Tablet</string>
+    <string name="ha_login_or_token">Oder ein langlebiges Zugriffstoken einfügen:</string>
+    <string name="ha_login_phone_title">Anmeldung mit dem Handy</string>
+    <string name="ha_login_phone_help">Diesen QR-Code mit einem Handy im selben Netzwerk scannen und sich dann bei Home Assistant anmelden (der Passwortmanager des Handys kann die Felder ausfüllen) oder ein Token einfügen.</string>
+    <string name="ha_login_waiting_phone">Warten auf das Handy…</string>
+    <string name="ha_login_tablet_title">Bei Home Assistant anmelden</string>
+    <string name="ha_login_creating">Token des Tablets wird erstellt…</string>
+    <string name="ha_login_error">Anmeldung fehlgeschlagen: %1$s</string>
+    <string name="ha_phone_page_title">HA-MACS-Tablet</string>
+    <string name="ha_phone_page_login">Bei Home Assistant anmelden</string>
+    <string name="ha_phone_page_token">Oder ein langlebiges Zugriffstoken einfügen:</string>
+    <string name="ha_phone_page_send">An das Tablet senden</string>
+    <string name="ha_phone_page_done">Fertig, das Tablet ist verbunden. Diese Seite kann geschlossen werden.</string>
+    <string name="ha_phone_page_error">Das hat nicht geklappt, bitte erneut versuchen.</string>
+    <string name="ha_login_phone_desc">QR-Code scannen und sich auf dem Handy anmelden: Der Passwortmanager füllt die Felder aus.</string>
+    <string name="ha_login_tablet_desc">Die Anmeldeseite von Home Assistant, direkt auf dem Tablet.</string>
+    <string name="ha_login_token_title">Zugriffstoken</string>
+    <string name="ha_login_token_desc">Ein in Home Assistant erstelltes langlebiges Token einfügen.</string>
+    <string name="ha_login_phone_open">QR-Code anzeigen</string>
+    <string name="ha_login_tablet_open">Anmeldeseite öffnen</string>
 </resources>

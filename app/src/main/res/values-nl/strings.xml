@@ -604,4 +604,27 @@
     <string name="setup_master_help">Beschermt de toegang tot de instellingen. Laat leeg voor geen; hij kan later worden ingesteld in Instellingen › Beveiliging.</string>
     <string name="setup_master_kept">Er is al een mastercode ingesteld: laat leeg om hem te behouden.</string>
     <string name="pin_locked">Te veel pogingen. Probeer het opnieuw over %1$s</string>
+    <string name="ha_discovered">Gevonden op het netwerk:</string>
+    <string name="ha_login_with">Inloggen bij Home Assistant:</string>
+    <string name="ha_login_phone">Met de telefoon</string>
+    <string name="ha_login_tablet">Op de tablet</string>
+    <string name="ha_login_or_token">Of plak een langlevend toegangstoken:</string>
+    <string name="ha_login_phone_title">Inloggen met de telefoon</string>
+    <string name="ha_login_phone_help">Scan deze QR-code met een telefoon op hetzelfde netwerk en log daarna in bij Home Assistant (de wachtwoordbeheerder van de telefoon kan de velden invullen) of plak een token.</string>
+    <string name="ha_login_waiting_phone">Wachten op de telefoon…</string>
+    <string name="ha_login_tablet_title">Inloggen bij Home Assistant</string>
+    <string name="ha_login_creating">Token van de tablet wordt aangemaakt…</string>
+    <string name="ha_login_error">Inloggen mislukt: %1$s</string>
+    <string name="ha_phone_page_title">HA-MACS-tablet</string>
+    <string name="ha_phone_page_login">Inloggen bij Home Assistant</string>
+    <string name="ha_phone_page_token">Of plak een langlevend toegangstoken:</string>
+    <string name="ha_phone_page_send">Naar de tablet sturen</string>
+    <string name="ha_phone_page_done">Klaar, de tablet is verbonden. Je kunt deze pagina sluiten.</string>
+    <string name="ha_phone_page_error">Dat is niet gelukt, probeer het opnieuw.</string>
+    <string name="ha_login_phone_desc">Scan een QR-code en log in op de telefoon: de wachtwoordbeheerder vult de velden in.</string>
+    <string name="ha_login_tablet_desc">De inlogpagina van Home Assistant, direct op de tablet.</string>
+    <string name="ha_login_token_title">Toegangstoken</string>
+    <string name="ha_login_token_desc">Plak een langlevend token dat in Home Assistant is aangemaakt.</string>
+    <string name="ha_login_phone_open">QR-code tonen</string>
+    <string name="ha_login_tablet_open">Inlogpagina openen</string>
 </resources>

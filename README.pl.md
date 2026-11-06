@@ -44,7 +44,8 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 ## 📋 Wymagania
 
 - 📱 Tablet z **Androidem 8.0** lub nowszym (np. Galaxy Tab A8)
-- 🏡 Home Assistant dostępny z tabletu oraz **długoterminowy token dostępu** (Profil › Bezpieczeństwo)
+- 🏡 Home Assistant dostępny z tabletu; nie trzeba tworzyć tokenu: kreator loguje się na Twoje konto,
+  *Telefonem* (kod QR, menedżer haseł telefonu wypełnia pola) lub *Na tablecie*, albo używa *Tokenu dostępu*
 
 ## 🚀 Instalacja
 
@@ -56,7 +57,7 @@ Nie ma jeszcze opublikowanego pliku APK: należy go zbudować ze źródeł.
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Przy pierwszym uruchomieniu **kreator** prosi o adres Home Assistant i token, a następnie dopasowuje pulpit do Twojego
+Przy pierwszym uruchomieniu **kreator** znajduje Home Assistant w sieci i loguje się, a następnie dopasowuje pulpit do Twojego
 domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 
 > 🔑 Opcjonalne wartości w `local.properties` (poza repozytorium) wstępnie wypełniają połączenie: `ha.url`,

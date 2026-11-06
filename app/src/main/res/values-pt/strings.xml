@@ -604,4 +604,27 @@
     <string name="setup_master_help">Protege o acesso às definições. Deixe vazio para nenhum; pode ser definido mais tarde em Definições › Segurança.</string>
     <string name="setup_master_kept">Já existe um código mestre: deixe vazio para o manter.</string>
     <string name="pin_locked">Demasiadas tentativas. Tente novamente dentro de %1$s</string>
+    <string name="ha_discovered">Encontrado na rede:</string>
+    <string name="ha_login_with">Iniciar sessão no Home Assistant:</string>
+    <string name="ha_login_phone">Com o telemóvel</string>
+    <string name="ha_login_tablet">No tablet</string>
+    <string name="ha_login_or_token">Ou cole um token de acesso de longa duração:</string>
+    <string name="ha_login_phone_title">Iniciar sessão com o telemóvel</string>
+    <string name="ha_login_phone_help">Leia este código QR com um telemóvel ligado à mesma rede e depois inicie sessão no Home Assistant (o gestor de palavras-passe do telemóvel pode preencher os campos) ou cole um token.</string>
+    <string name="ha_login_waiting_phone">À espera do telemóvel…</string>
+    <string name="ha_login_tablet_title">Iniciar sessão no Home Assistant</string>
+    <string name="ha_login_creating">A criar o token do tablet…</string>
+    <string name="ha_login_error">Falha ao iniciar sessão: %1$s</string>
+    <string name="ha_phone_page_title">Tablet HA-MACS</string>
+    <string name="ha_phone_page_login">Iniciar sessão no Home Assistant</string>
+    <string name="ha_phone_page_token">Ou cole um token de acesso de longa duração:</string>
+    <string name="ha_phone_page_send">Enviar para o tablet</string>
+    <string name="ha_phone_page_done">Pronto, o tablet está ligado. Pode fechar esta página.</string>
+    <string name="ha_phone_page_error">Não funcionou, tente novamente.</string>
+    <string name="ha_login_phone_desc">Leia um código QR e inicie sessão no telemóvel: o gestor de palavras-passe preenche os campos.</string>
+    <string name="ha_login_tablet_desc">A página de início de sessão do Home Assistant, diretamente no tablet.</string>
+    <string name="ha_login_token_title">Token de acesso</string>
+    <string name="ha_login_token_desc">Cole um token de longa duração criado no Home Assistant.</string>
+    <string name="ha_login_phone_open">Mostrar o código QR</string>
+    <string name="ha_login_tablet_open">Abrir a página de início de sessão</string>
 </resources>

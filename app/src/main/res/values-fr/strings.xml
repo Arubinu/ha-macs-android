@@ -622,4 +622,27 @@
     <string name="setup_master_help">Protège l\'accès aux réglages. Laissez vide pour ne pas en mettre ; il peut être défini plus tard dans Réglages › Sécurité.</string>
     <string name="setup_master_kept">Un code maître est déjà défini : laissez vide pour le garder.</string>
     <string name="pin_locked">Trop d\'essais. Réessayez dans %1$s</string>
+    <string name="ha_discovered">Trouvé sur le réseau :</string>
+    <string name="ha_login_with">Se connecter à Home Assistant :</string>
+    <string name="ha_login_phone">Avec le téléphone</string>
+    <string name="ha_login_tablet">Sur la tablette</string>
+    <string name="ha_login_or_token">Ou collez un jeton d\'accès longue durée :</string>
+    <string name="ha_login_phone_title">Connexion avec le téléphone</string>
+    <string name="ha_login_phone_help">Scannez ce QR code avec un téléphone connecté au même réseau, puis connectez-vous à Home Assistant (le gestionnaire de mots de passe du téléphone peut remplir les champs) ou collez un jeton.</string>
+    <string name="ha_login_waiting_phone">En attente du téléphone…</string>
+    <string name="ha_login_tablet_title">Connexion à Home Assistant</string>
+    <string name="ha_login_creating">Création du jeton de la tablette…</string>
+    <string name="ha_login_error">Échec de la connexion : %1$s</string>
+    <string name="ha_phone_page_title">Tablette HA-MACS</string>
+    <string name="ha_phone_page_login">Se connecter à Home Assistant</string>
+    <string name="ha_phone_page_token">Ou collez un jeton d\'accès longue durée :</string>
+    <string name="ha_phone_page_send">Envoyer à la tablette</string>
+    <string name="ha_phone_page_done">C\'est fait, la tablette est connectée. Vous pouvez fermer cette page.</string>
+    <string name="ha_phone_page_error">Cela n\'a pas fonctionné, réessayez.</string>
+    <string name="ha_login_phone_desc">Scannez un QR code et connectez-vous depuis le téléphone : son gestionnaire de mots de passe remplit les champs.</string>
+    <string name="ha_login_tablet_desc">La page de connexion de Home Assistant, directement sur la tablette.</string>
+    <string name="ha_login_token_title">Jeton d\'accès</string>
+    <string name="ha_login_token_desc">Collez un jeton longue durée créé dans Home Assistant.</string>
+    <string name="ha_login_phone_open">Afficher le QR code</string>
+    <string name="ha_login_tablet_open">Ouvrir la page de connexion</string>
 </resources>

@@ -622,4 +622,27 @@
     <string name="setup_master_help">Chroni dostęp do ustawień. Zostaw puste, aby go nie ustawiać; można go ustawić później w Ustawienia › Bezpieczeństwo.</string>
     <string name="setup_master_kept">Kod główny jest już ustawiony: zostaw puste, aby go zachować.</string>
     <string name="pin_locked">Zbyt wiele prób. Spróbuj ponownie za %1$s</string>
+    <string name="ha_discovered">Znaleziono w sieci:</string>
+    <string name="ha_login_with">Zaloguj się do Home Assistant:</string>
+    <string name="ha_login_phone">Telefonem</string>
+    <string name="ha_login_tablet">Na tablecie</string>
+    <string name="ha_login_or_token">Lub wklej token dostępu o długim okresie ważności:</string>
+    <string name="ha_login_phone_title">Logowanie telefonem</string>
+    <string name="ha_login_phone_help">Zeskanuj ten kod QR telefonem podłączonym do tej samej sieci, a następnie zaloguj się do Home Assistant (menedżer haseł telefonu może wypełnić pola) lub wklej token.</string>
+    <string name="ha_login_waiting_phone">Oczekiwanie na telefon…</string>
+    <string name="ha_login_tablet_title">Zaloguj się do Home Assistant</string>
+    <string name="ha_login_creating">Tworzenie tokenu tabletu…</string>
+    <string name="ha_login_error">Logowanie nie powiodło się: %1$s</string>
+    <string name="ha_phone_page_title">Tablet HA-MACS</string>
+    <string name="ha_phone_page_login">Zaloguj się do Home Assistant</string>
+    <string name="ha_phone_page_token">Lub wklej token dostępu o długim okresie ważności:</string>
+    <string name="ha_phone_page_send">Wyślij do tabletu</string>
+    <string name="ha_phone_page_done">Gotowe, tablet jest połączony. Możesz zamknąć tę stronę.</string>
+    <string name="ha_phone_page_error">Nie udało się, spróbuj ponownie.</string>
+    <string name="ha_login_phone_desc">Zeskanuj kod QR i zaloguj się na telefonie: menedżer haseł wypełni pola.</string>
+    <string name="ha_login_tablet_desc">Strona logowania Home Assistant, bezpośrednio na tablecie.</string>
+    <string name="ha_login_token_title">Token dostępu</string>
+    <string name="ha_login_token_desc">Wklej token o długim okresie ważności utworzony w Home Assistant.</string>
+    <string name="ha_login_phone_open">Pokaż kod QR</string>
+    <string name="ha_login_tablet_open">Otwórz stronę logowania</string>
 </resources>

@@ -317,6 +317,9 @@ async def websocket(request):
             kind, mid = m.get('type'), m.get('id')
             if kind == 'auth':
                 await ws.send_json({'type': 'auth_ok', 'ha_version': VERSION})
+            elif kind == 'auth/long_lived_access_token':
+                print('jeton longue duree cree :', m.get('client_name'), m.get('lifespan'))
+                await result(mid, 'demo-long-lived-token-0123456789')
             elif kind == 'supported_features':
                 await result(mid)
             elif kind == 'subscribe_entities':
@@ -379,10 +382,52 @@ async def api_root(request):
     return web.json_response({'message': 'API running.'})
 
 
+# Connexion (flux OAuth2 de HA, simplifie) : page de connexion factice, n'importe quel identifiant est accepte.
+LOGIN_PAGE = """<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:sans-serif;background:#fafafa;display:flex;justify-content:center;padding:40px}
+form{display:flex;flex-direction:column;gap:12px;width:320px}input,button{padding:12px;font-size:16px}</style></head>
+<body><form method="post"><h2>Demo Home Assistant</h2><p>Client : %(client)s</p>
+<input name="username" placeholder="Username" value="demo"><input name="password" type="password" placeholder="Password" value="demo">
+<button id="login" type="submit">Log in</button></form></body></html>"""
+
+
+def same_origin(a: str, b: str) -> bool:
+    from urllib.parse import urlsplit
+    x, y = urlsplit(a), urlsplit(b)
+    return (x.scheme, x.netloc) == (y.scheme, y.netloc)
+
+
+async def authorize(request):
+    q = request.query
+    client, redirect = q.get('client_id', ''), q.get('redirect_uri', '')
+    if not same_origin(client, redirect):
+        return web.Response(status=400, text='Invalid redirect URI')
+    if request.method == 'POST':
+        from urllib.parse import urlencode
+        raise web.HTTPFound(redirect + '?' + urlencode({'code': 'demo-code', 'state': q.get('state', '')}))
+    return web.Response(text=LOGIN_PAGE % {'client': client}, content_type='text/html')
+
+
+async def auth_token(request):
+    form = await request.post()
+    print('auth/token :', dict(form))
+    if form.get('grant_type') != 'authorization_code' or form.get('code') != 'demo-code':
+        return web.json_response({'error': 'invalid_request'}, status=400)
+    return web.json_response({'access_token': 'demo-access', 'refresh_token': 'demo-refresh', 'token_type': 'Bearer', 'expires_in': 1800})
+
+
+async def auth_revoke(request):
+    print('auth/revoke :', dict(await request.post()))
+    return web.Response(text='')
+
+
 def app() -> web.Application:
     a = web.Application()
     a.router.add_get('/api/websocket', websocket)
     a.router.add_get('/api/', api_root)
+    a.router.add_route('*', '/auth/authorize', authorize)
+    a.router.add_post('/auth/token', auth_token)
+    a.router.add_post('/auth/revoke', auth_revoke)
     a.router.add_get('/api/camera_proxy/{entity}', camera_proxy)
     a.router.add_get('/api/calendars/{entity}', calendars)
     a.router.add_static('/demo/stream/', HERE / 'stream')

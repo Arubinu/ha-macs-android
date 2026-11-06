@@ -429,8 +429,27 @@ private fun ConnectionSection() {
             }
         }
         GroupDivider()
+        val servers = fr.pergens.hamacs.ha.rememberHaServers()
+        val login = remember { fr.pergens.hamacs.ui.HaLoginState() }
+        fr.pergens.hamacs.ui.HaLoginDialogs(login, url) { t ->
+            token = t
+            app.config.update { it.copy(haUrl = url.trim(), haToken = t) }
+            saved = true
+        }
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Field(url, { url = it; saved = false }, stringResource(R.string.ha_url), stringResource(R.string.ha_url_hint), null)
+            fr.pergens.hamacs.ui.HaServerChips(servers, url) { url = it; saved = false }
+            // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé.
+            Text(stringResource(R.string.ha_login_with), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Button(onClick = { login.phone = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text("📱  " + stringResource(R.string.ha_login_phone))
+                }
+                OutlinedButton(onClick = { login.tablet = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text("🔐  " + stringResource(R.string.ha_login_tablet))
+                }
+            }
+            Text(stringResource(R.string.ha_login_or_token), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
             Field(token, { token = it; saved = false }, stringResource(R.string.ha_token), null, stringResource(R.string.ha_token_help), secret = true)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(

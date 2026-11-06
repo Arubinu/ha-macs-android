@@ -45,7 +45,9 @@ personalizadas y sin nada que configurar en Home Assistant.
 ## 📋 Requisitos
 
 - 📱 Tablet con **Android 8.0** o posterior (p. ej. Galaxy Tab A8)
-- 🏡 Home Assistant accesible desde la tablet y un **token de acceso de larga duración** (Perfil › Seguridad)
+- 🏡 Home Assistant accesible desde la tablet; ningún token que crear: el asistente inicia sesión con tu cuenta,
+  *Con el teléfono* (código QR, el gestor de contraseñas del teléfono rellena los campos) o *En la tableta*, o usa un
+  *Token de acceso*
 
 ## 🚀 Instalación
 
@@ -57,7 +59,7 @@ Todavía no hay ningún APK publicado: hay que compilarlo desde el código fuent
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-En el primer arranque, el **asistente** pide la dirección de Home Assistant y el token, y adapta el panel a tu casa.
+En el primer arranque, el **asistente** encuentra Home Assistant en la red, inicia sesión y adapta el panel a tu casa.
 ¿Ya tienes una copia de seguridad? **Impórtala** en el primer paso y listo.
 
 > 🔑 Unos valores opcionales en `local.properties` (no versionado) rellenan la conexión: `ha.url`, `ha.token`,

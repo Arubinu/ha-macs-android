@@ -604,4 +604,27 @@
     <string name="setup_master_help">Protegge l\'accesso alle impostazioni. Lasciare vuoto per nessuno; si può definire in seguito in Impostazioni › Sicurezza.</string>
     <string name="setup_master_kept">Un codice principale è già impostato: lasciare vuoto per mantenerlo.</string>
     <string name="pin_locked">Troppi tentativi. Riprova tra %1$s</string>
+    <string name="ha_discovered">Trovato sulla rete:</string>
+    <string name="ha_login_with">Accedi a Home Assistant:</string>
+    <string name="ha_login_phone">Con il telefono</string>
+    <string name="ha_login_tablet">Sul tablet</string>
+    <string name="ha_login_or_token">Oppure incolla un token di accesso di lunga durata:</string>
+    <string name="ha_login_phone_title">Accesso con il telefono</string>
+    <string name="ha_login_phone_help">Scansiona questo codice QR con un telefono connesso alla stessa rete, poi accedi a Home Assistant (il gestore di password del telefono può compilare i campi) oppure incolla un token.</string>
+    <string name="ha_login_waiting_phone">In attesa del telefono…</string>
+    <string name="ha_login_tablet_title">Accedi a Home Assistant</string>
+    <string name="ha_login_creating">Creazione del token del tablet…</string>
+    <string name="ha_login_error">Accesso non riuscito: %1$s</string>
+    <string name="ha_phone_page_title">Tablet HA-MACS</string>
+    <string name="ha_phone_page_login">Accedi a Home Assistant</string>
+    <string name="ha_phone_page_token">Oppure incolla un token di accesso di lunga durata:</string>
+    <string name="ha_phone_page_send">Invia al tablet</string>
+    <string name="ha_phone_page_done">Fatto, il tablet è connesso. Puoi chiudere questa pagina.</string>
+    <string name="ha_phone_page_error">Non ha funzionato, riprova.</string>
+    <string name="ha_login_phone_desc">Scansiona un codice QR e accedi dal telefono: il suo gestore di password compila i campi.</string>
+    <string name="ha_login_tablet_desc">La pagina di accesso di Home Assistant, direttamente sul tablet.</string>
+    <string name="ha_login_token_title">Token di accesso</string>
+    <string name="ha_login_token_desc">Incolla un token di lunga durata creato in Home Assistant.</string>
+    <string name="ha_login_phone_open">Mostra il codice QR</string>
+    <string name="ha_login_tablet_open">Apri la pagina di accesso</string>
 </resources>

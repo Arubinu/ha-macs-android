@@ -44,7 +44,9 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 ## 📋 Prérequis
 
 - 📱 Tablette **Android 8.0** ou plus récente (ex. Galaxy Tab A8)
-- 🏡 Home Assistant joignable depuis la tablette, et un **jeton d'accès longue durée** (Profil › Sécurité)
+- 🏡 Home Assistant joignable depuis la tablette ; aucun jeton à créer : l'assistant se connecte avec votre compte,
+  *Avec le téléphone* (QR code, le gestionnaire de mots de passe du téléphone remplit les champs) ou *Sur la tablette*,
+  ou prend un *Jeton d'accès*
 
 ## 🚀 Installation
 
@@ -56,7 +58,7 @@ Aucun APK n'est encore publié : il faut le compiler depuis les sources.
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Au premier lancement, l'**assistant** demande l'adresse de Home Assistant et le jeton, puis adapte le tableau de bord
+Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'y connecte, puis adapte le tableau de bord
 à votre maison. Vous avez déjà une sauvegarde ? **Importez-la** dès la première étape, et c'est terminé.
 
 > 🔑 Des valeurs facultatives dans `local.properties` (non versionné) préremplissent la connexion : `ha.url`,

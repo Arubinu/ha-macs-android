@@ -42,7 +42,8 @@ nothing to set up in Home Assistant.
 ## 📋 Requirements
 
 - 📱 Android **8.0** or later tablet (e.g. Galaxy Tab A8)
-- 🏡 Home Assistant reachable from the tablet, and a **long-lived access token** (Profile › Security)
+- 🏡 Home Assistant reachable from the tablet; no token to create: the wizard signs in with your account,
+  *With the phone* (QR code, the phone's password manager fills in the fields) or *On the tablet*, or takes an *Access token*
 
 ## 🚀 Installation
 
@@ -54,7 +55,7 @@ No APK is published yet: build it from the sources.
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-On first launch, the **wizard** asks for the Home Assistant address and token, then adapts the dashboard to your
+On first launch, the **wizard** finds Home Assistant on the network and signs in, then adapts the dashboard to your
 home. Already have a backup? **Import** it on the first step and you are done.
 
 > 🔑 Optional `local.properties` values (not versioned) prefill the connection: `ha.url`, `ha.token`, `voice.url`.

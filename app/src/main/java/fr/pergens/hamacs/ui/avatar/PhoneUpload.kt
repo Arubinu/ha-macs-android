@@ -1,24 +1,11 @@
 package fr.pergens.hamacs.ui.avatar
 
 import android.graphics.Bitmap
-import android.util.Log
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.qrcode.QRCodeWriter
+import fr.pergens.hamacs.net.LocalHttpServer
+import fr.pergens.hamacs.net.LocalHttpServer.Companion.esc
+import fr.pergens.hamacs.net.LocalHttpServer.Companion.js
+import fr.pergens.hamacs.net.LocalHttpServer.Response
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.net.Inet4Address
-import java.net.InetSocketAddress
-import java.net.NetworkInterface
-import java.net.ServerSocket
-import java.net.Socket
-import java.security.SecureRandom
 
 /**
  * Envoi d'une photo depuis un téléphone, sans appli : la tablette ouvre un petit serveur HTTP sur le réseau local
@@ -30,77 +17,23 @@ class PhoneUpload(private val texts: Texts, private val onPhoto: (ByteArray) -> 
     /** Textes de la page, dans la langue de l'app. */
     data class Texts(val title: String, val take: String, val choose: String, val sending: String, val done: String, val error: String)
 
-    private val token = ByteArray(9).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }
-    private var server: ServerSocket? = null
-    private var job: Job? = null
+    private val server: LocalHttpServer = LocalHttpServer(maxBody = 25_000_000) { req ->
+        when {
+            req.path != "/" -> Response.notFound
+            req.method == "GET" -> Response.html(page())
+            req.method == "POST" && req.body.isNotEmpty() -> {
+                onPhoto(req.body)
+                server.stop()
+                Response.text("200 OK", "ok")
+            }
+            else -> Response.text("405 Method Not Allowed", "")
+        }
+    }
 
     /** Démarre le serveur ; retourne l'adresse à ouvrir sur le téléphone, ou null (pas de réseau local). */
-    fun start(scope: CoroutineScope): String? {
-        val ip = localIp() ?: return null
-        val s = ServerSocket().apply { reuseAddress = true; bind(InetSocketAddress(0)) }
-        server = s
-        job = scope.launch(Dispatchers.IO) {
-            while (isActive && !s.isClosed) {
-                val client = runCatching { s.accept() }.getOrNull() ?: break
-                runCatching { client.use { handle(it) } }.onFailure { Log.w("PhoneUpload", "requête", it) }
-            }
-        }
-        return "http://$ip:${s.localPort}/$token"
-    }
+    fun start(scope: CoroutineScope): String? = server.start(scope)
 
-    fun stop() {
-        runCatching { server?.close() }
-        job?.cancel()
-    }
-
-    private fun handle(socket: Socket) {
-        socket.soTimeout = 30_000
-        val input = BufferedInputStream(socket.getInputStream())
-        val requestLine = readLine(input) ?: return
-        val headers = HashMap<String, String>()
-        while (true) {
-            val line = readLine(input) ?: return
-            if (line.isEmpty()) break
-            val i = line.indexOf(':')
-            if (i > 0) headers[line.substring(0, i).trim().lowercase()] = line.substring(i + 1).trim()
-        }
-        val parts = requestLine.split(' ')
-        val method = parts.getOrNull(0) ?: return
-        val path = parts.getOrNull(1)?.substringBefore('?') ?: return
-        val out = socket.getOutputStream()
-        fun respond(code: String, type: String, body: ByteArray) {
-            out.write("HTTP/1.1 $code\r\nContent-Type: $type\r\nContent-Length: ${body.size}\r\nCache-Control: no-store\r\nConnection: close\r\n\r\n".toByteArray())
-            out.write(body); out.flush()
-        }
-        if (path != "/$token") { respond("404 Not Found", "text/plain", "Not found".toByteArray()); return }
-        when (method) {
-            "GET" -> respond("200 OK", "text/html; charset=utf-8", page().toByteArray())
-            "POST" -> {
-                val length = headers["content-length"]?.toIntOrNull() ?: 0
-                if (length <= 0 || length > 25_000_000) { respond("413 Payload Too Large", "text/plain", "Too large".toByteArray()); return }
-                val body = ByteArray(length)
-                var read = 0
-                while (read < length) { val n = input.read(body, read, length - read); if (n < 0) break; read += n }
-                respond("200 OK", "text/plain", "ok".toByteArray())
-                onPhoto(body)
-                stop()
-            }
-            else -> respond("405 Method Not Allowed", "text/plain", "".toByteArray())
-        }
-    }
-
-    private fun readLine(input: InputStream): String? {
-        val b = ByteArrayOutputStream()
-        while (true) {
-            val c = input.read()
-            if (c < 0) return if (b.size() == 0) null else b.toString("UTF-8")
-            if (c == '\n'.code) return b.toString("UTF-8").trimEnd('\r')
-            b.write(c)
-            if (b.size() > 8192) return null
-        }
-    }
-
-    private fun esc(s: String) = s.replace("&", "&amp;").replace("<", "&lt;").replace("\"", "&quot;")
+    fun stop() { server.stop() }
 
     /** Page envoyée au téléphone : deux boutons (appareil photo, galerie), photo réduite à 1600 px puis envoyée. */
     private fun page(): String = """
@@ -137,23 +70,7 @@ document.getElementById('g').onchange=e=>send(e.target.files[0]);
 </script></body></html>
 """.trimIndent()
 
-    private fun js(s: String) = "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"").replace("<", "\\u003c") + "\""
-
     companion object {
-        /** Adresse IPv4 de la tablette sur le réseau local (Wi-Fi ou Ethernet). */
-        fun localIp(): String? = runCatching {
-            NetworkInterface.getNetworkInterfaces().toList()
-                .filter { it.isUp && !it.isLoopback }
-                .flatMap { it.inetAddresses.toList() }
-                .filterIsInstance<Inet4Address>()
-                .firstOrNull { it.isSiteLocalAddress }?.hostAddress
-        }.getOrNull()
-
-        /** QR code (modules noirs sur fond blanc). */
-        fun qr(text: String, size: Int = 512): Bitmap {
-            val m = QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, mapOf(EncodeHintType.MARGIN to 1))
-            val px = IntArray(size * size) { if (m[it % size, it / size]) 0xFF000000.toInt() else 0xFFFFFFFF.toInt() }
-            return Bitmap.createBitmap(px, size, size, Bitmap.Config.ARGB_8888)
-        }
+        fun qr(text: String, size: Int = 512): Bitmap = LocalHttpServer.qr(text, size)
     }
 }
