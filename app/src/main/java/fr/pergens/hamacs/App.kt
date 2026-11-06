@@ -42,6 +42,8 @@ class App : Application(), ImageLoaderFactory {
         private set
     lateinit var link: fr.pergens.hamacs.ha.MobileAppLink
         private set
+    lateinit var dlna: fr.pergens.hamacs.dlna.DlnaRenderer
+        private set
 
     override fun attachBaseContext(base: android.content.Context) {
         super.attachBaseContext(fr.pergens.hamacs.config.AppLocale.wrap(base))
@@ -71,6 +73,8 @@ class App : Application(), ImageLoaderFactory {
             it.lastMotion = { presence.lastMotion.value }
             it.start()
         }
+        // La tablette en lecteur DLNA : Home Assistant la découvre et y envoie du son (TTS, radios, Music Assistant…).
+        dlna = fr.pergens.hamacs.dlna.DlnaRenderer(this, http, scope) { link.deviceName }.also { it.start(); it.watchVolume() }
 
         scope.launch {
             config.settings.map { it.haUrl to it.haToken }.distinctUntilChanged().collect { (url, token) ->

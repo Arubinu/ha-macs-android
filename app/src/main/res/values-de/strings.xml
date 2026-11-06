@@ -711,4 +711,11 @@
     <string name="presence_details_away">Abwesend</string>
     <string name="presence_details_total">Zu Hause %1$s in den letzten %2$d h</string>
     <string name="presence_details_empty">Kein Verlauf für diesen Zeitraum</string>
+    <string name="dlna_title">Mediaplayer (DLNA)</string>
+    <string name="dlna_help">Home Assistant findet das Tablet als Mediaplayer und kann Ton dorthin senden: Sprachausgabe, Radios, Music Assistant…</string>
+    <string name="dlna_running">Im Netzwerk sichtbar als „%1$s“</string>
+    <string name="dlna_no_network">Kein lokales Netzwerk</string>
+    <string name="dlna_starting">Wird gestartet…</string>
+    <string name="dlna_usage">In Home Assistant: Einstellungen › Geräte &amp; Dienste, entdecktes „DLNA Digital Media Renderer“ › Konfigurieren. Das Tablet wird dann eine media_player-Entität. Der Name ist der des Tablets (oben).</string>
+    <string name="dlna_playing">Wiedergabe</string>
 </resources>

@@ -306,6 +306,8 @@ class MainActivity : ComponentActivity() {
                             fr.pergens.hamacs.ui.AnimationsNotice(state)
                             // Sonnette, détecteurs : caméra en plein écran sur un événement (option du bloc caméra).
                             fr.pergens.hamacs.ui.CameraEventWatcher()
+                            // Son envoyé au lecteur DLNA : pastille « en lecture » (pause, arrêt).
+                            fr.pergens.hamacs.ui.DlnaNowPlaying()
                             // Notification de Home Assistant : bandeau en haut (refermé au toucher ou après 15 s).
                             haBanner.value?.let { b -> fr.pergens.hamacs.ui.HaBanner(b.title, b.message) { haBanner.value = null } }
                         }

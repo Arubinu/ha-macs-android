@@ -729,4 +729,11 @@
     <string name="presence_details_away">Absent</string>
     <string name="presence_details_total">À la maison %1$s sur les dernières %2$d h</string>
     <string name="presence_details_empty">Aucun historique sur cette période</string>
+    <string name="dlna_title">Lecteur multimédia (DLNA)</string>
+    <string name="dlna_help">Home Assistant trouve la tablette comme lecteur multimédia et peut y envoyer du son : synthèse vocale, radios, Music Assistant…</string>
+    <string name="dlna_running">Visible sur le réseau sous le nom « %1$s »</string>
+    <string name="dlna_no_network">Pas de réseau local</string>
+    <string name="dlna_starting">Démarrage…</string>
+    <string name="dlna_usage">Dans Home Assistant : Paramètres › Appareils et services, « DLNA Digital Media Renderer » découvert › Configurer. La tablette devient alors une entité media_player. Son nom est celui de la tablette (ci-dessus).</string>
+    <string name="dlna_playing">Lecture en cours</string>
 </resources>

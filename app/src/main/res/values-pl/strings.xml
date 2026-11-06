@@ -731,4 +731,11 @@
     <string name="presence_details_away">Poza domem</string>
     <string name="presence_details_total">W domu %1$s w ciągu ostatnich %2$d h</string>
     <string name="presence_details_empty">Brak historii dla tego okresu</string>
+    <string name="dlna_title">Odtwarzacz multimediów (DLNA)</string>
+    <string name="dlna_help">Home Assistant wykrywa tablet jako odtwarzacz multimediów i może wysyłać do niego dźwięk: syntezę mowy, radio, Music Assistant…</string>
+    <string name="dlna_running">Widoczny w sieci jako „%1$s”</string>
+    <string name="dlna_no_network">Brak sieci lokalnej</string>
+    <string name="dlna_starting">Uruchamianie…</string>
+    <string name="dlna_usage">W Home Assistant: Ustawienia › Urządzenia i usługi, wykryty „DLNA Digital Media Renderer” › Konfiguruj. Tablet staje się wtedy encją media_player. Jego nazwa to nazwa tabletu (powyżej).</string>
+    <string name="dlna_playing">Odtwarzanie</string>
 </resources>

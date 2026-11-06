@@ -711,4 +711,11 @@
     <string name="presence_details_away">Fuori casa</string>
     <string name="presence_details_total">A casa %1$s nelle ultime %2$d h</string>
     <string name="presence_details_empty">Nessuna cronologia per questo periodo</string>
+    <string name="dlna_title">Lettore multimediale (DLNA)</string>
+    <string name="dlna_help">Home Assistant trova il tablet come lettore multimediale e può inviargli audio: sintesi vocale, radio, Music Assistant…</string>
+    <string name="dlna_running">Visibile in rete come «%1$s»</string>
+    <string name="dlna_no_network">Nessuna rete locale</string>
+    <string name="dlna_starting">Avvio…</string>
+    <string name="dlna_usage">In Home Assistant: Impostazioni › Dispositivi e servizi, «DLNA Digital Media Renderer» rilevato › Configura. Il tablet diventa un\'entità media_player. Il nome è quello del tablet (sopra).</string>
+    <string name="dlna_playing">In riproduzione</string>
 </resources>

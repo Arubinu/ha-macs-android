@@ -711,4 +711,11 @@
     <string name="presence_details_away">Afwezig</string>
     <string name="presence_details_total">Thuis %1$s in de laatste %2$d u</string>
     <string name="presence_details_empty">Geen geschiedenis voor deze periode</string>
+    <string name="dlna_title">Mediaspeler (DLNA)</string>
+    <string name="dlna_help">Home Assistant vindt de tablet als mediaspeler en kan er geluid naartoe sturen: tekst-naar-spraak, radio\'s, Music Assistant…</string>
+    <string name="dlna_running">Zichtbaar op het netwerk als ‘%1$s’</string>
+    <string name="dlna_no_network">Geen lokaal netwerk</string>
+    <string name="dlna_starting">Starten…</string>
+    <string name="dlna_usage">In Home Assistant: Instellingen › Apparaten en diensten, ontdekte ‘DLNA Digital Media Renderer’ › Configureren. De tablet wordt dan een media_player-entiteit. De naam is die van de tablet (hierboven).</string>
+    <string name="dlna_playing">Speelt af</string>
 </resources>

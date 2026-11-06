@@ -711,4 +711,11 @@
     <string name="presence_details_away">Fuera</string>
     <string name="presence_details_total">En casa %1$s en las últimas %2$d h</string>
     <string name="presence_details_empty">Sin historial en este periodo</string>
+    <string name="dlna_title">Reproductor multimedia (DLNA)</string>
+    <string name="dlna_help">Home Assistant encuentra la tableta como reproductor multimedia y puede enviarle sonido: síntesis de voz, radios, Music Assistant…</string>
+    <string name="dlna_running">Visible en la red como «%1$s»</string>
+    <string name="dlna_no_network">Sin red local</string>
+    <string name="dlna_starting">Iniciando…</string>
+    <string name="dlna_usage">En Home Assistant: Ajustes › Dispositivos y servicios, «DLNA Digital Media Renderer» descubierto › Configurar. La tableta pasa a ser una entidad media_player. Su nombre es el de la tableta (arriba).</string>
+    <string name="dlna_playing">Reproduciendo</string>
 </resources>

@@ -27,9 +27,21 @@ import java.security.SecureRandom
  */
 class LocalHttpServer(
     private val maxBody: Int = 64 * 1024,
+    /** Requêtes traitées en parallèle (plusieurs clients, ex. Home Assistant pour le lecteur DLNA). */
+    private val concurrent: Boolean = false,
+    /** Port voulu (0 : au hasard) ; s'il est pris, un port au hasard. */
+    private val port: Int = 0,
+    /** Code fixe au début des adresses (sinon aléatoire). */
+    fixedKey: String? = null,
     private val handler: suspend (Request) -> Response,
 ) {
-    class Request(val method: String, val path: String, val query: Map<String, String>, val body: ByteArray) {
+    class Request(
+        val method: String, val path: String, val query: Map<String, String>, val body: ByteArray,
+        /** En-têtes, noms en minuscules. */
+        val headers: Map<String, String> = emptyMap(),
+        /** Adresse IP du client. */
+        val remote: String? = null,
+    ) {
         /** Corps `application/x-www-form-urlencoded`. */
         fun form(): Map<String, String> = parseQuery(body.toString(Charsets.UTF_8))
     }
@@ -44,7 +56,7 @@ class LocalHttpServer(
     }
 
     /** Code aléatoire placé au début de chaque adresse. */
-    val key: String = ByteArray(9).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }
+    val key: String = fixedKey ?: ByteArray(9).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }
     private var server: ServerSocket? = null
     private var job: Job? = null
 
@@ -55,14 +67,16 @@ class LocalHttpServer(
     /** Démarre le serveur ; retourne l'adresse de la page d'accueil (`origin/key`), ou null sans réseau local. */
     fun start(scope: CoroutineScope): String? {
         val ip = localIp() ?: return null
-        val s = ServerSocket().apply { reuseAddress = true; bind(InetSocketAddress(0)) }
+        val s = runCatching { ServerSocket().apply { reuseAddress = true; bind(InetSocketAddress(port)) } }.getOrNull()
+            ?: ServerSocket().apply { reuseAddress = true; bind(InetSocketAddress(0)) }
         server = s
         origin = "http://$ip:${s.localPort}"
         job = scope.launch(Dispatchers.IO) {
             while (isActive && !s.isClosed) {
                 val client = runCatching { s.accept() }.getOrNull() ?: break
-                // Une requête à la fois suffit (un seul téléphone) ; le traitement peut durer (échange de jeton).
-                runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) }
+                // Un téléphone : une requête à la fois (le traitement peut durer, échange de jeton) ; sinon en parallèle.
+                if (concurrent) launch { runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) } }
+                else runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) }
             }
         }
         return "$origin/$key"
@@ -101,7 +115,7 @@ class LocalHttpServer(
         var read = 0
         while (read < body.size) { val n = input.read(body, read, body.size - read); if (n < 0) break; read += n }
         val sub = path.removePrefix("/$key").ifEmpty { "/" }
-        respond(handler(Request(method, sub, parseQuery(target.substringAfter('?', "")), body)))
+        respond(handler(Request(method, sub, parseQuery(target.substringAfter('?', "")), body, headers, socket.inetAddress?.hostAddress)))
     }
 
     private fun readLine(input: InputStream): String? {

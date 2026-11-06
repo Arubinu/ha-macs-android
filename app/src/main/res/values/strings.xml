@@ -742,4 +742,11 @@
     <string name="presence_details_away">Away</string>
     <string name="presence_details_total">At home %1$s over the last %2$d h</string>
     <string name="presence_details_empty">No history for this period</string>
+    <string name="dlna_title">Media player (DLNA)</string>
+    <string name="dlna_help">Home Assistant finds the tablet as a media player and can send sound to it: text to speech, radios, Music Assistant…</string>
+    <string name="dlna_running">Visible on the network as “%1$s”</string>
+    <string name="dlna_no_network">No local network</string>
+    <string name="dlna_starting">Starting…</string>
+    <string name="dlna_usage">In Home Assistant: Settings › Devices &amp; services, “DLNA Digital Media Renderer” discovered › Configure. The tablet then becomes a media_player entity. The name is the tablet\'s name (above).</string>
+    <string name="dlna_playing">Playing</string>
 </resources>

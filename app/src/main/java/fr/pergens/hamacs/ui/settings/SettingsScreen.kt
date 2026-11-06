@@ -579,6 +579,7 @@ private fun ConnectionSection() {
         }
     }
     HaDeviceGroup()
+    DlnaGroup()
 }
 
 /** La tablette vue par Home Assistant (intégration mobile_app) : activation, nom, service de notification. */
@@ -614,6 +615,28 @@ private fun HaDeviceGroup() {
                         style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp),
                     )
                 }
+            }
+        }
+    }
+}
+
+/** Lecteur DLNA : Home Assistant découvre la tablette comme lecteur multimédia (intégration DLNA Digital Media Renderer). */
+@Composable
+private fun DlnaGroup() {
+    val dlna = App.instance.dlna
+    val on by dlna.enabled.collectAsState()
+    val status by dlna.status.collectAsState()
+    Group {
+        SwitchRow(stringResource(R.string.dlna_title), stringResource(R.string.dlna_help), on) { dlna.setEnabled(it) }
+        if (on) {
+            GroupDivider()
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                when (val s = status) {
+                    is fr.pergens.hamacs.dlna.DlnaRenderer.Status.Running -> StatusChip(Success, stringResource(R.string.dlna_running, s.name))
+                    fr.pergens.hamacs.dlna.DlnaRenderer.Status.NoNetwork -> StatusChip(Warning, stringResource(R.string.dlna_no_network))
+                    else -> StatusChip(TextSecondary, stringResource(R.string.dlna_starting))
+                }
+                Text(stringResource(R.string.dlna_usage), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp))
             }
         }
     }
