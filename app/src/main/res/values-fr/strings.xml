@@ -782,4 +782,5 @@
     <string name="anim_off_help_dev">Les échelles d\'animation des options pour les développeurs sont désactivées : les transitions de l\'app sont instantanées. Remettez à 1x l\'échelle d\'animation des fenêtres, des transitions et la durée de l\'animation.</string>
     <string name="anim_off_fix">Réactiver les animations</string>
     <string name="anim_off_grant">Pour les réactiver d\'un geste, autorisez une fois l\'app depuis un ordinateur : %1$s</string>
+    <string name="player_hd_fallback">Flux haute définition non pris en charge par cette tablette : flux standard affiché</string>
 </resources>

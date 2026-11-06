@@ -96,7 +96,7 @@ private fun open(camId: String, options: JsonObject) {
     val at = System.currentTimeMillis()
     // Réveille l'écran (veille, atténuation, écran noir de nuit) et affiche la caméra.
     state.lastInteraction = at
-    state.player = url
+    state.openPlayer(url, card?.s("live_url") ?: camId)
     eventPlayer = EventPlayer(url, (options["event_seconds"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 60, at)
     if ((options["event_sound"] as? JsonPrimitive)?.content != "false") runCatching {
         RingtoneManager.getRingtone(app, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))?.play()

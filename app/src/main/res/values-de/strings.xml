@@ -764,4 +764,5 @@
     <string name="anim_off_help_dev">Die Animationsskalen in den Entwickleroptionen sind aus: Übergänge der App sind sofort. Fenster-, Übergangs- und Animatordauer-Skala wieder auf 1x stellen.</string>
     <string name="anim_off_fix">Animationen wieder einschalten</string>
     <string name="anim_off_grant">Um sie mit einem Tippen wieder einzuschalten, erlaube es der App einmal von einem Computer aus: %1$s</string>
+    <string name="player_hd_fallback">HD-Stream wird von diesem Tablet nicht unterstützt: Standard-Stream wird angezeigt</string>
 </resources>

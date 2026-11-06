@@ -764,4 +764,5 @@
     <string name="anim_off_help_dev">Le scale di animazione delle opzioni sviluppatore sono disattivate: le transizioni dell\'app sono istantanee. Riporta a 1x le scale di finestra, transizione e durata animatore.</string>
     <string name="anim_off_fix">Riattiva le animazioni</string>
     <string name="anim_off_grant">Per riattivarle con un tocco, autorizza l\'app una volta da un computer: %1$s</string>
+    <string name="player_hd_fallback">Flusso ad alta definizione non supportato da questo tablet: mostrato il flusso standard</string>
 </resources>

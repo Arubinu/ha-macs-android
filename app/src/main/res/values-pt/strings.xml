@@ -764,4 +764,5 @@
     <string name="anim_off_help_dev">As escalas de animação das opções de programador estão desativadas: as transições da app são instantâneas. Volte a pôr a 1x as escalas de janela, transição e duração do animador.</string>
     <string name="anim_off_fix">Reativar as animações</string>
     <string name="anim_off_grant">Para as reativar com um toque, autorize a app uma vez a partir de um computador: %1$s</string>
+    <string name="player_hd_fallback">Transmissão em alta definição não suportada por este tablet: transmissão padrão mostrada</string>
 </resources>

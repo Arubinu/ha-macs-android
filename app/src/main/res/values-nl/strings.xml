@@ -764,4 +764,5 @@
     <string name="anim_off_help_dev">De animatieschalen in de ontwikkelaarsopties staan uit: overgangen in de app zijn direct. Zet venster-, overgangs- en animatorduurschaal terug op 1x.</string>
     <string name="anim_off_fix">Animaties weer aanzetten</string>
     <string name="anim_off_grant">Om ze met één tik weer aan te zetten, geef de app eenmalig toestemming vanaf een computer: %1$s</string>
+    <string name="player_hd_fallback">HD-stream niet ondersteund door deze tablet: standaardstream getoond</string>
 </resources>

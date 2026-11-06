@@ -105,6 +105,14 @@ class DashState(
     var kioskMenu by mutableStateOf(false)
     /** Vidéo plein écran : URL directe (mp4/HLS) ou caméra à streamer ("camera.xxx"). */
     var player by mutableStateOf<String?>(null)
+    /** Flux de repli du plein écran (celui de la carte) si la tablette ne sait pas décoder [player] (4K H.265…). */
+    var playerFallback: String? = null
+
+    /** Ouvre le plein écran sur [target], avec [fallback] si son flux n'est pas lisible par la tablette. */
+    fun openPlayer(target: String, fallback: String?) {
+        playerFallback = fallback?.takeIf { it != target }
+        player = target
+    }
     /** Horodatage de la dernière interaction (retour automatique à l'accueil). */
     var lastInteraction by mutableStateOf(System.currentTimeMillis())
     /** Mode édition : toucher un bloc ouvre ses réglages au lieu de l'actionner. */

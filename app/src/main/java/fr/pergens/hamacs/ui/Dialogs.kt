@@ -77,7 +77,7 @@ fun Overlays(dashboard: JsonObject) {
     val state = LocalDashState.current
     state.popup?.let { id -> dashboard.o("popups")?.o(id)?.let { PopupDialog(it) { state.popup = null } } }
     state.moreInfo?.let { MoreInfoDialog(it) { state.moreInfo = null } }
-    state.player?.let { PlayerDialog(it) { state.player = null } }
+    state.player?.let { PlayerDialog(it, state.playerFallback) { state.player = null; state.playerFallback = null } }
     state.pin?.let { req -> PinDialog(req) { state.pin = null } }
     if (state.kioskMenu) KioskMenu { state.kioskMenu = false }
     state.editTarget?.let { t ->
@@ -435,9 +435,12 @@ private fun MoreInfoDialog(entityId: String, onDismiss: () -> Unit) {
  */
 @OptIn(UnstableApi::class)
 @Composable
-private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
+private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> Unit) {
     val state = LocalDashState.current
     val ctx = LocalContext.current
+    // Flux lu : celui demandé, ou celui de la carte si la tablette ne sait pas décoder le premier (4K H.265…).
+    var target by remember(requested) { mutableStateOf(requested) }
+    var fellBack by remember(requested) { mutableStateOf(false) }
     var url by remember(target) { mutableStateOf<String?>(if (target.startsWith("camera.")) null else target) }
     var error by remember(target) { mutableStateOf<String?>(null) }
     LaunchedEffect(target) {
@@ -461,8 +464,11 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
         val l = object : androidx.media3.common.Player.Listener {
             override fun onRenderedFirstFrame() { rendered = true }
             override fun onPlayerError(e: androidx.media3.common.PlaybackException) {
-                error = e.errorCodeName
                 note("erreur ${e.errorCodeName} : ${e.message}", e)
+                if (fallback != null && target != fallback) {
+                    fellBack = true
+                    target = fallback
+                } else error = e.errorCodeName
             }
         }
         player.addListener(l)
@@ -485,6 +491,11 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
         DisposableEffect(view) {
             (view.parent as? androidx.compose.ui.window.DialogWindowProvider)?.window?.let { w ->
                 w.setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT)
+                // Tout l'écran, place de la barre de navigation comprise (sinon une bande reste visible sur le côté).
+                w.addFlags(android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+                w.attributes = w.attributes.apply {
+                    if (android.os.Build.VERSION.SDK_INT >= 28) layoutInDisplayCutoutMode = android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                }
                 androidx.core.view.WindowInsetsControllerCompat(w, w.decorView).apply {
                     hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
                     systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -493,9 +504,10 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
             onDispose { }
         }
         Box(Modifier.fillMaxSize().background(Color.Black).tapHold(onDismiss), contentAlignment = Alignment.Center) {
-            error?.let { Text(stringResource(R.string.stream_unavailable, it), color = Color.White) }
             AndroidView(
-                factory = { PlayerView(it).apply { this.player = player; useController = false } },
+                factory = {
+                    (android.view.LayoutInflater.from(it).inflate(R.layout.player_texture, null) as PlayerView).apply { this.player = player }
+                },
                 // « Remplir » : l'image couvre tout l'écran, ce qui dépasse est rogné (aucune bande noire).
                 // Sinon : l'image entière est affichée, avec des bandes si les proportions diffèrent.
                 update = {
@@ -503,6 +515,14 @@ private fun PlayerDialog(target: String, onDismiss: () -> Unit) {
                     else androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
                 },
                 modifier = Modifier.fillMaxSize(),
+            )
+            // Messages au-dessus de la vidéo (la vue du lecteur les cachait).
+            error?.let { Text(stringResource(R.string.stream_unavailable, it), color = Color.White) }
+            if (fellBack && error == null) Text(
+                stringResource(R.string.player_hd_fallback),
+                Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp)
+                    .background(Color(0xB3000000), androidx.compose.foundation.shape.RoundedCornerShape(12.dp)).padding(horizontal = 14.dp, vertical = 8.dp),
+                color = Color.White, fontSize = 13.sp,
             )
             HaIcon("mdi:close", Modifier.align(Alignment.TopEnd).padding(24.dp).tapHold(onDismiss), 32.dp)
         }

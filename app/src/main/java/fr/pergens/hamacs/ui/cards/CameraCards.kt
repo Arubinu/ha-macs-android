@@ -192,7 +192,7 @@ fun CameraCard(card: Card, modifier: Modifier) {
                     val fullscreen = App.instance.config.settings.value.tapFullscreen || (live && liveShown)
                     // Caméra protégée : le code est demandé avant d'afficher le direct.
                     state.guard(camId) {
-                        if (fullscreen) state.player = card.s("fullscreen_url") ?: card.s("fullscreen_entity") ?: card.s("live_url") ?: camId
+                        if (fullscreen) state.openPlayer(card.s("fullscreen_url") ?: card.s("fullscreen_entity") ?: card.s("live_url") ?: camId, card.s("live_url") ?: camId)
                         else liveUntil = maxOf(liveUntil, System.currentTimeMillis() + liveSeconds * 1000L)
                     }
                 },
