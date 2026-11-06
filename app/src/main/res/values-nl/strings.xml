@@ -608,7 +608,6 @@
     <string name="ha_login_with">Inloggen bij Home Assistant:</string>
     <string name="ha_login_phone">Met de telefoon</string>
     <string name="ha_login_tablet">Op de tablet</string>
-    <string name="ha_login_or_token">Of plak een langlevend toegangstoken:</string>
     <string name="ha_login_phone_title">Inloggen met de telefoon</string>
     <string name="ha_login_phone_help">Scan deze QR-code met een telefoon op hetzelfde netwerk en log daarna in bij Home Assistant (de wachtwoordbeheerder van de telefoon kan de velden invullen) of plak een token.</string>
     <string name="ha_login_waiting_phone">Wachten op de telefoon…</string>

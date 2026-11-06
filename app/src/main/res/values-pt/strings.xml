@@ -608,7 +608,6 @@
     <string name="ha_login_with">Iniciar sessão no Home Assistant:</string>
     <string name="ha_login_phone">Com o telemóvel</string>
     <string name="ha_login_tablet">No tablet</string>
-    <string name="ha_login_or_token">Ou cole um token de acesso de longa duração:</string>
     <string name="ha_login_phone_title">Iniciar sessão com o telemóvel</string>
     <string name="ha_login_phone_help">Leia este código QR com um telemóvel ligado à mesma rede e depois inicie sessão no Home Assistant (o gestor de palavras-passe do telemóvel pode preencher os campos) ou cole um token.</string>
     <string name="ha_login_waiting_phone">À espera do telemóvel…</string>

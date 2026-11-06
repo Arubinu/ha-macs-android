@@ -626,7 +626,6 @@
     <string name="ha_login_with">Zaloguj się do Home Assistant:</string>
     <string name="ha_login_phone">Telefonem</string>
     <string name="ha_login_tablet">Na tablecie</string>
-    <string name="ha_login_or_token">Lub wklej token dostępu o długim okresie ważności:</string>
     <string name="ha_login_phone_title">Logowanie telefonem</string>
     <string name="ha_login_phone_help">Zeskanuj ten kod QR telefonem podłączonym do tej samej sieci, a następnie zaloguj się do Home Assistant (menedżer haseł telefonu może wypełnić pola) lub wklej token.</string>
     <string name="ha_login_waiting_phone">Oczekiwanie na telefon…</string>

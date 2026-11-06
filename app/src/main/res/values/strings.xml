@@ -639,7 +639,6 @@
     <string name="ha_login_with">Sign in to Home Assistant:</string>
     <string name="ha_login_phone">With the phone</string>
     <string name="ha_login_tablet">On the tablet</string>
-    <string name="ha_login_or_token">Or paste a long-lived access token:</string>
     <string name="ha_login_phone_title">Sign in with the phone</string>
     <string name="ha_login_phone_help">Scan this QR code with a phone on the same network, then sign in to Home Assistant (the phone\'s password manager can fill in the fields) or paste a token.</string>
     <string name="ha_login_waiting_phone">Waiting for the phone…</string>

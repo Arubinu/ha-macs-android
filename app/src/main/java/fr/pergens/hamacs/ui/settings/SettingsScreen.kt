@@ -431,6 +431,9 @@ private fun ConnectionSection() {
         GroupDivider()
         val servers = fr.pergens.hamacs.ha.rememberHaServers()
         val login = remember { fr.pergens.hamacs.ui.HaLoginState() }
+        var method by remember {
+            mutableStateOf(if (settings.haToken.isNotBlank()) fr.pergens.hamacs.ui.HaLoginMethod.Token else fr.pergens.hamacs.ui.HaLoginMethod.Phone)
+        }
         fr.pergens.hamacs.ui.HaLoginDialogs(login, url) { t ->
             token = t
             app.config.update { it.copy(haUrl = url.trim(), haToken = t) }
@@ -439,27 +442,29 @@ private fun ConnectionSection() {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Field(url, { url = it; saved = false }, stringResource(R.string.ha_url), stringResource(R.string.ha_url_hint), null)
             fr.pergens.hamacs.ui.HaServerChips(servers, url) { url = it; saved = false }
-            // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé.
+            // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé : mêmes choix que l'assistant.
             Text(stringResource(R.string.ha_login_with), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(onClick = { login.phone = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
-                    Text("📱  " + stringResource(R.string.ha_login_phone))
-                }
-                OutlinedButton(onClick = { login.tablet = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
-                    Text("🔐  " + stringResource(R.string.ha_login_tablet))
-                }
+            fr.pergens.hamacs.ui.HaLoginChoices(method, url, login) { method = it }
+            if (method == fr.pergens.hamacs.ui.HaLoginMethod.Token) {
+                Field(token, { token = it; saved = false }, stringResource(R.string.ha_token), null, stringResource(R.string.ha_token_help), secret = true)
             }
-            Text(stringResource(R.string.ha_login_or_token), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
-            Field(token, { token = it; saved = false }, stringResource(R.string.ha_token), null, stringResource(R.string.ha_token_help), secret = true)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(
-                    onClick = {
-                        app.config.update { it.copy(haUrl = url.trim(), haToken = token.trim()) }
-                        saved = true
-                    },
-                    enabled = changed,
-                    modifier = Modifier.heightIn(min = 48.dp),
-                ) { Text(stringResource(R.string.action_save_connect)) }
+                when (method) {
+                    fr.pergens.hamacs.ui.HaLoginMethod.Phone -> Button(onClick = { login.phone = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.ha_login_phone_open))
+                    }
+                    fr.pergens.hamacs.ui.HaLoginMethod.Tablet -> Button(onClick = { login.tablet = true }, enabled = url.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.ha_login_tablet_open))
+                    }
+                    fr.pergens.hamacs.ui.HaLoginMethod.Token -> Button(
+                        onClick = {
+                            app.config.update { it.copy(haUrl = url.trim(), haToken = token.trim()) }
+                            saved = true
+                        },
+                        enabled = changed,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) { Text(stringResource(R.string.action_save_connect)) }
+                }
                 Spacer(Modifier.width(16.dp))
                 Feedback(if (saved && !changed) stringResource(R.string.saved) else null)
             }

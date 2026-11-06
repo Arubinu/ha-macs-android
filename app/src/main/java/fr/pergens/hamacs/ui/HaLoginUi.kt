@@ -108,6 +108,51 @@ fun HaServerChips(servers: List<HaServer>, current: String, onPick: (String) -> 
     }
 }
 
+enum class HaLoginMethod { Phone, Tablet, Token }
+
+/**
+ * Les trois façons de se connecter, présentées comme les choix de l'assistant (assistant et réglages).
+ * Choisir téléphone ou tablette ouvre directement la connexion si l'adresse est remplie.
+ */
+@Composable
+fun HaLoginChoices(method: HaLoginMethod, url: String, state: HaLoginState, onSelect: (HaLoginMethod) -> Unit) {
+    LoginChoice("mdi:cellphone-key", stringResource(R.string.ha_login_phone), stringResource(R.string.ha_login_phone_desc), method == HaLoginMethod.Phone) {
+        onSelect(HaLoginMethod.Phone); if (url.isNotBlank()) state.phone = true
+    }
+    LoginChoice("mdi:tablet-dashboard", stringResource(R.string.ha_login_tablet), stringResource(R.string.ha_login_tablet_desc), method == HaLoginMethod.Tablet) {
+        onSelect(HaLoginMethod.Tablet); if (url.isNotBlank()) state.tablet = true
+    }
+    LoginChoice("mdi:key-variant", stringResource(R.string.ha_login_token_title), stringResource(R.string.ha_login_token_desc), method == HaLoginMethod.Token) {
+        onSelect(HaLoginMethod.Token)
+    }
+}
+
+/** Ligne de choix (icône, titre, description, bouton radio) : même rendu que `Choice` de l'assistant. */
+@Composable
+private fun LoginChoice(icon: String, title: String, desc: String, selected: Boolean, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(18.dp)
+    val surface = Color(0xFF19191D)
+    val outline = Color(0xFF2C2C33)
+    Row(
+        Modifier.fillMaxWidth().clip(shape).background(if (selected) Dash.colors.accent.copy(alpha = 0.08f) else surface, shape)
+            .border(if (selected) 1.5.dp else 1.dp, if (selected) Dash.colors.accent else outline, shape)
+            .clickable(onClick = onClick).padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(52.dp).clip(CircleShape).background(Dash.colors.accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            HaIcon(icon, size = 28.dp, tint = Dash.colors.accent)
+        }
+        Column(Modifier.weight(1f).padding(horizontal = 16.dp)) {
+            Text(title, style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color(0xFFF2F2F5)))
+            Text(desc, Modifier.padding(top = 4.dp), style = TextStyle(fontSize = 14.sp, color = Muted, lineHeight = 20.sp))
+        }
+        Box(
+            Modifier.size(26.dp).clip(CircleShape).border(2.dp, if (selected) Dash.colors.accent else Muted, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) { if (selected) Box(Modifier.size(14.dp).clip(CircleShape).background(Dash.colors.accent)) }
+    }
+}
+
 private enum class Step { Waiting, Creating, Error }
 
 private fun randomState() = ByteArray(12).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }

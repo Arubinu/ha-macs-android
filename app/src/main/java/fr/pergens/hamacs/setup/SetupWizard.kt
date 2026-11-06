@@ -64,7 +64,9 @@ import fr.pergens.hamacs.R
 import fr.pergens.hamacs.ha.ConnState
 import fr.pergens.hamacs.ui.EntityPicker
 import fr.pergens.hamacs.ha.rememberHaServers
+import fr.pergens.hamacs.ui.HaLoginChoices
 import fr.pergens.hamacs.ui.HaLoginDialogs
+import fr.pergens.hamacs.ui.HaLoginMethod
 import fr.pergens.hamacs.ui.HaLoginState
 import fr.pergens.hamacs.ui.HaServerChips
 import fr.pergens.hamacs.ui.components.HaIcon
@@ -209,7 +211,6 @@ fun SetupWizard(onImport: () -> Unit, importError: String?, onDone: () -> Unit) 
 
 // --- Étapes ------------------------------------------------------------------------------------------------------
 
-private enum class LoginMethod { Phone, Tablet, Token }
 
 @Composable
 private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, onImport: () -> Unit, importError: String?) {
@@ -226,7 +227,7 @@ private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, on
         val servers = rememberHaServers()
         val login = remember { HaLoginState() }
         // Jeton déjà présent (sauvegarde importée, local.properties) : choix « jeton » d'emblée.
-        var method by remember { mutableStateOf(if (settings.haToken.isNotBlank()) LoginMethod.Token else LoginMethod.Phone) }
+        var method by remember { mutableStateOf(if (settings.haToken.isNotBlank()) HaLoginMethod.Token else HaLoginMethod.Phone) }
         HaLoginDialogs(login, url) { t -> token = t; app.config.update { it.copy(haUrl = url.trim(), haToken = t) } }
         Panel {
             Text(stringResource(R.string.setup_connect), style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
@@ -235,24 +236,16 @@ private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, on
             // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé : même présentation que les
             // autres choix de l'assistant. Choisir téléphone ou tablette ouvre directement la connexion.
             Text(stringResource(R.string.ha_login_with), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
-            Choice("mdi:cellphone-key", stringResource(R.string.ha_login_phone), stringResource(R.string.ha_login_phone_desc), method == LoginMethod.Phone) {
-                method = LoginMethod.Phone; if (url.isNotBlank()) login.phone = true
-            }
-            Choice("mdi:tablet-dashboard", stringResource(R.string.ha_login_tablet), stringResource(R.string.ha_login_tablet_desc), method == LoginMethod.Tablet) {
-                method = LoginMethod.Tablet; if (url.isNotBlank()) login.tablet = true
-            }
-            Choice("mdi:key-variant", stringResource(R.string.ha_login_token_title), stringResource(R.string.ha_login_token_desc), method == LoginMethod.Token) {
-                method = LoginMethod.Token
-            }
-            if (method == LoginMethod.Token) {
+            HaLoginChoices(method, url, login) { method = it }
+            if (method == HaLoginMethod.Token) {
                 Field(token, { token = it }, stringResource(R.string.ha_token), null, secret = true)
                 Text(stringResource(R.string.ha_token_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 when (method) {
-                    LoginMethod.Phone -> WizardButton(stringResource(R.string.ha_login_phone_open), primary = true, enabled = url.isNotBlank()) { login.phone = true }
-                    LoginMethod.Tablet -> WizardButton(stringResource(R.string.ha_login_tablet_open), primary = true, enabled = url.isNotBlank()) { login.tablet = true }
-                    LoginMethod.Token -> WizardButton(stringResource(R.string.action_save_connect), primary = true, enabled = url.isNotBlank() && token.isNotBlank()) {
+                    HaLoginMethod.Phone -> WizardButton(stringResource(R.string.ha_login_phone_open), primary = true, enabled = url.isNotBlank()) { login.phone = true }
+                    HaLoginMethod.Tablet -> WizardButton(stringResource(R.string.ha_login_tablet_open), primary = true, enabled = url.isNotBlank()) { login.tablet = true }
+                    HaLoginMethod.Token -> WizardButton(stringResource(R.string.action_save_connect), primary = true, enabled = url.isNotBlank() && token.isNotBlank()) {
                         app.config.update { it.copy(haUrl = url.trim(), haToken = token.trim()) }
                     }
                 }

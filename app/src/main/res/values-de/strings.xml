@@ -608,7 +608,6 @@
     <string name="ha_login_with">Bei Home Assistant anmelden:</string>
     <string name="ha_login_phone">Mit dem Handy</string>
     <string name="ha_login_tablet">Auf dem Tablet</string>
-    <string name="ha_login_or_token">Oder ein langlebiges Zugriffstoken einfügen:</string>
     <string name="ha_login_phone_title">Anmeldung mit dem Handy</string>
     <string name="ha_login_phone_help">Diesen QR-Code mit einem Handy im selben Netzwerk scannen und sich dann bei Home Assistant anmelden (der Passwortmanager des Handys kann die Felder ausfüllen) oder ein Token einfügen.</string>
     <string name="ha_login_waiting_phone">Warten auf das Handy…</string>
