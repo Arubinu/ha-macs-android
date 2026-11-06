@@ -73,6 +73,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   par leur libellé (`tapt "Nouveau code (4 à 8 chiffres)"`) et passer au suivant / valider avec `input keyevent 66`.
 - `ffmpeg` dans Git Bash est un script qui boucle : appeler `/d/Logiciels/ffmpeg/ffmpeg.exe` (vidéo d'animation :
   `adb shell screenrecord --time-limit 3 …`, puis une mosaïque d'images avec `-vf "fps=20,…,tile=8x4"`).
+- Relancer l'émulateur (`emulator -avd taba8 -no-snapshot-save`) recharge un ancien instantané : l'app peut y être
+  vierge ou l'ancien paquet réapparaître. Réinstaller, restaurer la dernière sauvegarde `tar` et redonner la caméra.
 - Une liste qui défile (`verticalScroll`) dans une colonne qui défile déjà doit toujours avoir une hauteur maximale
   finie, même provisoire, sinon Compose plante (c'est arrivé avec le calendrier des membres).
 - **Captures des README** : faux serveur Home Assistant `tools/demo/demo_ha.py` (données fictives) et script
