@@ -641,4 +641,16 @@
     <string name="transfer_page_upload">Sicherung an das Tablet senden</string>
     <string name="transfer_page_sending">Wird gesendet…</string>
     <string name="transfer_page_note">Token und Codes sind für das Tablet verschlüsselt, das die Sicherung erstellt hat.</string>
+    <string name="crash_log">Absturzprotokoll</string>
+    <string name="crash_log_none">Kein Absturz.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d Absturz, zuletzt am %2$s.</item>
+        <item quantity="other">%1$d Abstürze, zuletzt am %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Löschen</string>
+    <string name="crash_log_copied">Protokoll kopiert</string>
+    <string name="relaunch_title">Automatischer Neustart</string>
+    <string name="relaunch_help">Nach einem Absturz öffnet sich die App von selbst. Android erlaubt das, wenn sie Geräteinhaber oder Startbildschirm ist oder über anderen Apps angezeigt werden darf.</string>
+    <string name="relaunch_on">Aktiv</string>
+    <string name="relaunch_allow">Erlauben</string>
 </resources>

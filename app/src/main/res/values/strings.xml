@@ -672,4 +672,16 @@
     <string name="transfer_page_upload">Send a backup to the tablet</string>
     <string name="transfer_page_sending">Sending…</string>
     <string name="transfer_page_note">The token and the codes are encrypted for the tablet that made the backup.</string>
+    <string name="crash_log">Crash log</string>
+    <string name="crash_log_none">No crash.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d crash, last on %2$s.</item>
+        <item quantity="other">%1$d crashes, last on %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Clear</string>
+    <string name="crash_log_copied">Log copied</string>
+    <string name="relaunch_title">Automatic restart</string>
+    <string name="relaunch_help">After a crash, the app reopens by itself. Android allows it when the app is device owner, the home screen, or allowed to display over other apps.</string>
+    <string name="relaunch_on">Active</string>
+    <string name="relaunch_allow">Allow</string>
 </resources>

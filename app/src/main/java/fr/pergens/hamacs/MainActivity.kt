@@ -310,6 +310,17 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         fr.pergens.hamacs.kiosk.Kiosk.onResume(this)
+        // Test du journal et de la relance après plantage (versions de débogage uniquement) :
+        // am start -n fr.pergens.hamacs/.MainActivity --ez debug_crash true
+        if (BuildConfig.DEBUG && intent?.getBooleanExtra("debug_crash", false) == true) {
+            intent.removeExtra("debug_crash")
+            window.decorView.post { throw IllegalStateException("Plantage de test (debug_crash)") }
+        }
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
     }
 
     override fun onStop() {

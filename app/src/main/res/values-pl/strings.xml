@@ -659,4 +659,18 @@
     <string name="transfer_page_upload">Wyślij kopię do tabletu</string>
     <string name="transfer_page_sending">Wysyłanie…</string>
     <string name="transfer_page_note">Token i kody są zaszyfrowane dla tabletu, który utworzył kopię.</string>
+    <string name="crash_log">Dziennik awarii</string>
+    <string name="crash_log_none">Brak awarii.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d awaria, ostatnia %2$s.</item>
+        <item quantity="few">%1$d awarie, ostatnia %2$s.</item>
+        <item quantity="many">%1$d awarii, ostatnia %2$s.</item>
+        <item quantity="other">%1$d awarii, ostatnia %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Wyczyść</string>
+    <string name="crash_log_copied">Dziennik skopiowany</string>
+    <string name="relaunch_title">Automatyczne ponowne uruchomienie</string>
+    <string name="relaunch_help">Po awarii aplikacja otwiera się sama. Android na to pozwala, gdy jest właścicielem urządzenia, ekranem głównym lub może wyświetlać się nad innymi aplikacjami.</string>
+    <string name="relaunch_on">Aktywne</string>
+    <string name="relaunch_allow">Zezwól</string>
 </resources>

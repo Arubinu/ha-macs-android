@@ -641,4 +641,16 @@
     <string name="transfer_page_upload">Back-up naar de tablet sturen</string>
     <string name="transfer_page_sending">Verzenden…</string>
     <string name="transfer_page_note">Het token en de codes zijn versleuteld voor de tablet die de back-up heeft gemaakt.</string>
+    <string name="crash_log">Crashlogboek</string>
+    <string name="crash_log_none">Geen crash.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d crash, de laatste op %2$s.</item>
+        <item quantity="other">%1$d crashes, de laatste op %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Wissen</string>
+    <string name="crash_log_copied">Logboek gekopieerd</string>
+    <string name="relaunch_title">Automatisch opnieuw starten</string>
+    <string name="relaunch_help">Na een crash opent de app vanzelf opnieuw. Android staat dat toe als ze apparaateigenaar of startscherm is, of over andere apps mag worden weergegeven.</string>
+    <string name="relaunch_on">Actief</string>
+    <string name="relaunch_allow">Toestaan</string>
 </resources>

@@ -659,4 +659,16 @@
     <string name="transfer_page_upload">Envoyer une sauvegarde à la tablette</string>
     <string name="transfer_page_sending">Envoi…</string>
     <string name="transfer_page_note">Le jeton et les codes sont chiffrés pour la tablette qui a fait la sauvegarde.</string>
+    <string name="crash_log">Journal des plantages</string>
+    <string name="crash_log_none">Aucun plantage.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d plantage, le dernier le %2$s.</item>
+        <item quantity="other">%1$d plantages, le dernier le %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Effacer</string>
+    <string name="crash_log_copied">Journal copié</string>
+    <string name="relaunch_title">Relance automatique</string>
+    <string name="relaunch_help">Après un plantage, l\'app se rouvre d\'elle-même. Android le permet si elle est propriétaire de l\'appareil, écran d\'accueil ou autorisée à s\'afficher par-dessus les autres apps.</string>
+    <string name="relaunch_on">Active</string>
+    <string name="relaunch_allow">Autoriser</string>
 </resources>

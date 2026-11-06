@@ -641,4 +641,16 @@
     <string name="transfer_page_upload">Invia un backup al tablet</string>
     <string name="transfer_page_sending">Invio…</string>
     <string name="transfer_page_note">Il token e i codici sono cifrati per il tablet che ha creato il backup.</string>
+    <string name="crash_log">Registro degli arresti anomali</string>
+    <string name="crash_log_none">Nessun arresto anomalo.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d arresto anomalo, l\'ultimo il %2$s.</item>
+        <item quantity="other">%1$d arresti anomali, l\'ultimo il %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Cancella</string>
+    <string name="crash_log_copied">Registro copiato</string>
+    <string name="relaunch_title">Riavvio automatico</string>
+    <string name="relaunch_help">Dopo un arresto anomalo, l\'app si riapre da sola. Android lo consente se è proprietaria del dispositivo, schermata Home o autorizzata a comparire sopra altre app.</string>
+    <string name="relaunch_on">Attivo</string>
+    <string name="relaunch_allow">Consenti</string>
 </resources>

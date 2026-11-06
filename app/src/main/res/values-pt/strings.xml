@@ -641,4 +641,16 @@
     <string name="transfer_page_upload">Enviar uma cópia para o tablet</string>
     <string name="transfer_page_sending">A enviar…</string>
     <string name="transfer_page_note">O token e os códigos são cifrados para o tablet que fez a cópia.</string>
+    <string name="crash_log">Registo de falhas</string>
+    <string name="crash_log_none">Nenhuma falha.</string>
+    <plurals name="crash_log_count">
+        <item quantity="one">%1$d falha, a última em %2$s.</item>
+        <item quantity="other">%1$d falhas, a última em %2$s.</item>
+    </plurals>
+    <string name="crash_log_clear">Apagar</string>
+    <string name="crash_log_copied">Registo copiado</string>
+    <string name="relaunch_title">Reinício automático</string>
+    <string name="relaunch_help">Após uma falha, a app volta a abrir sozinha. O Android permite-o se for proprietária do dispositivo, ecrã principal ou autorizada a sobrepor-se a outras apps.</string>
+    <string name="relaunch_on">Ativo</string>
+    <string name="relaunch_allow">Permitir</string>
 </resources>

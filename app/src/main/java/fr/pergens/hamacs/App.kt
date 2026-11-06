@@ -46,6 +46,8 @@ class App : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        // Plantage : noté dans le journal, puis relance de l'app (tablette au mur).
+        CrashGuard.install(this)
         http = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

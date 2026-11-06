@@ -76,6 +76,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -913,6 +914,25 @@ private fun KioskGroup() {
                 ) { Text(stringResource(R.string.kiosk_remove)) }
             }
         }
+        // Relance après un plantage : possible si l'app est propriétaire, écran d'accueil ou autorisée à s'afficher
+        // par-dessus les autres apps (sinon Android bloque l'ouverture depuis l'arrière-plan).
+        val relaunch = remember(tick) { fr.pergens.hamacs.CrashGuard.canRelaunch(ctx) }
+        GroupDivider()
+        SettingRow(stringResource(R.string.relaunch_title), stringResource(R.string.relaunch_help)) {
+            if (relaunch) StatusChip(Success, stringResource(R.string.relaunch_on))
+            else OutlinedButton(
+                onClick = {
+                    runCatching {
+                        ctx.startActivity(
+                            android.content.Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:${ctx.packageName}"))
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                },
+                Modifier.heightIn(min = 48.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+            ) { Text(stringResource(R.string.relaunch_allow)) }
+        }
     }
 }
 
@@ -949,5 +969,44 @@ private fun AboutSection() {
         GroupDivider()
         SettingRow(stringResource(R.string.licenses), stringResource(R.string.licenses_text))
     }
+    CrashLogGroup()
     Spacer(Modifier.height(8.dp))
+}
+
+/** Journal des plantages (l'app se relance seule) : enroulé, à copier pour le signaler, ou à effacer. */
+@Composable
+private fun CrashLogGroup() {
+    val ctx = LocalContext.current
+    var entries by remember { mutableStateOf(fr.pergens.hamacs.CrashGuard.entries(ctx)) }
+    var open by remember { mutableStateOf(false) }
+    var copied by remember { mutableStateOf(false) }
+    val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
+    Group {
+        val last = entries.firstOrNull()?.substringBefore(" · ")
+        SettingRow(
+            stringResource(R.string.crash_log),
+            if (last == null) stringResource(R.string.crash_log_none) else pluralStringResource(R.plurals.crash_log_count, entries.size, entries.size, last),
+            onClick = if (entries.isEmpty()) null else ({ open = !open }),
+        ) { if (entries.isNotEmpty()) Chevron(open) }
+        Unfold(open && entries.isNotEmpty()) {
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    entries.joinToString("\n\n"),
+                    Modifier.fillMaxWidth().heightIn(max = 360.dp).clip(RoundedCornerShape(10.dp)).background(Background)
+                        .verticalScroll(rememberScrollState()).padding(12.dp),
+                    style = TextStyle(fontSize = 11.sp, color = TextSecondary, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace, lineHeight = 15.sp),
+                )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(onClick = { clipboard.setText(androidx.compose.ui.text.AnnotatedString(entries.joinToString("\n\n"))); copied = true }, Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.kiosk_copy))
+                    }
+                    OutlinedButton(
+                        onClick = { fr.pergens.hamacs.CrashGuard.clear(ctx); entries = emptyList(); open = false },
+                        Modifier.heightIn(min = 48.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                    ) { Text(stringResource(R.string.crash_log_clear)) }
+                    Feedback(if (copied) stringResource(R.string.crash_log_copied) else null)
+                }
+            }
+        }
+    }
 }
