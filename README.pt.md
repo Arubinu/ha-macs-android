@@ -24,7 +24,8 @@ personalizados e sem nada para configurar no Home Assistant.
 - 🤖 **M.A.C.S.**, a personagem animada, no centro do ecrã inicial
 - 🧙 **Assistente de configuração**: divisões, membros, câmaras e elementos principais detetados no Home Assistant
 - 🏠 **Divisões**: luzes, temperatura, humidade e aparelhos num relance
-- 👨‍👩‍👧 **Membros**: presença, hora de chegada, passos, bateria do telemóvel e próximos eventos
+- 👨‍👩‍👧 **Membros**: presença (toque na barra para ver chegadas e saídas), hora de chegada, passos, bateria do telemóvel
+  e próximos eventos
 - 🧑‍🎨 **Avatares**: foto com a câmara do tablet, de um ficheiro ou de um telemóvel (código QR), recortada no
   dispositivo, filtros opcionais, cabeça a sair de um círculo com a cor do painel
 - 📹 **Câmaras**: em direto, separadores personalizáveis, ecrã inteiro em alta definição, últimas deteções (multimédia
@@ -32,8 +33,9 @@ personalizados e sem nada para configurar no Home Assistant.
 - 🚨 **Alertas**: versão nativa do [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, som,
   voz e notificações
 - 🌦️ **Meteorologia e gráficos**: previsão, radar Windy, consumo elétrico, preços dos combustíveis com o posto mais
-  barato
-- 🎙️ **Assistente de voz local** (opcional): fale com o M.A.C.S., que responde através de um modelo de áudio local
+  barato (toque num gráfico: cada posto, o seu preço e as últimas alterações)
+- 🎙️ **Assistente de voz**: fale com o M.A.C.S. através da sua gateway local ou como **satélite de voz do Home
+  Assistant** (Wyoming, pipeline do Assist, palavra de ativação opcional); Definições › Assistente de voz
 - ✏️ **Modo de edição**: altere entidades, divisões, separadores e blocos diretamente no tablet
 - 🔒 **Modo quiosque**: ninguém sai da app nem desliga o tablet sem o código mestre (ou o de acesso)
 - 🌍 **8 idiomas**: inglês, francês, alemão, espanhol, italiano, neerlandês, português, polaco
@@ -77,6 +79,8 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
   ou um detetor é acionado, com um som
 - 📡 **Tablet no Home Assistant**: Definições › Home Assistant; sensores de bateria, ecrã e presença, e notificações
   (faixa, leitura em voz alta, ecrã aceso, câmara em ecrã inteiro)
+- 🔊 **Leitor multimédia**: o Home Assistant encontra o tablet (DLNA) e pode reproduzir nele síntese de voz, rádios ou
+  Music Assistant; Definições › Home Assistant
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque

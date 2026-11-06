@@ -165,6 +165,29 @@ capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenê
 
 Les réglages globaux (connexion, affichage, veille, code d'accès…) restent dans la page Réglages.
 
+## Satellite Home Assistant (Wyoming)
+
+Réglages › Assistant vocal › *Satellite Home Assistant (Wyoming)* : la tablette se comporte comme un satellite vocal
+(wyoming-satellite, ESPHome). Elle écoute sur le port TCP **10700** et s'annonce en mDNS (`_wyoming._tcp`) ; Home
+Assistant la propose dans Paramètres › Appareils et services (« Wyoming Protocol »), sinon l'ajouter avec l'adresse de
+la tablette et ce port. Le pipeline Assist (reconnaissance, agent, synthèse vocale, mot d'activation) se choisit sur la
+page de l'appareil dans Home Assistant.
+
+- **Appui sur le M.A.C.S.** : pipeline depuis l'écoute (`asr` → `tts`), audio PCM 16 kHz jusqu'à la fin de phrase
+  détectée par Home Assistant ;
+- **Mot d'activation** (option) : micro ouvert en continu, détection faite par Home Assistant (openWakeWord…) ;
+- la transcription et la réponse s'affichent dans les bulles du M.A.C.S., la synthèse vocale est jouée par la tablette.
+
+La passerelle ci-dessous est l'autre système possible (exclusif) : choix dans le même écran.
+
+## Lecteur multimédia (DLNA)
+
+Réglages › Home Assistant › *Lecteur multimédia (DLNA)* : la tablette devient un MediaRenderer UPnP (SSDP, services
+AVTransport, RenderingControl, ConnectionManager, événements). Home Assistant la découvre (« DLNA Digital Media
+Renderer ») et crée une entité `media_player` : `tts.speak`, `media_player.play_media`, radios, Music Assistant… Le
+volume est celui des médias d'Android. Une pastille affiche la lecture en cours avec pause et arrêt (en bas à gauche sur
+l'accueil, à côté de la barre d'onglets ailleurs). Port HTTP fixe : 49494.
+
 ## Passerelle vocale
 
 ```sh

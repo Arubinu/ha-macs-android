@@ -207,7 +207,7 @@
     <string name="dim_help">Senkt die Helligkeit nach dieser Zeit ohne Berührung oder erkannte Anwesenheit. Sie kehrt zurück, sobald Aktivität erkannt wird.</string>
     <string name="dim_level">Gedimmte Helligkeit</string>
     <string name="section_voice">Sprachassistent</string>
-    <string name="section_voice_desc">Sprach-Gateway und Mikrofon</string>
+    <string name="section_voice_desc">Gateway oder Home Assistant, Mikrofon</string>
     <string name="voice_url">Gateway-Adresse</string>
     <string name="voice_url_hint">z. B. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">M.A.C.S. antippen, um zu sprechen. Leer lassen, um den Assistenten zu deaktivieren.</string>

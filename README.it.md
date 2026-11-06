@@ -24,7 +24,8 @@ card personalizzate e senza nulla da configurare in Home Assistant.
 - 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale
 - 🧙 **Procedura guidata**: stanze, membri, telecamere ed elementi principali rilevati in Home Assistant
 - 🏠 **Stanze**: luci, temperatura, umidità e dispositivi a colpo d'occhio
-- 👨‍👩‍👧 **Membri**: presenza, ora di arrivo, passi, batteria del telefono e prossimi eventi
+- 👨‍👩‍👧 **Membri**: presenza (tocca la barra per arrivi e partenze), ora di arrivo, passi, batteria del telefono e
+  prossimi eventi
 - 🧑‍🎨 **Avatar**: foto con la fotocamera del tablet, da un file o da un telefono (codice QR), scontornata sul
   dispositivo, filtri facoltativi, testa che esce da un cerchio con il colore della dashboard
 - 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione, ultimi rilevamenti (media
@@ -32,8 +33,9 @@ card personalizzate e senza nulla da configurare in Home Assistant.
 - 🚨 **Avvisi**: versione nativa di [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temi, suono,
   sintesi vocale e notifiche
 - 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più
-  economico
-- 🎙️ **Assistente vocale locale** (facoltativo): parla con M.A.C.S., che risponde con un modello audio locale
+  economico (tocca un grafico: ogni distributore, il suo prezzo e gli ultimi cambiamenti)
+- 🎙️ **Assistente vocale**: parla con M.A.C.S. tramite il tuo gateway locale o come **satellite vocale di Home Assistant**
+  (Wyoming, pipeline Assist, parola di attivazione facoltativa); Impostazioni › Assistente vocale
 - ✏️ **Modalità modifica**: entità, stanze, schede e blocchi si modificano direttamente sul tablet
 - 🔒 **Modalità kiosk**: nessuno esce dall'app o spegne il tablet senza il codice principale (o quello di accesso)
 - 🌍 **8 lingue**: inglese, francese, tedesco, spagnolo, italiano, olandese, portoghese, polacco
@@ -79,6 +81,8 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
   campanello o un sensore si attiva, con un suono
 - 📡 **Tablet in Home Assistant**: Impostazioni › Home Assistant; sensori di batteria, schermo e presenza, e notifiche
   (banner, lettura ad alta voce, accensione dello schermo, telecamera a schermo intero)
+- 🔊 **Lettore multimediale**: Home Assistant trova il tablet (DLNA) e può riprodurvi sintesi vocale, radio o Music
+  Assistant; Impostazioni › Home Assistant
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk

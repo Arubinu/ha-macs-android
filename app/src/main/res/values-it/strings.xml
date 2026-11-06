@@ -207,7 +207,7 @@
     <string name="dim_help">Abbassa la luminosità dopo questo tempo senza tocchi né presenza rilevata. Torna appena viene rilevata un\'attività.</string>
     <string name="dim_level">Luminosità attenuata</string>
     <string name="section_voice">Assistente vocale</string>
-    <string name="section_voice_desc">Gateway vocale e microfono</string>
+    <string name="section_voice_desc">Gateway o Home Assistant, microfono</string>
     <string name="voice_url">Indirizzo del gateway</string>
     <string name="voice_url_hint">es. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Tocca M.A.C.S. per parlare. Lascia vuoto per disattivare l\'assistente.</string>

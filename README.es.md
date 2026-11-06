@@ -25,7 +25,8 @@ personalizadas y sin nada que configurar en Home Assistant.
 - 🧙 **Asistente de configuración**: habitaciones, miembros, cámaras y elementos principales detectados en Home
   Assistant
 - 🏠 **Habitaciones**: luces, temperatura, humedad y aparatos de un vistazo
-- 👨‍👩‍👧 **Miembros**: presencia, hora de llegada, pasos, batería del teléfono y próximos eventos
+- 👨‍👩‍👧 **Miembros**: presencia (toca la barra para ver llegadas y salidas), hora de llegada, pasos, batería del
+  teléfono y próximos eventos
 - 🧑‍🎨 **Avatares**: foto con la cámara de la tablet, un archivo o un teléfono (código QR), recortada en el dispositivo,
   filtros opcionales, la cabeza sobresale de un círculo con el color del panel
 - 📹 **Cámaras**: directo, pestañas personalizables, pantalla completa en alta definición, últimas detecciones (medios
@@ -33,8 +34,9 @@ personalizadas y sin nada que configurar en Home Assistant.
 - 🚨 **Alertas**: versión nativa de [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, sonido,
   síntesis de voz y notificaciones
 - 🌦️ **Tiempo y gráficos**: previsión, radar Windy, consumo eléctrico, precios del combustible con la gasolinera más
-  barata
-- 🎙️ **Asistente de voz local** (opcional): habla con M.A.C.S., que responde con un modelo de audio local
+  barata (toca un gráfico: cada gasolinera, su precio y sus últimos cambios)
+- 🎙️ **Asistente de voz**: habla con M.A.C.S. a través de tu pasarela local o como **satélite de voz de Home Assistant**
+  (Wyoming, canalización de Assist, palabra de activación opcional); Ajustes › Asistente de voz
 - ✏️ **Modo edición**: cambia entidades, habitaciones, pestañas y bloques directamente en la tablet
 - 🔒 **Modo quiosco**: nadie sale de la app ni apaga la tablet sin el código maestro (o el de acceso)
 - 🌍 **8 idiomas**: inglés, francés, alemán, español, italiano, neerlandés, portugués, polaco
@@ -79,6 +81,8 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   o un detector se activa, con un sonido
 - 📡 **Tableta en Home Assistant**: Ajustes › Home Assistant; sensores de batería, pantalla y presencia, y
   notificaciones (banner, lectura en voz alta, encendido de la pantalla, cámara a pantalla completa)
+- 🔊 **Reproductor multimedia**: Home Assistant encuentra la tableta (DLNA) y puede reproducir en ella síntesis de voz,
+  radios o Music Assistant; Ajustes › Home Assistant
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco

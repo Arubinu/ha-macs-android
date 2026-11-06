@@ -24,14 +24,17 @@ Custom Cards und ohne Einrichtung in Home Assistant.
 - 🤖 **M.A.C.S.**, die animierte Assistenzfigur, im Mittelpunkt des Startbildschirms
 - 🧙 **Einrichtungsassistent**: Räume, Mitglieder, Kameras und wichtige Elemente werden in Home Assistant erkannt
 - 🏠 **Räume**: Licht, Temperatur, Luftfeuchtigkeit und Geräte auf einen Blick
-- 👨‍👩‍👧 **Mitglieder**: Anwesenheit, Ankunftszeit, Schritte, Handy-Akku und anstehende Termine
+- 👨‍👩‍👧 **Mitglieder**: Anwesenheit (Balken antippen für Ankünfte und Abfahrten), Ankunftszeit, Schritte, Handy-Akku
+  und anstehende Termine
 - 🧑‍🎨 **Avatare**: Foto mit der Tablet-Kamera, aus einer Datei oder vom Handy (QR-Code), auf dem Gerät freigestellt,
   optionale Filter, Kopf ragt aus einem Kreis in der Farbe des Dashboards
 - 📹 **Kameras**: Livebild, eigene Tabs, Vollbild in hoher Auflösung, letzte Erkennungen (HA-Medien, SMB, NFS, lokal)
 - 🚨 **Warnungen**: native Umsetzung der [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 Themes,
   Ton, Sprachausgabe und Benachrichtigungen
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle
-- 🎙️ **Lokaler Sprachassistent** (optional): mit M.A.C.S. sprechen, Antwort von einem lokalen Audiomodell
+  (Diagramm antippen: jede Tankstelle, ihr Preis und ihre letzten Änderungen)
+- 🎙️ **Sprachassistent**: mit M.A.C.S. über dein lokales Gateway oder als **Home-Assistant-Sprachsatellit** sprechen
+  (Wyoming, Assist-Pipeline, Aktivierungswort optional); Einstellungen › Sprachassistent
 - ✏️ **Bearbeitungsmodus**: Entitäten, Räume, Tabs und Blöcke direkt auf dem Tablet ändern
 - 🔒 **Kioskmodus**: ohne Mastercode (oder Zugangscode) lässt sich die App nicht verlassen und das Tablet nicht ausschalten
 - 🌍 **8 Sprachen**: Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch, Portugiesisch, Polnisch
@@ -77,6 +80,8 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
   Klingel oder ein Melder auslöst, mit Ton
 - 📡 **Tablet in Home Assistant**: Einstellungen › Home Assistant; Sensoren für Akku, Bildschirm und Anwesenheit sowie
   Benachrichtigungen (Banner, Vorlesen, Bildschirm an, Kamera im Vollbild)
+- 🔊 **Mediaplayer**: Home Assistant findet das Tablet (DLNA) und kann Sprachausgabe, Radios oder Music Assistant darauf
+  abspielen; Einstellungen › Home Assistant
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus

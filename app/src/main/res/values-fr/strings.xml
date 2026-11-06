@@ -221,7 +221,7 @@
     <string name="dim_level">Luminosité atténuée</string>
 
     <string name="section_voice">Assistant vocal</string>
-    <string name="section_voice_desc">Passerelle vocale et micro</string>
+    <string name="section_voice_desc">Passerelle ou Home Assistant, micro</string>
     <string name="voice_url">Adresse de la passerelle</string>
     <string name="voice_url_hint">ex. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Touchez M.A.C.S. pour parler. Laissez vide pour désactiver l\'assistant.</string>

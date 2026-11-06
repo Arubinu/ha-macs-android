@@ -24,7 +24,8 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 - 🤖 **M.A.C.S.**, le personnage animé, au cœur de l'écran d'accueil
 - 🧙 **Assistant de configuration** : pièces, membres, caméras et éléments principaux détectés dans Home Assistant
 - 🏠 **Pièces** : lumières, température, humidité et appareils d'un coup d'œil
-- 👨‍👩‍👧 **Membres** : présence, heure d'arrivée, pas, batterie du téléphone et événements à venir
+- 👨‍👩‍👧 **Membres** : présence (touchez la barre pour les arrivées et départs), heure d'arrivée, pas, batterie du
+  téléphone et événements à venir
 - 🧑‍🎨 **Avatars** : photo prise avec la tablette, un fichier ou un téléphone (QR code), détourée sur l'appareil,
   filtres au choix, tête qui dépasse d'un cercle aux couleurs du tableau de bord
 - 📹 **Caméras** : direct, onglets personnalisables, plein écran en haute définition, dernières détections (média HA,
@@ -32,8 +33,9 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 - 🚨 **Alertes** : portage natif de l'[AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thèmes, son,
   synthèse vocale et notifications
 - 🌦️ **Météo et graphiques** : prévisions, radar Windy, consommation électrique, prix des carburants avec la station la
-  moins chère
-- 🎙️ **Assistant vocal local** (facultatif) : parlez à M.A.C.S., qui répond grâce à un modèle audio local
+  moins chère (touchez un graphique : chaque station, son prix et ses derniers changements)
+- 🎙️ **Assistant vocal** : parlez à M.A.C.S. par votre passerelle locale ou en **satellite vocal Home Assistant**
+  (Wyoming, pipeline Assist, mot d'activation au choix) ; Réglages › Assistant vocal
 - ✏️ **Mode édition** : entités, pièces, onglets et blocs se modifient directement sur la tablette
 - 🔒 **Mode kiosque** : impossible de quitter l'app ou d'éteindre la tablette sans le code maître (ou le code d'accès)
 - 🌍 **8 langues** : anglais, français, allemand, espagnol, italien, néerlandais, portugais, polonais
@@ -77,6 +79,8 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
   ou un détecteur se déclenche, avec un son
 - 📡 **Tablette dans Home Assistant** : Réglages › Home Assistant ; capteurs de batterie, d'écran et de présence, et
   notifications (bandeau, lecture à voix haute, allumage de l'écran, caméra en plein écran)
+- 🔊 **Lecteur multimédia** : Home Assistant trouve la tablette (DLNA) et peut y diffuser synthèse vocale, radios ou
+  Music Assistant ; Réglages › Home Assistant
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque

@@ -215,7 +215,7 @@
     <string name="dim_help">Zmniejsza jasność po tym czasie bez dotyku ani wykrytej obecności. Wraca, gdy tylko zostanie wykryta aktywność.</string>
     <string name="dim_level">Przyciemniona jasność</string>
     <string name="section_voice">Asystent głosowy</string>
-    <string name="section_voice_desc">Bramka głosowa i mikrofon</string>
+    <string name="section_voice_desc">Bramka lub Home Assistant, mikrofon</string>
     <string name="voice_url">Adres bramki</string>
     <string name="voice_url_hint">np. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Dotknij M.A.C.S., aby mówić. Zostaw puste, aby wyłączyć asystenta.</string>

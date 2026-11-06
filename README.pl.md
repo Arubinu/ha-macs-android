@@ -24,16 +24,18 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 - 🤖 **M.A.C.S.**, animowana postać, w centrum ekranu głównego
 - 🧙 **Kreator konfiguracji**: pomieszczenia, domownicy, kamery i najważniejsze elementy wykrywane w Home Assistant
 - 🏠 **Pomieszczenia**: światła, temperatura, wilgotność i urządzenia w jednym miejscu
-- 👨‍👩‍👧 **Domownicy**: obecność, godzina przybycia, kroki, bateria telefonu i nadchodzące wydarzenia
+- 👨‍👩‍👧 **Domownicy**: obecność (dotknij paska, aby zobaczyć przyjścia i wyjścia), godzina przybycia, kroki, bateria
+  telefonu i nadchodzące wydarzenia
 - 🧑‍🎨 **Awatary**: zdjęcie z aparatu tabletu, z pliku lub z telefonu (kod QR), wycięte z tła na urządzeniu,
   opcjonalne filtry, głowa wychodzi poza koło w kolorze pulpitu
 - 📹 **Kamery**: podgląd na żywo, własne karty, pełny ekran w wysokiej rozdzielczości, ostatnie wykrycia (media HA,
   SMB, NFS, pamięć lokalna)
 - 🚨 **Alerty**: natywna wersja [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 motywy, dźwięk,
   synteza mowy i powiadomienia
-- 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją
-- 🎙️ **Lokalny asystent głosowy** (opcjonalnie): rozmawiaj z M.A.C.S., który odpowiada dzięki lokalnemu modelowi
-  audio
+- 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją (dotknij wykresu: każda
+  stacja, jej cena i ostatnie zmiany)
+- 🎙️ **Asystent głosowy**: rozmawiaj z M.A.C.S. przez lokalną bramkę lub jako **satelita głosowy Home Assistant**
+  (Wyoming, potok Assist, opcjonalne słowo aktywujące); Ustawienia › Asystent głosowy
 - ✏️ **Tryb edycji**: zmieniaj encje, pomieszczenia, karty i bloki bezpośrednio na tablecie
 - 🔒 **Tryb kiosku**: bez kodu głównego (lub kodu dostępu) nikt nie wyjdzie z aplikacji ani nie wyłączy tabletu
 - 🌍 **8 języków**: angielski, francuski, niemiecki, hiszpański, włoski, niderlandzki, portugalski, polski
@@ -76,6 +78,8 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
   lub czujnik, z dźwiękiem
 - 📡 **Tablet w Home Assistant**: Ustawienia › Home Assistant; czujniki baterii, ekranu i obecności oraz powiadomienia
   (baner, czytanie na głos, włączenie ekranu, kamera na pełnym ekranie)
+- 🔊 **Odtwarzacz multimediów**: Home Assistant wykrywa tablet (DLNA) i może odtwarzać na nim syntezę mowy, radio lub
+  Music Assistant; Ustawienia › Home Assistant
 - 🧙 **Kreator**: można go uruchomić ponownie w Ustawienia › Panel
 
 ## 🔒 Tryb kiosku

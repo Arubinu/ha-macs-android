@@ -24,14 +24,17 @@ nothing to set up in Home Assistant.
 - 🤖 **M.A.C.S.**, the animated assistant character, at the heart of the home screen
 - 🧙 **Setup wizard**: rooms, members, cameras and key elements are detected from your Home Assistant
 - 🏠 **Rooms**: lights, temperature, humidity and devices at a glance
-- 👨‍👩‍👧 **Members**: presence, arrival time, steps, phone battery and upcoming events
+- 👨‍👩‍👧 **Members**: presence (tap the bar for arrivals and departures), arrival time, steps, phone battery and
+  upcoming events
 - 🧑‍🎨 **Avatars**: photo from the tablet camera, a file or a phone (QR code), cut out on the device, optional
   filters, head standing out of a circle that takes the dashboard colour
 - 📹 **Cameras**: live view, custom tabs, fullscreen in high definition, latest detections (HA media, SMB, NFS, local)
 - 🚨 **Alerts**: native port of [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 themes, sound,
   speech and push notifications
-- 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station
-- 🎙️ **Local voice assistant** (optional): talk to M.A.C.S., answered by a local audio model
+- 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station (tap a
+  graph: each station, its price and its latest changes)
+- 🎙️ **Voice assistant**: talk to M.A.C.S. through your local gateway or as a **Home Assistant voice satellite**
+  (Wyoming, Assist pipeline, optional wake word); Settings › Voice assistant
 - ✏️ **Edit mode**: change entities, rooms, tabs and blocks right on the tablet
 - 🔒 **Kiosk mode**: nobody leaves the app or turns the tablet off without the master code (or the access code)
 - 🌍 **8 languages**: English, French, German, Spanish, Italian, Dutch, Portuguese, Polish
@@ -73,6 +76,8 @@ home. Already have a backup? **Import** it on the first step and you are done.
   triggers, with a sound
 - 📡 **Tablet in Home Assistant**: Settings › Home Assistant; battery, screen and presence sensors, and
   notifications (banner, text read aloud, screen on, camera fullscreen)
+- 🔊 **Media player**: Home Assistant finds the tablet (DLNA) and can play text to speech, radios or Music Assistant on
+  it; Settings › Home Assistant
 - 🧙 **Wizard**: can be run again from Settings › Dashboard
 
 ## 🔒 Kiosk mode

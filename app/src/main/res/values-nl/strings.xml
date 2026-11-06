@@ -207,7 +207,7 @@
     <string name="dim_help">Verlaagt de helderheid na deze tijd zonder aanraking of gedetecteerde aanwezigheid. Ze komt terug zodra er activiteit is.</string>
     <string name="dim_level">Gedimde helderheid</string>
     <string name="section_voice">Spraakassistent</string>
-    <string name="section_voice_desc">Spraakgateway en microfoon</string>
+    <string name="section_voice_desc">Gateway of Home Assistant, microfoon</string>
     <string name="voice_url">Adres van de gateway</string>
     <string name="voice_url_hint">bijv. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Tik op M.A.C.S. om te spreken. Leeg laten om de assistent uit te schakelen.</string>

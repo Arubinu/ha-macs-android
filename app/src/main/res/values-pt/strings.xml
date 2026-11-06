@@ -207,7 +207,7 @@
     <string name="dim_help">Reduz o brilho após este tempo sem toque nem presença detetada. Volta assim que for detetada atividade.</string>
     <string name="dim_level">Brilho reduzido</string>
     <string name="section_voice">Assistente de voz</string>
-    <string name="section_voice_desc">Gateway de voz e microfone</string>
+    <string name="section_voice_desc">Gateway ou Home Assistant, microfone</string>
     <string name="voice_url">Endereço do gateway</string>
     <string name="voice_url_hint">ex. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Toque em M.A.C.S. para falar. Deixe vazio para desativar o assistente.</string>

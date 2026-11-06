@@ -24,7 +24,8 @@ custom cards en zonder iets in te stellen in Home Assistant.
 - 🤖 **M.A.C.S.**, het geanimeerde personage, centraal op het startscherm
 - 🧙 **Installatieassistent**: kamers, leden, camera's en belangrijke elementen worden in Home Assistant gevonden
 - 🏠 **Kamers**: verlichting, temperatuur, luchtvochtigheid en apparaten in één oogopslag
-- 👨‍👩‍👧 **Leden**: aanwezigheid, aankomsttijd, stappen, telefoonaccu en komende afspraken
+- 👨‍👩‍👧 **Leden**: aanwezigheid (tik op de balk voor aankomsten en vertrekken), aankomsttijd, stappen, telefoonaccu en
+  komende afspraken
 - 🧑‍🎨 **Avatars**: foto met de tabletcamera, uit een bestand of vanaf een telefoon (QR-code), op het apparaat
   uitgeknipt, optionele filters, hoofd dat uit een cirkel in de dashboardkleur steekt
 - 📹 **Camera's**: live beeld, eigen tabbladen, volledig scherm in hoge resolutie, laatste detecties (HA-media, SMB,
@@ -32,7 +33,9 @@ custom cards en zonder iets in te stellen in Home Assistant.
 - 🚨 **Meldingen**: native versie van [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thema's,
   geluid, spraak en pushmeldingen
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation
-- 🎙️ **Lokale spraakassistent** (optioneel): praat met M.A.C.S., die antwoordt via een lokaal audiomodel
+  (tik op een grafiek: elk tankstation, de prijs en de laatste wijzigingen)
+- 🎙️ **Spraakassistent**: praat met M.A.C.S. via je lokale gateway of als **Home Assistant-spraaksatelliet** (Wyoming,
+  Assist-pijplijn, activeringswoord optioneel); Instellingen › Spraakassistent
 - ✏️ **Bewerkmodus**: entiteiten, kamers, tabbladen en blokken direct op de tablet aanpassen
 - 🔒 **Kioskmodus**: niemand verlaat de app of zet de tablet uit zonder de mastercode (of de toegangscode)
 - 🌍 **8 talen**: Engels, Frans, Duits, Spaans, Italiaans, Nederlands, Portugees, Pools
@@ -76,6 +79,8 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
   of sensor afgaat, met geluid
 - 📡 **Tablet in Home Assistant**: Instellingen › Home Assistant; sensoren voor batterij, scherm en aanwezigheid, en
   meldingen (banner, voorlezen, scherm aan, camera schermvullend)
+- 🔊 **Mediaspeler**: Home Assistant vindt de tablet (DLNA) en kan er tekst-naar-spraak, radio's of Music Assistant op
+  afspelen; Instellingen › Home Assistant
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus

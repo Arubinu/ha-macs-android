@@ -234,7 +234,7 @@
     <string name="dim_level">Dimmed brightness</string>
 
     <string name="section_voice">Voice assistant</string>
-    <string name="section_voice_desc">Voice gateway and microphone</string>
+    <string name="section_voice_desc">Gateway or Home Assistant, microphone</string>
     <string name="voice_url">Gateway address</string>
     <string name="voice_url_hint">e.g. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Tap M.A.C.S. to speak. Leave empty to turn the assistant off.</string>

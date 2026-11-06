@@ -207,7 +207,7 @@
     <string name="dim_help">Reduce el brillo tras este tiempo sin toques ni presencia detectada. Vuelve en cuanto se detecta actividad.</string>
     <string name="dim_level">Brillo atenuado</string>
     <string name="section_voice">Asistente de voz</string>
-    <string name="section_voice_desc">Pasarela de voz y micrófono</string>
+    <string name="section_voice_desc">Pasarela o Home Assistant, micrófono</string>
     <string name="voice_url">Dirección de la pasarela</string>
     <string name="voice_url_hint">p. ej. ws://192.168.1.10:8765/ws</string>
     <string name="voice_help">Toca M.A.C.S. para hablar. Déjalo vacío para desactivar el asistente.</string>

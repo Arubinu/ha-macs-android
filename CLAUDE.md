@@ -118,7 +118,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   15 min au plus ; conservé au redémarrage, remis à zéro par un bon code. Code de l'alarme non concerné (vérifié par HA).
   En test : sauvegarder/restaurer les prefs pour ne pas laisser de blocage.
 - **Membre favori** : option `favorite` sur `members:main` (réglage « Membre favori » d'un membre), appliqué au
-  démarrage et au retour sur l'accueil (`DashState.onHome`).
+  démarrage et au retour sur l'accueil (`DashState.onHome`). Sans favori, un membre protégé (code pour tous ou code du
+  membre) n'est pas gardé : premier membre non protégé, sinon aucun (« Touchez un membre… »).
 - **Export** : le jeton HA y est chiffré (`config/DeviceSecret.kt`, AES-GCM, clé tirée d'`ANDROID_ID`) ; il ne se
   déchiffre que sur l'appareil d'origine, ailleurs il est vidé et demandé (`importNeedsToken`). Un jeton en clair
   dans un fichier reste accepté. Les codes (`access_code`, `master_code`, `member_code:<id>`, plus le `access_code`
@@ -151,6 +152,28 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   `command_screen_on`, `command_camera` + `entity`. Webhook et identifiant non exportés (`LOCAL_KEYS`). Test :
   `demo_ha.py` simule l'enregistrement et `/demo/notify?message=…`. Ne pas activer sur le vrai HA sans accord
   (crée un appareil).
+- **Lecteur DLNA** (`dlna/DlnaRenderer.kt`, `dlna/Scpd.kt`, prefs `dlna`, non exportées) : MediaRenderer UPnP (SSDP sur
+  239.255.255.250:1900, verrou multicast ; HTTP fixe port 49494, chemin `/dlna-<uuid>`), AVTransport, RenderingControl
+  (volume « médias » d'Android), ConnectionManager, événements `LastChange` envoyés dans l'ordre (file unique). Lecture
+  ExoPlayer ; pastille `ui/DlnaUi.kt` : complète en bas à gauche sur l'accueil, compacte à gauche de la barre d'onglets
+  la plus haute ailleurs (`DashState.topMenu`, relevée par `PillMenu`), masquée sur les réglages. Test : `adb forward
+  tcp:49494`, requêtes SOAP et SUBSCRIBE depuis le PC (rappel `http://10.0.2.2:…`) ; le multicast SSDP ne traverse pas
+  l'émulateur.
+- **Satellite Wyoming** (`voice/WyomingSatellite.kt`, prefs `wyoming`) : Réglages › Assistant vocal, système *Passerelle*
+  ou *Home Assistant* (exclusifs). Serveur TCP 10700, mDNS `_wyoming._tcp`, `describe`/`info`, `ping`/`pong`,
+  `run-satellite` ; appui sur le M.A.C.S. → `run-pipeline` (asr→tts) + audio 16 kHz ; mot d'activation → micro continu,
+  `run-pipeline` depuis `wake`. Réception : `transcript`, `synthesize`, audio TTS (écrit dans l'AudioTrack sur une file
+  unique : écrire en parallèle fait planter le code natif), `played`. Envois réseau jamais sur le fil principal (file
+  `writer`). Démarré dans `App` après `link` (nom de l'appareil). Test : `adb forward tcp:10700`, faux HA en Python.
+- **Animations coupées** : `ui/SystemAnimations.kt` lit `ANIMATOR_DURATION_SCALE` ; bandeau au démarrage et ligne dans
+  Réglages › Affichage, qui ouvrent l'accessibilité (ou les options pour les développeurs), via `Kiosk.suspend` en
+  kiosque (code maître demandé). L'app ne force pas ses animations.
+- **Journal** : `CrashGuard.note` (une fois par clé et par démarrage, adresses passées par `redact`) pour les erreurs de
+  lecture vidéo (plein écran, direct, captures) et du lecteur DLNA.
+- **Détails au toucher** : graphique à plusieurs courbes → `GraphDetailsSheet` (valeur, écart, 3 derniers changements
+  sur 7 jours) ; barre de présence → `PresenceDetailsSheet` (périodes des 24 h).
+- **Bouton Dashboard** : `assets/images/dashboard-button.webp` (WebP animé, Android 9+), généré par
+  `tools/images/make_dashboard_button.py` depuis les sources de l'utilisateur (vague + texte HD centré).
 - **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
   (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en
