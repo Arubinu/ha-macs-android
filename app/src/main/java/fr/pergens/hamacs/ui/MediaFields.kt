@@ -46,18 +46,8 @@ internal fun MediaFields(objKey: String, cfg: JsonObject) {
     val players = cfg.strs("players")
 
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text(stringResource(R.string.media_players), Modifier.padding(top = 8.dp), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
-        Text(stringResource(R.string.media_players_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
-        players.forEach { p ->
-            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
-                HaIcon("mdi:speaker", size = 20.dp, tint = Dash.colors.accent)
-                Text(entity(p)?.name ?: p, Modifier.weight(1f).padding(horizontal = 12.dp), style = TextStyle(fontSize = 15.sp, color = Color.White))
-                HaIcon("mdi:close", Modifier.clip(RoundedCornerShape(12.dp)).tapHold({
-                    set("players", JsonArray((players - p).map { JsonPrimitive(it) }).takeIf { it.isNotEmpty() })
-                }).padding(8.dp), 20.dp, tint = Color(255, 255, 255, 180))
-            }
-        }
-        Text(
+        // Autres lecteurs : liste « players » des entités ci-dessus (ajout, remplacement, retrait).
+        if (players.isEmpty()) Text(
             "+  " + stringResource(R.string.media_add_player),
             Modifier.clip(RoundedCornerShape(12.dp)).tapHold({ pick = "player" }).padding(vertical = 10.dp, horizontal = 4.dp),
             style = TextStyle(fontSize = 15.sp, color = Dash.colors.accent, fontWeight = FontWeight.Medium),
@@ -71,9 +61,8 @@ internal fun MediaFields(objKey: String, cfg: JsonObject) {
         EditSwitch(stringResource(R.string.media_power_always), stringResource(R.string.media_power_always_help), flag("always_show_power_button", false)) {
             set("always_show_power_button", if (it) JsonPrimitive(true) else null)
         }
-        // Bouton favori : entité button (Music Assistant), ou aucun.
-        val fav = cfg.s("favorite_button")
-        Row(
+        // Bouton favori : à choisir ici ; ensuite, la liste des entités ci-dessus le remplace ou le retire.
+        if (cfg.s("favorite_button") == null) Row(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).tapHold({ pick = "button" }).heightIn(min = 64.dp).padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -81,8 +70,7 @@ internal fun MediaFields(objKey: String, cfg: JsonObject) {
                 Text(stringResource(R.string.media_favorite_button), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
                 Text(stringResource(R.string.media_favorite_button_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
             }
-            Text(fav?.let { entity(it)?.name ?: it } ?: stringResource(R.string.media_none), Modifier.padding(horizontal = 8.dp), style = TextStyle(fontSize = 14.sp, color = Dash.colors.accent))
-            if (fav != null) HaIcon("mdi:close", Modifier.clip(RoundedCornerShape(12.dp)).tapHold({ set("favorite_button", null) }).padding(8.dp), 20.dp, tint = Color(255, 255, 255, 180))
+            Text(stringResource(R.string.media_none), Modifier.padding(horizontal = 8.dp), style = TextStyle(fontSize = 14.sp, color = Dash.colors.accent))
         }
     }
     when (pick) {

@@ -290,7 +290,7 @@ internal fun MiniGraphMulti(card: Card, modifier: Modifier) {
 }
 
 /** Fondu des bords gauche/droit (3 %) et bas (3 %), équivalent du `mask-image` du card_mod d'origine. */
-internal fun Modifier.fadeEdges(): Modifier = this
+internal fun Modifier.fadeEdges(top: Boolean = false): Modifier = this
     .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
     .drawWithContent {
         drawContent()
@@ -299,6 +299,8 @@ internal fun Modifier.fadeEdges(): Modifier = this
             blendMode = BlendMode.DstIn,
         )
         drawRect(Brush.verticalGradient(0.97f to Color.Black, 1f to Color.Transparent), blendMode = BlendMode.DstIn)
+        // Haut aussi (lecteur multimedia).
+        if (top) drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.03f to Color.Black), blendMode = BlendMode.DstIn)
     }
 
 /**

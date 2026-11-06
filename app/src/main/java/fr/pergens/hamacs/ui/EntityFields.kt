@@ -61,6 +61,8 @@ private fun fieldLabel(field: String): String = when (field) {
     "battery" -> stringResource(R.string.field_battery)
     "motion" -> stringResource(R.string.field_motion)
     "media_player" -> stringResource(R.string.field_media_player)
+    "players" -> stringResource(R.string.media_players)
+    "favorite_button" -> stringResource(R.string.media_favorite_button)
     "home_sensor" -> stringResource(R.string.field_home_sensor)
     "steps_sensor" -> stringResource(R.string.field_steps_sensor)
     "battery_sensor" -> stringResource(R.string.field_battery_sensor)

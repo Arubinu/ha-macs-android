@@ -196,7 +196,7 @@ fun MediaPlayerCard(card: Card, modifier: Modifier) {
     dash = state
     if (big) MediaSheet(card, id, onSwitch = { current = it }, players = players) { big = false }
 
-    DashCard(modifier.fillMaxWidth(), padding = 0.dp) {
+    DashCard(modifier.fillMaxWidth().fadeEdges(top = true), radius = Dash.shapes.roundedRadius, padding = 0.dp) {
         Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(tint.copy(alpha = tint.alpha * 0.35f), Color.Transparent))))
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (players.size > 1) PlayerChips(players, id) { current = it }
@@ -409,10 +409,8 @@ private fun MediaSheet(card: Card, id: String, players: List<String>, onSwitch: 
     val tint = artColor(art) ?: Dash.colors.accent
     val tabs = listOfNotNull(Tab.Library.takeIf { e.has(MF.BROWSE) }, Tab.Search.takeIf { e.has(MF.SEARCH) }, Tab.Queue)
     var tab by remember(id) { mutableStateOf(tabs.first()) }
-    Sheet(onDismiss, 0.8f) {
-        // Fond opaque teinté par la pochette (le tableau de bord ne doit pas transparaître).
-        Box(Modifier.matchParentSize().background(Color(0xFF222222)))
-        Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(tint.copy(alpha = 0.25f), Color.Transparent))))
+    // Fond opaque teinté par la pochette sur toute la fenêtre.
+    Sheet(onDismiss, 0.8f, overlay = Brush.verticalGradient(listOf(tint.copy(alpha = 0.28f), Color.Transparent))) {
         Box(
             Modifier.align(Alignment.TopEnd).size(44.dp).clip(CircleShape).tapHold(onDismiss),
             contentAlignment = Alignment.Center,

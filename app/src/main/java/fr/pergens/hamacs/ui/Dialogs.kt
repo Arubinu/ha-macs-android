@@ -276,11 +276,17 @@ private fun configFlag(root: kotlinx.serialization.json.JsonElement, entity: Str
 }
 
 @Composable
-internal fun Sheet(onDismiss: () -> Unit, widthFraction: Float = 0.6f, modifier: Modifier = Modifier, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+internal fun Sheet(
+    onDismiss: () -> Unit, widthFraction: Float = 0.6f, modifier: Modifier = Modifier,
+    /** Fond par-dessus le fond de base, sur toute la fenêtre (ex. teinte d'une pochette). */
+    overlay: androidx.compose.ui.graphics.Brush? = null,
+    content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit,
+) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         val shape = RoundedCornerShape(20.dp)
         Box(
-            modifier.fillMaxWidth(widthFraction).clip(shape).background(Color(0xF2222222), shape).padding(20.dp)
+            modifier.fillMaxWidth(widthFraction).clip(shape).background(Color(if (overlay != null) 0xFF222222 else 0xF2222222), shape)
+                .then(if (overlay != null) Modifier.background(overlay, shape) else Modifier).padding(20.dp)
         ) { content() }
     }
 }
