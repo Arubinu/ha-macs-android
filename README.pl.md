@@ -34,6 +34,8 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
   synteza mowy i powiadomienia
 - 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją (dotknij wykresu: każda
   stacja, jej cena i ostatnie zmiany)
+- 🎵 **Muzyka**: okładka i jej kolory, postęp na żywo, głośność, losowo i powtarzanie, kilka odtwarzaczy; dotknij
+  okładki, aby otworzyć bibliotekę, wyszukiwanie, kolejkę, źródło i głośniki
 - 🎙️ **Asystent głosowy**: rozmawiaj z M.A.C.S. przez lokalną bramkę lub jako **satelita głosowy Home Assistant**
   (Wyoming, potok Assist, opcjonalne słowo aktywujące); Ustawienia › Asystent głosowy
 - ✏️ **Tryb edycji**: zmieniaj encje, pomieszczenia, karty i bloki bezpośrednio na tablecie

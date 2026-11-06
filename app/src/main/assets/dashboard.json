@@ -1032,6 +1032,7 @@
                     {
                       "type": "media_player",
                       "entity": "media_player.kiosk_3",
+                      "players": ["media_player.salon_appletv"],
                       "name": "Kiosk"
                     }
                   ]

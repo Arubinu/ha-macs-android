@@ -35,6 +35,8 @@ personalizadas y sin nada que configurar en Home Assistant.
   síntesis de voz y notificaciones
 - 🌦️ **Tiempo y gráficos**: previsión, radar Windy, consumo eléctrico, precios del combustible con la gasolinera más
   barata (toca un gráfico: cada gasolinera, su precio y sus últimos cambios)
+- 🎵 **Música**: carátula y sus colores, progreso en directo, volumen, aleatorio y repetición, varios reproductores;
+  toca la carátula para la biblioteca, la búsqueda, la cola, la fuente y los altavoces
 - 🎙️ **Asistente de voz**: habla con M.A.C.S. a través de tu pasarela local o como **satélite de voz de Home Assistant**
   (Wyoming, canalización de Assist, palabra de activación opcional); Ajustes › Asistente de voz
 - ✏️ **Modo edición**: cambia entidades, habitaciones, pestañas y bloques directamente en la tablet

@@ -44,7 +44,7 @@ d'accès et le code : à garder en lieu sûr).
 | `power_graph` | plotly-graph (conso + jour/nuit) | `entity`, `hours`, `height` |
 | `mini_graph` | mini-graph-card | `entity`, `hours`, `decimals`, `aggregate`, `color` ; ou plusieurs courbes : `entities` (`name`, `color`, `show_graph`, `show_line`, `show_legend`, `y_axis`, `smoothing`), `hours_to_show`, `points_per_hour`, `aggregate_func`, `state_map`, `show` (`fill`, `name`, `state`, `legend`), `fade_edges` |
 | `swipe` | simple-swipe-card | `cards`, `enable_auto_swipe`, `auto_swipe_interval`, `swipe_effect` (`slide`, `fade`, `instant`), `show_pagination` ; glissement au doigt et indicateur à points |
-| `media_player` | mediocre-media-player-card | `entity` |
+| `media_player` | mediocre-media-player-card | `entity`, `players` (autres lecteurs, pastilles), `use_art_colors`, `show_volume_step_buttons`, `always_show_power_button`, `favorite_button` |
 | `remote` | télécommande Apple TV | `entity`, `media_player`, `apps` |
 | `alert_ticker` (ou `ticker`) | [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card) | mêmes options que la carte Lovelace (voir ci-dessous) |
 | `webview` | iframe | `url`, `aspect_ratio` (adresse modifiable en mode édition) |

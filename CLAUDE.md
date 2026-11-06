@@ -174,6 +174,13 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   sur 7 jours) ; barre de présence → `PresenceDetailsSheet` (périodes des 24 h).
 - **Bouton Dashboard** : `assets/images/dashboard-button.webp` (WebP animé, Android 9+), généré par
   `tools/images/make_dashboard_button.py` depuis les sources de l'utilisateur (vague + texte HD centré).
+- **Lecteur multimédia** (`ui/cards/MediaPlayer.kt`, réglages `ui/MediaFields.kt`) : d'après la Mediocre Media Player
+  Card. Commandes selon `supported_features` (masquées sinon), progression en direct (`media_position_updated_at`),
+  curseurs fins maison (`SlimSlider`, pas le Slider Material), couleur de la pochette. Grande fenêtre (toucher la
+  pochette ou le titre) : source, mode son, enceintes (`join` / `unjoin`), favori (entité button), bibliothèque
+  (`media_player/browse_media`), recherche (`media_player.search_media`) et file (`music_assistant.get_queue`), ces deux
+  derniers avec `return_response`. Démo : `demo_ha.py` simule bibliothèque, recherche, file, pochettes SVG
+  (`/demo/cover/…`) et fait réellement changer l'état des lecteurs.
 - **Codes des membres** : « Code pour ce membre » (sans « Code pour tous ») → code propre `member_code:<id>`
   (`MemberCodeEditor` dans la fiche du membre) ; sans code propre, le code d'accès est demandé.
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en

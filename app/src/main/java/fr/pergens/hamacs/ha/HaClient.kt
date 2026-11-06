@@ -281,12 +281,15 @@ class HaClient(
         service: String,
         data: JsonObject? = null,
         target: JsonObject? = null,
+        /** Service qui renvoie des données (recherche, file d'attente…) : `{ "response": … }`. */
+        returnResponse: Boolean = false,
     ): JsonElement = call(buildJsonObject {
         put("type", "call_service")
         put("domain", domain)
         put("service", service)
         if (data != null) put("service_data", data)
         if (target != null) put("target", target)
+        if (returnResponse) put("return_response", true)
     })
 
     /** Appel de service sans attente du résultat ; [notify] : prévenir l'utilisateur en cas de refus. */

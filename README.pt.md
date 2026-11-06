@@ -34,6 +34,8 @@ personalizados e sem nada para configurar no Home Assistant.
   voz e notificações
 - 🌦️ **Meteorologia e gráficos**: previsão, radar Windy, consumo elétrico, preços dos combustíveis com o posto mais
   barato (toque num gráfico: cada posto, o seu preço e as últimas alterações)
+- 🎵 **Música**: capa e as suas cores, progresso em direto, volume, aleatório e repetição, vários leitores; toque na
+  capa para a biblioteca, a pesquisa, a fila, a fonte e as colunas
 - 🎙️ **Assistente de voz**: fale com o M.A.C.S. através da sua gateway local ou como **satélite de voz do Home
   Assistant** (Wyoming, pipeline do Assist, palavra de ativação opcional); Definições › Assistente de voz
 - ✏️ **Modo de edição**: altere entidades, divisões, separadores e blocos diretamente no tablet

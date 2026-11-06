@@ -62,63 +62,6 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 
-/** Lecteur multimédia compact (mediocre-media-player-card). */
-@Composable
-fun MediaPlayerCard(card: Card, modifier: Modifier) {
-    val state = LocalDashState.current
-    val id = card.s("entity") ?: return
-    val e = entity(id)
-    fun svc(name: String, data: kotlinx.serialization.json.JsonObject? = null) = state.guard(id) {
-        state.ha.fireService("media_player", name, data, buildJsonObject { put("entity_id", JsonPrimitive(id)) })
-    }
-    val playing = e?.state == "playing"
-    val art = e?.attrString("entity_picture")
-
-    DashCard(modifier.fillMaxWidth(), padding = 16.dp) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier.size(78.dp).clip(RoundedCornerShape(4.dp)).background(Color(120, 120, 120)),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (art != null) AsyncImage(state.ha.resolveUrl(art), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                else HaIcon("mdi:music", size = 44.dp, tint = Color.Black)
-            }
-            Column(Modifier.weight(1f).padding(start = 16.dp)) {
-                Text(
-                    e?.attrString("media_title") ?: e?.attrString("source") ?: e?.name ?: "—",
-                    style = TextStyle(fontSize = 17.sp, color = Color.White, fontWeight = FontWeight.Medium),
-                    maxLines = 1, overflow = TextOverflow.Ellipsis,
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    HaIcon("mdi:speaker", size = 14.dp, tint = Color(255, 255, 255, 160))
-                    Text(
-                        e?.attrString("media_artist") ?: card.s("name") ?: e?.name ?: "",
-                        Modifier.padding(start = 4.dp),
-                        style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 160), fontStyle = FontStyle.Italic),
-                        maxLines = 1,
-                    )
-                }
-                Row(Modifier.padding(top = 6.dp).editOutline(state.editMode, RoundedCornerShape(12.dp)).padding(if (state.editMode) 6.dp else 0.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    HaIcon("mdi:shuffle-variant", Modifier.tapHold({ svc("shuffle_set", buildJsonObject { put("shuffle", JsonPrimitive(e?.attrBool("shuffle") != true)) }) }), 20.dp,
-                        tint = if (e?.attrBool("shuffle") == true) Dash.colors.accent else Color.White)
-                    HaIcon("mdi:skip-previous", Modifier.tapHold({ svc("media_previous_track") }), 24.dp)
-                    Box(Modifier.size(34.dp).background(Color.White, CircleShape).tapHold({ svc("media_play_pause") }), contentAlignment = Alignment.Center) {
-                        HaIcon(if (playing) "mdi:pause" else "mdi:play", size = 24.dp, tint = Color.Black)
-                    }
-                    HaIcon("mdi:skip-next", Modifier.tapHold({ svc("media_next_track") }), 24.dp)
-                    HaIcon(if (e?.attrString("repeat") == "off" || e?.attrString("repeat") == null) "mdi:repeat-off" else "mdi:repeat",
-                        Modifier.tapHold({ svc("repeat_set", buildJsonObject { put("repeat", JsonPrimitive(if (e?.attrString("repeat") == "off") "all" else "off")) }) }), 20.dp)
-                }
-            }
-            Column(Modifier.editOutline(state.editMode, RoundedCornerShape(12.dp)).padding(if (state.editMode) 6.dp else 0.dp), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(28.dp)) {
-                HaIcon(if (e?.attrBool("is_volume_muted") == true) "mdi:volume-off" else "mdi:volume-high",
-                    Modifier.tapHold({ svc("volume_mute", buildJsonObject { put("is_volume_muted", JsonPrimitive(e?.attrBool("is_volume_muted") != true)) }) }), 22.dp)
-                HaIcon("mdi:power", Modifier.tapHold({ svc("toggle") }), 22.dp)
-            }
-        }
-    }
-}
-
 /** Page web embarquée (radar Windy…) : seule carte qui reste en WebView. */
 @SuppressLint("SetJavaScriptEnabled")
 @Composable

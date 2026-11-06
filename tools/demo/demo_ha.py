@@ -55,6 +55,40 @@ def pretty(object_id: str) -> str:
     return object_id.replace('_', ' ').capitalize()
 
 
+# Lecteur de démonstration : toutes les fonctions (pause, avance, volume, pistes, marche/arrêt, source, aléatoire,
+# mode son, bibliothèque, répétition, regroupement, recherche…).
+MEDIA_ALL = 1 | 2 | 4 | 8 | 16 | 32 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 16384 | 32768 | 65536 | 131072 | 262144 | 524288 | 4194304
+
+# Bibliothèque : (titre, artiste, classe, couleur de pochette).
+TRACKS = [('Clair de lune', 'Claude Debussy', '#3b6ea8'), ('Gymnopédie n° 1', 'Erik Satie', '#a85a3b'),
+          ('Le Cygne', 'Camille Saint-Saëns', '#3ba88c'), ('Boléro', 'Maurice Ravel', '#a83b6e'),
+          ('La Mer', 'Charles Trenet', '#3b8ca8'), ('Nocturne op. 9 n° 2', 'Frédéric Chopin', '#6e3ba8')]
+RADIOS = [('Radio Classique', '#c9a227'), ('FIP', '#d0386b'), ('France Musique', '#2a7fd4'), ('Jazz Radio', '#7a4bd1')]
+
+
+def media_item(cid, title, cls, color, play=True, expand=False, children=None):
+    o = {'title': title, 'media_class': cls, 'media_content_id': cid, 'media_content_type': 'music', 'can_play': play,
+         'can_expand': expand, 'thumbnail': f'/demo/cover/{color.lstrip("#")}.svg'}
+    if children is not None:
+        o['children'] = children
+    return o
+
+
+def browse(cid: str) -> dict:
+    tracks = [media_item(f'track:{i}', f'{t} — {a}', 'track', c) for i, (t, a, c) in enumerate(TRACKS)]
+    radios = [media_item(f'radio:{n}', n, 'channel', c) for n, c in RADIOS]
+    if cid == 'radios':
+        return media_item('radios', 'Radios', 'directory', '#c9a227', play=False, expand=True, children=radios)
+    if cid == 'favorites':
+        return media_item('favorites', 'Favoris', 'playlist', '#d0386b', play=True, expand=True, children=tracks[:3])
+    if cid == 'tracks':
+        return media_item('tracks', 'Morceaux', 'directory', '#3b6ea8', play=False, expand=True, children=tracks)
+    return media_item('', 'Music Assistant', 'directory', '#333333', play=False, expand=True, children=[
+        media_item('favorites', 'Favoris', 'playlist', '#d0386b', expand=True),
+        media_item('radios', 'Radios', 'directory', '#c9a227', play=False, expand=True),
+        media_item('tracks', 'Morceaux', 'directory', '#3b6ea8', play=False, expand=True)])
+
+
 def build_states() -> dict[str, dict]:
     rnd = random.Random(42)
     st: dict[str, dict] = {}
@@ -112,11 +146,17 @@ def build_states() -> dict[str, dict]:
         elif dom == 'media_player':
             if 'appletv' in obj:
                 put(eid, 'playing', media_title='Voyage en Patagonie', media_artist='Documentaire', app_name='TV',
-                    friendly_name='Apple TV du salon', volume_level=0.4)
+                    friendly_name='Apple TV du salon', volume_level=0.4, media_duration=3120, media_position=1410,
+                    media_position_updated_at=iso(NOW), entity_picture='/demo/cover/patagonie.svg',
+                    supported_features=1 | 2 | 4 | 8 | 16 | 32 | 128 | 256 | 16384 | 2048 | 524288,
+                    source_list=['TV', 'Netflix', 'YouTube'], source='TV', group_members=['media_player.salon_appletv'])
             else:
                 put(eid, 'playing', friendly_name='Kiosque', media_title='Clair de lune', media_artist='Claude Debussy',
-                    media_album_name='Suite bergamasque', media_duration=300, media_position=92, volume_level=0.35,
-                    is_volume_muted=False, shuffle=False, repeat='all', source='Radio Classique')
+                    media_album_name='Suite bergamasque', media_duration=300, media_position=92,
+                    media_position_updated_at=iso(NOW), volume_level=0.35, is_volume_muted=False, shuffle=False,
+                    repeat='all', source='Radio Classique', source_list=['Radio Classique', 'FIP', 'Spotify', 'Bluetooth'],
+                    sound_mode='Musique', sound_mode_list=['Musique', 'Film', 'Voix'], group_members=[eid],
+                    entity_picture='/demo/cover/clair.svg', media_content_id='clair', supported_features=MEDIA_ALL)
         elif dom == 'remote':
             put(eid, 'on', friendly_name='Télécommande')
         elif dom == 'calendar':
@@ -364,11 +404,116 @@ async def websocket(request):
                 await ws.send_json({'id': mid, 'type': 'event', 'event': {'result': '', 'listeners': {}}})
             elif kind and kind.startswith('lovelace/'):
                 await result(mid, success=False)
+            elif kind == 'media_player/browse_media':
+                await result(mid, browse(m.get('media_content_id', '')))
+            elif kind == 'call_service' and m.get('return_response'):
+                eid = (m.get('target') or {}).get('entity_id', '')
+                if m.get('service') == 'search_media':
+                    q = (m.get('service_data') or {}).get('search_query', '').lower()
+                    found = [media_item(f'track:{i}', f'{t} — {a}', 'track', c) for i, (t, a, c) in enumerate(TRACKS)
+                             if q in t.lower() or q in a.lower()] + [media_item(f'radio:{n}', n, 'channel', c) for n, c in RADIOS if q in n.lower()]
+                    await result(mid, {'response': {eid: {'result': found}}})
+                elif m.get('service') == 'get_queue' and eid == 'media_player.kiosk_3':
+                    nxt = TRACKS[1]
+                    await result(mid, {'response': {eid: {'items': 12, 'current_index': 0,
+                        'current_item': {'name': 'Clair de lune', 'image': '/demo/cover/3b6ea8.svg',
+                                         'media_item': {'name': 'Clair de lune', 'artists': [{'name': 'Claude Debussy'}]}},
+                        'next_item': {'name': nxt[0], 'image': f'/demo/cover/{nxt[2].lstrip("#")}.svg',
+                                      'media_item': {'name': nxt[0], 'artists': [{'name': nxt[1]}]}}}}})
+                else:
+                    await result(mid, success=False)
+            elif kind == 'call_service' and m.get('domain') == 'media_player':
+                await result(mid, {'context': {}})
+                await media_service(m)
             elif kind == 'media_source/browse_media':
                 await result(mid, {'title': 'Media', 'media_content_id': m.get('media_content_id', ''), 'children': [], 'can_expand': True})
             else:
                 await result(mid)  # call_service, subscribe_events, unsubscribe… : acquittés sans effet
     return ws
+
+
+async def push(eid):
+    s = STATES[eid]
+    for ws, mid in list(SUBSCRIBERS):
+        if ws.closed:
+            SUBSCRIBERS.remove((ws, mid))
+            continue
+        await ws.send_json({'id': mid, 'type': 'event', 'event': {'c': {eid: {'+': {'s': s['state'], 'a': s['attributes']}}}}})
+
+
+async def media_service(m):
+    """Lecteurs de démo : les commandes changent réellement leur état (rien n'est piloté)."""
+    eid = (m.get('target') or {}).get('entity_id') or (m.get('service_data') or {}).get('entity_id')
+    if eid not in STATES:
+        return
+    s, a, d, svc = STATES[eid], STATES[eid]['attributes'], m.get('service_data') or {}, m.get('service')
+    now = datetime.now(timezone.utc)
+    if 'media_position' in a and s['state'] == 'playing' and a.get('media_position_updated_at'):
+        elapsed = (now - datetime.fromisoformat(a['media_position_updated_at'])).total_seconds()
+        a['media_position'] = min(a.get('media_duration', 0), a['media_position'] + elapsed)
+    a['media_position_updated_at'] = iso(now)
+    if svc == 'media_play_pause':
+        s['state'] = 'paused' if s['state'] == 'playing' else 'playing'
+    elif svc in ('media_play', 'turn_on'):
+        s['state'] = 'playing'
+    elif svc == 'media_pause':
+        s['state'] = 'paused'
+    elif svc in ('media_stop', 'turn_off'):
+        s['state'] = 'off' if svc == 'turn_off' else 'idle'
+    elif svc == 'volume_set':
+        a['volume_level'] = round(float(d.get('volume_level', 0)), 2)
+    elif svc == 'volume_mute':
+        a['is_volume_muted'] = bool(d.get('is_volume_muted'))
+    elif svc == 'shuffle_set':
+        a['shuffle'] = bool(d.get('shuffle'))
+    elif svc == 'repeat_set':
+        a['repeat'] = d.get('repeat', 'off')
+    elif svc == 'select_source':
+        a['source'] = d.get('source')
+    elif svc == 'select_sound_mode':
+        a['sound_mode'] = d.get('sound_mode')
+    elif svc == 'media_seek':
+        a['media_position'] = float(d.get('seek_position', 0))
+    elif svc in ('media_next_track', 'media_previous_track', 'play_media'):
+        cur = next((i for i, t in enumerate(TRACKS) if t[0] == a.get('media_title')), 0)
+        cid = d.get('media_content_id', '')
+        if svc == 'play_media' and cid.startswith('radio:'):
+            name = cid[6:]
+            color = dict(RADIOS).get(name, '#333333')
+            a.update(media_title=name, media_artist='Radio en direct', media_album_name=None, media_duration=None,
+                     entity_picture=f'/demo/cover/{color.lstrip("#")}.svg', source=name)
+            s['state'] = 'playing'
+            await push(eid)
+            return
+        i = int(cid[6:]) if svc == 'play_media' and cid.startswith('track:') else (cur + (1 if svc == 'media_next_track' else -1)) % len(TRACKS)
+        t, art, color = TRACKS[i]
+        a.update(media_title=t, media_artist=art, media_album_name='Classiques', media_duration=240, media_position=0,
+                 entity_picture=f'/demo/cover/{color.lstrip("#")}.svg')
+        s['state'] = 'playing'
+    elif svc == 'join':
+        for other in d.get('group_members', []):
+            if other not in a.setdefault('group_members', [eid]):
+                a['group_members'] = a['group_members'] + [other]
+    elif svc == 'unjoin':
+        for p in STATES.values():
+            if eid in p['attributes'].get('group_members', [])[1:]:
+                p['attributes']['group_members'] = [x for x in p['attributes']['group_members'] if x != eid]
+    await push(eid)
+    for other, p in STATES.items():
+        if other != eid and other.startswith('media_player.'):
+            await push(other)
+
+
+async def cover(request):
+    """Pochette de démonstration (SVG) : dégradé de la couleur demandée et une note de musique."""
+    name = request.match_info['name']
+    color = {'clair': '3b6ea8', 'patagonie': '5a8a3b'}.get(name, name)
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#{color}"/>
+<stop offset="1" stop-color="#111"/></linearGradient></defs><rect width="512" height="512" fill="url(#g)"/>
+<circle cx="380" cy="130" r="160" fill="#fff" opacity="0.07"/>
+<path d="M300 120v190a55 55 0 1 1-30-49V160l-90 22v170a55 55 0 1 1-30-49V160z" fill="#fff" opacity="0.85"/></svg>'''
+    return web.Response(text=svg, content_type='image/svg+xml')
 
 
 async def camera_proxy(request):
@@ -478,6 +623,7 @@ def app() -> web.Application:
     a.router.add_post('/auth/token', auth_token)
     a.router.add_post('/auth/revoke', auth_revoke)
     a.router.add_get('/demo/set', demo_set)
+    a.router.add_get('/demo/cover/{name}.svg', cover)
     a.router.add_post('/api/mobile_app/registrations', mobile_register)
     a.router.add_post('/api/webhook/{id}', mobile_webhook)
     a.router.add_get('/demo/notify', demo_notify)

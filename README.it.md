@@ -34,6 +34,8 @@ card personalizzate e senza nulla da configurare in Home Assistant.
   sintesi vocale e notifiche
 - 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più
   economico (tocca un grafico: ogni distributore, il suo prezzo e gli ultimi cambiamenti)
+- 🎵 **Musica**: copertina e i suoi colori, avanzamento in diretta, volume, casuale e ripetizione, più lettori; tocca
+  la copertina per libreria, ricerca, coda, sorgente e altoparlanti
 - 🎙️ **Assistente vocale**: parla con M.A.C.S. tramite il tuo gateway locale o come **satellite vocale di Home Assistant**
   (Wyoming, pipeline Assist, parola di attivazione facoltativa); Impostazioni › Assistente vocale
 - ✏️ **Modalità modifica**: entità, stanze, schede e blocchi si modificano direttamente sul tablet

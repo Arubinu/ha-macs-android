@@ -241,14 +241,14 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                 // Sonnette, détecteur : ouverture en plein écran quand une entité se déclenche.
                 CameraEventFields(optionKey, options)
             }
-            when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> EntityFields(objKey, graphType) }
+            when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> { EntityFields(objKey, graphType); if (target is EditTarget.Entity && original?.s("type") == "media_player") MediaFields(objKey, JsonObject(original + (set ?: JsonObject(emptyMap())))) } }
             }
         }
     }
 }
 
 @Composable
-private fun EditSwitch(title: String, help: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+internal fun EditSwitch(title: String, help: String, checked: Boolean, onChange: (Boolean) -> Unit) {
     Row(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).tapHold({ onChange(!checked) }).heightIn(min = 64.dp).padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,

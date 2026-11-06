@@ -34,6 +34,8 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
   synthèse vocale et notifications
 - 🌦️ **Météo et graphiques** : prévisions, radar Windy, consommation électrique, prix des carburants avec la station la
   moins chère (touchez un graphique : chaque station, son prix et ses derniers changements)
+- 🎵 **Musique** : pochette et ses couleurs, progression en direct, volume, aléatoire et répétition, plusieurs lecteurs ;
+  touchez la pochette pour la bibliothèque, la recherche, la file d'attente, la source et les enceintes
 - 🎙️ **Assistant vocal** : parlez à M.A.C.S. par votre passerelle locale ou en **satellite vocal Home Assistant**
   (Wyoming, pipeline Assist, mot d'activation au choix) ; Réglages › Assistant vocal
 - ✏️ **Mode édition** : entités, pièces, onglets et blocs se modifient directement sur la tablette

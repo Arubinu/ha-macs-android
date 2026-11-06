@@ -33,6 +33,8 @@ nothing to set up in Home Assistant.
   speech and push notifications
 - 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station (tap a
   graph: each station, its price and its latest changes)
+- 🎵 **Music**: artwork and its colors, live progress, volume, shuffle and repeat, several players; tap the artwork
+  for the library, search, queue, source and speaker grouping
 - 🎙️ **Voice assistant**: talk to M.A.C.S. through your local gateway or as a **Home Assistant voice satellite**
   (Wyoming, Assist pipeline, optional wake word); Settings › Voice assistant
 - ✏️ **Edit mode**: change entities, rooms, tabs and blocks right on the tablet

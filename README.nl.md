@@ -34,6 +34,8 @@ custom cards en zonder iets in te stellen in Home Assistant.
   geluid, spraak en pushmeldingen
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation
   (tik op een grafiek: elk tankstation, de prijs en de laatste wijzigingen)
+- 🎵 **Muziek**: hoes en de kleuren ervan, voortgang live, volume, willekeurig en herhalen, meerdere spelers; tik op de
+  hoes voor bibliotheek, zoeken, wachtrij, bron en speakers
 - 🎙️ **Spraakassistent**: praat met M.A.C.S. via je lokale gateway of als **Home Assistant-spraaksatelliet** (Wyoming,
   Assist-pijplijn, activeringswoord optioneel); Instellingen › Spraakassistent
 - ✏️ **Bewerkmodus**: entiteiten, kamers, tabbladen en blokken direct op de tablet aanpassen

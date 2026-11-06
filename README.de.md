@@ -33,6 +33,8 @@ Custom Cards und ohne Einrichtung in Home Assistant.
   Ton, Sprachausgabe und Benachrichtigungen
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle
   (Diagramm antippen: jede Tankstelle, ihr Preis und ihre letzten Änderungen)
+- 🎵 **Musik**: Cover und seine Farben, Fortschritt live, Lautstärke, Zufall und Wiederholung, mehrere Player; Cover
+  antippen für Mediathek, Suche, Warteschlange, Quelle und Lautsprechergruppen
 - 🎙️ **Sprachassistent**: mit M.A.C.S. über dein lokales Gateway oder als **Home-Assistant-Sprachsatellit** sprechen
   (Wyoming, Assist-Pipeline, Aktivierungswort optional); Einstellungen › Sprachassistent
 - ✏️ **Bearbeitungsmodus**: Entitäten, Räume, Tabs und Blöcke direkt auf dem Tablet ändern
