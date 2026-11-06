@@ -785,4 +785,5 @@
     <string name="anim_off_fix">Włącz animacje ponownie</string>
     <string name="anim_off_grant">Aby włączyć je jednym dotknięciem, zezwól aplikacji raz z komputera: %1$s</string>
     <string name="player_hd_fallback">Strumień HD nieobsługiwany przez ten tablet: pokazano strumień standardowy</string>
+    <string name="video_unreadable">Wideo nie do odtworzenia na tym tablecie (zbyt ciężki format, np. 4K H.265)</string>
 </resources>

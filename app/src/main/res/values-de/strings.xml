@@ -765,4 +765,5 @@
     <string name="anim_off_fix">Animationen wieder einschalten</string>
     <string name="anim_off_grant">Um sie mit einem Tippen wieder einzuschalten, erlaube es der App einmal von einem Computer aus: %1$s</string>
     <string name="player_hd_fallback">HD-Stream wird von diesem Tablet nicht unterstützt: Standard-Stream wird angezeigt</string>
+    <string name="video_unreadable">Video auf diesem Tablet nicht abspielbar (Format zu anspruchsvoll, z. B. 4K H.265)</string>
 </resources>

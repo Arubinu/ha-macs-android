@@ -765,4 +765,5 @@
     <string name="anim_off_fix">Riattiva le animazioni</string>
     <string name="anim_off_grant">Per riattivarle con un tocco, autorizza l\'app una volta da un computer: %1$s</string>
     <string name="player_hd_fallback">Flusso ad alta definizione non supportato da questo tablet: mostrato il flusso standard</string>
+    <string name="video_unreadable">Video non riproducibile su questo tablet (formato troppo pesante, es. 4K H.265)</string>
 </resources>

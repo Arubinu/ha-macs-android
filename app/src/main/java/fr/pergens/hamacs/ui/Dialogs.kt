@@ -451,7 +451,8 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
             }
         }
     }
-    val player = remember { ExoPlayer.Builder(ctx).build() }
+    // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format, avant le flux de repli.
+    val player = remember { ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).build() }
     val fill = fr.pergens.hamacs.App.instance.config.settings.collectAsState().value.fullscreenFill
     DisposableEffect(Unit) { onDispose { player.release() } }
     // Erreurs notées dans le journal (Réglages › À propos) : le flux plein écran peut rester noir sans autre signe.

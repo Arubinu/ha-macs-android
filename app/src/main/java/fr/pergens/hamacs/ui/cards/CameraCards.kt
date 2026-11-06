@@ -333,7 +333,10 @@ private fun InlineLive(
     val state = LocalDashState.current
     val ctx = LocalContext.current
     var url by remember(camId) { mutableStateOf(liveUrl) }
-    val player = remember { ExoPlayer.Builder(ctx).build().apply { volume = 0f } }
+    val player = remember {
+        // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format (4K H.265 sur Galaxy Tab A8).
+        ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).build().apply { volume = 0f }
+    }
     DisposableEffect(Unit) { onDispose { player.release() } }
     LaunchedEffect(camId) {
         if (url == null) url = runCatching { state.ha.cameraStreamUrl(camId) }.getOrNull()
@@ -456,6 +459,9 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
             val isPlaying = playing == d.id
             var videoShown by remember(d.id) { mutableStateOf(false) }
             var videoFailed by remember(d.id) { mutableStateOf(false) }
+            // Vidéo illisible par la tablette : message quelques secondes sur la capture (au lieu de rien).
+            var unreadable by remember(d.id) { mutableStateOf(false) }
+            LaunchedEffect(unreadable) { if (unreadable) { delay(5000); unreadable = false } }
             // Capture et vidéo : adresse, `content://` ou fichier téléchargé (SMB/NFS), obtenus à la demande.
             val image by androidx.compose.runtime.produceState<String?>(null, d.id) { value = runCatching { d.image() }.getOrNull() }
             var videoUrl by remember(d.id) { mutableStateOf<String?>(null) }
@@ -492,10 +498,16 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                         videoUrl, d.camera,
                         Modifier.fillMaxSize().graphicsLayer { alpha = videoAlpha },
                         onFirstFrame = { videoShown = true },
-                        onError = { videoFailed = true; playing = null },
+                        onError = { videoFailed = true; unreadable = true; playing = null },
                         onEnded = { playing = null },
                     )
                 }
+                if (unreadable) Text(
+                    stringResource(R.string.video_unreadable),
+                    Modifier.align(Alignment.Center).padding(16.dp)
+                        .background(Color(0xCC000000), RoundedCornerShape(12.dp)).padding(horizontal = 14.dp, vertical = 8.dp),
+                    style = TextStyle(fontSize = 13.sp, color = Color.White, textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+                )
                 Row(
                     Modifier.align(Alignment.BottomStart).fillMaxWidth()
                         .background(Brush.verticalGradient(listOf(Color.Transparent, Color(0, 0, 0, 180))))

@@ -765,4 +765,5 @@
     <string name="anim_off_fix">Reativar as animações</string>
     <string name="anim_off_grant">Para as reativar com um toque, autorize a app uma vez a partir de um computador: %1$s</string>
     <string name="player_hd_fallback">Transmissão em alta definição não suportada por este tablet: transmissão padrão mostrada</string>
+    <string name="video_unreadable">Vídeo não reproduzível neste tablet (formato demasiado pesado, ex. 4K H.265)</string>
 </resources>

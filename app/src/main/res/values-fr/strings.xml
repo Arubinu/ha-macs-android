@@ -783,4 +783,5 @@
     <string name="anim_off_fix">Réactiver les animations</string>
     <string name="anim_off_grant">Pour les réactiver d\'un geste, autorisez une fois l\'app depuis un ordinateur : %1$s</string>
     <string name="player_hd_fallback">Flux haute définition non pris en charge par cette tablette : flux standard affiché</string>
+    <string name="video_unreadable">Vidéo non lisible par cette tablette (format trop lourd, ex. 4K H.265)</string>
 </resources>
