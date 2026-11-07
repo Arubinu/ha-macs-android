@@ -165,9 +165,14 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   `run-pipeline` depuis `wake`. Réception : `transcript`, `synthesize`, audio TTS (écrit dans l'AudioTrack sur une file
   unique : écrire en parallèle fait planter le code natif), `played`. Envois réseau jamais sur le fil principal (file
   `writer`). Démarré dans `App` après `link` (nom de l'appareil). Test : `adb forward tcp:10700`, faux HA en Python.
-- **Animations coupées** : `ui/SystemAnimations.kt` lit `ANIMATOR_DURATION_SCALE` ; bandeau au démarrage et ligne dans
-  Réglages › Affichage, qui ouvrent l'accessibilité (ou les options pour les développeurs), via `Kiosk.suspend` en
-  kiosque (code maître demandé). L'app ne force pas ses animations.
+- **Animations coupées** : `ui/SystemAnimations.kt` lit `ANIMATOR_DURATION_SCALE` ; cause : `remove_animations`
+  (réglage système Samsung, accessibilité) sinon échelles des options pour les développeurs. Bandeau (tableau de bord
+  seulement) et Réglages › Affichage ouvrent `AnimationsSheet` : *Automatiquement* (WRITE_SECURE_SETTINGS, accordable
+  uniquement par adb, aucune page d'Android ne la propose ; commande à copier ; ensuite l'app remet les échelles à 1 à
+  chaque retour au premier plan) ou *Moi-même* (étapes guidées, écrans ouverts en tâche neuve, via `Kiosk.suspend` en
+  kiosque). Ne jamais accorder la permission sur la tablette de l'utilisateur sans son accord.
+- **Formats vidéo** : décodeur de repli (logiciel) activé dans ExoPlayer ; flux refusés mémorisés (`ui/VideoCompat.kt`,
+  prefs `video`) ; Galaxy Tab A8 : pas de décodage matériel 4K H.265 (flux « Clair » Reolink, enregistrements du Hub).
 - **Journal** : `CrashGuard.note` (une fois par clé et par démarrage, adresses passées par `redact`) pour les erreurs de
   lecture vidéo (plein écran, direct, captures) et du lecteur DLNA.
 - **Détails au toucher** : graphique à plusieurs courbes → `GraphDetailsSheet` (valeur, écart, 3 derniers changements

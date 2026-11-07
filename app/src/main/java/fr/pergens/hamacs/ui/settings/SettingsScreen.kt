@@ -684,11 +684,9 @@ private fun DisplaySection() {
                 Text(stringResource(R.string.anim_off_title), Modifier.padding(start = 10.dp), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
             }
             Text(fr.pergens.hamacs.ui.animationsHelp(), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
-            fr.pergens.hamacs.ui.AnimationsButtons(onFixed = { animTick++ })
-            if (!fr.pergens.hamacs.ui.SystemAnimations.canFix(ctx)) Text(
-                stringResource(R.string.anim_off_grant, fr.pergens.hamacs.ui.SystemAnimations.grantCommand(ctx)),
-                style = TextStyle(fontSize = 12.sp, color = TextSecondary, lineHeight = 17.sp),
-            )
+            var how by remember { mutableStateOf(false) }
+            fr.pergens.hamacs.ui.NoticeButton(stringResource(R.string.anim_how_title), primary = true) { how = true }
+            if (how) fr.pergens.hamacs.ui.AnimationsSheet { how = false; animTick++ }
         }
     }
     Group { AccentPicker(settings.accentColor) { hex -> app.config.update { it.copy(accentColor = hex) } } }
