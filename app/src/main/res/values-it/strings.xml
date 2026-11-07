@@ -793,4 +793,21 @@
     <string name="anim_step_acc_title">Disattivare «Rimuovi animazioni»</string>
     <string name="anim_step_acc_desc">Impostazioni › Accessibilità (Samsung: Miglioramenti visibilità).</string>
     <string name="anim_waiting">In attesa dell\'autorizzazione</string>
+    <string name="ready_title">Preparare il tablet</string>
+    <string name="ready_help">Per un tablet a parete, sempre sulla dashboard. Tutto è facoltativo.</string>
+    <string name="ready_summary">Pronti: %1$d su %2$d.</string>
+    <string name="ready_all">Tutto è pronto.</string>
+    <string name="ready_open">Verifica</string>
+    <string name="ready_kiosk_desc">Nessuno esce dall\'app o spegne il tablet senza il codice.</string>
+    <string name="ready_enable">Attiva</string>
+    <string name="ready_owner_how">Come fare</string>
+    <string name="ready_battery_title">Nessuna restrizione della batteria</string>
+    <string name="ready_battery_desc">Android non chiude l\'app né la sua connessione a Home Assistant per risparmiare batteria.</string>
+    <string name="ready_anim_title">Animazioni</string>
+    <string name="whats_new_title">Novità della versione %1$s</string>
+    <string name="whats_new_none">Nessuna nota per questa versione.</string>
+    <string name="whats_new_failed">Note non disponibili: GitHub non è raggiungibile.</string>
+    <string name="whats_new_row">Novità</string>
+    <string name="whats_new_row_help">Note della versione %1$s, quella installata.</string>
+    <string name="whats_new_show">Mostra</string>
 </resources>

@@ -98,6 +98,8 @@ class MainActivity : ComponentActivity() {
 
     /** Sauvegarde envoyée par un téléphone (QR code) : fenêtre ouverte depuis les réglages ou l'assistant. */
     private val phoneTransfer = mutableStateOf(false)
+    /** Fenêtre « Préparer la tablette » après l'assistant (s'il manque quelque chose). */
+    private val readiness = mutableStateOf(false)
 
     /**
      * Applique un fichier de sauvegarde (sélecteur de fichiers ou téléphone) ; retourne le message affiché (erreur ?).
@@ -277,6 +279,8 @@ class MainActivity : ComponentActivity() {
                                     onPhone = { transferMessage.value = null; phoneTransfer.value = true },
                                 ) {
                                     app.config.finishSetup()
+                                    // Premier lancement : ce qui manque pour une tablette murale, une fois.
+                                    if (fr.pergens.hamacs.ui.Readiness.missing(this@MainActivity) > 0) readiness.value = true
                                     // Retour direct au tableau de bord, même si l'assistant a été lancé depuis les réglages.
                                     state.showSettings = false
                                     state.editMode = false
@@ -302,8 +306,27 @@ class MainActivity : ComponentActivity() {
                                 onImport = { applyImport(it) },
                             )
                             fr.pergens.hamacs.ui.CodeReplaceDialog()
+                            if (readiness.value && !setupPending) fr.pergens.hamacs.ui.ReadinessSheet { readiness.value = false }
+                            // Nouvelle version installée : ses nouveautés, une fois (notes chargées avant d'ouvrir).
+                            val whatsNew = remember { fr.pergens.hamacs.update.WhatsNew.pending(app) }
+                            var whatsNewNotes by remember { mutableStateOf<fr.pergens.hamacs.update.WhatsNew.Notes?>(null) }
+                            LaunchedEffect(whatsNew) {
+                                if (whatsNew == null) return@LaunchedEffect
+                                // Sans réseau : nouvel essai au prochain démarrage ; pas de notes pour cette version : rien.
+                                when (val n = fr.pergens.hamacs.update.WhatsNew.notes(app, whatsNew)) {
+                                    is fr.pergens.hamacs.update.WhatsNew.Notes.Found -> whatsNewNotes = n
+                                    fr.pergens.hamacs.update.WhatsNew.Notes.None -> fr.pergens.hamacs.update.WhatsNew.seen(app)
+                                    else -> {}
+                                }
+                            }
+                            if (whatsNew != null && whatsNewNotes != null && !setupPending && !state.showSettings && !readiness.value) {
+                                fr.pergens.hamacs.update.WhatsNewSheet(whatsNew, whatsNewNotes) {
+                                    fr.pergens.hamacs.update.WhatsNew.seen(app)
+                                    whatsNewNotes = null
+                                }
+                            }
                             // « Supprimer les animations » d'Android activé : conseil au démarrage.
-                            fr.pergens.hamacs.ui.AnimationsNotice(state)
+                            if (!readiness.value) fr.pergens.hamacs.ui.AnimationsNotice(state)
                             // Sonnette, détecteurs : caméra en plein écran sur un événement (option du bloc caméra).
                             fr.pergens.hamacs.ui.CameraEventWatcher()
                             // Son envoyé au lecteur DLNA : pastille « en lecture » (pause, arrêt).

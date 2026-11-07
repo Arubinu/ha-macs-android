@@ -171,6 +171,14 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   uniquement par adb, aucune page d'Android ne la propose ; commande à copier ; ensuite l'app remet les échelles à 1 à
   chaque retour au premier plan) ou *Moi-même* (étapes guidées, écrans ouverts en tâche neuve, via `Kiosk.suspend` en
   kiosque). Ne jamais accorder la permission sur la tablette de l'utilisateur sans son accord.
+- **Préparer la tablette** (`ui/Readiness.kt`) : Réglages › Sécurité (en tête) et une fois après l'assistant s'il manque
+  quelque chose : kiosque, propriétaire (commande adb) ou écran d'accueil, relance après plantage, batterie
+  (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`), animations. Écrans d'Android ouverts via `Kiosk.suspend` si verrouillé.
+- **Quoi de neuf** (`update/WhatsNew.kt`, prefs `whats_new`, non exportées) : au premier démarrage d'une nouvelle
+  version, ses notes de Release (gardées à l'installation, sinon relues sur GitHub) s'affichent une fois ; aussi dans
+  Réglages › À propos › *Nouveautés*. Rendu Markdown simple (`ui/Markdown.kt`) ; dans les notes, tout ce qui suit
+  `<!-- whats-new:end -->` (liste des APK) n'est pas affiché dans l'app. Test : pref `update_url` vers un faux JSON et
+  `whats_new.xml` avec `last` = version antérieure.
 - **Formats vidéo** : décodeur de repli (logiciel) activé dans ExoPlayer ; flux refusés mémorisés (`ui/VideoCompat.kt`,
   prefs `video`) ; Galaxy Tab A8 : pas de décodage matériel 4K H.265 (flux « Clair » Reolink, enregistrements du Hub).
 - **Journal** : `CrashGuard.note` (une fois par clé et par démarrage, adresses passées par `redact`) pour les erreurs de

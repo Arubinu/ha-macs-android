@@ -958,6 +958,7 @@ private fun SecuritySection() {
     }
 
     var open by remember { mutableStateOf(false) }
+    ReadinessGroup()
     Group {
         // Enroulé par défaut : un appui sur l'en-tête déroule les champs de modification.
         SettingRow(stringResource(R.string.access_code), stringResource(R.string.access_code_help), onClick = { open = !open }) { Chevron(open) }
@@ -978,6 +979,31 @@ private fun SecuritySection() {
     }
     MasterCodeGroup()
     KioskGroup()
+}
+
+/** Préparer la tablette : résumé des réglages d'Android utiles au mur, et fenêtre qui les règle un par un. */
+@Composable
+private fun ReadinessGroup() {
+    val ctx = LocalContext.current
+    var tick by remember { mutableIntStateOf(0) }
+    var open by remember { mutableStateOf(false) }
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { tick++; onPauseOrDispose { } }
+    val checks = remember(tick, open) { fr.pergens.hamacs.ui.Readiness.checks(ctx) }
+    val ok = checks.count { it.second }
+    Group {
+        SettingRow(
+            stringResource(R.string.ready_title),
+            if (ok == checks.size) stringResource(R.string.ready_all) else stringResource(R.string.ready_summary, ok, checks.size),
+            onClick = { open = true },
+        ) {
+            if (ok == checks.size) StatusChip(Success, stringResource(R.string.relaunch_on))
+            else OutlinedButton(
+                onClick = { open = true }, Modifier.heightIn(min = 48.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+            ) { Text(stringResource(R.string.ready_open)) }
+        }
+    }
+    if (open) fr.pergens.hamacs.ui.ReadinessSheet { open = false; tick++ }
 }
 
 /** Champs de changement de code : actuel (null = pas de code défini), nouveau et confirmation. */
@@ -1255,12 +1281,22 @@ private fun UpdateGroup() {
             }
         }
         (state as? UpdateState.Available)?.release?.notes?.takeIf { it.isNotBlank() }?.let { notes ->
-            Text(
-                notes.lines().filter { it.isNotBlank() }.take(8).joinToString("\n"),
-                Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp),
-                style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp),
+            fr.pergens.hamacs.ui.MarkdownText(
+                notes,
+                Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp).heightIn(max = 280.dp).verticalScroll(rememberScrollState()),
+                fontSize = 13,
             )
         }
+        GroupDivider()
+        // Nouveautés de la version installée (celles affichées une fois après la mise à jour).
+        var notes by remember { mutableStateOf(false) }
+        SettingRow(stringResource(R.string.whats_new_row), stringResource(R.string.whats_new_row_help, BuildConfig.VERSION_NAME), onClick = { notes = true }) {
+            OutlinedButton(
+                onClick = { notes = true }, Modifier.heightIn(min = 48.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+            ) { Text(stringResource(R.string.whats_new_show)) }
+        }
+        if (notes) fr.pergens.hamacs.update.WhatsNewSheet(BuildConfig.VERSION_NAME) { notes = false }
         GroupDivider()
         SwitchRow(
             stringResource(R.string.update_auto),

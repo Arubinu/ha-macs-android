@@ -75,7 +75,7 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
   Codes sind für dieses Tablet verschlüsselt (auf einem anderen werden neue Codes abgefragt), die Datei bleibt aber
   persönlich (Layout, Avatarfotos)
 - 🔄 **Updates**: Einstellungen › Über › *Updates*; neue Versionen (und auf Wunsch Vorabversionen) werden automatisch
-  installiert, die App öffnet sich nach einem Update oder Absturz von selbst wieder
+  installiert, die App öffnet sich nach einem Update oder Absturz von selbst wieder und zeigt einmal die *Neuigkeiten*
 - 🌙 **Nachtmodus**: Einstellungen › Ruhezustand & Anwesenheit › *Nachtmodus*; von Sonnenuntergang bis -aufgang (oder
   zu festen Zeiten) wird der Bildschirm früher schwarz und wacht bei Berührung oder Anwesenheit auf
 - 🔔 **Türklingel**: im Bearbeitungsmodus zeigt *Bei einem Ereignis öffnen* eine Kamera im Vollbild, wenn eine
@@ -97,6 +97,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Vor dem Deinstallieren: Einstellungen › Sicherheit › *Geräteinhaber-Rechte entfernen*.
+
+✅ Einstellungen › Sicherheit › *Tablet vorbereiten* prüft alles auf einmal: Kiosk, Geräteinhaber oder
+Startbildschirm, Neustart nach einem Absturz, Akku und Animationen, jeweils mit der Lösung.
 
 ## 🎙️ Sprachassistent (optional)
 

@@ -74,7 +74,7 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
   et les codes y sont chiffrés pour cette tablette (sur une autre, de nouveaux codes sont demandés), mais le fichier
   reste personnel (agencement, photos des avatars)
 - 🔄 **Mises à jour** : Réglages › À propos › *Mises à jour* ; les nouvelles versions (et les préversions si on le
-  souhaite) s'installent automatiquement, l'app se rouvre d'elle-même après une mise à jour ou un plantage
+  souhaite) s'installent automatiquement, l'app se rouvre d'elle-même après une mise à jour ou un plantage et affiche une fois les *Nouveautés*
 - 🌙 **Mode nuit** : Réglages › Veille et présence › *Mode nuit* ; du coucher au lever du soleil (ou à heures fixes),
   l'écran devient noir plus vite et se rallume au toucher ou à une présence
 - 🔔 **Sonnette** : en mode édition, *Ouvrir sur un événement* d'une caméra l'affiche en plein écran quand une sonnette
@@ -96,6 +96,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Avant de désinstaller : Réglages › Sécurité › *Retirer les droits de propriétaire*.
+
+✅ Réglages › Sécurité › *Préparer la tablette* vérifie tout d'un coup : kiosque, propriétaire ou écran d'accueil,
+relance après un plantage, batterie et animations, chacun avec sa solution.
 
 ## 🎙️ Assistant vocal (facultatif)
 

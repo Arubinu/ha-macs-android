@@ -248,7 +248,7 @@ fun AnimationsSheet(beforeOpen: ((() -> Unit) -> Unit)? = null, onDismiss: () ->
     }
 }
 
-private val StepDone = Color(0xFF4CD964)
+internal val StepDone = Color(0xFF4CD964)
 
 /**
  * Étape d'un parcours : pastille numérotée (coche une fois faite) reliée à la suivante par un trait, titre, explication
@@ -275,7 +275,7 @@ private fun Step(number: Int, title: String, desc: String?, last: Boolean = fals
 
 /** Action d'une étape : pastille avec icône et flèche, discrète. */
 @Composable
-private fun StepAction(icon: String, text: String, onClick: () -> Unit) {
+internal fun StepAction(icon: String, text: String, onClick: () -> Unit) {
     val shape = RoundedCornerShape(12.dp)
     Row(
         Modifier.clip(shape).border(1.dp, Dash.colors.accent.copy(alpha = 0.6f), shape).clickable(onClick = onClick)
@@ -290,7 +290,7 @@ private fun StepAction(icon: String, text: String, onClick: () -> Unit) {
 
 /** Commande à lancer : texte sélectionnable et icône copier, remplacée quelques secondes par une coche. */
 @Composable
-private fun CommandBox(cmd: String) {
+internal fun CommandBox(cmd: String) {
     val ctx = LocalContext.current
     var copied by remember { mutableStateOf(false) }
     LaunchedEffect(copied) { if (copied) { kotlinx.coroutines.delay(2000); copied = false } }

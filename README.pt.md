@@ -74,7 +74,7 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
   os códigos são cifrados para este tablet (noutro são pedidos novos códigos), mas o ficheiro continua pessoal
   (esquema, fotografias dos avatares)
 - 🔄 **Atualizações**: Definições › Acerca de › *Atualizações*; as novas versões (e as pré-versões, se quiser)
-  instalam-se sozinhas, a app volta a abrir após uma atualização ou uma falha
+  instalam-se sozinhas, a app volta a abrir após uma atualização ou uma falha e mostra uma vez as *Novidades*
 - 🌙 **Modo noturno**: Definições › Repouso e presença › *Modo noturno*; do pôr ao nascer do sol (ou a horas fixas),
   o ecrã fica preto mais depressa e acende-se com um toque ou uma presença
 - 🔔 **Campainha**: no modo de edição, *Abrir num evento* de uma câmara mostra-a em ecrã inteiro quando uma campainha
@@ -96,6 +96,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Antes de desinstalar: Definições › Segurança › *Retirar os direitos de proprietário*.
+
+✅ Definições › Segurança › *Preparar o tablet* verifica tudo de uma vez: quiosque, proprietário ou ecrã inicial,
+reabertura após uma falha, bateria e animações, cada um com a sua solução.
 
 ## 🎙️ Assistente de voz (opcional)
 

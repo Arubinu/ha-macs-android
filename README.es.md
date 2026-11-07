@@ -76,7 +76,7 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   códigos están cifrados para esta tableta (en otra se piden códigos nuevos), pero el archivo sigue siendo personal
   (diseño, fotos de los avatares)
 - 🔄 **Actualizaciones**: Ajustes › Acerca de › *Actualizaciones*; las nuevas versiones (y las preliminares si se
-  desea) se instalan solas, la app se vuelve a abrir tras una actualización o un fallo
+  desea) se instalan solas, la app se vuelve a abrir tras una actualización o un fallo y muestra una vez las *Novedades*
 - 🌙 **Modo noche**: Ajustes › Reposo y presencia › *Modo noche*; de la puesta de sol al amanecer (o a horas fijas),
   la pantalla se pone negra antes y se enciende con un toque o una presencia
 - 🔔 **Timbre**: en modo edición, *Abrir con un evento* de una cámara la muestra a pantalla completa cuando un timbre
@@ -98,6 +98,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Antes de desinstalar: Ajustes › Seguridad › *Quitar los derechos de propietario*.
+
+✅ Ajustes › Seguridad › *Preparar la tableta* lo comprueba todo de una vez: quiosco, propietario o pantalla de
+inicio, reapertura tras un fallo, batería y animaciones, cada uno con su solución.
 
 ## 🎙️ Asistente de voz (opcional)
 

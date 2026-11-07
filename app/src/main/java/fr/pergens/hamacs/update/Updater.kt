@@ -100,6 +100,8 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
                 return@launch
             }
             _state.value = State.Installing(release)
+            // Notes gardées pour le « Quoi de neuf » de la nouvelle version.
+            WhatsNew.remember(context, release.version, release.notes)
             runCatching { withContext(Dispatchers.Main) { commit(file) } }.onFailure {
                 _state.value = State.Failed(it.message ?: it.javaClass.simpleName)
             }
@@ -109,6 +111,18 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
     internal fun onResult(status: Int, message: String?) {
         if (status != PackageInstaller.STATUS_SUCCESS && status != PackageInstaller.STATUS_PENDING_USER_ACTION) {
             _state.value = State.Failed(message ?: "status $status")
+        }
+    }
+
+    /** Notes de la Release de [version] (null : pas de Release pour cette version). */
+    suspend fun notesFor(version: String): String? = withContext(Dispatchers.IO) {
+        val req = Request.Builder().url(apiUrl).header("Accept", "application/vnd.github+json").header("User-Agent", "HA-MACS-Android").build()
+        http.newCall(req).execute().use { r ->
+            if (r.code == 404) return@withContext null
+            if (!r.isSuccessful) error("HTTP ${r.code}")
+            (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
+                .firstOrNull { it["tag_name"]?.jsonPrimitive?.contentOrNull?.removePrefix("v") == version }
+                ?.get("body")?.jsonPrimitive?.contentOrNull
         }
     }
 

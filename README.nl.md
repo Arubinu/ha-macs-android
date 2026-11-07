@@ -74,7 +74,7 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
   codes zijn versleuteld voor deze tablet (op een andere worden nieuwe codes gevraagd), maar het bestand blijft
   persoonlijk (indeling, avatarfoto's)
 - 🔄 **Updates**: Instellingen › Over › *Updates*; nieuwe versies (en desgewenst voorlopige versies) worden automatisch
-  geïnstalleerd, de app opent vanzelf opnieuw na een update of crash
+  geïnstalleerd, de app opent vanzelf opnieuw na een update of crash en toont één keer wat er *Nieuw* is
 - 🌙 **Nachtmodus**: Instellingen › Stand-by & aanwezigheid › *Nachtmodus*; van zonsondergang tot zonsopkomst (of op
   vaste tijden) wordt het scherm sneller zwart en gaat het aan bij aanraking of aanwezigheid
 - 🔔 **Deurbel**: in de bewerkmodus toont *Openen bij een gebeurtenis* een camera schermvullend wanneer een deurbel
@@ -96,6 +96,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Voor het verwijderen: Instellingen › Beveiliging › *Rechten van apparaateigenaar intrekken*.
+
+✅ Instellingen › Beveiliging › *Tablet voorbereiden* controleert alles in één keer: kiosk, apparaateigenaar of
+startscherm, herstart na een crash, batterij en animaties, elk met de oplossing.
 
 ## 🎙️ Spraakassistent (optioneel)
 

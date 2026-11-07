@@ -793,4 +793,21 @@
     <string name="anim_step_acc_title">„Animationen entfernen“ ausschalten</string>
     <string name="anim_step_acc_desc">Einstellungen › Eingabehilfen (Samsung: Sichtbarkeitsverbesserungen).</string>
     <string name="anim_waiting">Warte auf die Berechtigung</string>
+    <string name="ready_title">Tablet vorbereiten</string>
+    <string name="ready_help">Für ein Wandtablet, das immer das Dashboard zeigt. Alles ist optional.</string>
+    <string name="ready_summary">Bereit: %1$d von %2$d.</string>
+    <string name="ready_all">Alles ist bereit.</string>
+    <string name="ready_open">Prüfen</string>
+    <string name="ready_kiosk_desc">Niemand verlässt die App oder schaltet das Tablet ohne den Code aus.</string>
+    <string name="ready_enable">Einschalten</string>
+    <string name="ready_owner_how">So geht\'s</string>
+    <string name="ready_battery_title">Keine Akku-Einschränkungen</string>
+    <string name="ready_battery_desc">Android beendet weder die App noch ihre Verbindung zu Home Assistant, um Akku zu sparen.</string>
+    <string name="ready_anim_title">Animationen</string>
+    <string name="whats_new_title">Neu in Version %1$s</string>
+    <string name="whats_new_none">Keine Hinweise für diese Version.</string>
+    <string name="whats_new_failed">Hinweise nicht verfügbar: GitHub ist nicht erreichbar.</string>
+    <string name="whats_new_row">Neuigkeiten</string>
+    <string name="whats_new_row_help">Versionshinweise der installierten Version %1$s.</string>
+    <string name="whats_new_show">Anzeigen</string>
 </resources>

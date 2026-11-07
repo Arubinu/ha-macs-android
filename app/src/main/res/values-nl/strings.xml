@@ -793,4 +793,21 @@
     <string name="anim_step_acc_title">‘Animaties verwijderen’ uitzetten</string>
     <string name="anim_step_acc_desc">Instellingen › Toegankelijkheid (Samsung: Zichtbaarheidsverbeteringen).</string>
     <string name="anim_waiting">Wachten op toestemming</string>
+    <string name="ready_title">Tablet voorbereiden</string>
+    <string name="ready_help">Voor een wandtablet die altijd het dashboard toont. Alles is optioneel.</string>
+    <string name="ready_summary">Klaar: %1$d van %2$d.</string>
+    <string name="ready_all">Alles is klaar.</string>
+    <string name="ready_open">Controleren</string>
+    <string name="ready_kiosk_desc">Niemand verlaat de app of zet de tablet uit zonder de code.</string>
+    <string name="ready_enable">Aanzetten</string>
+    <string name="ready_owner_how">Hoe het werkt</string>
+    <string name="ready_battery_title">Geen batterijbeperkingen</string>
+    <string name="ready_battery_desc">Android sluit de app en haar verbinding met Home Assistant niet om batterij te sparen.</string>
+    <string name="ready_anim_title">Animaties</string>
+    <string name="whats_new_title">Nieuw in versie %1$s</string>
+    <string name="whats_new_none">Geen notities voor deze versie.</string>
+    <string name="whats_new_failed">Notities niet beschikbaar: GitHub is onbereikbaar.</string>
+    <string name="whats_new_row">Nieuw</string>
+    <string name="whats_new_row_help">Notities van versie %1$s, de geïnstalleerde.</string>
+    <string name="whats_new_show">Tonen</string>
 </resources>

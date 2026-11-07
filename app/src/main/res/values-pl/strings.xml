@@ -813,4 +813,21 @@
     <string name="anim_step_acc_title">Wyłącz „Usuń animacje”</string>
     <string name="anim_step_acc_desc">Ustawienia › Ułatwienia dostępu (Samsung: Ulepszenia widoczności).</string>
     <string name="anim_waiting">Oczekiwanie na uprawnienie</string>
+    <string name="ready_title">Przygotuj tablet</string>
+    <string name="ready_help">Dla tabletu na ścianie, zawsze na pulpicie. Wszystko jest opcjonalne.</string>
+    <string name="ready_summary">Gotowe: %1$d z %2$d.</string>
+    <string name="ready_all">Wszystko gotowe.</string>
+    <string name="ready_open">Sprawdź</string>
+    <string name="ready_kiosk_desc">Nikt nie wyjdzie z aplikacji ani nie wyłączy tabletu bez kodu.</string>
+    <string name="ready_enable">Włącz</string>
+    <string name="ready_owner_how">Jak to zrobić</string>
+    <string name="ready_battery_title">Bez ograniczeń baterii</string>
+    <string name="ready_battery_desc">Android nie zamyka aplikacji ani jej połączenia z Home Assistant, by oszczędzać baterię.</string>
+    <string name="ready_anim_title">Animacje</string>
+    <string name="whats_new_title">Nowości w wersji %1$s</string>
+    <string name="whats_new_none">Brak informacji dla tej wersji.</string>
+    <string name="whats_new_failed">Informacje niedostępne: brak połączenia z GitHub.</string>
+    <string name="whats_new_row">Nowości</string>
+    <string name="whats_new_row_help">Informacje o zainstalowanej wersji %1$s.</string>
+    <string name="whats_new_show">Pokaż</string>
 </resources>

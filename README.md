@@ -71,7 +71,7 @@ home. Already have a backup? **Import** it on the first step and you are done.
 - 💾 **Backup**: Settings › Dashboard › *Export* / *Import* / *With the phone* (QR code); the token and the codes are
   encrypted for this tablet (on another one, new codes are asked), but the file stays personal (layout, avatar photos)
 - 🔄 **Updates**: Settings › About › *Updates*; new versions (and pre-releases if wanted) are installed
-  automatically, the app reopens by itself after an update or a crash
+  automatically, the app reopens by itself after an update or a crash and shows *What's new* once
 - 🌙 **Night mode**: Settings › Standby & presence › *Night mode*; from sunset to sunrise (or set times), the
   screen goes black sooner and wakes on a touch or a presence
 - 🔔 **Doorbell**: in edit mode, a camera's *Open on an event* shows it fullscreen when a doorbell or sensor
@@ -92,6 +92,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Before uninstalling: Settings › Security › *Remove device owner rights*.
+
+✅ Settings › Security › *Prepare the tablet* checks everything at once: kiosk, device owner or home screen,
+restart after a crash, battery and animations, each with its fix.
 
 ## 🎙️ Voice assistant (optional)
 

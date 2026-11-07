@@ -73,7 +73,7 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
   zaszyfrowane dla tego tabletu (na innym wymagane są nowe kody), ale plik pozostaje osobisty (układ, zdjęcia
   awatarów)
 - 🔄 **Aktualizacje**: Ustawienia › Informacje › *Aktualizacje*; nowe wersje (i na życzenie wersje wstępne) instalują
-  się same, aplikacja otwiera się ponownie po aktualizacji lub awarii
+  się same, aplikacja otwiera się ponownie po aktualizacji lub awarii i raz pokazuje *Nowości*
 - 🌙 **Tryb nocny**: Ustawienia › Czuwanie i obecność › *Tryb nocny*; od zachodu do wschodu słońca (lub w ustalonych
   godzinach) ekran szybciej robi się czarny i budzi się po dotyku lub wykryciu obecności
 - 🔔 **Dzwonek**: w trybie edycji *Otwórz przy zdarzeniu* kamery pokazuje ją na pełnym ekranie, gdy uruchomi się dzwonek
@@ -95,6 +95,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
 ⚠️ Przed odinstalowaniem: Ustawienia › Bezpieczeństwo › *Usuń uprawnienia właściciela*.
+
+✅ Ustawienia › Bezpieczeństwo › *Przygotuj tablet* sprawdza wszystko naraz: kiosk, właściciela urządzenia lub
+ekran główny, ponowne otwarcie po awarii, baterię i animacje, każde z rozwiązaniem.
 
 ## 🎙️ Asystent głosowy (opcjonalnie)
 
