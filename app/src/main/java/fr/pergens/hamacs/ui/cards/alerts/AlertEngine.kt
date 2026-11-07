@@ -642,11 +642,20 @@ class AlertEngine(
         return subEntity(msg)
     }
 
-    /** Heure du déclenchement : « 09:58:12 » aujourd'hui, sinon avec le jour (« 4 nov. 18:20 »). */
+    /**
+     * Heure du déclenchement, jour entre parenthèses s'il ne s'agit pas d'aujourd'hui : « 09:58 », « 18:20 (hier) »,
+     * « 18:20 (4 nov.) ». Se lit après « à » dans toutes les langues (« Détection à {trigger_time} »).
+     */
     private fun triggerTime(ms: Long): String {
         val t = Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault())
-        val today = java.time.LocalDate.now() == t.toLocalDate()
-        return DateTimeFormatter.ofPattern(if (today) "HH:mm:ss" else "d MMM HH:mm", locale).format(t)
+        val i18n = fr.pergens.hamacs.App.instance.alerts.i18n
+        val time = DateTimeFormatter.ofPattern("HH:mm", locale).format(t)
+        val today = java.time.LocalDate.now()
+        return when (t.toLocalDate()) {
+            today -> time
+            today.minusDays(1) -> i18n.a("when_yesterday", time)
+            else -> i18n.a("when_date", time, DateTimeFormatter.ofPattern("d MMM", locale).format(t))
+        }
     }
 
     /** Évaluation immédiate des templates simples en attendant la réponse de HA. */

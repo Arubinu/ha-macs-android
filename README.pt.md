@@ -83,6 +83,9 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
   (faixa, leitura em voz alta, ecrã aceso, câmara em ecrã inteiro)
 - 🔊 **Leitor multimédia**: o Home Assistant encontra o tablet (DLNA) e pode reproduzir nele síntese de voz, rádios ou
   Music Assistant; Definições › Home Assistant
+  (acesso: Home Assistant e dispositivos aprovados, ou toda a rede)
+- 🌍 **Acesso pela Internet**: proxy inverso https (Pangolin, Cloudflare Access…) com os seus cabeçalhos;
+  Definições › Home Assistant › *Proxy inverso*
 - 🧙 **Assistente**: pode ser relançado em Definições › Painel
 
 ## 🔒 Modo quiosque
@@ -102,7 +105,7 @@ arranque, mas um gesto do Android pode retirar a fixação de ecrã.
 ⚠️ Antes de desinstalar: Definições › Segurança › *Retirar os direitos de proprietário*.
 
 ✅ Definições › Segurança › *Preparar o tablet* verifica tudo de uma vez: quiosque, proprietário ou ecrã inicial,
-reabertura após uma falha, bateria e animações, cada um com a sua solução.
+código mestre, reabertura após uma falha, bateria e animações, cada um com a sua solução.
 
 ## 🎙️ Assistente de voz (opcional)
 

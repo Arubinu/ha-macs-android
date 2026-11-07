@@ -549,6 +549,7 @@ private fun ConnectionSection() {
         }
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Field(url, { url = it; saved = false }, stringResource(R.string.ha_url), stringResource(R.string.ha_url_hint), null)
+            if (insecureRemote(url)) Text(stringResource(R.string.ha_http_warning), style = TextStyle(fontSize = 13.sp, color = Danger, lineHeight = 18.sp))
             fr.pergens.hamacs.ui.HaServerChips(servers, url) { url = it; saved = false }
             // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé : mêmes choix que l'assistant.
             Text(stringResource(R.string.ha_login_with), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
@@ -578,8 +579,91 @@ private fun ConnectionSection() {
             }
         }
     }
+    ProxyGroup()
     HaDeviceGroup()
     DlnaGroup()
+}
+
+/**
+ * Adresse en `http://` hors du réseau local (nom de domaine public, IP publique) : le jeton et toutes les données
+ * circuleraient en clair sur Internet. Réseau local : IP privées, `.local`, `.lan`, `.home`, `.internal`, nom sans point.
+ */
+internal fun insecureRemote(url: String): Boolean {
+    val uri = runCatching { java.net.URI(url.trim()) }.getOrNull() ?: return false
+    if (!uri.scheme.equals("http", true)) return false
+    val host = uri.host?.lowercase() ?: return false
+    if ('.' !in host || listOf(".local", ".lan", ".home", ".internal", ".home.arpa").any { host.endsWith(it) }) return false
+    val ip = host.split('.').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 4 } ?: return true
+    return !(ip[0] == 10 || ip[0] == 127 || (ip[0] == 192 && ip[1] == 168) || (ip[0] == 172 && ip[1] in 16..31) || (ip[0] == 169 && ip[1] == 254) ||
+        (ip[0] == 100 && ip[1] in 64..127))
+}
+
+/**
+ * Proxy inverse (accès par Internet) : en-têtes envoyés avec chaque requête vers Home Assistant. Modèles pour Pangolin
+ * (jeton d'accès de la ressource) et Cloudflare Access (jeton de service).
+ */
+@Composable
+private fun ProxyGroup() {
+    val app = App.instance
+    val rows = remember { androidx.compose.runtime.mutableStateListOf<Pair<String, String>>().apply { addAll(app.config.proxyHeaders) } }
+    var saved by remember { mutableStateOf(false) }
+    var open by remember { mutableStateOf(rows.isNotEmpty()) }
+    val changed = rows.toList() != app.config.proxyHeaders
+    fun preset(vararg names: String) {
+        rows.removeAll { it.second.isBlank() }
+        names.filter { n -> rows.none { it.first.equals(n, true) } }.forEach { rows.add(it to "") }
+        saved = false
+    }
+    Group {
+        SettingRow(stringResource(R.string.proxy_title), stringResource(R.string.proxy_help), onClick = { open = !open }) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (app.config.proxyHeaders.isNotEmpty()) StatusChip(Success, stringResource(R.string.proxy_count, app.config.proxyHeaders.size))
+                Spacer(Modifier.width(12.dp))
+                Chevron(open)
+            }
+        }
+        Unfold(open) {
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.proxy_presets), style = TextStyle(fontSize = 14.sp, color = TextSecondary))
+                    OutlinedButton(onClick = { preset("P-Access-Token-Id", "P-Access-Token") }, colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary)) { Text("Pangolin") }
+                    OutlinedButton(onClick = { preset("CF-Access-Client-Id", "CF-Access-Client-Secret") }, colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary)) { Text("Cloudflare Access") }
+                }
+                rows.forEachIndexed { i, (name, value) ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.weight(0.4f)) {
+                            Field(name, { rows[i] = it.filter { c -> !c.isWhitespace() } to rows[i].second; saved = false }, stringResource(R.string.proxy_name), null, null, keyboard = KeyboardType.Text, next = true)
+                        }
+                        Box(Modifier.weight(0.6f)) {
+                            Field(value, { rows[i] = rows[i].first to it.trim(); saved = false }, stringResource(R.string.proxy_value), null, null, secret = true)
+                        }
+                        TextButton(onClick = { rows.removeAt(i); saved = false }) { HaIcon("mdi:delete-outline", size = 22.dp, tint = TextSecondary) }
+                    }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedButton(onClick = { rows.add("" to ""); saved = false }, Modifier.heightIn(min = 48.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary)) {
+                        Text(stringResource(R.string.proxy_add))
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Button(
+                        onClick = {
+                            app.config.setProxyHeaders(rows.toList())
+                            rows.clear(); rows.addAll(app.config.proxyHeaders)
+                            // Nouvelle connexion avec les nouveaux en-têtes.
+                            val s = app.config.settings.value
+                            if (s.haUrl.isNotBlank() && s.haToken.isNotBlank()) app.ha.connect(s.haUrl, s.haToken)
+                            saved = true
+                        },
+                        enabled = changed,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) { Text(stringResource(R.string.action_save_connect)) }
+                    Spacer(Modifier.width(16.dp))
+                    Feedback(if (saved && !changed) stringResource(R.string.saved) else null)
+                }
+                Text(stringResource(R.string.proxy_note), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp))
+            }
+        }
+    }
 }
 
 /** La tablette vue par Home Assistant (intégration mobile_app) : activation, nom, service de notification. */
@@ -640,6 +724,8 @@ private fun WyomingGroup() {
                 }
                 Text(stringResource(R.string.wyoming_usage), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp))
             }
+            GroupDivider()
+            Box(Modifier.padding(20.dp)) { PeersBlock(sat.guard, modeChoice = false, help = stringResource(R.string.peers_wyoming_help)) }
         }
     }
 }
@@ -661,6 +747,69 @@ private fun DlnaGroup() {
                     else -> StatusChip(TextSecondary, stringResource(R.string.dlna_starting))
                 }
                 Text(stringResource(R.string.dlna_usage), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp))
+            }
+            GroupDivider()
+            Box(Modifier.padding(20.dp)) { PeersBlock(dlna.guard, modeChoice = true) }
+        }
+    }
+}
+
+/**
+ * Appareils qui contactent un service de la tablette : accès (DLNA : tout le réseau ou approuvés), puis la liste,
+ * avec approbation, blocage et retrait.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PeersBlock(guard: fr.pergens.hamacs.net.PeerGuard, modeChoice: Boolean, help: String? = null) {
+    val peers by guard.peers.collectAsState()
+    val mode by guard.mode.collectAsState()
+    val open = mode == fr.pergens.hamacs.net.PeerGuard.Mode.Open
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        if (modeChoice) {
+            Text(stringResource(R.string.peers_access), style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                SegmentedButton(!open, { guard.setMode(fr.pergens.hamacs.net.PeerGuard.Mode.Approved) }, SegmentedButtonDefaults.itemShape(0, 2)) {
+                    Text(stringResource(R.string.peers_mode_approved))
+                }
+                SegmentedButton(open, { guard.setMode(fr.pergens.hamacs.net.PeerGuard.Mode.Open) }, SegmentedButtonDefaults.itemShape(1, 2)) {
+                    Text(stringResource(R.string.peers_mode_open))
+                }
+            }
+        }
+        Text(
+            help ?: stringResource(if (open) R.string.peers_mode_open_help else R.string.peers_mode_approved_help),
+            style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 19.sp),
+        )
+        Text(stringResource(R.string.peers_title), Modifier.padding(top = 6.dp), style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+        if (peers.isEmpty()) Text(stringResource(R.string.peers_none), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+        val fmt = remember { java.time.format.DateTimeFormatter.ofPattern("d MMM HH:mm") }
+        peers.forEach { p ->
+            val (icon, tint, state) = when {
+                p.ha -> Triple("mdi:home-assistant", Success, stringResource(R.string.peers_state_ha))
+                p.state == fr.pergens.hamacs.net.PeerGuard.State.Allowed -> Triple("mdi:check-circle-outline", Success, stringResource(R.string.peers_state_allowed))
+                p.state == fr.pergens.hamacs.net.PeerGuard.State.Blocked -> Triple("mdi:cancel", Danger, stringResource(R.string.peers_state_blocked))
+                open -> Triple("mdi:help-circle-outline", Warning, stringResource(R.string.peers_state_new))
+                else -> Triple("mdi:help-circle-outline", Warning, stringResource(R.string.peers_state_pending))
+            }
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Background).padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                HaIcon(icon, size = 22.dp, tint = tint)
+                Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
+                    Text(p.label.ifEmpty { p.ip }, style = TextStyle(fontSize = 15.sp, color = TextPrimary), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+                    val last = fmt.format(java.time.Instant.ofEpochMilli(p.last).atZone(java.time.ZoneId.systemDefault()))
+                    Text(listOfNotNull(p.ip.takeIf { p.label.isNotEmpty() }, state, last).joinToString(" · "), style = TextStyle(fontSize = 12.sp, color = TextSecondary))
+                }
+                if (!p.ha) {
+                    if (p.state != fr.pergens.hamacs.net.PeerGuard.State.Allowed) TextButton(onClick = { guard.set(p.ip, fr.pergens.hamacs.net.PeerGuard.State.Allowed) }) {
+                        Text(stringResource(R.string.peers_approve))
+                    }
+                    if (p.state != fr.pergens.hamacs.net.PeerGuard.State.Blocked) TextButton(onClick = { guard.set(p.ip, fr.pergens.hamacs.net.PeerGuard.State.Blocked) }) {
+                        Text(stringResource(R.string.peers_block), color = Danger)
+                    }
+                }
+                TextButton(onClick = { guard.remove(p.ip) }) { HaIcon("mdi:delete-outline", size = 20.dp, tint = TextSecondary) }
             }
         }
     }
@@ -1008,7 +1157,7 @@ private fun ReadinessGroup() {
 
 /** Champs de changement de code : actuel (null = pas de code défini), nouveau et confirmation. */
 @Composable
-private fun CodeFields(
+internal fun CodeFields(
     current: String?, onCurrent: (String) -> Unit, new1: String, onNew1: (String) -> Unit,
     new2: String, onNew2: (String) -> Unit, onDone: () -> Unit,
 ) {
@@ -1042,7 +1191,8 @@ private fun Unfold(open: Boolean, content: @Composable () -> Unit) {
 @Composable
 private fun MasterCodeGroup() {
     val app = App.instance
-    var defined by remember { mutableStateOf(app.config.masterCode().isNotEmpty()) }
+    // Relu si le code change ailleurs (« Préparer la tablette »).
+    var defined by remember(app.config.masterCodeVersion.intValue) { mutableStateOf(app.config.masterCode().isNotEmpty()) }
     var current by remember { mutableStateOf("") }
     var new1 by remember { mutableStateOf("") }
     var new2 by remember { mutableStateOf("") }

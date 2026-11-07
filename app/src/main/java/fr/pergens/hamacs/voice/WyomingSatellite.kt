@@ -84,7 +84,7 @@ class WyomingSatellite(
     val ready: Boolean get() = (_status.value as? Status.Connected)?.running == true
 
     fun setEnabled(on: Boolean) {
-        prefs.edit().putBoolean("enabled", on).remove("peer").apply()
+        prefs.edit().putBoolean("enabled", on).apply()
         _enabled.value = on
         restart()
     }
@@ -132,20 +132,13 @@ class WyomingSatellite(
     }
 
     /**
-     * Appareil autorisé à se connecter : le serveur Home Assistant de l'app (adresse de [haUrl]), sinon le premier
-     * appareil connecté depuis l'activation (HA derrière un proxy, adresse publique…), retenu ensuite. Désactiver puis
-     * réactiver le satellite oublie cet appareil. Versions de débogage : la tablette elle-même aussi (`adb forward`).
+     * Appareils autorisés : le serveur Home Assistant de l'app (adresse de [haUrl]) d'office, les autres seulement
+     * une fois approuvés dans les réglages (HA derrière un proxy : son adresse sur le réseau diffère de celle de l'app).
      */
-    private fun allowed(addr: java.net.InetAddress?): Boolean {
-        val ip = addr?.hostAddress ?: return false
-        if (BuildConfig.DEBUG && addr.isLoopbackAddress) return true
-        val host = runCatching { android.net.Uri.parse(haUrl()).host }.getOrNull()
-        val ha = host?.let { h -> runCatching { java.net.InetAddress.getAllByName(h).mapNotNull { it.hostAddress } }.getOrNull() }.orEmpty()
-        if (ip in ha) return true
-        val peer = prefs.getString("peer", null)
-        if (peer == null) { prefs.edit().putString("peer", ip).apply(); return true }
-        return peer == ip
-    }
+    val guard = fr.pergens.hamacs.net.PeerGuard(ctx, "peers_wyoming", scope, haUrl)
+
+    private fun allowed(addr: java.net.InetAddress?): Boolean =
+        guard.check(addr?.hostAddress, loopback = addr?.isLoopbackAddress == true)
 
     private fun closeClient() {
         runCatching { client?.close() }

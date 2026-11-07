@@ -84,6 +84,9 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
   Benachrichtigungen (Banner, Vorlesen, Bildschirm an, Kamera im Vollbild)
 - 🔊 **Mediaplayer**: Home Assistant findet das Tablet (DLNA) und kann Sprachausgabe, Radios oder Music Assistant darauf
   abspielen; Einstellungen › Home Assistant
+  (Zugriff: Home Assistant und genehmigte Geräte oder das ganze Netzwerk)
+- 🌍 **Zugriff über das Internet**: https-Reverse-Proxy (Pangolin, Cloudflare Access…) mit seinen Headern;
+  Einstellungen › Home Assistant › *Reverse-Proxy*
 - 🧙 **Assistent**: jederzeit erneut startbar unter Einstellungen › Dashboard
 
 ## 🔒 Kioskmodus
@@ -103,7 +106,7 @@ kommt mit der Home-Taste und beim Start zurück, aber eine Android-Geste kann da
 ⚠️ Vor dem Deinstallieren: Einstellungen › Sicherheit › *Geräteinhaber-Rechte entfernen*.
 
 ✅ Einstellungen › Sicherheit › *Tablet vorbereiten* prüft alles auf einmal: Kiosk, Geräteinhaber oder
-Startbildschirm, Neustart nach einem Absturz, Akku und Animationen, jeweils mit der Lösung.
+Startbildschirm, Mastercode, Neustart nach einem Absturz, Akku und Animationen, jeweils mit der Lösung.
 
 ## 🎙️ Sprachassistent (optional)
 

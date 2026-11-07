@@ -101,6 +101,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:1.6.1")
     implementation("androidx.media3:media3-ui:1.6.1")
     implementation("androidx.media3:media3-exoplayer-rtsp:1.6.1")
+    // Lecteurs sur le client OkHttp de l'app : en-tetes du proxy inverse vers Home Assistant.
+    implementation("androidx.media3:media3-datasource-okhttp:1.6.1")
 
     // Détection de présence par la caméra frontale (analyse locale d'images basse résolution).
     implementation("androidx.camera:camera-camera2:1.4.2")

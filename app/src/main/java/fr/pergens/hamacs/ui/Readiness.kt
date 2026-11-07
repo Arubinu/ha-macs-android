@@ -60,7 +60,7 @@ import fr.pergens.hamacs.update.scrollFade
  * animations). Tout reste facultatif ; chaque point ouvre l'écran d'Android qui le règle.
  */
 object Readiness {
-    enum class Check { Kiosk, Lock, Relaunch, Battery, Animations }
+    enum class Check { Kiosk, Lock, MasterCode, Relaunch, Battery, Animations }
 
     fun isHome(ctx: Context): Boolean =
         ctx.packageManager.resolveActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME), 0)?.activityInfo?.packageName == ctx.packageName
@@ -75,6 +75,7 @@ object Readiness {
     fun checks(ctx: Context): List<Pair<Check, Boolean>> = listOf(
         Check.Kiosk to App.instance.config.settings.value.kioskEnabled,
         Check.Lock to (Kiosk.isDeviceOwner(ctx) || isHome(ctx)),
+        Check.MasterCode to App.instance.config.masterCode().isNotEmpty(),
         Check.Relaunch to CrashGuard.canRelaunch(ctx),
         Check.Battery to batteryFree(ctx),
         Check.Animations to !SystemAnimations.off(ctx),
@@ -108,6 +109,11 @@ fun ReadinessSheet(onDismiss: () -> Unit) {
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(2000); tick++ } }
     val checks = remember(tick, settings.kioskEnabled) { Readiness.checks(ctx) }
     var anim by remember { mutableStateOf(false) }
+    // Code maître : saisie dépliée, deux champs et erreur éventuelle.
+    var master by remember { mutableStateOf(false) }
+    var code1 by remember { mutableStateOf("") }
+    var code2 by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf<String?>(null) }
     // Verrouillage complet : 0 = replié, 1 = avec un ordinateur (adb), 2 = sans ordinateur (QR code).
     var how by remember { mutableIntStateOf(0) }
     val isOwner = remember(tick) { Kiosk.isDeviceOwner(ctx) }
@@ -160,6 +166,27 @@ fun ReadinessSheet(onDismiss: () -> Unit) {
                             }
                         }),
                     ) {}
+                    Readiness.Check.MasterCode -> CheckRow(
+                        "mdi:form-textbox-password", stringResource(R.string.master_code), stringResource(R.string.ready_master_desc), done,
+                        extra = {
+                            AnimatedVisibility(master) {
+                                Column(Modifier.padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    val invalid = stringResource(R.string.access_code_invalid)
+                                    val mismatch = stringResource(R.string.access_code_mismatch)
+                                    val save = {
+                                        error = when {
+                                            code1.length !in 4..8 -> invalid
+                                            code1 != code2 -> mismatch
+                                            else -> { app.config.setMasterCode(code1); code1 = ""; code2 = ""; master = false; tick++; null }
+                                        }
+                                    }
+                                    fr.pergens.hamacs.ui.settings.CodeFields(null, {}, code1, { code1 = it; error = null }, code2, { code2 = it; error = null }) { save() }
+                                    error?.let { Text(it, style = TextStyle(fontSize = 13.sp, color = Color(0xFFFF8A80))) }
+                                    StepAction("mdi:content-save-outline", stringResource(R.string.master_code_save)) { save() }
+                                }
+                            }
+                        },
+                    ) { StepAction("mdi:form-textbox-password", stringResource(R.string.ready_master_set)) { master = !master } }
                     Readiness.Check.Relaunch -> CheckRow("mdi:restart", stringResource(R.string.relaunch_title), stringResource(R.string.relaunch_help), done) {
                         StepAction("mdi:layers-outline", stringResource(R.string.relaunch_allow)) { activity?.let { Readiness.open(it, Readiness.overlayIntent(ctx)) } }
                     }

@@ -55,6 +55,14 @@ class App : Application(), ImageLoaderFactory {
         // Plantage : noté dans le journal, puis relance de l'app (tablette au mur).
         CrashGuard.install(this)
         http = OkHttpClient.Builder()
+            // Proxy inverse (Pangolin, Cloudflare Access…) : ses en-têtes sur toutes les requêtes vers Home Assistant,
+            // WebSocket comprise ; jamais vers un autre serveur.
+            .addInterceptor { chain ->
+                val req = chain.request()
+                val extra = if (::config.isInitialized) config.proxyHeaders else emptyList()
+                if (extra.isEmpty() || "${req.url.host}:${req.url.port}" != haServer()) chain.proceed(req)
+                else chain.proceed(req.newBuilder().apply { extra.forEach { (k, v) -> header(k, v) } }.build())
+            }
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .pingInterval(30, TimeUnit.SECONDS)
@@ -83,6 +91,27 @@ class App : Application(), ImageLoaderFactory {
             }
         }
     }
+
+    /** « hôte:port » du serveur Home Assistant (null si l'adresse est invalide). */
+    fun haServer(): String? = server(config.settings.value.haUrl)
+
+    /** « hôte:port » d'une adresse, port par défaut du protocole s'il est absent (ws/wss comme http/https). */
+    private fun server(url: String): String? = runCatching {
+        val u = java.net.URI(url.trim())
+        val host = u.host ?: return null
+        val port = if (u.port > 0) u.port else if (u.scheme.equals("https", true) || u.scheme.equals("wss", true)) 443 else 80
+        "$host:$port"
+    }.getOrNull()
+
+    /** En-têtes du proxy pour [url] s'il pointe vers Home Assistant (lecteurs qui n'utilisent pas [http]). */
+    fun proxyHeadersFor(url: String): Map<String, String> =
+        if (server(url)?.let { it == haServer() } == true) config.proxyHeaders.toMap() else emptyMap()
+
+    /** Sources des lecteurs vidéo et audio : client [http] (en-têtes du proxy inverse vers Home Assistant). */
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    fun mediaSources(ctx: android.content.Context) = androidx.media3.exoplayer.source.DefaultMediaSourceFactory(
+        androidx.media3.datasource.DefaultDataSource.Factory(ctx, androidx.media3.datasource.okhttp.OkHttpDataSource.Factory(http)),
+    )
 
     /** Coil : ajoute le jeton HA aux images servies par Home Assistant (/local, /api/camera_proxy…). */
     override fun newImageLoader(): ImageLoader {

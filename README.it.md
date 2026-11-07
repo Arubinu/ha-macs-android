@@ -85,6 +85,9 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
   (banner, lettura ad alta voce, accensione dello schermo, telecamera a schermo intero)
 - 🔊 **Lettore multimediale**: Home Assistant trova il tablet (DLNA) e può riprodurvi sintesi vocale, radio o Music
   Assistant; Impostazioni › Home Assistant
+  (accesso: Home Assistant e dispositivi approvati, o tutta la rete)
+- 🌍 **Accesso da Internet**: proxy inverso https (Pangolin, Cloudflare Access…) con le sue intestazioni;
+  Impostazioni › Home Assistant › *Proxy inverso*
 - 🧙 **Procedura guidata**: si può riavviare da Impostazioni › Dashboard
 
 ## 🔒 Modalità kiosk
@@ -104,7 +107,7 @@ e all'avvio, ma un gesto di Android può togliere il blocco su schermo.
 ⚠️ Prima di disinstallare: Impostazioni › Sicurezza › *Rimuovi i diritti di proprietario*.
 
 ✅ Impostazioni › Sicurezza › *Preparare il tablet* controlla tutto in una volta: kiosk, proprietario o schermata
-Home, riapertura dopo un arresto, batteria e animazioni, ognuno con la sua soluzione.
+Home, codice principale, riapertura dopo un arresto, batteria e animazioni, ognuno con la sua soluzione.
 
 ## 🎙️ Assistente vocale (facoltativo)
 

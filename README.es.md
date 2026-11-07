@@ -85,6 +85,9 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
   notificaciones (banner, lectura en voz alta, encendido de la pantalla, cámara a pantalla completa)
 - 🔊 **Reproductor multimedia**: Home Assistant encuentra la tableta (DLNA) y puede reproducir en ella síntesis de voz,
   radios o Music Assistant; Ajustes › Home Assistant
+  (acceso: Home Assistant y dispositivos aprobados, o toda la red)
+- 🌍 **Acceso por Internet**: proxy inverso https (Pangolin, Cloudflare Access…) con sus cabeceras; Ajustes ›
+  Home Assistant › *Proxy inverso*
 - 🧙 **Asistente**: se puede volver a lanzar desde Ajustes › Panel
 
 ## 🔒 Modo quiosco
@@ -104,7 +107,7 @@ botón Inicio y al arrancar, pero un gesto de Android puede quitar la fijación 
 ⚠️ Antes de desinstalar: Ajustes › Seguridad › *Quitar los derechos de propietario*.
 
 ✅ Ajustes › Seguridad › *Preparar la tableta* lo comprueba todo de una vez: quiosco, propietario o pantalla de
-inicio, reapertura tras un fallo, batería y animaciones, cada uno con su solución.
+inicio, código maestro, reapertura tras un fallo, batería y animaciones, cada uno con su solución.
 
 ## 🎙️ Asistente de voz (opcional)
 

@@ -140,7 +140,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         val values = local.filterKeys { !isCode(it) }.mapValues { (k, v) ->
             when {
                 // Jeton Home Assistant et codes chiffrés avec une clé propre à cet appareil : ils ne se déchiffrent qu'ici.
-                k == "ha_token" && v is String && v.isNotBlank() -> P(DeviceSecret.encrypt(context, v))
+                k in SECRETS && v is String && v.isNotBlank() -> P(DeviceSecret.encrypt(context, v))
                 v is Boolean -> kotlinx.serialization.json.JsonPrimitive(v)
                 v is Number -> kotlinx.serialization.json.JsonPrimitive(v)
                 else -> P(v)
@@ -228,7 +228,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                 val p = v as? kotlinx.serialization.json.JsonPrimitive ?: return@forEach
                 when {
                     // Jeton chiffré : déchiffré avec la clé de cet appareil ; autre appareil → vide (à saisir).
-                    k == "ha_token" && DeviceSecret.isEncrypted(p.content) -> putString(k, DeviceSecret.decrypt(context, p.content).orEmpty())
+                    // En-têtes du proxy : de même (autre appareil → à saisir à nouveau).
+                    k in SECRETS && DeviceSecret.isEncrypted(p.content) -> putString(k, DeviceSecret.decrypt(context, p.content).orEmpty())
                     // Codes chiffrés : déchiffrés ici, sinon à redéfinir (rien n'est écrit, pas de code par défaut).
                     isCode(k) && DeviceSecret.isEncrypted(p.content) -> DeviceSecret.decrypt(context, p.content)?.let { putString(k, it) }
                     types[k] == "f" -> putFloat(k, p.content.toFloat())
@@ -250,10 +251,35 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         avatars.import(doc.o("avatars"))
         _dashboard.value = dashboard
         _settings.value = readSettings()
+        proxyHeaders = readProxyHeaders()
         _blocks.value = readBlocks()
         publish()
         null
     }.getOrElse { it.message ?: it.javaClass.simpleName }
+
+    // --- Proxy inverse ---------------------------------------------------------------------------
+
+    /**
+     * En-têtes ajoutés à chaque requête vers Home Assistant (API, WebSocket, images, vidéos, sons), pour un accès par
+     * un proxy inverse qui authentifie les applications : Pangolin (`P-Access-Token-Id` / `P-Access-Token`),
+     * Cloudflare Access (`CF-Access-Client-Id` / `CF-Access-Client-Secret`)… Chiffrés à l'export, comme le jeton.
+     */
+    @Volatile var proxyHeaders: List<Pair<String, String>> = readProxyHeaders()
+        private set
+
+    private fun readProxyHeaders(): List<Pair<String, String>> = runCatching {
+        json.parseToJsonElement(prefs.getString("proxy_headers", null) ?: "{}").jsonObject
+            .map { (k, v) -> k to ((v as? kotlinx.serialization.json.JsonPrimitive)?.content ?: "") }
+    }.getOrDefault(emptyList())
+
+    fun setProxyHeaders(list: List<Pair<String, String>>) {
+        val valid = list.map { it.first.trim() to it.second.trim() }.filter { HEADER_NAME.matches(it.first) && it.second.isNotEmpty() }
+        prefs.edit().apply {
+            if (valid.isEmpty()) remove("proxy_headers")
+            else putString("proxy_headers", JsonObject(valid.associate { it.first to kotlinx.serialization.json.JsonPrimitive(it.second) }).toString())
+        }.apply()
+        proxyHeaders = readProxyHeaders()
+    }
 
     // --- Code d'accès (global) ---------------------------------------------------------------
 
@@ -296,7 +322,11 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
 
     fun setMasterCode(code: String) {
         prefs.edit().putString("master_code", code).apply()
+        masterCodeVersion.intValue++
     }
+
+    /** Change à chaque modification du code maître (écrans qui affichent s'il est défini). */
+    val masterCodeVersion = androidx.compose.runtime.mutableIntStateOf(0)
 
     // --- Assistant de premier démarrage -------------------------------------------------------
 
@@ -406,5 +436,9 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         private const val EXPORT_FORMAT = "ha-android-dashboard"
         private const val PIN_MAX_LOCK = 15 * 60_000L
         private const val CODES_TO_REPLACE = "codes_to_replace"
+        /** Réglages secrets chiffrés à l'export (lisibles seulement sur l'appareil d'origine). */
+        private val SECRETS = setOf("ha_token", "proxy_headers")
+        /** Nom d'en-tête HTTP valide (token RFC 7230). */
+        val HEADER_NAME = Regex("[A-Za-z0-9!#$%&'*+.^_`|~-]{1,64}")
     }
 }

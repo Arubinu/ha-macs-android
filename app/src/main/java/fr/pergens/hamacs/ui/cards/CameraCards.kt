@@ -337,7 +337,7 @@ private fun InlineLive(
     var url by remember(camId) { mutableStateOf(liveUrl) }
     val player = remember {
         // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format (4K H.265 sur Galaxy Tab A8).
-        ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).build().apply { volume = 0f }
+        ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().apply { volume = 0f }
     }
     DisposableEffect(Unit) { onDispose { player.release() } }
     LaunchedEffect(camId) {

@@ -232,6 +232,9 @@ private fun WelcomeStep(conn: ConnState, scanning: Boolean, plan: SetupPlan?, on
         Panel {
             Text(stringResource(R.string.setup_connect), style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
             Field(url, { url = it }, stringResource(R.string.ha_url), stringResource(R.string.ha_url_hint))
+            if (fr.pergens.hamacs.ui.settings.insecureRemote(url)) {
+                Text(stringResource(R.string.ha_http_warning), style = TextStyle(fontSize = 13.sp, color = androidx.compose.ui.graphics.Color(0xFFFF6B6B), lineHeight = 18.sp))
+            }
             HaServerChips(servers, url) { url = it }
             // Connexion avec le compte HA (téléphone ou tablette), sinon jeton collé : même présentation que les
             // autres choix de l'assistant. Choisir téléphone ou tablette ouvre directement la connexion.

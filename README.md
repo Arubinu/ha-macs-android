@@ -80,6 +80,9 @@ home. Already have a backup? **Import** it on the first step and you are done.
   notifications (banner, text read aloud, screen on, camera fullscreen)
 - 🔊 **Media player**: Home Assistant finds the tablet (DLNA) and can play text to speech, radios or Music Assistant on
   it; Settings › Home Assistant
+  (access: Home Assistant and approved devices, or the whole network)
+- 🌍 **Internet access**: https reverse proxy (Pangolin, Cloudflare Access…) with its headers; Settings ›
+  Home Assistant › *Reverse proxy*
 - 🧙 **Wizard**: can be run again from Settings › Dashboard
 
 ## 🔒 Kiosk mode
@@ -97,7 +100,7 @@ startup, but an Android gesture can remove the screen pinning.
 
 ⚠️ Before uninstalling: Settings › Security › *Remove device owner rights*.
 
-✅ Settings › Security › *Prepare the tablet* checks everything at once: kiosk, device owner or home screen,
+✅ Settings › Security › *Prepare the tablet* checks everything at once: kiosk, device owner or home screen, master code,
 restart after a crash, battery and animations, each with its fix.
 
 ## 🎙️ Voice assistant (optional)

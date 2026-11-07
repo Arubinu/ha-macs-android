@@ -225,7 +225,8 @@ class AlertHub(
             scope.launch(Dispatchers.Main) {
                 runCatching {
                     MediaPlayer().apply {
-                        setDataSource(ha.resolveUrl(url))
+                        val u = ha.resolveUrl(url) ?: url
+                        setDataSource(fr.pergens.hamacs.App.instance, android.net.Uri.parse(u), fr.pergens.hamacs.App.instance.proxyHeadersFor(u))
                         setOnPreparedListener { it.start() }
                         setOnCompletionListener { it.release() }
                         prepareAsync()

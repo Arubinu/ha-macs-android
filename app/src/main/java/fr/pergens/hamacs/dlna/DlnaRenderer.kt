@@ -207,7 +207,15 @@ class DlnaRenderer(
     // HTTP : description, services (SCPD), commandes SOAP et abonnements aux événements.
     // ------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Appareils autorisés à commander le lecteur : tout le réseau ([PeerGuard.Mode.Open]) ou Home Assistant et les
+     * appareils approuvés dans les réglages. Les descriptions (GET) restent lisibles, pour que l'appareil se présente.
+     */
+    val guard = fr.pergens.hamacs.net.PeerGuard(ctx, "peers_dlna", scope, { fr.pergens.hamacs.App.instance.config.settings.value.haUrl })
+
     private suspend fun handle(r: Request): Response = when {
+        r.method != "GET" && !guard.check(r.remote, r.headers["user-agent"], loopback = r.remote == "127.0.0.1" || r.remote == "::1") ->
+            Response("403 Forbidden", "text/plain", ByteArray(0))
         r.method == "GET" && r.path == "/description.xml" -> xml(description())
         r.method == "GET" && r.path.endsWith(".xml") -> Scpd.of(r.path.removePrefix("/").removeSuffix(".xml"))?.let { xml(it) } ?: Response.notFound
         r.method == "POST" && r.path.startsWith("/ctl/") -> soap(r.path.removePrefix("/ctl/"), r)
@@ -362,7 +370,7 @@ class DlnaRenderer(
     // Lecture (fil principal).
     // ------------------------------------------------------------------------------------------------------------
 
-    private fun ensurePlayer(): ExoPlayer = player ?: ExoPlayer.Builder(ctx).build().also { p ->
+    private fun ensurePlayer(): ExoPlayer = player ?: ExoPlayer.Builder(ctx).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().also { p ->
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
         p.addListener(object : Player.Listener {
             override fun onEvents(player: Player, events: Player.Events) = updateState()

@@ -83,6 +83,9 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
   meldingen (banner, voorlezen, scherm aan, camera schermvullend)
 - 🔊 **Mediaspeler**: Home Assistant vindt de tablet (DLNA) en kan er tekst-naar-spraak, radio's of Music Assistant op
   afspelen; Instellingen › Home Assistant
+  (toegang: Home Assistant en goedgekeurde apparaten, of het hele netwerk)
+- 🌍 **Toegang via internet**: https-reverse proxy (Pangolin, Cloudflare Access…) met zijn headers;
+  Instellingen › Home Assistant › *Reverse proxy*
 - 🧙 **Assistent**: opnieuw te starten via Instellingen › Dashboard
 
 ## 🔒 Kioskmodus
@@ -102,7 +105,7 @@ bij het opstarten, maar een Android-gebaar kan scherm vastzetten opheffen.
 ⚠️ Voor het verwijderen: Instellingen › Beveiliging › *Rechten van apparaateigenaar intrekken*.
 
 ✅ Instellingen › Beveiliging › *Tablet voorbereiden* controleert alles in één keer: kiosk, apparaateigenaar of
-startscherm, herstart na een crash, batterij en animaties, elk met de oplossing.
+startscherm, mastercode, herstart na een crash, batterij en animaties, elk met de oplossing.
 
 ## 🎙️ Spraakassistent (optioneel)
 

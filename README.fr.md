@@ -83,6 +83,9 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
   notifications (bandeau, lecture à voix haute, allumage de l'écran, caméra en plein écran)
 - 🔊 **Lecteur multimédia** : Home Assistant trouve la tablette (DLNA) et peut y diffuser synthèse vocale, radios ou
   Music Assistant ; Réglages › Home Assistant
+  (accès : Home Assistant et appareils approuvés, ou tout le réseau)
+- 🌍 **Accès par Internet** : proxy inverse en https (Pangolin, Cloudflare Access…) avec ses en-têtes ; Réglages ›
+  Home Assistant › *Proxy inverse*
 - 🧙 **Assistant** : relançable depuis Réglages › Tableau de bord
 
 ## 🔒 Mode kiosque
@@ -101,7 +104,7 @@ le bouton Accueil et au démarrage, mais un geste d'Android peut retirer l'épin
 
 ⚠️ Avant de désinstaller : Réglages › Sécurité › *Retirer les droits de propriétaire*.
 
-✅ Réglages › Sécurité › *Préparer la tablette* vérifie tout d'un coup : kiosque, propriétaire ou écran d'accueil,
+✅ Réglages › Sécurité › *Préparer la tablette* vérifie tout d'un coup : kiosque, propriétaire ou écran d'accueil, code maître,
 relance après un plantage, batterie et animations, chacun avec sa solution.
 
 ## 🎙️ Assistant vocal (facultatif)

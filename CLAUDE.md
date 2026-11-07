@@ -126,6 +126,11 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   racine de l'agencement, retiré de l'agencement exporté) sont chiffrés de la même façon ; `code_groups` regroupe
   les codes identiques. Ailleurs, rien n'est écrit pour eux (pas de 0000) : `codes_to_replace` (pref, conservée
   jusqu'au bout) fait afficher `CodeReplaceDialog` (non fermable), un nouveau code par groupe.
+- **Proxy inverse** (Réglages › Home Assistant, pref `proxy_headers`, chiffrée à l'export comme le jeton) : en-têtes
+  ajoutés par l'intercepteur d'`App.http` aux requêtes vers l'hôte:port de HA (REST, WebSocket, Coil, lecteurs ExoPlayer
+  via `App.mediaSources`, sons via `proxyHeadersFor`). Modèles Pangolin (`P-Access-Token-Id` / `P-Access-Token`) et
+  Cloudflare Access. La WebView de connexion n'a les en-têtes que sur la 1ʳᵉ page (sinon jeton collé). Adresse `http://`
+  hors réseau local → avertissement (`insecureRemote`). Test : faux serveur qui affiche les en-têtes reçus.
 - **Sauvegarde par téléphone** (`ui/PhoneTransferUi.kt`) : QR → `LocalHttpServer` ; la page télécharge l'export
   (`/clé/export`), en envoie un (`/clé/import`, même traitement que l'import de fichier : `MainActivity.applyImport`)
   et propose le journal des plantages (`/clé/crashes`). Boutons dans Réglages › Tableau de bord, l'assistant et le journal.
@@ -158,10 +163,13 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   ExoPlayer ; pastille `ui/DlnaUi.kt` : complète en bas à gauche sur l'accueil, compacte à gauche de la barre d'onglets
   la plus haute ailleurs (`DashState.topMenu`, relevée par `PillMenu`), masquée sur les réglages. Test : `adb forward
   tcp:49494`, requêtes SOAP et SUBSCRIBE depuis le PC (rappel `http://10.0.2.2:…`) ; le multicast SSDP ne traverse pas
-  l'émulateur.
+  l'émulateur. Accès (`net/PeerGuard.kt`, prefs `peers_dlna`, non exportées) : *Appareils approuvés* (défaut : IP du
+  serveur HA de l'app d'office, les autres en attente → 403) ou *Tout le réseau* (sauf bloqués) ; les GET (descriptions)
+  restent libres. Boucle locale acceptée en débogage (`adb forward`) ; pour tester un appareil « du réseau » :
+  `adb shell "printf 'POST …' | nc 10.0.2.16 49494"` (l'émulateur vers sa propre IP Wi-Fi).
 - **Satellite Wyoming** (`voice/WyomingSatellite.kt`, prefs `wyoming`) : Réglages › Assistant vocal, système *Passerelle*
-  ou *Home Assistant* (exclusifs). Serveur TCP 10700 (seuls l'IP du serveur HA de l'app, sinon le premier appareil
-  connecté, pref `peer` oubliée en désactivant ; boucle locale en débogage), mDNS `_wyoming._tcp`, `describe`/`info`, `ping`/`pong`,
+  ou *Home Assistant* (exclusifs). Serveur TCP 10700 (pas d'authentification dans le protocole : seuls l'IP du
+  serveur HA de l'app et les appareils approuvés, `PeerGuard` prefs `peers_wyoming` ; boucle locale en débogage), mDNS `_wyoming._tcp`, `describe`/`info`, `ping`/`pong`,
   `run-satellite` ; appui sur le M.A.C.S. → `run-pipeline` (asr→tts) + audio 16 kHz ; mot d'activation → micro continu,
   `run-pipeline` depuis `wake`. Réception : `transcript`, `synthesize`, audio TTS (écrit dans l'AudioTrack sur une file
   unique : écrire en parallèle fait planter le code natif), `played`. Envois réseau jamais sur le fil principal (file
@@ -173,7 +181,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   chaque retour au premier plan) ou *Moi-même* (étapes guidées, écrans ouverts en tâche neuve, via `Kiosk.suspend` en
   kiosque). Ne jamais accorder la permission sur la tablette de l'utilisateur sans son accord.
 - **Préparer la tablette** (`ui/Readiness.kt`) : Réglages › Sécurité (en tête) et une fois après l'assistant s'il manque
-  quelque chose : kiosque, verrouillage (prêt avec l'écran d'accueil *ou* le propriétaire), relance après plantage,
+  quelque chose : kiosque, verrouillage (prêt avec l'écran d'accueil *ou* le propriétaire), code maître (saisi sur place),
+  relance après plantage,
   batterie (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`), animations. Écrans d'Android ouverts via `Kiosk.suspend` si verrouillé.
   Propriétaire : commande adb, ou QR code de provisionnement (`kiosk/Provisioning.kt`, aussi dans le groupe kiosque) scanné
   après une réinitialisation : APK de la Release de la version installée (API GitHub, ABI de la tablette), empreinte du
@@ -221,5 +230,6 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   plein écran. L'assistant permet d'ajouter / renommer / supprimer des onglets.
 - **Graphiques** : `state_from: min|max` affiche la courbe la plus basse/haute avec son nom (meilleur prix) ;
   bandes jour/nuit sur `sun.sun`.
-- **Alertes `persistent`** : heure de déclenchement mémorisée (`{trigger_time}`), rattrapage sur 24 h
+- **Alertes `persistent`** : heure de déclenchement mémorisée (`{trigger_time}` = « 09:58 », « 18:20 (hier) »,
+  « 18:20 (4 nov.) » : se lit après « à »), rattrapage sur 24 h
   d'historique à la connexion ; la prise en compte (✕) est propre à chaque tablette.

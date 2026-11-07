@@ -82,6 +82,9 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
   (baner, czytanie na głos, włączenie ekranu, kamera na pełnym ekranie)
 - 🔊 **Odtwarzacz multimediów**: Home Assistant wykrywa tablet (DLNA) i może odtwarzać na nim syntezę mowy, radio lub
   Music Assistant; Ustawienia › Home Assistant
+  (dostęp: Home Assistant i zatwierdzone urządzenia albo cała sieć)
+- 🌍 **Dostęp przez Internet**: odwrotne proxy https (Pangolin, Cloudflare Access…) z jego nagłówkami;
+  Ustawienia › Home Assistant › *Odwrotne proxy*
 - 🧙 **Kreator**: można go uruchomić ponownie w Ustawienia › Panel
 
 ## 🔒 Tryb kiosku
@@ -101,7 +104,7 @@ naciśnięciu przycisku ekranu głównego i przy starcie, ale gest Androida moż
 ⚠️ Przed odinstalowaniem: Ustawienia › Bezpieczeństwo › *Usuń uprawnienia właściciela*.
 
 ✅ Ustawienia › Bezpieczeństwo › *Przygotuj tablet* sprawdza wszystko naraz: kiosk, właściciela urządzenia lub
-ekran główny, ponowne otwarcie po awarii, baterię i animacje, każde z rozwiązaniem.
+ekran główny, kod główny, ponowne otwarcie po awarii, baterię i animacje, każde z rozwiązaniem.
 
 ## 🎙️ Asystent głosowy (opcjonalnie)
 

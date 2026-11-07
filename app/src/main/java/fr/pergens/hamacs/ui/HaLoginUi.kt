@@ -282,7 +282,7 @@ private fun TabletLoginDialog(base: String, onClose: () -> Unit, onToken: (Strin
                                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
                                     handleRedirect(request.url.toString())
                             }
-                            loadUrl(authorize)
+                            loadUrl(authorize, fr.pergens.hamacs.App.instance.proxyHeadersFor(authorize))
                         }
                     },
                     modifier = Modifier.fillMaxSize(),
