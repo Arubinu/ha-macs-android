@@ -224,9 +224,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                         ) {
-                            ScreenHost(dashboard)
-                            // Bannière des alertes (AlertTicker) quand leur carte n'est pas à l'écran.
-                            AlertOverlayHost()
+                            // Plein écran (caméra seule ou mur) : l'affichage du tableau de bord est mis en pause dessous
+                            // (cartes, animations, directs des caméras) ; le reste de l'app continue.
+                            if (!state.fullscreen) {
+                                ScreenHost(dashboard)
+                                // Bannière des alertes (AlertTicker) quand leur carte n'est pas à l'écran.
+                                AlertOverlayHost()
+                            }
                             // Zone cachée (coin haut-gauche) : appui long = réglages.
                             Box(Modifier.align(Alignment.TopStart).size(48.dp).tapHold(onTap = null, onHold = {
                                 // Kiosque ou code maître : les réglages demandent le code.

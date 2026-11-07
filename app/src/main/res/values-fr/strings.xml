@@ -872,4 +872,26 @@
     <string name="clock_weather_entity_help">Par défaut, l\'entité météo de M.A.C.S.</string>
     <string name="fullscreen_timeout">Plein écran : fermeture automatique</string>
     <string name="fullscreen_timeout_help">Retour au tableau de bord après ce délai, si personne ne l\'a fermé avant.</string>
+    <string name="wall_title">Mur de caméras</string>
+    <string name="wall_all">Toutes</string>
+    <string name="wall_live_all">Tout en direct</string>
+    <string name="wall_empty">Aucune caméra à afficher.</string>
+    <string name="wall_home_button">Bouton sur l\'accueil</string>
+    <string name="wall_home_button_help">Ouvre le mur de caméras depuis l\'écran d\'accueil.</string>
+    <string name="wall_timeout">Mur de caméras : fermeture automatique</string>
+    <string name="wall_timeout_help">Retour au tableau de bord après ce délai, jamais pendant une détection.</string>
+    <string name="wall_timeout_same">Comme le plein écran</string>
+    <string name="wall_live_max">Mur de caméras : directs simultanés</string>
+    <string name="wall_live_max_help">Au-delà, les caméras affichent une capture rafraîchie. Automatique : %1$d d\'après les décodeurs vidéo de la tablette.</string>
+    <string name="wall_live_auto">Automatique</string>
+    <string name="wall_live_learned">Réduit à %1$d après un échec de lecture.</string>
+    <string name="wall_live_reset">Réinitialiser</string>
+    <string name="camera_power">Alimentation</string>
+    <string name="camera_power_help">Mur de caméras. Secteur : direct permanent. Solaire et batterie : capture, direct au toucher ou sur mouvement.</string>
+    <string name="camera_power_auto">Automatique (%1$s)</string>
+    <string name="camera_power_mains">Secteur</string>
+    <string name="camera_power_solar">Solaire</string>
+    <string name="camera_power_battery">Batterie</string>
+    <string name="camera_event_also">Afficher aussi</string>
+    <string name="camera_event_also_help">Autres caméras affichées en vignettes à côté de celle-ci.</string>
 </resources>

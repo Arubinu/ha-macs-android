@@ -885,4 +885,26 @@
     <string name="clock_weather_entity_help">By default, the weather entity of M.A.C.S.</string>
     <string name="fullscreen_timeout">Fullscreen: close automatically</string>
     <string name="fullscreen_timeout_help">Back to the dashboard after this delay, if nobody closed it before.</string>
+    <string name="wall_title">Camera wall</string>
+    <string name="wall_all">All</string>
+    <string name="wall_live_all">All live</string>
+    <string name="wall_empty">No camera to show.</string>
+    <string name="wall_home_button">Button on the home screen</string>
+    <string name="wall_home_button_help">Opens the camera wall from the home screen.</string>
+    <string name="wall_timeout">Camera wall: close automatically</string>
+    <string name="wall_timeout_help">Back to the dashboard after this delay, never during a detection.</string>
+    <string name="wall_timeout_same">Like fullscreen</string>
+    <string name="wall_live_max">Camera wall: simultaneous live streams</string>
+    <string name="wall_live_max_help">Beyond this, cameras show a refreshed snapshot. Automatic: %1$d according to the tablet\'s video decoders.</string>
+    <string name="wall_live_auto">Automatic</string>
+    <string name="wall_live_learned">Lowered to %1$d after a playback failure.</string>
+    <string name="wall_live_reset">Reset</string>
+    <string name="camera_power">Power supply</string>
+    <string name="camera_power_help">Camera wall. Mains: always live. Solar and battery: snapshot, live on touch or on motion.</string>
+    <string name="camera_power_auto">Automatic (%1$s)</string>
+    <string name="camera_power_mains">Mains</string>
+    <string name="camera_power_solar">Solar</string>
+    <string name="camera_power_battery">Battery</string>
+    <string name="camera_event_also">Also show</string>
+    <string name="camera_event_also_help">Other cameras shown as thumbnails next to this one.</string>
 </resources>

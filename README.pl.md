@@ -31,6 +31,8 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 - 📹 **Kamery**: podgląd na żywo, własne karty, pełny ekran w wysokiej rozdzielczości, ostatnie wykrycia (media HA,
   SMB, NFS, pamięć lokalna)
   ; pełny ekran zamyka się sam po czasie (Ustawienia › Wyświetlanie), nigdy podczas wykrycia
+  ; 🧱 **ściana kamer**: siatka według karty lub wszystkie, z kart lub ekranu głównego, na żywo zależnie od zasilania
+  (sieć, słoneczne, bateria); dzwonek może otworzyć swoją kamerę w dużym oknie z innymi jako miniatury
 - 🚨 **Alerty**: natywna wersja [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 motywy, dźwięk,
   synteza mowy i powiadomienia
 - 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją (dotknij wykresu: każda

@@ -79,6 +79,8 @@ fun Overlays(dashboard: JsonObject) {
     val state = LocalDashState.current
     state.popup?.let { id -> dashboard.o("popups")?.o(id)?.let { PopupDialog(it) { state.popup = null } } }
     state.moreInfo?.let { MoreInfoDialog(it) { state.moreInfo = null } }
+    // Mur avant le lecteur : une caméra agrandie depuis le mur s'ouvre par-dessus.
+    state.wall?.let { CameraWallDialog(it) { state.wall = null } }
     state.player?.let { PlayerDialog(it, state.playerFallback) { state.player = null; state.playerFallback = null } }
     state.pin?.let { req -> PinDialog(req) { state.pin = null } }
     if (state.kioskMenu) KioskMenu { state.kioskMenu = false }
@@ -164,10 +166,10 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
             }
             val webHost = (target as? EditTarget.Web)?.let { android.net.Uri.parse(original?.s("url") ?: "").host }
             Text(
-                when { target is EditTarget.Pages -> stringResource(R.string.pages_title); target is EditTarget.Macs -> "M.A.C.S."; target is EditTarget.Clock -> stringResource(R.string.clock_title); target is EditTarget.Detections -> stringResource(R.string.det_title); target is EditTarget.DetectionCamera -> detectionCameraTitle(target.key, target.index); target is EditTarget.Device -> deviceTitle(target.key, target.room, target.index) ?: ""; roomName != null -> roomName; target is EditTarget.Tabs -> stringResource(R.string.tabs_title); target is EditTarget.Tab -> tabLabel ?: ""; carousel -> stringResource(R.string.swipe_title); windy -> stringResource(R.string.windy_title); target is EditTarget.Web -> stringResource(R.string.web_title); else -> graphTitle ?: e?.name ?: entityId },
+                when { target is EditTarget.Pages -> stringResource(R.string.pages_title); target is EditTarget.Macs -> "M.A.C.S."; target is EditTarget.Clock -> stringResource(R.string.clock_title); target is EditTarget.Wall -> stringResource(R.string.wall_title); target is EditTarget.Detections -> stringResource(R.string.det_title); target is EditTarget.DetectionCamera -> detectionCameraTitle(target.key, target.index); target is EditTarget.Device -> deviceTitle(target.key, target.room, target.index) ?: ""; roomName != null -> roomName; target is EditTarget.Tabs -> stringResource(R.string.tabs_title); target is EditTarget.Tab -> tabLabel ?: ""; carousel -> stringResource(R.string.swipe_title); windy -> stringResource(R.string.windy_title); target is EditTarget.Web -> stringResource(R.string.web_title); else -> graphTitle ?: e?.name ?: entityId },
                 Modifier.padding(end = 48.dp), style = TextStyle(fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Medium),
             )
-            if (!windy && !multiGraph && !carousel && roomName == null && target !is EditTarget.Pages && target !is EditTarget.Macs && target !is EditTarget.Clock && target !is EditTarget.Detections && target !is EditTarget.DetectionCamera && target !is EditTarget.Tabs && target !is EditTarget.Tab && target !is EditTarget.Device) Text(webHost ?: entityId, style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 140), fontStyle = androidx.compose.ui.text.font.FontStyle.Italic))
+            if (!windy && !multiGraph && !carousel && roomName == null && target !is EditTarget.Pages && target !is EditTarget.Macs && target !is EditTarget.Clock && target !is EditTarget.Wall && target !is EditTarget.Detections && target !is EditTarget.DetectionCamera && target !is EditTarget.Tabs && target !is EditTarget.Tab && target !is EditTarget.Device) Text(webHost ?: entityId, style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 140), fontStyle = androidx.compose.ui.text.font.FontStyle.Italic))
             androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             if (target is EditTarget.Member) {
@@ -240,10 +242,12 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                     stringResource(R.string.edit_always_live), stringResource(R.string.edit_always_live_help),
                     options?.b("always_live") ?: configAlwaysLive,
                 ) { app.config.setBlockOption(optionKey, "always_live", it.takeIf { v -> v != configAlwaysLive }) }
+                // Mur de caméras : direct permanent (secteur) ou capture (solaire, batterie).
+                CameraPowerFields(optionKey, options, original)
                 // Sonnette, détecteur : ouverture en plein écran quand une entité se déclenche.
                 CameraEventFields(optionKey, options)
             }
-            when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Clock -> ClockFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> { EntityFields(objKey, graphType); if (target is EditTarget.Entity && original?.s("type") == "media_player") MediaFields(objKey, JsonObject(original + (set ?: JsonObject(emptyMap())))) } }
+            when { target is EditTarget.Pages -> PagesFields(objKey); target is EditTarget.Macs -> MacsFields(); target is EditTarget.Clock -> ClockFields(); target is EditTarget.Wall -> WallFields(); target is EditTarget.Detections -> DetectionFields(objKey); target is EditTarget.DetectionCamera -> DetectionCameraFields(objKey, target.index, onDismiss); target is EditTarget.Device -> DeviceFields(objKey, target.room, target.index, onDismiss); target is EditTarget.Tabs -> TabsFields(objKey); target is EditTarget.Tab -> TabFields(objKey, target.index); target is EditTarget.Room -> RoomFields(objKey, target.index, onDismiss); carousel -> CarouselFields(objKey); target is EditTarget.Web -> WebFields(objKey); multiGraph -> MultiGraphFields(objKey); else -> { EntityFields(objKey, graphType); if (target is EditTarget.Entity && original?.s("type") == "media_player") MediaFields(objKey, JsonObject(original + (set ?: JsonObject(emptyMap())))) } }
             }
         }
     }

@@ -31,6 +31,8 @@ card personalizzate e senza nulla da configurare in Home Assistant.
 - 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione, ultimi rilevamenti (media
   HA, SMB, NFS, locale)
   ; lo schermo intero si chiude da solo dopo un tempo (Impostazioni › Visualizzazione), mai durante un rilevamento
+  ; 🧱 **muro di telecamere**: griglia per scheda o tutte, dalle schede o dalla schermata iniziale, diretta secondo
+  l'alimentazione (rete, solare, batteria); un campanello può aprire la sua telecamera in grande con altre in miniatura
 - 🚨 **Avvisi**: versione nativa di [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temi, suono,
   sintesi vocale e notifiche
 - 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più

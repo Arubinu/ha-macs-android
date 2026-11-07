@@ -31,6 +31,8 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 - 📹 **Caméras** : direct, onglets personnalisables, plein écran en haute définition, dernières détections (média HA,
   SMB, NFS, stockage local)
   ; plein écran refermé tout seul après un délai (Réglages › Affichage), jamais pendant une détection
+  ; 🧱 **mur de caméras** : grille par onglet ou toutes, depuis les onglets ou l'accueil, direct selon l'alimentation
+  (secteur, solaire, batterie) ; une sonnette peut ouvrir sa caméra en grand avec d'autres en vignettes
 - 🚨 **Alertes** : portage natif de l'[AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thèmes, son,
   synthèse vocale et notifications
 - 🌦️ **Météo et graphiques** : prévisions, radar Windy, consommation électrique, prix des carburants avec la station la

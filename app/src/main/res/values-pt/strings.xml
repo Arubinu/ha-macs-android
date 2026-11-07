@@ -854,4 +854,26 @@
     <string name="clock_weather_entity_help">Por predefinição, a entidade meteorológica do M.A.C.S.</string>
     <string name="fullscreen_timeout">Ecrã inteiro: fecho automático</string>
     <string name="fullscreen_timeout_help">Volta ao painel após este tempo, se ninguém o tiver fechado antes.</string>
+    <string name="wall_title">Mural de câmaras</string>
+    <string name="wall_all">Todas</string>
+    <string name="wall_live_all">Tudo em direto</string>
+    <string name="wall_empty">Nenhuma câmara para mostrar.</string>
+    <string name="wall_home_button">Botão no ecrã inicial</string>
+    <string name="wall_home_button_help">Abre o mural de câmaras a partir do ecrã inicial.</string>
+    <string name="wall_timeout">Mural de câmaras: fecho automático</string>
+    <string name="wall_timeout_help">Volta ao painel após este tempo, nunca durante uma deteção.</string>
+    <string name="wall_timeout_same">Como o ecrã inteiro</string>
+    <string name="wall_live_max">Mural de câmaras: diretos simultâneos</string>
+    <string name="wall_live_max_help">Acima disso, as câmaras mostram uma captura atualizada. Automático: %1$d segundo os descodificadores de vídeo do tablet.</string>
+    <string name="wall_live_auto">Automático</string>
+    <string name="wall_live_learned">Reduzido para %1$d após uma falha de reprodução.</string>
+    <string name="wall_live_reset">Repor</string>
+    <string name="camera_power">Alimentação</string>
+    <string name="camera_power_help">Mural de câmaras. Corrente: direto permanente. Solar e bateria: captura, direto ao tocar ou com movimento.</string>
+    <string name="camera_power_auto">Automático (%1$s)</string>
+    <string name="camera_power_mains">Corrente elétrica</string>
+    <string name="camera_power_solar">Solar</string>
+    <string name="camera_power_battery">Bateria</string>
+    <string name="camera_event_also">Mostrar também</string>
+    <string name="camera_event_also_help">Outras câmaras mostradas em miniatura ao lado desta.</string>
 </resources>

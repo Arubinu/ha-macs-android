@@ -191,6 +191,8 @@ private fun FitColumn(
 private fun OverlayScreen(screen: Card) {
     Box(Modifier.fillMaxSize()) {
         screen.objs("cards").forEach { card -> Positioned(card) }
+        // Accès rapide au mur de caméras (masquable en mode édition).
+        WallHomeButton(Modifier.align(Alignment.BottomEnd).padding(28.dp))
     }
 }
 

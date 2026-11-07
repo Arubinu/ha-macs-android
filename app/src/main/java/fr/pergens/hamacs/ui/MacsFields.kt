@@ -224,6 +224,17 @@ fun ClockFields() {
     }
 }
 
+/** Bouton du mur de caméras sur l'accueil : affiché ou non. */
+@Composable
+fun WallFields() {
+    val app = App.instance
+    val blocks by app.config.blocks.collectAsState()
+    val shown = (blocks[CameraWall.KEY]?.get("home_button") as? JsonPrimitive)?.content != "false"
+    SwitchLine(stringResource(R.string.wall_home_button), stringResource(R.string.wall_home_button_help), shown) {
+        app.config.setBlockValue(CameraWall.KEY, "home_button", if (it) null else JsonPrimitive(false))
+    }
+}
+
 private fun fmt(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
 
 /** Capteur numérique : entité, unité (auto = celle du capteur) et plage ramenée à 0–100. */

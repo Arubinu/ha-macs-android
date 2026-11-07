@@ -116,7 +116,7 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
                 tabsKey != null -> ({ state.editTarget = fr.pergens.hamacs.ui.EditTarget.Tabs(tabsKey) })
                 pagesKey != null -> ({ state.editTarget = fr.pergens.hamacs.ui.EditTarget.Pages(pagesKey) })
                 else -> null
-            })
+            }, onWall = if (tabsKey != null && !state.editMode) ({ state.wall = fr.pergens.hamacs.ui.WallRequest(page = current) }) else null)
             Spacer(Modifier.height(12.dp))
             content()
         }
@@ -128,7 +128,7 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
  * boutons de 32px de haut arrondis à 18px (donc des pilules parfaites, au centre comme aux extrémités).
  */
 @Composable
-fun PillMenu(pages: List<Card>, current: String, onSelect: (String) -> Unit, onEdit: (() -> Unit)? = null) {
+fun PillMenu(pages: List<Card>, current: String, onSelect: (String) -> Unit, onEdit: (() -> Unit)? = null, onWall: (() -> Unit)? = null) {
     val c = Dash.colors
     val state = fr.pergens.hamacs.ui.LocalDashState.current
     val outer = RoundedCornerShape(Dash.shapes.menuRadius)
@@ -168,6 +168,15 @@ fun PillMenu(pages: List<Card>, current: String, onSelect: (String) -> Unit, onE
                         Text(it, Modifier.padding(start = 8.dp), style = TextStyle(fontSize = 14.sp, color = c.menuActiveButton), maxLines = 1)
                     }
                 }
+            }
+            // Onglets de caméras : mur de caméras (toutes celles de l'onglet en plein écran).
+            if (onWall != null) {
+                val pill = RoundedCornerShape(Dash.shapes.menuRadius)
+                Box(
+                    Modifier.padding(start = 4.dp).clip(pill).background(c.menuInactiveButtonBackground, pill).tapHold({ onWall() })
+                        .heightIn(min = 32.dp).padding(horizontal = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) { HaIcon("mdi:view-grid-outline", size = 16.dp, tint = c.menuInactiveButton) }
             }
             if (onEdit != null) {
                 val pill = RoundedCornerShape(Dash.shapes.menuRadius)

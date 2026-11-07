@@ -30,6 +30,8 @@ Custom Cards und ohne Einrichtung in Home Assistant.
   optionale Filter, Kopf ragt aus einem Kreis in der Farbe des Dashboards
 - 📹 **Kameras**: Livebild, eigene Tabs, Vollbild in hoher Auflösung, letzte Erkennungen (HA-Medien, SMB, NFS, lokal)
   ; Vollbild schließt sich nach einer Wartezeit selbst (Einstellungen › Anzeige), nie während einer Erkennung
+  ; 🧱 **Kamerawand**: Raster pro Tab oder alle Kameras, über die Tabs oder den Startbildschirm, live je nach
+  Stromversorgung (Netz, Solar, Akku); eine Türklingel kann ihre Kamera groß mit anderen als Miniaturen öffnen
 - 🚨 **Warnungen**: native Umsetzung der [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 Themes,
   Ton, Sprachausgabe und Benachrichtigungen
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle

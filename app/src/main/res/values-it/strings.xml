@@ -854,4 +854,26 @@
     <string name="clock_weather_entity_help">Per impostazione predefinita, l\'entità meteo di M.A.C.S.</string>
     <string name="fullscreen_timeout">Schermo intero: chiusura automatica</string>
     <string name="fullscreen_timeout_help">Torna alla dashboard dopo questo tempo, se nessuno l\'ha chiuso prima.</string>
+    <string name="wall_title">Muro di telecamere</string>
+    <string name="wall_all">Tutte</string>
+    <string name="wall_live_all">Tutto in diretta</string>
+    <string name="wall_empty">Nessuna telecamera da mostrare.</string>
+    <string name="wall_home_button">Pulsante nella schermata iniziale</string>
+    <string name="wall_home_button_help">Apre il muro di telecamere dalla schermata iniziale.</string>
+    <string name="wall_timeout">Muro di telecamere: chiusura automatica</string>
+    <string name="wall_timeout_help">Torna alla dashboard dopo questo tempo, mai durante un rilevamento.</string>
+    <string name="wall_timeout_same">Come lo schermo intero</string>
+    <string name="wall_live_max">Muro di telecamere: dirette simultanee</string>
+    <string name="wall_live_max_help">Oltre, le telecamere mostrano un\'istantanea aggiornata. Automatico: %1$d secondo i decoder video del tablet.</string>
+    <string name="wall_live_auto">Automatico</string>
+    <string name="wall_live_learned">Ridotto a %1$d dopo un errore di riproduzione.</string>
+    <string name="wall_live_reset">Reimposta</string>
+    <string name="camera_power">Alimentazione</string>
+    <string name="camera_power_help">Muro di telecamere. Rete: diretta continua. Solare e batteria: istantanea, diretta al tocco o con movimento.</string>
+    <string name="camera_power_auto">Automatico (%1$s)</string>
+    <string name="camera_power_mains">Rete elettrica</string>
+    <string name="camera_power_solar">Solare</string>
+    <string name="camera_power_battery">Batteria</string>
+    <string name="camera_event_also">Mostra anche</string>
+    <string name="camera_event_also_help">Altre telecamere mostrate in miniatura accanto a questa.</string>
 </resources>

@@ -31,6 +31,8 @@ personalizados e sem nada para configurar no Home Assistant.
 - 📹 **Câmaras**: em direto, separadores personalizáveis, ecrã inteiro em alta definição, últimas deteções (multimédia
   do HA, SMB, NFS, local)
   ; o ecrã inteiro fecha-se sozinho após um tempo (Definições › Ecrã), nunca durante uma deteção
+  ; 🧱 **mural de câmaras**: grelha por separador ou todas, a partir dos separadores ou do ecrã inicial, direto conforme
+  a alimentação (corrente, solar, bateria); uma campainha pode abrir a sua câmara em grande com outras em miniatura
 - 🚨 **Alertas**: versão nativa do [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, som,
   voz e notificações
 - 🌦️ **Meteorologia e gráficos**: previsão, radar Windy, consumo elétrico, preços dos combustíveis com o posto mais

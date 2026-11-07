@@ -57,6 +57,8 @@ sealed interface EditTarget {
     data class Macs(override val key: String = "macs") : EditTarget
     /** Horloge de l'accueil ([key] = `clock`) : météo sous l'heure et son entité. */
     data class Clock(override val key: String = "clock") : EditTarget
+    /** Bouton du mur de caméras sur l'accueil ([key] = `wall`). */
+    data class Wall(override val key: String = "wall") : EditTarget
     /** Bloc dont seules les entités se règlent (météo…). */
     data class Block(override val key: String) : EditTarget
     /** Carte dont toute la configuration se modifie dans un éditeur dédié (AlertTicker…). */
@@ -107,6 +109,10 @@ class DashState(
     var kioskMenu by mutableStateOf(false)
     /** Vidéo plein écran : URL directe (mp4/HLS) ou caméra à streamer ("camera.xxx"). */
     var player by mutableStateOf<String?>(null)
+    /** Mur de caméras ouvert (grille plein écran). */
+    var wall by mutableStateOf<WallRequest?>(null)
+    /** Plein écran (caméra seule ou mur) : l'affichage du tableau de bord est mis en pause dessous. */
+    val fullscreen: Boolean get() = player != null || wall != null
     /** Flux de repli du plein écran (celui de la carte) si la tablette ne sait pas décoder [player] (4K H.265…). */
     var playerFallback: String? = null
 

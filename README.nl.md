@@ -31,6 +31,8 @@ custom cards en zonder iets in te stellen in Home Assistant.
 - 📹 **Camera's**: live beeld, eigen tabbladen, volledig scherm in hoge resolutie, laatste detecties (HA-media, SMB,
   NFS, lokaal)
   ; volledig scherm sluit vanzelf na een tijd (Instellingen › Weergave), nooit tijdens een detectie
+  ; 🧱 **camerawand**: raster per tabblad of alle camera's, via de tabbladen of het startscherm, live volgens de
+  voeding (net, zon, batterij); een deurbel kan zijn camera groot openen met andere als miniaturen
 - 🚨 **Meldingen**: native versie van [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thema's,
   geluid, spraak en pushmeldingen
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation

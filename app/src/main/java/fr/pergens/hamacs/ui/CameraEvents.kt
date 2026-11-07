@@ -94,10 +94,18 @@ private fun open(camId: String, options: JsonObject) {
     val card = findCard(app.config.rawDashboard.value, camId)
     val url = card?.s("fullscreen_url") ?: card?.s("fullscreen_entity") ?: card?.s("live_url") ?: camId
     val at = System.currentTimeMillis()
+    val seconds = (options["event_seconds"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 60
     // Réveille l'écran (veille, atténuation, écran noir de nuit) et affiche la caméra.
     state.lastInteraction = at
-    state.openPlayer(url, card?.s("live_url") ?: camId)
-    eventPlayer = EventPlayer(url, (options["event_seconds"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 60, at)
+    val also = options.s("event_also")?.split(',')?.filter { it.isNotBlank() }.orEmpty()
+    if (also.isNotEmpty()) {
+        // Avec d'autres caméras : elle en grand, les autres en vignettes (le mur se referme seul après le délai).
+        state.player = null
+        state.wall = WallRequest(focus = camId, only = also, autoSeconds = seconds, at = at)
+    } else {
+        state.openPlayer(url, card?.s("live_url") ?: camId)
+        eventPlayer = EventPlayer(url, seconds, at)
+    }
     if ((options["event_sound"] as? JsonPrimitive)?.content != "false") runCatching {
         RingtoneManager.getRingtone(app, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))?.play()
     }
@@ -113,6 +121,39 @@ private fun findCard(e: JsonElement, camId: String): JsonObject? = when (e) {
 
 /** État du tableau de bord pour les déclenchements hors composition (fixé par [CameraEventWatcher]). */
 internal var currentDashState: DashState? = null
+
+/**
+ * Alimentation de la caméra (mur de caméras) : automatique (secteur si sa batterie est branchée), secteur (direct
+ * permanent), solaire ou batterie (capture, direct au toucher ou sur mouvement).
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun CameraPowerFields(optionKey: String, options: JsonObject?, card: JsonObject?) {
+    val app = App.instance
+    val chosen = options?.s("power")
+    val states = app.ha.states.value
+    val guess = card?.let { CameraWall.guessPower(it, states) } ?: CameraPower.Mains
+    val label = @Composable { p: CameraPower ->
+        stringResource(when (p) { CameraPower.Mains -> R.string.camera_power_mains; CameraPower.Solar -> R.string.camera_power_solar; CameraPower.Battery -> R.string.camera_power_battery })
+    }
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.camera_power), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+        Text(stringResource(R.string.camera_power_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val chip = @Composable { selected: Boolean, text: String, value: String? ->
+                FilterChip(
+                    selected = selected,
+                    onClick = { app.config.setBlockValue(optionKey, "power", value?.let { JsonPrimitive(it) }) },
+                    label = { Text(text) },
+                    modifier = Modifier.heightIn(min = 40.dp),
+                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+                )
+            }
+            chip(chosen == null, stringResource(R.string.camera_power_auto, label(guess)), null)
+            CameraPower.entries.forEach { p -> chip(chosen == p.key, label(p), p.key) }
+        }
+    }
+}
 
 /** Options « ouvrir sur un événement » de l'éditeur d'un bloc caméra. */
 @OptIn(ExperimentalLayoutApi::class)
@@ -139,6 +180,29 @@ internal fun CameraEventFields(optionKey: String, options: JsonObject?) {
                         modifier = Modifier.heightIn(min = 40.dp),
                         colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
                     )
+                }
+            }
+            // Autres caméras en vignettes à côté de celle-ci (mur de caméras centré sur elle).
+            val others = remember { CameraWall.allCameras(app.config.dashboard.value).mapNotNull { it.s("entity") }.filter { it != optionKey } }
+            if (others.isNotEmpty()) {
+                val also = options.s("event_also")?.split(',')?.filter { it.isNotBlank() }.orEmpty()
+                Text(stringResource(R.string.camera_event_also), style = TextStyle(fontSize = 15.sp, color = Color.White))
+                Text(stringResource(R.string.camera_event_also_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+                val states = app.ha.states.value
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    others.forEach { id ->
+                        val on = id in also
+                        FilterChip(
+                            selected = on,
+                            onClick = {
+                                val next = if (on) also - id else also + id
+                                app.config.setBlockValue(optionKey, "event_also", next.takeIf { it.isNotEmpty() }?.let { JsonPrimitive(it.joinToString(",")) })
+                            },
+                            label = { Text(states[id]?.name ?: id) },
+                            modifier = Modifier.heightIn(min = 40.dp),
+                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+                        )
+                    }
                 }
             }
             val sound = (options["event_sound"] as? JsonPrimitive)?.content != "false"

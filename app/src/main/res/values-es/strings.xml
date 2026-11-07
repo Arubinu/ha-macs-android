@@ -854,4 +854,26 @@
     <string name="clock_weather_entity_help">Por defecto, la entidad meteorológica de M.A.C.S.</string>
     <string name="fullscreen_timeout">Pantalla completa: cierre automático</string>
     <string name="fullscreen_timeout_help">Vuelve al panel tras este tiempo, si nadie la ha cerrado antes.</string>
+    <string name="wall_title">Muro de cámaras</string>
+    <string name="wall_all">Todas</string>
+    <string name="wall_live_all">Todo en directo</string>
+    <string name="wall_empty">Ninguna cámara que mostrar.</string>
+    <string name="wall_home_button">Botón en la pantalla de inicio</string>
+    <string name="wall_home_button_help">Abre el muro de cámaras desde la pantalla de inicio.</string>
+    <string name="wall_timeout">Muro de cámaras: cierre automático</string>
+    <string name="wall_timeout_help">Vuelve al panel tras este tiempo, nunca durante una detección.</string>
+    <string name="wall_timeout_same">Como la pantalla completa</string>
+    <string name="wall_live_max">Muro de cámaras: directos simultáneos</string>
+    <string name="wall_live_max_help">Por encima, las cámaras muestran una captura actualizada. Automático: %1$d según los decodificadores de vídeo de la tableta.</string>
+    <string name="wall_live_auto">Automático</string>
+    <string name="wall_live_learned">Reducido a %1$d tras un fallo de reproducción.</string>
+    <string name="wall_live_reset">Restablecer</string>
+    <string name="camera_power">Alimentación</string>
+    <string name="camera_power_help">Muro de cámaras. Red: directo permanente. Solar y batería: captura, directo al tocar o con movimiento.</string>
+    <string name="camera_power_auto">Automático (%1$s)</string>
+    <string name="camera_power_mains">Red eléctrica</string>
+    <string name="camera_power_solar">Solar</string>
+    <string name="camera_power_battery">Batería</string>
+    <string name="camera_event_also">Mostrar también</string>
+    <string name="camera_event_also_help">Otras cámaras mostradas en miniatura junto a esta.</string>
 </resources>

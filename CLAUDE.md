@@ -200,6 +200,18 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Plein écran** (`PlayerDialog`) : 2 nouveaux essais à 3 s (erreur hors format, ou aucune image en 25 s), puis erreur.
   Fermeture automatique (pref `fullscreen_seconds`, Réglages › Affichage, 0 = jamais), suspendue tant qu'un capteur
   `motion` de la carte caméra ou son `event_entity` est `on` (délai relancé ensuite).
+- **Mur de caméras** (`ui/CameraWall.kt`, `DashState.wall`) : grille plein écran des caméras du premier bloc d'onglets
+  de caméras (onglet ou toutes), colonne d'icônes des onglets ; ouvert par l'icône de grille à droite des onglets ou le
+  bouton de l'accueil (`WallHomeButton`, masquable : surcharge `wall` / `home_button`, `EditTarget.Wall`). Direct selon
+  l'alimentation (option `power` du bloc caméra : `mains` / `solar` / `battery`, sinon devinée par un capteur
+  `…_battery_state` / `…_charging` du même préfixe) : secteur toujours, mouvement (+ `motion_delay`) pour tous,
+  « Tout en direct » 2 min sauf batterie ; limite = réglage `wall_max_live` ou estimation (décodeur H.264 matériel :
+  fps 720p atteignables / 30, bornés par ses instances), abaissée après un échec de décodeur (prefs `video`
+  `wall_learned`). Captures : secteur 10 s, solaire 15 s, batterie `refresh`. Fermeture `wall_seconds` (-1 = comme
+  le plein écran), suspendue pendant une détection ou une caméra agrandie. Sonnette : `event_also` (liste d'entités
+  séparées par des virgules) → mur centré sur la caméra (`WallRequest.focus`), vignettes à droite. Pendant tout plein
+  écran (`DashState.fullscreen`), `ScreenHost` n'est pas composé (affichage en pause, le reste tourne). Test : onglet
+  « Intérieur » seulement (le bouton de l'accueil ouvre toutes les caméras).
 - **Horloge de l'accueil** (`ClockCard`) : ligne météo dessous (icône, température, ciel, mini / maxi du jour), active
   par défaut ; entité = surcharge `clock` (`weather`, `weather_entity`, éditeur `ClockFields`, `EditTarget.Clock`)
   sinon l'entité météo de M.A.C.S.

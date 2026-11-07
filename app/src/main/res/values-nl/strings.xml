@@ -854,4 +854,26 @@
     <string name="clock_weather_entity_help">Standaard de weerentiteit van M.A.C.S.</string>
     <string name="fullscreen_timeout">Volledig scherm: automatisch sluiten</string>
     <string name="fullscreen_timeout_help">Terug naar het dashboard na deze tijd, als niemand het eerder heeft gesloten.</string>
+    <string name="wall_title">Camerawand</string>
+    <string name="wall_all">Alle</string>
+    <string name="wall_live_all">Alles live</string>
+    <string name="wall_empty">Geen camera om te tonen.</string>
+    <string name="wall_home_button">Knop op het startscherm</string>
+    <string name="wall_home_button_help">Opent de camerawand vanaf het startscherm.</string>
+    <string name="wall_timeout">Camerawand: automatisch sluiten</string>
+    <string name="wall_timeout_help">Terug naar het dashboard na deze tijd, nooit tijdens een detectie.</string>
+    <string name="wall_timeout_same">Zoals volledig scherm</string>
+    <string name="wall_live_max">Camerawand: gelijktijdige livebeelden</string>
+    <string name="wall_live_max_help">Daarboven tonen camera\'s een vernieuwde momentopname. Automatisch: %1$d volgens de videodecoders van de tablet.</string>
+    <string name="wall_live_auto">Automatisch</string>
+    <string name="wall_live_learned">Verlaagd naar %1$d na een afspeelfout.</string>
+    <string name="wall_live_reset">Herstellen</string>
+    <string name="camera_power">Voeding</string>
+    <string name="camera_power_help">Camerawand. Netstroom: altijd live. Zonne-energie en batterij: momentopname, live bij aanraken of beweging.</string>
+    <string name="camera_power_auto">Automatisch (%1$s)</string>
+    <string name="camera_power_mains">Netstroom</string>
+    <string name="camera_power_solar">Zonne-energie</string>
+    <string name="camera_power_battery">Batterij</string>
+    <string name="camera_event_also">Ook tonen</string>
+    <string name="camera_event_also_help">Andere camera\'s als miniaturen naast deze.</string>
 </resources>

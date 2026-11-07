@@ -38,6 +38,10 @@ data class Settings(
     val fullscreenFill: Boolean,
     /** Plein écran : fermé tout seul au bout de ce délai (0 = jamais). */
     val fullscreenSeconds: Int = 0,
+    /** Mur de caméras : fermeture automatique (-1 = comme le plein écran, 0 = jamais). */
+    val wallSeconds: Int = -1,
+    /** Mur de caméras : directs simultanés (0 = automatique, d'après les décodeurs de la tablette). */
+    val wallMaxLive: Int = 0,
     /** Couleur principale (#rrggbb) imposée à tout le tableau de bord et à M.A.C.S. ; vide = celle du thème. */
     val accentColor: String = "",
     /** Kiosk mode: the app cannot be left (nor the tablet switched off) without the access code. */
@@ -86,6 +90,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         tapFullscreen = prefs.getBoolean("tap_fullscreen", false),
         fullscreenFill = prefs.getBoolean("fullscreen_fill", false),
         fullscreenSeconds = prefs.getInt("fullscreen_seconds", 0),
+        wallSeconds = prefs.getInt("wall_seconds", -1),
+        wallMaxLive = prefs.getInt("wall_max_live", 0),
         accentColor = prefs.getString("accent_color", null) ?: "",
         kioskEnabled = prefs.getBoolean("kiosk_enabled", false),
         nightEnabled = prefs.getBoolean("night_enabled", false),
@@ -111,6 +117,8 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             .putBoolean("tap_fullscreen", s.tapFullscreen)
             .putBoolean("fullscreen_fill", s.fullscreenFill)
             .putInt("fullscreen_seconds", s.fullscreenSeconds)
+            .putInt("wall_seconds", s.wallSeconds)
+            .putInt("wall_max_live", s.wallMaxLive)
             .putString("accent_color", s.accentColor)
             .putBoolean("kiosk_enabled", s.kioskEnabled)
             .putBoolean("night_enabled", s.nightEnabled)

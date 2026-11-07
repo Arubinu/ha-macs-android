@@ -376,7 +376,7 @@ private fun BatteryBadge(pct: Double, modifier: Modifier) {
  */
 @OptIn(UnstableApi::class)
 @Composable
-private fun InlineLive(
+internal fun InlineLive(
     liveUrl: String?,
     camId: String,
     modifier: Modifier,

@@ -874,4 +874,26 @@
     <string name="clock_weather_entity_help">Domyślnie encja pogody M.A.C.S.</string>
     <string name="fullscreen_timeout">Pełny ekran: automatyczne zamykanie</string>
     <string name="fullscreen_timeout_help">Powrót do pulpitu po tym czasie, jeśli nikt wcześniej go nie zamknął.</string>
+    <string name="wall_title">Ściana kamer</string>
+    <string name="wall_all">Wszystkie</string>
+    <string name="wall_live_all">Wszystko na żywo</string>
+    <string name="wall_empty">Brak kamer do wyświetlenia.</string>
+    <string name="wall_home_button">Przycisk na ekranie głównym</string>
+    <string name="wall_home_button_help">Otwiera ścianę kamer z ekranu głównego.</string>
+    <string name="wall_timeout">Ściana kamer: automatyczne zamykanie</string>
+    <string name="wall_timeout_help">Powrót do pulpitu po tym czasie, nigdy podczas wykrycia.</string>
+    <string name="wall_timeout_same">Jak pełny ekran</string>
+    <string name="wall_live_max">Ściana kamer: jednoczesne podglądy na żywo</string>
+    <string name="wall_live_max_help">Powyżej tej liczby kamery pokazują odświeżany zrzut. Automatycznie: %1$d według dekoderów wideo tabletu.</string>
+    <string name="wall_live_auto">Automatycznie</string>
+    <string name="wall_live_learned">Zmniejszono do %1$d po błędzie odtwarzania.</string>
+    <string name="wall_live_reset">Resetuj</string>
+    <string name="camera_power">Zasilanie</string>
+    <string name="camera_power_help">Ściana kamer. Sieć: zawsze na żywo. Słoneczne i bateria: zrzut, na żywo po dotknięciu lub przy ruchu.</string>
+    <string name="camera_power_auto">Automatycznie (%1$s)</string>
+    <string name="camera_power_mains">Sieć</string>
+    <string name="camera_power_solar">Słoneczne</string>
+    <string name="camera_power_battery">Bateria</string>
+    <string name="camera_event_also">Pokaż też</string>
+    <string name="camera_event_also_help">Inne kamery jako miniatury obok tej.</string>
 </resources>

@@ -383,6 +383,51 @@ private fun Field(
     )
 }
 
+/** Mur de caméras : fermeture automatique (comme le plein écran par défaut) et directs simultanés. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WallSettings(settings: fr.pergens.hamacs.config.Settings) {
+    val app = fr.pergens.hamacs.App.instance
+    val learned by fr.pergens.hamacs.ui.CameraWall.learned.collectAsState()
+    val chip = @Composable { selected: Boolean, label: String, onClick: () -> Unit ->
+        FilterChip(
+            selected = selected, onClick = onClick, label = { Text(label) }, modifier = Modifier.heightIn(min = 40.dp),
+            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+        )
+    }
+    Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(stringResource(R.string.wall_timeout), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+        Text(stringResource(R.string.wall_timeout_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            chip(settings.wallSeconds < 0, stringResource(R.string.wall_timeout_same)) { app.config.update { it.copy(wallSeconds = -1) } }
+            listOf(0, 30, 60, 120, 300, 600).forEach { sec ->
+                val label = when {
+                    sec == 0 -> stringResource(R.string.idle_never)
+                    sec < 60 -> stringResource(R.string.idle_seconds, sec)
+                    else -> stringResource(R.string.idle_minutes, sec / 60)
+                }
+                chip(settings.wallSeconds == sec, label) { app.config.update { it.copy(wallSeconds = sec) } }
+            }
+        }
+    }
+    GroupDivider()
+    Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(stringResource(R.string.wall_live_max), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+        Text(stringResource(R.string.wall_live_max_help, fr.pergens.hamacs.ui.CameraWall.estimate), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            chip(settings.wallMaxLive == 0, stringResource(R.string.wall_live_auto)) { app.config.update { it.copy(wallMaxLive = 0) } }
+            (1..6).forEach { n -> chip(settings.wallMaxLive == n, n.toString()) { app.config.update { it.copy(wallMaxLive = n) } } }
+        }
+        if (learned > 0 && settings.wallMaxLive == 0) Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.wall_live_learned, learned), Modifier.weight(1f), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+            OutlinedButton(
+                onClick = { fr.pergens.hamacs.ui.CameraWall.resetLearned() }, Modifier.heightIn(min = 48.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+            ) { Text(stringResource(R.string.wall_live_reset)) }
+        }
+    }
+}
+
 /** Choix d'un délai : Jamais, 30 s, 1, 2, 5, 10 ou 30 min. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -888,6 +933,8 @@ private fun DisplaySection() {
             Text(stringResource(R.string.fullscreen_timeout_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
             DelayChips(settings.fullscreenSeconds, listOf(0, 30, 60, 120, 300, 600)) { sec -> app.config.update { it.copy(fullscreenSeconds = sec) } }
         }
+        GroupDivider()
+        WallSettings(settings)
         // Flux et caméras mémorisés comme illisibles par la tablette : réinitialisable (mise à jour, réglage changé).
         val unplayable by fr.pergens.hamacs.ui.VideoCompat.unplayable.collectAsState()
         if (unplayable.isNotEmpty()) {
