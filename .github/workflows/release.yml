@@ -1,11 +1,15 @@
-# Publication d'une Release GitHub : compile l'app et joint les APK (un par architecture + un universel).
+# Tag de version poussé (v1.2.3, v1.2.3-beta…) : compile l'app et joint les APK (un par architecture + un universel)
+# à une Release brouillon de ce tag, créée si besoin (préversion si le tag contient un « - »). On relit, on complète
+# les notes et on publie à la main : la publication ne recompile rien, et un échec ne laisse aucune Release publiée.
+# Relancer sur un tag existant (onglet Actions) remplace les APK.
 # Secrets requis : RELEASE_KEYSTORE_BASE64 (fichier .jks encodé en base64), RELEASE_STORE_PASSWORD,
 # RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD.
 name: Release APK
 
 on:
-  release:
-    types: [published]
+  push:
+    tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -51,10 +55,17 @@ jobs:
           done
           ls -la dist
 
-      - name: Ajout à la Release
+      - name: Ajout à la Release (brouillon créé si besoin)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${GITHUB_REF_NAME}" dist/*.apk --clobber
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          case "$tag" in v*) ;; *) echo "Lancer depuis un tag v… (pas $tag)"; exit 1 ;; esac
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            pre=""; case "$tag" in *-*) pre="--prerelease" ;; esac
+            gh release create "$tag" --draft $pre --title "$tag" --notes "Notes à compléter avant publication."
+          fi
+          gh release upload "$tag" dist/*.apk --clobber
 
       - name: Nettoyage
         if: always()

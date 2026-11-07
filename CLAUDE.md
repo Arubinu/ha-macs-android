@@ -233,9 +233,13 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Onglets favoris** : `"favorite"` d'un switcher (étoile dans l'éditeur des onglets, pastille ✎ sous le rail en
   mode édition). Affiché au démarrage et à chaque retour sur l'écran d'accueil (`start_screen`) ; sans favori,
   l'onglet en cours est gardé.
-- **Release** : `.github/workflows/release.yml` (Release publiée → `assembleRelease` signé avec la clé des secrets
-  `RELEASE_KEYSTORE_BASE64`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD` → 5 APK joints).
-  En local, la clé peut être donnée dans `local.properties` (`release.store.file`…), sinon clé de debug.
+- **Release** : `.github/workflows/release.yml` (tag `v*` poussé → `assembleRelease` signé avec la clé des secrets
+  `RELEASE_KEYSTORE_BASE64`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS` (`hamacs`), `RELEASE_KEY_PASSWORD` → 5 APK
+  joints à une Release brouillon du tag, préversion si le tag contient « - »). Notes (`private/release-notes-<tag>.md`,
+  badge tree-hash) ajoutées puis publication à la main. En local, la clé est dans `local.properties`
+  (`release.store.file=private/release.jks`…), sinon clé de debug. `gh` n'est pas installé : API GitHub avec le jeton
+  de `git credential fill` (jamais affiché ; suivre les redirections des journaux sans l'en-tête). v1.0.0 publiée le
+  2026-11-07.
 - **Avatars** (`ui/avatar/`, `config/AvatarStore.kt`) : éditeur dans les réglages du membre (mode édition). Source :
   caméra de la tablette (CameraX, dans l'app : rien d'externe en kiosque), fichier (sélecteur de photos), téléphone
   (QR code → mini serveur HTTP local, code aléatoire, un seul envoi), photo HA. Détourage ML Kit (services Google,
