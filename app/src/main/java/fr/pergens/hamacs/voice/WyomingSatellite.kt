@@ -43,6 +43,8 @@ class WyomingSatellite(
     private val scope: CoroutineScope,
     /** Nom de l'appareil dans Home Assistant (celui de la tablette). */
     private val name: () -> String,
+    /** Adresse du serveur Home Assistant de l'app : seul appareil accepté d'office. */
+    private val haUrl: () -> String,
 ) {
     sealed interface Status {
         data object Off : Status
@@ -82,7 +84,7 @@ class WyomingSatellite(
     val ready: Boolean get() = (_status.value as? Status.Connected)?.running == true
 
     fun setEnabled(on: Boolean) {
-        prefs.edit().putBoolean("enabled", on).apply()
+        prefs.edit().putBoolean("enabled", on).remove("peer").apply()
         _enabled.value = on
         restart()
     }
@@ -108,6 +110,13 @@ class WyomingSatellite(
             try {
                 while (isActive) {
                     val s = runCatching { server.accept() }.getOrNull() ?: break
+                    // Le protocole n'a pas d'authentification : sans ce filtre, n'importe quel appareil du réseau
+                    // prendrait la place de Home Assistant et recevrait le micro (mot d'activation : en continu).
+                    if (!allowed(s.inetAddress)) {
+                        Log.w(TAG, "connexion refusée : ${s.inetAddress?.hostAddress}")
+                        runCatching { s.close() }
+                        continue
+                    }
                     // Une seule connexion de Home Assistant : la nouvelle remplace l'ancienne.
                     closeClient()
                     client = s
@@ -120,6 +129,22 @@ class WyomingSatellite(
                 unregister()
             }
         }
+    }
+
+    /**
+     * Appareil autorisé à se connecter : le serveur Home Assistant de l'app (adresse de [haUrl]), sinon le premier
+     * appareil connecté depuis l'activation (HA derrière un proxy, adresse publique…), retenu ensuite. Désactiver puis
+     * réactiver le satellite oublie cet appareil. Versions de débogage : la tablette elle-même aussi (`adb forward`).
+     */
+    private fun allowed(addr: java.net.InetAddress?): Boolean {
+        val ip = addr?.hostAddress ?: return false
+        if (BuildConfig.DEBUG && addr.isLoopbackAddress) return true
+        val host = runCatching { android.net.Uri.parse(haUrl()).host }.getOrNull()
+        val ha = host?.let { h -> runCatching { java.net.InetAddress.getAllByName(h).mapNotNull { it.hostAddress } }.getOrNull() }.orEmpty()
+        if (ip in ha) return true
+        val peer = prefs.getString("peer", null)
+        if (peer == null) { prefs.edit().putString("peer", ip).apply(); return true }
+        return peer == ip
     }
 
     private fun closeClient() {
@@ -213,11 +238,14 @@ class WyomingSatellite(
         val head = runCatching { json.parseToJsonElement(line).jsonObject }.getOrNull() ?: return Event("", JsonObject(emptyMap()), null)
         var data = (head["data"] as? JsonObject) ?: JsonObject(emptyMap())
         val dataLength = (head["data_length"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 0
+        // Tailles annoncées plafonnées : une valeur énorme ferait allouer des Go et planter l'app.
+        if (dataLength > MAX_DATA) return null
         if (dataLength > 0) {
             val extra = readExactly(input, dataLength) ?: return null
             runCatching { json.parseToJsonElement(extra.toString(Charsets.UTF_8)).jsonObject }.getOrNull()?.let { data = JsonObject(data + it) }
         }
         val payloadLength = (head["payload_length"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 0
+        if (payloadLength > MAX_PAYLOAD) return null
         val payload = if (payloadLength > 0) readExactly(input, payloadLength) ?: return null else null
         return Event((head["type"] as? JsonPrimitive)?.content ?: "", data, payload)
     }
@@ -271,6 +299,9 @@ class WyomingSatellite(
         private const val TAG = "WyomingSatellite"
         const val PORT = 10700
         private const val VERSION = "1.5.4"
+        private const val MAX_DATA = 1_000_000
+        /** Morceau d'audio (TTS en 22 kHz : quelques Ko ; marge large). */
+        private const val MAX_PAYLOAD = 8_000_000
 
         fun text(e: Event): String = (e.data["text"] as? JsonPrimitive)?.content.orEmpty()
         fun int(e: Event, k: String, def: Int): Int = (e.data[k] as? JsonPrimitive)?.content?.toIntOrNull() ?: def

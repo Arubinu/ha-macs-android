@@ -97,7 +97,9 @@ class VoiceAssistant(
     /**
      * Satellite Home Assistant (Wyoming) : prioritaire quand Home Assistant y est connecté ; sinon la passerelle.
      */
-    val wyoming = WyomingSatellite(context, scope) { fr.pergens.hamacs.App.instance.link.deviceName }
+    val wyoming = WyomingSatellite(context, scope, { fr.pergens.hamacs.App.instance.link.deviceName }) {
+        fr.pergens.hamacs.App.instance.config.settings.value.haUrl
+    }
     /** Micro ouvert en continu pour le mot d'activation (détecté par Home Assistant). */
     private var wakeJob: Job? = null
     /** Lecture de la synthèse : une seule écriture à la fois dans l'AudioTrack (sinon plantage natif). */

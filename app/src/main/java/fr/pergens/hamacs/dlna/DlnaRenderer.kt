@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -246,7 +247,9 @@ class DlnaRenderer(
     }
 
     private suspend fun soap(service: String, r: Request): Response {
-        val action = r.headers["soapaction"]?.trim('"')?.substringAfter('#')
+        // Nom d'action vérifié avant d'entrer dans l'expression régulière (sinon injectable, ex. `(a+)+$`, et le calcul
+        // pourrait bloquer le fil sur un corps de 256 Ko).
+        val action = r.headers["soapaction"]?.trim('"')?.substringAfter('#')?.takeIf { ACTION_NAME.matches(it) }
             ?: return fault(401, "Invalid Action")
         val body = r.body.toString(Charsets.UTF_8)
         val args = Regex("<(?:\\w+:)?$action\\b[^>]*>(.*)</(?:\\w+:)?$action>", RegexOption.DOT_MATCHES_ALL).find(body)?.groupValues?.get(1)
@@ -278,6 +281,8 @@ class DlnaRenderer(
     private suspend fun avTransport(action: String, a: Map<String, String>): List<Pair<String, String>>? = when (action) {
         "SetAVTransportURI" -> {
             val uri = a["CurrentURI"].orEmpty()
+            // Flux réseau seulement : pas de fichier ni de contenu local de la tablette (file://, content://…).
+            if (uri.isNotEmpty() && !uri.startsWith("http://", true) && !uri.startsWith("https://", true)) throw UpnpError(714, "Illegal MIME-type")
             val meta = a["CurrentURIMetaData"].orEmpty()
             withContext(Dispatchers.Main) { load(uri, meta) }
             emptyList()
@@ -450,8 +455,13 @@ class DlnaRenderer(
             s.expires = System.currentTimeMillis() + timeout * 1000L
             return Response("200 OK", "text/plain", ByteArray(0), mapOf("SID" to sid, "TIMEOUT" to "Second-$timeout", "SERVER" to serverHeader))
         }
+        // Rappel en http seulement ; abonnements plafonnés (sinon n'importe qui sur le réseau en accumule sans fin et
+        // fait envoyer à la tablette un événement par abonnement à chaque changement).
         val callback = r.headers["callback"]?.let { Regex("<([^>]+)>").find(it)?.groupValues?.get(1) }
+            ?.takeIf { it.startsWith("http://") && it.toHttpUrlOrNull() != null }
             ?: return Response("412 Precondition Failed", "text/plain", ByteArray(0))
+        expireSubs()
+        if (subs.size >= MAX_SUBS) return Response("503 Service Unavailable", "text/plain", ByteArray(0))
         val newSid = "uuid:" + UUID.randomUUID()
         val sub = Sub(callback, service, System.currentTimeMillis() + timeout * 1000L)
         subs[newSid] = sub
@@ -514,6 +524,8 @@ class DlnaRenderer(
 
     companion object {
         private const val TAG = "DlnaRenderer"
+        private val ACTION_NAME = Regex("[A-Za-z][A-Za-z0-9_]{0,63}")
+        private const val MAX_SUBS = 32
 
         /** Formats acceptés (ExoPlayer) : audio courant, flux HLS et vidéo MP4 (son seul). */
         private val SINK = listOf(

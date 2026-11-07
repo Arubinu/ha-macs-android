@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -57,6 +58,8 @@ class LocalHttpServer(
 
     /** Code aléatoire placé au début de chaque adresse. */
     val key: String = fixedKey ?: ByteArray(9).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }
+    private val slots = java.util.concurrent.Semaphore(16)
+    private val one = kotlinx.coroutines.sync.Mutex()
     private var server: ServerSocket? = null
     private var job: Job? = null
 
@@ -74,9 +77,12 @@ class LocalHttpServer(
         job = scope.launch(Dispatchers.IO) {
             while (isActive && !s.isClosed) {
                 val client = runCatching { s.accept() }.getOrNull() ?: break
-                // Un téléphone : une requête à la fois (le traitement peut durer, échange de jeton) ; sinon en parallèle.
-                if (concurrent) launch { runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) } }
-                else runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) }
+                // Connexions lues en parallèle (16 au plus, les autres refusées) : un client lent ne bloque personne.
+                if (!slots.tryAcquire()) { runCatching { client.close() }; continue }
+                launch {
+                    try { runCatching { client.use { serve(it) } }.onFailure { Log.w(TAG, "requête", it) } }
+                    finally { slots.release() }
+                }
             }
         }
         return "$origin/$key"
@@ -90,10 +96,15 @@ class LocalHttpServer(
     private suspend fun serve(socket: java.net.Socket) {
         socket.soTimeout = 30_000
         val input = BufferedInputStream(socket.getInputStream())
-        val requestLine = readLine(input) ?: return
+        // En-tête complet en 15 s et 100 lignes au plus : un client qui envoie goutte à goutte ne bloque pas le serveur
+        // (qui ne traite qu'une requête à la fois pour un téléphone).
+        val deadline = System.currentTimeMillis() + 15_000
+        fun line(): String? = if (System.currentTimeMillis() > deadline) null else readLine(input, deadline)
+        val requestLine = line() ?: return
         val headers = HashMap<String, String>()
         while (true) {
-            val line = readLine(input) ?: return
+            if (headers.size > 100) return
+            val line = line() ?: return
             if (line.isEmpty()) break
             val i = line.indexOf(':')
             if (i > 0) headers[line.substring(0, i).trim().lowercase()] = line.substring(i + 1).trim()
@@ -115,12 +126,15 @@ class LocalHttpServer(
         var read = 0
         while (read < body.size) { val n = input.read(body, read, body.size - read); if (n < 0) break; read += n }
         val sub = path.removePrefix("/$key").ifEmpty { "/" }
-        respond(handler(Request(method, sub, parseQuery(target.substringAfter('?', "")), body, headers, socket.inetAddress?.hostAddress)))
+        val request = Request(method, sub, parseQuery(target.substringAfter('?', "")), body, headers, socket.inetAddress?.hostAddress)
+        // Un téléphone : traitements un par un (échange de jeton, import…) ; sinon en parallèle.
+        respond(if (concurrent) handler(request) else one.withLock { handler(request) })
     }
 
-    private fun readLine(input: InputStream): String? {
+    private fun readLine(input: InputStream, deadline: Long): String? {
         val b = ByteArrayOutputStream()
         while (true) {
+            if (System.currentTimeMillis() > deadline) return null
             val c = input.read()
             if (c < 0) return if (b.size() == 0) null else b.toString("UTF-8")
             if (c == '\n'.code) return b.toString("UTF-8").trimEnd('\r')
