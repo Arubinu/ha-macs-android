@@ -91,6 +91,10 @@ make the app *device owner* once, from a computer, with no account signed in on 
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Without a computer: *Prepare the tablet* (below) shows a QR code to scan on the welcome screen after a factory
+reset (tap the same spot 6 times). Simpler: choose the app as home screen; it comes back with the Home button and at
+startup, but an Android gesture can remove the screen pinning.
+
 ⚠️ Before uninstalling: Settings › Security › *Remove device owner rights*.
 
 ✅ Settings › Security › *Prepare the tablet* checks everything at once: kiosk, device owner or home screen,

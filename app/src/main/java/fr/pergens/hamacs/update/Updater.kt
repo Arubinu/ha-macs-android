@@ -126,6 +126,18 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
         }
     }
 
+    /** Adresse de l'APK (architecture de la tablette) de la Release de [version], sinon de la dernière version stable. */
+    suspend fun apkFor(version: String): String? = withContext(Dispatchers.IO) {
+        val req = Request.Builder().url(apiUrl).header("Accept", "application/vnd.github+json").header("User-Agent", "HA-MACS-Android").build()
+        http.newCall(req).execute().use { r ->
+            if (!r.isSuccessful) return@withContext null
+            val list = (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
+                .filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }.mapNotNull { release(it) }
+            (list.firstOrNull { it.version == version }
+                ?: list.filter { !it.prerelease }.reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a })?.apkUrl
+        }
+    }
+
     /** Version la plus récente du canal choisi (stables seules, ou stables et préversions). */
     private suspend fun latest(): Release? = withContext(Dispatchers.IO) {
         val req = Request.Builder().url(apiUrl).header("Accept", "application/vnd.github+json").header("User-Agent", "HA-MACS-Android").build()

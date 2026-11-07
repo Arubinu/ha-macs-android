@@ -95,6 +95,10 @@ sans aucun compte connecté sur la tablette :
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Sans ordinateur : *Préparer la tablette* (ci-dessous) affiche un QR code à scanner sur l'écran de bienvenue après
+une réinitialisation (6 touches au même endroit). Plus simple : choisir l'app comme écran d'accueil ; elle revient avec
+le bouton Accueil et au démarrage, mais un geste d'Android peut retirer l'épinglage d'écran.
+
 ⚠️ Avant de désinstaller : Réglages › Sécurité › *Retirer les droits de propriétaire*.
 
 ✅ Réglages › Sécurité › *Préparer la tablette* vérifie tout d'un coup : kiosque, propriétaire ou écran d'accueil,

@@ -1168,6 +1168,16 @@ private fun KioskGroup() {
                     }) { Text(stringResource(R.string.kiosk_copy)) }
                 }
                 Feedback(info)
+                // Sans ordinateur : QR code scanné sur l'écran de bienvenue après une réinitialisation.
+                var qr by remember { mutableStateOf(false) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.ready_full_reset_help),
+                        Modifier.weight(1f), style = TextStyle(fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp),
+                    )
+                    TextButton(onClick = { qr = !qr }) { Text(stringResource(R.string.whats_new_show)) }
+                }
+                if (qr) fr.pergens.hamacs.ui.ProvisioningQr()
             }
             GroupDivider()
             SettingRow(stringResource(R.string.kiosk_home), stringResource(R.string.kiosk_home_help)) {

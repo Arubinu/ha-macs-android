@@ -97,6 +97,10 @@ collegato sul tablet:
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Senza computer: *Preparare il tablet* (sotto) mostra un codice QR da scansionare nella schermata di benvenuto dopo
+un ripristino (6 tocchi nello stesso punto). Più semplice: scegliere l'app come schermata Home; torna con il tasto Home
+e all'avvio, ma un gesto di Android può togliere il blocco su schermo.
+
 ⚠️ Prima di disinstallare: Impostazioni › Sicurezza › *Rimuovi i diritti di proprietario*.
 
 ✅ Impostazioni › Sicurezza › *Preparare il tablet* controlla tutto in una volta: kiosk, proprietario o schermata

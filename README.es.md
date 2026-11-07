@@ -97,6 +97,10 @@ ninguna cuenta conectada en la tablet:
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Sin ordenador: *Preparar la tableta* (abajo) muestra un código QR para escanear en la pantalla de bienvenida tras
+un restablecimiento (6 toques en el mismo sitio). Más sencillo: elegir la app como pantalla de inicio; vuelve con el
+botón Inicio y al arrancar, pero un gesto de Android puede quitar la fijación de pantalla.
+
 ⚠️ Antes de desinstalar: Ajustes › Seguridad › *Quitar los derechos de propietario*.
 
 ✅ Ajustes › Seguridad › *Preparar la tableta* lo comprueba todo de una vez: quiosco, propietario o pantalla de

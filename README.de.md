@@ -96,6 +96,10 @@ Tablet:
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Ohne Computer: *Tablet vorbereiten* (unten) zeigt einen QR-Code, der nach dem Zurücksetzen auf dem
+Begrüßungsbildschirm gescannt wird (6-mal auf dieselbe Stelle tippen). Einfacher: die App als Startbildschirm wählen; sie
+kommt mit der Home-Taste und beim Start zurück, aber eine Android-Geste kann das Bildschirmfixieren lösen.
+
 ⚠️ Vor dem Deinstallieren: Einstellungen › Sicherheit › *Geräteinhaber-Rechte entfernen*.
 
 ✅ Einstellungen › Sicherheit › *Tablet vorbereiten* prüft alles auf einmal: Kiosk, Geräteinhaber oder

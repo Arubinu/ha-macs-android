@@ -172,8 +172,12 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   chaque retour au premier plan) ou *Moi-même* (étapes guidées, écrans ouverts en tâche neuve, via `Kiosk.suspend` en
   kiosque). Ne jamais accorder la permission sur la tablette de l'utilisateur sans son accord.
 - **Préparer la tablette** (`ui/Readiness.kt`) : Réglages › Sécurité (en tête) et une fois après l'assistant s'il manque
-  quelque chose : kiosque, propriétaire (commande adb) ou écran d'accueil, relance après plantage, batterie
-  (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`), animations. Écrans d'Android ouverts via `Kiosk.suspend` si verrouillé.
+  quelque chose : kiosque, verrouillage (prêt avec l'écran d'accueil *ou* le propriétaire), relance après plantage,
+  batterie (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`), animations. Écrans d'Android ouverts via `Kiosk.suspend` si verrouillé.
+  Propriétaire : commande adb, ou QR code de provisionnement (`kiosk/Provisioning.kt`, aussi dans le groupe kiosque) scanné
+  après une réinitialisation : APK de la Release de la version installée (API GitHub, ABI de la tablette), empreinte du
+  certificat de l'app ; `ProvisioningModeActivity` / `PolicyComplianceActivity` exigées par Android 10+. En débogage la
+  tablette refuserait le code (autre clé). Non testé sur un vrai appareil (il faut le réinitialiser).
 - **Quoi de neuf** (`update/WhatsNew.kt`, prefs `whats_new`, non exportées) : au premier démarrage d'une nouvelle
   version, ses notes de Release (gardées à l'installation, sinon relues sur GitHub) s'affichent une fois ; aussi dans
   Réglages › À propos › *Nouveautés*. Rendu Markdown simple (`ui/Markdown.kt`) ; dans les notes, tout ce qui suit

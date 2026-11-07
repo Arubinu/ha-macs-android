@@ -95,6 +95,10 @@ tablet:
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Zonder computer: *Tablet voorbereiden* (hieronder) toont een QR-code om na een reset op het welkomstscherm te
+scannen (6 keer op dezelfde plek tikken). Eenvoudiger: kies de app als startscherm; ze komt terug met de Home-knop en
+bij het opstarten, maar een Android-gebaar kan scherm vastzetten opheffen.
+
 ⚠️ Voor het verwijderen: Instellingen › Beveiliging › *Rechten van apparaateigenaar intrekken*.
 
 ✅ Instellingen › Beveiliging › *Tablet voorbereiden* controleert alles in één keer: kiosk, apparaateigenaar of

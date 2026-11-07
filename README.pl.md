@@ -94,6 +94,10 @@ powiadomienia i menu zasilania zablokowane), jednorazowo ustaw aplikację jako *
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Bez komputera: *Przygotuj tablet* (poniżej) pokazuje kod QR do zeskanowania na ekranie powitalnym po przywróceniu
+ustawień fabrycznych (6 dotknięć w tym samym miejscu). Prościej: wybrać aplikację jako ekran główny; wraca po
+naciśnięciu przycisku ekranu głównego i przy starcie, ale gest Androida może zdjąć przypięcie ekranu.
+
 ⚠️ Przed odinstalowaniem: Ustawienia › Bezpieczeństwo › *Usuń uprawnienia właściciela*.
 
 ✅ Ustawienia › Bezpieczeństwo › *Przygotuj tablet* sprawdza wszystko naraz: kiosk, właściciela urządzenia lub

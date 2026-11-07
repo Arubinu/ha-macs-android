@@ -95,6 +95,10 @@ conta ligada no tablet:
 adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 ```
 
+📷 Sem computador: *Preparar o tablet* (abaixo) mostra um código QR para ler no ecrã de boas-vindas após uma
+reposição (6 toques no mesmo sítio). Mais simples: escolher a app como ecrã inicial; volta com o botão Início e no
+arranque, mas um gesto do Android pode retirar a fixação de ecrã.
+
 ⚠️ Antes de desinstalar: Definições › Segurança › *Retirar os direitos de proprietário*.
 
 ✅ Definições › Segurança › *Preparar o tablet* verifica tudo de uma vez: quiosque, proprietário ou ecrã inicial,
