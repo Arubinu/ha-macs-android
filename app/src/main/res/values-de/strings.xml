@@ -876,4 +876,6 @@
     <string name="camera_power_battery">Akku</string>
     <string name="camera_event_also">Auch anzeigen</string>
     <string name="camera_event_also_help">Weitere Kameras als Miniaturen neben dieser.</string>
+    <string name="camera_name">Name</string>
+    <string name="camera_name_help">In der Kamerawand angezeigt. Leer: der Name aus dem Erkennungsbereich, sonst der der Entität.</string>
 </resources>

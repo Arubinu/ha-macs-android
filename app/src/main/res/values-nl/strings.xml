@@ -876,4 +876,6 @@
     <string name="camera_power_battery">Batterij</string>
     <string name="camera_event_also">Ook tonen</string>
     <string name="camera_event_also_help">Andere camera\'s als miniaturen naast deze.</string>
+    <string name="camera_name">Naam</string>
+    <string name="camera_name_help">Getoond in de camerawand. Leeg: de naam uit het detectiegebied, anders die van de entiteit.</string>
 </resources>

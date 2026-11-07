@@ -126,6 +126,41 @@ object CameraWall {
         return out.values.toList()
     }
 
+    /**
+     * Nom affiché d'une caméra : celui de son éditeur (option `name`), sinon `name` de la carte, sinon celui de la
+     * zone des détections (caméra liée par son entité, ou dont le texte reconnu commence son nom dans HA), sinon le
+     * nom de l'entité.
+     */
+    fun displayName(card: JsonObject, blocks: Map<String, JsonObject>, states: Map<String, EntityState>, dashboard: JsonElement): String {
+        val id = card.s("entity") ?: return card.s("name").orEmpty()
+        blocks[id]?.s("name")?.takeIf { it.isNotBlank() }?.let { return it }
+        card.s("name")?.takeIf { it.isNotBlank() }?.let { return it }
+        val haName = states[id]?.name ?: id
+        detectionNames(dashboard).firstOrNull { (cam, _) ->
+            cam.entity == id || (cam.match.isNotBlank() && haName.startsWith(cam.match.trim(), true) &&
+                (haName.length == cam.match.trim().length || !haName[cam.match.trim().length].isLetterOrDigit()))
+        }?.second?.let { return it }
+        return haName
+    }
+
+    /** Caméras nommées des zones de détections de l'agencement. */
+    private fun detectionNames(dashboard: JsonElement): List<Pair<fr.pergens.hamacs.detections.DetectionCamera, String>> {
+        val out = mutableListOf<Pair<fr.pergens.hamacs.detections.DetectionCamera, String>>()
+        fun walk(e: JsonElement) {
+            when (e) {
+                is JsonObject -> {
+                    if (e.s("type") == "camera_detections") fr.pergens.hamacs.detections.DetectionConfig(e).cameras
+                        .filter { it.name.isNotBlank() }.forEach { out += it to it.name }
+                    e.values.forEach(::walk)
+                }
+                is JsonArray -> e.forEach(::walk)
+                else -> {}
+            }
+        }
+        walk(dashboard)
+        return out
+    }
+
     /** Alimentation choisie dans l'éditeur de la caméra, sinon [guessPower]. */
     fun power(card: JsonObject, blocks: Map<String, JsonObject>, states: Map<String, EntityState>): CameraPower {
         val chosen = card.s("entity")?.let { blocks[it]?.s("power") }
@@ -425,8 +460,10 @@ private fun WallTile(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (moving) HaIcon("mdi:motion-sensor", size = 16.dp, tint = Dash.colors.accent)
+                val dash by App.instance.config.dashboard.collectAsState()
+                val name = remember(card, blocks, cam?.name, dash) { CameraWall.displayName(card, blocks, states, dash) }
                 Text(
-                    card.s("name") ?: cam?.name ?: camId, Modifier.padding(start = if (moving) 6.dp else 0.dp),
+                    name, Modifier.padding(start = if (moving) 6.dp else 0.dp),
                     style = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Medium), maxLines = 1,
                 )
             }

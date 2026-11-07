@@ -876,4 +876,6 @@
     <string name="camera_power_battery">Batteria</string>
     <string name="camera_event_also">Mostra anche</string>
     <string name="camera_event_also_help">Altre telecamere mostrate in miniatura accanto a questa.</string>
+    <string name="camera_name">Nome</string>
+    <string name="camera_name_help">Mostrato nel muro di telecamere. Vuoto: il nome dell\'area dei rilevamenti, altrimenti quello dell\'entità.</string>
 </resources>

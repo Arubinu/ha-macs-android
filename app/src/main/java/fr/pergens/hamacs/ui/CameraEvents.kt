@@ -122,6 +122,35 @@ private fun findCard(e: JsonElement, camId: String): JsonObject? = when (e) {
 /** État du tableau de bord pour les déclenchements hors composition (fixé par [CameraEventWatcher]). */
 internal var currentDashState: DashState? = null
 
+/** Nom de la caméra (mur de caméras…) ; vide = nom de la zone des détections, sinon celui de l'entité. */
+@Composable
+internal fun CameraNameField(optionKey: String, options: JsonObject?, card: JsonObject?) {
+    val app = App.instance
+    val saved = options?.s("name").orEmpty()
+    var text by remember(optionKey) { mutableStateOf(saved) }
+    // Nom proposé sans réglage : zone des détections ou entité.
+    val fallback = remember(card) {
+        card?.let { CameraWall.displayName(JsonObject(it - "name"), app.config.blocks.value - optionKey, app.ha.states.value, app.config.dashboard.value) }.orEmpty()
+    }
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.camera_name), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+        androidx.compose.material3.OutlinedTextField(
+            text,
+            { v ->
+                text = v
+                app.config.setBlockValue(optionKey, "name", v.trim().takeIf { it.isNotEmpty() }?.let { JsonPrimitive(it) })
+            },
+            Modifier.fillMaxWidth(), singleLine = true,
+            placeholder = { Text(fallback) },
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White, unfocusedTextColor = Color.White,
+                focusedBorderColor = Dash.colors.accent, cursorColor = Dash.colors.accent,
+            ),
+        )
+        Text(stringResource(R.string.camera_name_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+    }
+}
+
 /**
  * Alimentation de la caméra (mur de caméras) : automatique (secteur si sa batterie est branchée), secteur (direct
  * permanent), solaire ou batterie (capture, direct au toucher ou sur mouvement).
@@ -183,14 +212,15 @@ internal fun CameraEventFields(optionKey: String, options: JsonObject?) {
                 }
             }
             // Autres caméras en vignettes à côté de celle-ci (mur de caméras centré sur elle).
-            val others = remember { CameraWall.allCameras(app.config.dashboard.value).mapNotNull { it.s("entity") }.filter { it != optionKey } }
+            val others = remember { CameraWall.allCameras(app.config.dashboard.value).filter { it.s("entity") != null && it.s("entity") != optionKey } }
             if (others.isNotEmpty()) {
                 val also = options.s("event_also")?.split(',')?.filter { it.isNotBlank() }.orEmpty()
                 Text(stringResource(R.string.camera_event_also), style = TextStyle(fontSize = 15.sp, color = Color.White))
                 Text(stringResource(R.string.camera_event_also_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
                 val states = app.ha.states.value
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    others.forEach { id ->
+                    others.forEach { other ->
+                        val id = other.s("entity")!!
                         val on = id in also
                         FilterChip(
                             selected = on,
@@ -198,7 +228,7 @@ internal fun CameraEventFields(optionKey: String, options: JsonObject?) {
                                 val next = if (on) also - id else also + id
                                 app.config.setBlockValue(optionKey, "event_also", next.takeIf { it.isNotEmpty() }?.let { JsonPrimitive(it.joinToString(",")) })
                             },
-                            label = { Text(states[id]?.name ?: id) },
+                            label = { Text(CameraWall.displayName(other, app.config.blocks.value, states, app.config.dashboard.value)) },
                             modifier = Modifier.heightIn(min = 40.dp),
                             colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
                         )

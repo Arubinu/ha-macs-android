@@ -907,4 +907,6 @@
     <string name="camera_power_battery">Battery</string>
     <string name="camera_event_also">Also show</string>
     <string name="camera_event_also_help">Other cameras shown as thumbnails next to this one.</string>
+    <string name="camera_name">Name</string>
+    <string name="camera_name_help">Shown in the camera wall. Empty: the name from the detections area, otherwise the entity\'s.</string>
 </resources>

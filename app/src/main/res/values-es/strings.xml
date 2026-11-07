@@ -876,4 +876,6 @@
     <string name="camera_power_battery">Batería</string>
     <string name="camera_event_also">Mostrar también</string>
     <string name="camera_event_also_help">Otras cámaras mostradas en miniatura junto a esta.</string>
+    <string name="camera_name">Nombre</string>
+    <string name="camera_name_help">Se muestra en el muro de cámaras. Vacío: el nombre de la zona de detecciones o, si no, el de la entidad.</string>
 </resources>

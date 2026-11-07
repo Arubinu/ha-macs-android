@@ -210,7 +210,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   `wall_learned`). Captures : secteur 10 s, solaire 15 s, batterie `refresh`. Fermeture `wall_seconds` (-1 = comme
   le plein écran), suspendue pendant une détection ou une caméra agrandie. Sonnette : `event_also` (liste d'entités
   séparées par des virgules) → mur centré sur la caméra (`WallRequest.focus`), vignettes à droite. Pendant tout plein
-  écran (`DashState.fullscreen`), `ScreenHost` n'est pas composé (affichage en pause, le reste tourne). Test : onglet
+  écran (`DashState.fullscreen`), `ScreenHost` n'est pas composé. Nom d'une caméra (`CameraWall.displayName`) : option
+  `name` de son éditeur, sinon `name` de la carte, sinon caméra de la zone des détections (même `entity`, ou `match` au
+  début du nom HA), sinon nom de l'entité (affichage en pause, le reste tourne). Test : onglet
   « Intérieur » seulement (le bouton de l'accueil ouvre toutes les caméras).
 - **Horloge de l'accueil** (`ClockCard`) : ligne météo dessous (icône, température, ciel, mini / maxi du jour), active
   par défaut ; entité = surcharge `clock` (`weather`, `weather_entity`, éditeur `ClockFields`, `EditTarget.Clock`)

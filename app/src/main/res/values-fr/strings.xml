@@ -894,4 +894,6 @@
     <string name="camera_power_battery">Batterie</string>
     <string name="camera_event_also">Afficher aussi</string>
     <string name="camera_event_also_help">Autres caméras affichées en vignettes à côté de celle-ci.</string>
+    <string name="camera_name">Nom</string>
+    <string name="camera_name_help">Affiché dans le mur de caméras. Vide : le nom de la zone des détections, sinon celui de l\'entité.</string>
 </resources>

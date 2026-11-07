@@ -896,4 +896,6 @@
     <string name="camera_power_battery">Bateria</string>
     <string name="camera_event_also">Pokaż też</string>
     <string name="camera_event_also_help">Inne kamery jako miniatury obok tej.</string>
+    <string name="camera_name">Nazwa</string>
+    <string name="camera_name_help">Wyświetlana na ścianie kamer. Puste: nazwa z obszaru wykryć, w przeciwnym razie nazwa encji.</string>
 </resources>

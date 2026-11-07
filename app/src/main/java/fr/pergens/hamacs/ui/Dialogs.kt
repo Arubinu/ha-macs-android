@@ -242,7 +242,8 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                     stringResource(R.string.edit_always_live), stringResource(R.string.edit_always_live_help),
                     options?.b("always_live") ?: configAlwaysLive,
                 ) { app.config.setBlockOption(optionKey, "always_live", it.takeIf { v -> v != configAlwaysLive }) }
-                // Mur de caméras : direct permanent (secteur) ou capture (solaire, batterie).
+                // Nom affiché (mur de caméras) et alimentation (direct permanent sur secteur, capture sinon).
+                CameraNameField(optionKey, options, original)
                 CameraPowerFields(optionKey, options, original)
                 // Sonnette, détecteur : ouverture en plein écran quand une entité se déclenche.
                 CameraEventFields(optionKey, options)
