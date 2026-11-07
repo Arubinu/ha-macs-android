@@ -21,7 +21,8 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - uses: android-actions/setup-android@v3
+      # Android SDK : déjà installé sur les machines ubuntu de GitHub (ANDROID_HOME, licences acceptées).
+      # (android-actions/setup-android@v3 échoue : il demande le paquet « tools », retiré de sdkmanager.)
 
       - name: Clé de signature
         env:
