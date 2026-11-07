@@ -227,7 +227,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   sur 42 % de la largeur ; le bas de la photo ne remonte jamais au-dessus du bas du cercle. La détection de visage
   ML Kit ne reconnaît pas les avatars cartoon : elle ne sert qu'aux photos rondes.
 - **Caméras** : une caméra physique = un appareil ; `entity` = flux de la carte, `fullscreen_entity` = flux
-  plein écran. L'assistant permet d'ajouter / renommer / supprimer des onglets.
+  plein écran. Caméras sur batterie derrière un pont : le pont les rend toutes `unavailable` ~1 min plusieurs
+  fois par jour, et le direct met 15-20 s à démarrer. En test, ne réveiller que les caméras désignées par
+  l'utilisateur (batteries). La carte retente seule : capture (5 s, 15 s, puis « hors ligne »), direct
+  (2 essais à 3 s, compte remis à zéro par direct, pas par image), nouvelle capture au retour d'indisponibilité. L'assistant permet d'ajouter / renommer / supprimer des onglets.
 - **Graphiques** : `state_from: min|max` affiche la courbe la plus basse/haute avec son nom (meilleur prix) ;
   bandes jour/nuit sur `sun.sun`.
 - **Alertes `persistent`** : heure de déclenchement mémorisée (`{trigger_time}` = « 09:58 », « 18:20 (hier) »,

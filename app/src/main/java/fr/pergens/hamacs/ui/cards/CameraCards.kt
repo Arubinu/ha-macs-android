@@ -119,7 +119,10 @@ fun CameraCard(card: Card, modifier: Modifier) {
     var reload by remember { mutableIntStateOf(0) }
     var lastKey by remember { mutableStateOf<String?>(null) }
     var snapshotShown by remember { mutableStateOf(false) }
+    /** Capture en échec malgré les nouveaux essais (écran « hors ligne » si aucune image n'a encore été montrée). */
     var snapshotFailed by remember { mutableStateOf(false) }
+    /** Échecs de capture consécutifs. */
+    var snapFails by remember { mutableIntStateOf(0) }
     var liveUntil by remember { mutableLongStateOf(0L) }
     var live by remember { mutableStateOf(false) }
     var liveShown by remember { mutableStateOf(false) }
@@ -154,14 +157,58 @@ fun CameraCard(card: Card, modifier: Modifier) {
         }
     }
 
-    val offline = cam == null || cam.isUnavailable
+    // États pas encore reçus (connexion ou reconnexion à HA) : attente, pas « hors ligne ».
+    val statesLoaded = state.ha.states.collectAsState().value.isNotEmpty()
+    val offline = (cam == null && statesLoaded) || cam?.isUnavailable == true
+    /** Nouvel essai automatique de la capture (en plus du rafraîchissement périodique). */
+    var snapRetry by remember { mutableIntStateOf(0) }
+    /** Nouveaux essais automatiques du direct depuis le dernier affichage réussi (ou le dernier appui). */
+    var liveRetry by remember { mutableIntStateOf(0) }
     // Images personnalisées facultatives ; sinon écrans d'attente / hors ligne dessinés et traduits.
     val loadingUrl = state.ha.resolveUrl(card.s("loading_image"))
     val offlineUrl = state.ha.resolveUrl(card.s("offline_image"))
     val errorUrl = state.ha.resolveUrl(card.s("error_image")) ?: offlineUrl
     val base = card.s("image_url") ?: camId?.let { "/api/camera_proxy/$it" }
-    val url = state.ha.resolveUrl(base)?.let { u -> u + (if ('?' in u) "&" else "?") + "t=$tick-$reload" }
+    val url = state.ha.resolveUrl(base)?.let { u -> u + (if ('?' in u) "&" else "?") + "t=$tick-$reload-$snapRetry" }
     val ctx = LocalContext.current
+
+    // Le pont des caméras (Reolink Home Hub…) se reconnecte de temps en temps : toutes ses caméras sont
+    // indisponibles une minute. Au retour, nouvelle capture tout de suite (et nouveau flux si le direct est affiché).
+    var wasOffline by remember { mutableStateOf(false) }
+    LaunchedEffect(offline) {
+        if (offline) wasOffline = true
+        else if (wasOffline) {
+            wasOffline = false
+            snapshotFailed = false
+            liveFailed = false
+            reload++
+        }
+    }
+    // Capture en échec sans image à montrer : nouveaux essais après 5 puis 15 s (caméra sur batterie qui se
+    // réveille, pont qui vient de revenir), l'écran d'attente restant affiché ; « hors ligne » seulement ensuite,
+    // le rafraîchissement périodique continuant d'essayer.
+    LaunchedEffect(snapFails, offline) {
+        if (snapshotShown || offline) return@LaunchedEffect
+        when (snapFails) {
+            1 -> { delay(5_000); snapRetry++ }
+            2 -> { delay(15_000); snapRetry++ }
+            else -> if (snapFails >= 3) snapshotFailed = true
+        }
+    }
+    // Flux en échec (caméra qui se réveille, pont qui se reconnecte) : deux nouveaux essais après 3 s, puis
+    // l'écran d'erreur. Le compte repart à zéro à chaque nouveau direct ou appui, pas à chaque image : un flux
+    // qui décroche sans cesse ne réveille pas indéfiniment une caméra sur batterie.
+    var liveErrors by remember { mutableIntStateOf(0) }
+    LaunchedEffect(liveErrors) {
+        when {
+            liveErrors in 1..2 -> { delay(3_000); liveRetry++ }
+            liveErrors > 2 -> liveFailed = true
+        }
+    }
+    LaunchedEffect(live, reload) {
+        snapFails = 0
+        liveErrors = 0
+    }
     val radius = card.d("radius")?.dp ?: Dash.shapes.roundedRadius
 
     // Chaque couche apparaît en fondu PAR-DESSUS la précédente, qui reste affichée en dessous :
@@ -223,8 +270,15 @@ fun CameraCard(card: Card, modifier: Modifier) {
                         lastKey = url
                         snapshotShown = true
                         snapshotFailed = false
+                        snapFails = 0
                     },
-                    onError = { _, _ -> snapshotFailed = true },
+                    onError = { _, r ->
+                        snapFails++
+                        fr.pergens.hamacs.CrashGuard.note(
+                            ctx, "snapshot:$camId:${r.throwable.javaClass.simpleName}", "Capture de caméra",
+                            "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\nerreur : ${r.throwable.message}", r.throwable,
+                        )
+                    },
                 )
                 .build(),
             contentDescription = cam?.name,
@@ -235,12 +289,12 @@ fun CameraCard(card: Card, modifier: Modifier) {
             PlaceholderLayer(offlineUrl, CameraPlaceholderKind.Offline, Modifier.fillMaxSize().graphicsLayer { alpha = offlineAlpha })
         }
         if (live && !offline && camId != null) {
-            key(reload) {
+            key(reload, liveRetry) {
                 InlineLive(
                     card.s("live_url"), camId,
                     Modifier.fillMaxSize().graphicsLayer { alpha = liveAlpha },
                     onFirstFrame = { liveShown = true },
-                    onError = { liveFailed = true },
+                    onError = { liveErrors++ },
                 )
             }
         }
@@ -340,9 +394,12 @@ private fun InlineLive(
         ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().apply { volume = 0f }
     }
     DisposableEffect(Unit) { onDispose { player.release() } }
+    // Une seule erreur signalée par lecteur (erreur de lecture et délai dépassé peuvent se suivre).
+    var failed by remember { mutableStateOf(false) }
+    val fail = { if (!failed) { failed = true; onError() } }
     LaunchedEffect(camId) {
         if (url == null) url = runCatching { state.ha.cameraStreamUrl(camId) }.getOrNull()
-        if (url == null) onError()
+        if (url == null) fail()
     }
     LaunchedEffect(url) {
         url?.let {
@@ -364,7 +421,7 @@ private fun InlineLive(
                     "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\nerreur ${error.errorCodeName} : ${error.message}", error,
                 )
                 if (fr.pergens.hamacs.ui.VideoCompat.isDecoderError(error)) onDecoderError()
-                onError()
+                fail()
             }
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_ENDED) onEnded()
@@ -381,7 +438,7 @@ private fun InlineLive(
                 ctx, "inline:$camId:timeout", "Vidéo dans la carte",
                 "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\naucune image au bout de 25 s (état ${player.playbackState}, format ${player.videoFormat?.sampleMimeType})",
             )
-            onError()
+            fail()
         }
     }
     AndroidView(
