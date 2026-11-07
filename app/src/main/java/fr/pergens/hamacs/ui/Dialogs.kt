@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -444,9 +445,13 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
     val known = fallback != null && VideoCompat.isUnplayable(requested)
     var target by remember(requested) { mutableStateOf(if (known) fallback!! else requested) }
     var fellBack by remember(requested) { mutableStateOf(known) }
-    var url by remember(target) { mutableStateOf<String?>(if (target.startsWith("camera.")) null else target) }
+    // Nouveaux essais (caméra qui se réveille, pont qui se reconnecte) : 2 de plus, à 3 s d'intervalle, après une
+    // erreur de lecture autre que le format, ou si aucune image n'est arrivée au bout de 25 s.
+    var attempt by remember(target) { mutableIntStateOf(0) }
+    var url by remember(target, attempt) { mutableStateOf<String?>(if (target.startsWith("camera.")) null else target) }
     var error by remember(target) { mutableStateOf<String?>(null) }
-    LaunchedEffect(target) {
+    var retryPending by remember(target) { mutableStateOf(false) }
+    LaunchedEffect(target, attempt) {
         if (target.startsWith("camera.")) {
             runCatching { url = state.ha.cameraStreamUrl(target) }.onFailure {
                 error = it.message
@@ -464,6 +469,13 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
         "cible : ${fr.pergens.hamacs.CrashGuard.redact(target)}\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\n$what", e,
     )
     var rendered by remember(target) { mutableStateOf(false) }
+    LaunchedEffect(retryPending) {
+        if (!retryPending) return@LaunchedEffect
+        player.stop()
+        delay(3_000)
+        retryPending = false
+        attempt++
+    }
     DisposableEffect(player) {
         val l = object : androidx.media3.common.Player.Listener {
             override fun onRenderedFirstFrame() { rendered = true }
@@ -471,7 +483,9 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                 note("erreur ${e.errorCodeName} : ${e.message}", e)
                 // Format refusé par la tablette : mémorisé pour les prochaines fois.
                 if (VideoCompat.isDecoderError(e)) VideoCompat.mark(target)
-                if (fallback != null && target != fallback) {
+                val decoder = VideoCompat.isDecoderError(e)
+                if (!decoder && attempt < 2) retryPending = true
+                else if (fallback != null && target != fallback) {
                     fellBack = true
                     target = fallback
                 } else error = e.errorCodeName
@@ -480,11 +494,15 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
         player.addListener(l)
         onDispose { player.removeListener(l) }
     }
-    LaunchedEffect(target) {
+    LaunchedEffect(target, attempt) {
         delay(25_000)
-        if (!rendered && error == null) note("aucune image au bout de 25 s (état ${player.playbackState}, format ${player.videoFormat?.sampleMimeType})")
+        if (!rendered && error == null && !retryPending) {
+            note("aucune image au bout de 25 s (essai ${attempt + 1}, état ${player.playbackState}, format ${player.videoFormat?.sampleMimeType})")
+            if (attempt < 2) retryPending = true else error = "TIMEOUT"
+        }
     }
-    LaunchedEffect(url) {
+    // L'adresse peut rester la même d'un essai à l'autre : l'essai fait partie de la clé.
+    LaunchedEffect(url, attempt) {
         url?.let {
             player.setMediaItem(MediaItem.fromUri(it))
             player.prepare()
