@@ -247,6 +247,11 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                     types[k] == "f" -> putFloat(k, p.content.toFloat())
                     types[k] == "i" -> putInt(k, p.content.toDouble().toInt())
                     !p.isString && (p.content == "true" || p.content == "false") -> putBoolean(k, p.content.toBoolean())
+                    // Autres nombres (réglage ajouté depuis) : entier ou décimal d'après la valeur, jamais du texte
+                    // (relu avec getInt / getFloat, un texte ferait planter l'app au démarrage).
+                    !p.isString && p.content.toIntOrNull() != null -> putInt(k, p.content.toInt())
+                    !p.isString && p.content.toLongOrNull() != null -> putLong(k, p.content.toLong())
+                    !p.isString && p.content.toFloatOrNull() != null -> putFloat(k, p.content.toFloat())
                     else -> putString(k, p.content)
                 }
             }
