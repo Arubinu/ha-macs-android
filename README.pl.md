@@ -30,6 +30,7 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
   opcjonalne filtry, głowa wychodzi poza koło w kolorze pulpitu
 - 📹 **Kamery**: podgląd na żywo, własne karty, pełny ekran w wysokiej rozdzielczości, ostatnie wykrycia (media HA,
   SMB, NFS, pamięć lokalna)
+  ; pełny ekran zamyka się sam po czasie (Ustawienia › Wyświetlanie), nigdy podczas wykrycia
 - 🚨 **Alerty**: natywna wersja [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 motywy, dźwięk,
   synteza mowy i powiadomienia
 - 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją (dotknij wykresu: każda

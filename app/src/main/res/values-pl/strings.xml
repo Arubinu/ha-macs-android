@@ -872,4 +872,6 @@
     <string name="clock_weather">Pogoda pod godziną</string>
     <string name="clock_weather_help">Temperatura, niebo oraz minimum / maksimum dnia.</string>
     <string name="clock_weather_entity_help">Domyślnie encja pogody M.A.C.S.</string>
+    <string name="fullscreen_timeout">Pełny ekran: automatyczne zamykanie</string>
+    <string name="fullscreen_timeout_help">Powrót do pulpitu po tym czasie, jeśli nikt wcześniej go nie zamknął.</string>
 </resources>

@@ -36,6 +36,8 @@ data class Settings(
     val tapFullscreen: Boolean,
     /** Plein écran : remplir tout l'écran (bords rognés, sans bandes noires) plutôt qu'afficher l'image entière. */
     val fullscreenFill: Boolean,
+    /** Plein écran : fermé tout seul au bout de ce délai (0 = jamais). */
+    val fullscreenSeconds: Int = 0,
     /** Couleur principale (#rrggbb) imposée à tout le tableau de bord et à M.A.C.S. ; vide = celle du thème. */
     val accentColor: String = "",
     /** Kiosk mode: the app cannot be left (nor the tablet switched off) without the access code. */
@@ -83,6 +85,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         dimLevel = prefs.getFloat("dim_level", 0.1f),
         tapFullscreen = prefs.getBoolean("tap_fullscreen", false),
         fullscreenFill = prefs.getBoolean("fullscreen_fill", false),
+        fullscreenSeconds = prefs.getInt("fullscreen_seconds", 0),
         accentColor = prefs.getString("accent_color", null) ?: "",
         kioskEnabled = prefs.getBoolean("kiosk_enabled", false),
         nightEnabled = prefs.getBoolean("night_enabled", false),
@@ -107,6 +110,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             .putFloat("dim_level", s.dimLevel)
             .putBoolean("tap_fullscreen", s.tapFullscreen)
             .putBoolean("fullscreen_fill", s.fullscreenFill)
+            .putInt("fullscreen_seconds", s.fullscreenSeconds)
             .putString("accent_color", s.accentColor)
             .putBoolean("kiosk_enabled", s.kioskEnabled)
             .putBoolean("night_enabled", s.nightEnabled)

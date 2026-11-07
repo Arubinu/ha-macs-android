@@ -197,6 +197,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   prefs `video`) ; Galaxy Tab A8 : pas de décodage matériel 4K H.265 (flux « Clair » Reolink, enregistrements du Hub).
 - **Journal** : `CrashGuard.note` (une fois par clé et par démarrage, adresses passées par `redact`) pour les erreurs de
   lecture vidéo (plein écran, direct, captures) et du lecteur DLNA.
+- **Plein écran** (`PlayerDialog`) : 2 nouveaux essais à 3 s (erreur hors format, ou aucune image en 25 s), puis erreur.
+  Fermeture automatique (pref `fullscreen_seconds`, Réglages › Affichage, 0 = jamais), suspendue tant qu'un capteur
+  `motion` de la carte caméra ou son `event_entity` est `on` (délai relancé ensuite).
 - **Horloge de l'accueil** (`ClockCard`) : ligne météo dessous (icône, température, ciel, mini / maxi du jour), active
   par défaut ; entité = surcharge `clock` (`weather`, `weather_entity`, éditeur `ClockFields`, `EditTarget.Clock`)
   sinon l'entité météo de M.A.C.S.

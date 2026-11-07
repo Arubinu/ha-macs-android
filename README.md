@@ -29,6 +29,7 @@ nothing to set up in Home Assistant.
 - 🧑‍🎨 **Avatars**: photo from the tablet camera, a file or a phone (QR code), cut out on the device, optional
   filters, head standing out of a circle that takes the dashboard colour
 - 📹 **Cameras**: live view, custom tabs, fullscreen in high definition, latest detections (HA media, SMB, NFS, local)
+  ; fullscreen can close by itself after a delay (Settings › Display), never during a detection
 - 🚨 **Alerts**: native port of [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 themes, sound,
   speech and push notifications
 - 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station (tap a

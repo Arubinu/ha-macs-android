@@ -431,6 +431,29 @@ private fun MoreInfoDialog(entityId: String, onDismiss: () -> Unit) {
     }
 }
 
+/** Capteurs de mouvement (`motion`) des cartes caméra dont l'entité ou un flux fait partie de [ids]. */
+private fun cameraMotion(root: kotlinx.serialization.json.JsonElement, ids: Set<String>): List<String> {
+    val out = mutableListOf<String>()
+    fun walk(e: kotlinx.serialization.json.JsonElement) {
+        when (e) {
+            is JsonObject -> {
+                if (e.s("type") == "camera" && listOf("entity", "fullscreen_entity", "fullscreen_url", "live_url").any { e.s(it) in ids }) {
+                    when (val m = e["motion"]) {
+                        is kotlinx.serialization.json.JsonArray -> m.forEach { (it as? JsonPrimitive)?.content?.let(out::add) }
+                        is JsonPrimitive -> out += m.content
+                        else -> {}
+                    }
+                }
+                e.values.forEach(::walk)
+            }
+            is kotlinx.serialization.json.JsonArray -> e.forEach(::walk)
+            else -> {}
+        }
+    }
+    walk(root)
+    return out.distinct()
+}
+
 /**
  * Lecteur plein écran avec le son : enregistrement mp4, flux RTSP/HLS direct (`live_url`, go2rtc…)
  * ou flux HLS d'une caméra Home Assistant ("camera.xxx").
@@ -461,7 +484,24 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
     }
     // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format, avant le flux de repli.
     val player = remember { ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build() }
-    val fill = fr.pergens.hamacs.App.instance.config.settings.collectAsState().value.fullscreenFill
+    val settings = fr.pergens.hamacs.App.instance.config.settings.collectAsState().value
+    val fill = settings.fullscreenFill
+    // Fermeture automatique (Réglages › Affichage) : retour au tableau de bord si personne ne l'a fermé. Jamais
+    // pendant une détection de mouvement de cette caméra (capteurs `motion` de sa carte) : le délai repart après.
+    val dash by fr.pergens.hamacs.App.instance.config.dashboard.collectAsState()
+    val blocks by fr.pergens.hamacs.App.instance.config.blocks.collectAsState()
+    val motionIds = remember(dash, blocks, requested, fallback) {
+        val ids = setOfNotNull(requested, fallback)
+        // Plus l'entité de « caméra sur événement » (sonnette, détecteur) réglée sur cette caméra.
+        cameraMotion(dash, ids) + ids.mapNotNull { blocks[it]?.s("event_entity") }
+    }
+    val motionOn = motionIds.any { entity(it)?.state == "on" }
+    LaunchedEffect(settings.fullscreenSeconds, motionOn) {
+        if (settings.fullscreenSeconds > 0 && !motionOn) {
+            delay(settings.fullscreenSeconds * 1000L)
+            onDismiss()
+        }
+    }
     DisposableEffect(Unit) { onDispose { player.release() } }
     // Erreurs notées dans le journal (Réglages › À propos) : le flux plein écran peut rester noir sans autre signe.
     fun note(what: String, e: Throwable? = null) = fr.pergens.hamacs.CrashGuard.note(

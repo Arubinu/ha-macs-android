@@ -882,6 +882,12 @@ private fun DisplaySection() {
         SwitchRow(stringResource(R.string.fullscreen_fill), stringResource(R.string.fullscreen_fill_help), settings.fullscreenFill) { on ->
             app.config.update { it.copy(fullscreenFill = on) }
         }
+        GroupDivider()
+        Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(stringResource(R.string.fullscreen_timeout), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+            Text(stringResource(R.string.fullscreen_timeout_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+            DelayChips(settings.fullscreenSeconds, listOf(0, 30, 60, 120, 300, 600)) { sec -> app.config.update { it.copy(fullscreenSeconds = sec) } }
+        }
         // Flux et caméras mémorisés comme illisibles par la tablette : réinitialisable (mise à jour, réglage changé).
         val unplayable by fr.pergens.hamacs.ui.VideoCompat.unplayable.collectAsState()
         if (unplayable.isNotEmpty()) {

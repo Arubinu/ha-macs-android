@@ -29,6 +29,7 @@ Custom Cards und ohne Einrichtung in Home Assistant.
 - 🧑‍🎨 **Avatare**: Foto mit der Tablet-Kamera, aus einer Datei oder vom Handy (QR-Code), auf dem Gerät freigestellt,
   optionale Filter, Kopf ragt aus einem Kreis in der Farbe des Dashboards
 - 📹 **Kameras**: Livebild, eigene Tabs, Vollbild in hoher Auflösung, letzte Erkennungen (HA-Medien, SMB, NFS, lokal)
+  ; Vollbild schließt sich nach einer Wartezeit selbst (Einstellungen › Anzeige), nie während einer Erkennung
 - 🚨 **Warnungen**: native Umsetzung der [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 Themes,
   Ton, Sprachausgabe und Benachrichtigungen
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle

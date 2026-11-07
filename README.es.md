@@ -31,6 +31,7 @@ personalizadas y sin nada que configurar en Home Assistant.
   filtros opcionales, la cabeza sobresale de un círculo con el color del panel
 - 📹 **Cámaras**: directo, pestañas personalizables, pantalla completa en alta definición, últimas detecciones (medios
   de HA, SMB, NFS, local)
+  ; la pantalla completa se cierra sola tras un tiempo (Ajustes › Pantalla), nunca durante una detección
 - 🚨 **Alertas**: versión nativa de [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, sonido,
   síntesis de voz y notificaciones
 - 🌦️ **Tiempo y gráficos**: previsión, radar Windy, consumo eléctrico, precios del combustible con la gasolinera más

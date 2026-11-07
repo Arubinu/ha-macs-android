@@ -883,4 +883,6 @@
     <string name="clock_weather">Weather under the time</string>
     <string name="clock_weather_help">Temperature, sky and today\'s low / high.</string>
     <string name="clock_weather_entity_help">By default, the weather entity of M.A.C.S.</string>
+    <string name="fullscreen_timeout">Fullscreen: close automatically</string>
+    <string name="fullscreen_timeout_help">Back to the dashboard after this delay, if nobody closed it before.</string>
 </resources>

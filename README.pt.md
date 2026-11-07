@@ -30,6 +30,7 @@ personalizados e sem nada para configurar no Home Assistant.
   dispositivo, filtros opcionais, cabeça a sair de um círculo com a cor do painel
 - 📹 **Câmaras**: em direto, separadores personalizáveis, ecrã inteiro em alta definição, últimas deteções (multimédia
   do HA, SMB, NFS, local)
+  ; o ecrã inteiro fecha-se sozinho após um tempo (Definições › Ecrã), nunca durante uma deteção
 - 🚨 **Alertas**: versão nativa do [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, som,
   voz e notificações
 - 🌦️ **Meteorologia e gráficos**: previsão, radar Windy, consumo elétrico, preços dos combustíveis com o posto mais

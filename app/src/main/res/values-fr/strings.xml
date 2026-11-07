@@ -870,4 +870,6 @@
     <string name="clock_weather">Météo sous l\'heure</string>
     <string name="clock_weather_help">Température, ciel et mini / maxi du jour.</string>
     <string name="clock_weather_entity_help">Par défaut, l\'entité météo de M.A.C.S.</string>
+    <string name="fullscreen_timeout">Plein écran : fermeture automatique</string>
+    <string name="fullscreen_timeout_help">Retour au tableau de bord après ce délai, si personne ne l\'a fermé avant.</string>
 </resources>

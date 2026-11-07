@@ -30,6 +30,7 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
   filtres au choix, tête qui dépasse d'un cercle aux couleurs du tableau de bord
 - 📹 **Caméras** : direct, onglets personnalisables, plein écran en haute définition, dernières détections (média HA,
   SMB, NFS, stockage local)
+  ; plein écran refermé tout seul après un délai (Réglages › Affichage), jamais pendant une détection
 - 🚨 **Alertes** : portage natif de l'[AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thèmes, son,
   synthèse vocale et notifications
 - 🌦️ **Météo et graphiques** : prévisions, radar Windy, consommation électrique, prix des carburants avec la station la

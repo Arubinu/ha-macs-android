@@ -30,6 +30,7 @@ card personalizzate e senza nulla da configurare in Home Assistant.
   dispositivo, filtri facoltativi, testa che esce da un cerchio con il colore della dashboard
 - 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione, ultimi rilevamenti (media
   HA, SMB, NFS, locale)
+  ; lo schermo intero si chiude da solo dopo un tempo (Impostazioni › Visualizzazione), mai durante un rilevamento
 - 🚨 **Avvisi**: versione nativa di [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temi, suono,
   sintesi vocale e notifiche
 - 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più

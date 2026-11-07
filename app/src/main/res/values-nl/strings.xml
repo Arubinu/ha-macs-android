@@ -852,4 +852,6 @@
     <string name="clock_weather">Weer onder de tijd</string>
     <string name="clock_weather_help">Temperatuur, lucht en minimum / maximum van vandaag.</string>
     <string name="clock_weather_entity_help">Standaard de weerentiteit van M.A.C.S.</string>
+    <string name="fullscreen_timeout">Volledig scherm: automatisch sluiten</string>
+    <string name="fullscreen_timeout_help">Terug naar het dashboard na deze tijd, als niemand het eerder heeft gesloten.</string>
 </resources>

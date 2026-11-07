@@ -852,4 +852,6 @@
     <string name="clock_weather">Tiempo bajo la hora</string>
     <string name="clock_weather_help">Temperatura, cielo y mínima / máxima del día.</string>
     <string name="clock_weather_entity_help">Por defecto, la entidad meteorológica de M.A.C.S.</string>
+    <string name="fullscreen_timeout">Pantalla completa: cierre automático</string>
+    <string name="fullscreen_timeout_help">Vuelve al panel tras este tiempo, si nadie la ha cerrado antes.</string>
 </resources>

@@ -852,4 +852,6 @@
     <string name="clock_weather">Wetter unter der Uhrzeit</string>
     <string name="clock_weather_help">Temperatur, Himmel und Tiefst- / Höchstwert des Tages.</string>
     <string name="clock_weather_entity_help">Standardmäßig die Wetter-Entität von M.A.C.S.</string>
+    <string name="fullscreen_timeout">Vollbild: automatisch schließen</string>
+    <string name="fullscreen_timeout_help">Nach dieser Zeit zurück zum Dashboard, falls es niemand vorher geschlossen hat.</string>
 </resources>

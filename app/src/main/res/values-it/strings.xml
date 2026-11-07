@@ -852,4 +852,6 @@
     <string name="clock_weather">Meteo sotto l\'ora</string>
     <string name="clock_weather_help">Temperatura, cielo e minima / massima del giorno.</string>
     <string name="clock_weather_entity_help">Per impostazione predefinita, l\'entità meteo di M.A.C.S.</string>
+    <string name="fullscreen_timeout">Schermo intero: chiusura automatica</string>
+    <string name="fullscreen_timeout_help">Torna alla dashboard dopo questo tempo, se nessuno l\'ha chiuso prima.</string>
 </resources>

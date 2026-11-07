@@ -30,6 +30,7 @@ custom cards en zonder iets in te stellen in Home Assistant.
   uitgeknipt, optionele filters, hoofd dat uit een cirkel in de dashboardkleur steekt
 - 📹 **Camera's**: live beeld, eigen tabbladen, volledig scherm in hoge resolutie, laatste detecties (HA-media, SMB,
   NFS, lokaal)
+  ; volledig scherm sluit vanzelf na een tijd (Instellingen › Weergave), nooit tijdens een detectie
 - 🚨 **Meldingen**: native versie van [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thema's,
   geluid, spraak en pushmeldingen
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation
