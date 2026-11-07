@@ -1009,7 +1009,16 @@ private fun SnoozeButton(al: Active, cfg: JsonObject, engine: AlertEngine, state
             Modifier.size(size).clip(CircleShape).background(Color(0x6B000000)).border(1.dp, Color(0x61FF5050), CircleShape)
                 .clickable { engine.dismissPersistent(al, states) },
             contentAlignment = Alignment.Center,
-        ) { Text("✕", style = TextStyle(fontSize = (size.value * 0.45f).sp, color = Color(0xE0FF9696), fontWeight = FontWeight.Bold)) }
+        ) {
+            // Croix dessinée (pas le caractère ✕, que chaque police place différemment) : centrée au pixel près.
+            // Opacité appliquée à l'ensemble (calque) : pas de point plus clair au croisement des deux traits.
+            androidx.compose.foundation.Canvas(Modifier.size(size * 0.34f).graphicsLayer { alpha = 0.88f }) {
+                val w = this.size.width * 0.18f
+                val c = Color(0xFFFF9696)
+                drawLine(c, androidx.compose.ui.geometry.Offset(w / 2, w / 2), androidx.compose.ui.geometry.Offset(this.size.width - w / 2, this.size.height - w / 2), w, androidx.compose.ui.graphics.StrokeCap.Round)
+                drawLine(c, androidx.compose.ui.geometry.Offset(this.size.width - w / 2, w / 2), androidx.compose.ui.geometry.Offset(w / 2, this.size.height - w / 2), w, androidx.compose.ui.graphics.StrokeCap.Round)
+            }
+        }
         return
     }
     val fixed = if (al.cfg.containsKey("snooze_duration")) al.cfg.d("snooze_duration") else cfg.d("snooze_default_duration")
