@@ -21,7 +21,7 @@ personalizadas y sin nada que configurar en Home Assistant.
 
 ## ✨ Funciones
 
-- 🤖 **M.A.C.S.**, el personaje animado, en el centro de la pantalla de inicio
+- 🤖 **M.A.C.S.**, el personaje animado, en el centro de la pantalla de inicio, con la hora y un breve parte meteorológico
 - 🧙 **Asistente de configuración**: habitaciones, miembros, cámaras y elementos principales detectados en Home
   Assistant
 - 🏠 **Habitaciones**: luces, temperatura, humedad y aparatos de un vistazo

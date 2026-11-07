@@ -55,6 +55,8 @@ sealed interface EditTarget {
     data class Pages(override val key: String) : EditTarget
     /** M.A.C.S. ([key] = `macs`) : capteurs, satellite Assist, batterie, conversation, luminosité, animations. */
     data class Macs(override val key: String = "macs") : EditTarget
+    /** Horloge de l'accueil ([key] = `clock`) : météo sous l'heure et son entité. */
+    data class Clock(override val key: String = "clock") : EditTarget
     /** Bloc dont seules les entités se règlent (météo…). */
     data class Block(override val key: String) : EditTarget
     /** Carte dont toute la configuration se modifie dans un éditeur dédié (AlertTicker…). */

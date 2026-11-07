@@ -21,7 +21,7 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 
 ## ✨ Fonctionnalités
 
-- 🤖 **M.A.C.S.**, le personnage animé, au cœur de l'écran d'accueil
+- 🤖 **M.A.C.S.**, le personnage animé, au cœur de l'écran d'accueil, avec l'heure et une météo succincte
 - 🧙 **Assistant de configuration** : pièces, membres, caméras et éléments principaux détectés dans Home Assistant
 - 🏠 **Pièces** : lumières, température, humidité et appareils d'un coup d'œil
 - 👨‍👩‍👧 **Membres** : présence (touchez la barre pour les arrivées et départs), heure d'arrivée, pas, batterie du

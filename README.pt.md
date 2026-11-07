@@ -21,7 +21,7 @@ personalizados e sem nada para configurar no Home Assistant.
 
 ## ✨ Funcionalidades
 
-- 🤖 **M.A.C.S.**, a personagem animada, no centro do ecrã inicial
+- 🤖 **M.A.C.S.**, a personagem animada, no centro do ecrã inicial, com a hora e uma meteorologia resumida
 - 🧙 **Assistente de configuração**: divisões, membros, câmaras e elementos principais detetados no Home Assistant
 - 🏠 **Divisões**: luzes, temperatura, humidade e aparelhos num relance
 - 👨‍👩‍👧 **Membros**: presença (toque na barra para ver chegadas e saídas), hora de chegada, passos, bateria do telemóvel

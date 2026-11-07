@@ -866,4 +866,8 @@
     <string name="peers_approve">Approuver</string>
     <string name="peers_block">Bloquer</string>
     <string name="peers_wyoming_help">Home Assistant est accepté d\'office. Tout autre appareil (Home Assistant derrière un proxy, par exemple) doit être approuvé : il recevra le son du micro.</string>
+    <string name="clock_title">Horloge</string>
+    <string name="clock_weather">Météo sous l\'heure</string>
+    <string name="clock_weather_help">Température, ciel et mini / maxi du jour.</string>
+    <string name="clock_weather_entity_help">Par défaut, l\'entité météo de M.A.C.S.</string>
 </resources>

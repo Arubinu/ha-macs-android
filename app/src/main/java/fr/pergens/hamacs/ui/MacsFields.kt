@@ -196,6 +196,34 @@ fun MacsFields() {
     }
 }
 
+/** Horloge de l'accueil : météo succincte sous l'heure (affichée ou non) et son entité. */
+@Composable
+fun ClockFields() {
+    val app = App.instance
+    val blocks by app.config.blocks.collectAsState()
+    val opts = blocks[fr.pergens.hamacs.ui.cards.CLOCK_KEY]
+    val key = fr.pergens.hamacs.ui.cards.CLOCK_KEY
+    val show = opts?.b("weather") ?: true
+    var pick by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SwitchLine(stringResource(R.string.clock_weather), stringResource(R.string.clock_weather_help), show) {
+            app.config.setBlockValue(key, "weather", if (it) null else JsonPrimitive(false))
+        }
+        if (show) {
+            val own = opts?.s("weather_entity")
+            val macs = blocks[MacsOptions.KEY]?.o("config")?.s("weather_entity") ?: app.config.dashboard.value.o("macs")?.s("weather_entity")
+            EntityRow(stringResource(R.string.macs_weather_entity), own ?: macs, own != null, { pick = true }) {
+                app.config.setBlockValue(key, "weather_entity", null)
+            }
+            Help(stringResource(R.string.clock_weather_entity_help))
+        }
+    }
+    if (pick) EntityPicker("weather", onDismiss = { pick = false }) { id ->
+        pick = false
+        app.config.setBlockValue(key, "weather_entity", JsonPrimitive(id))
+    }
+}
+
 private fun fmt(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
 
 /** Capteur numérique : entité, unité (auto = celle du capteur) et plage ramenée à 0–100. */

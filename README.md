@@ -21,7 +21,7 @@ nothing to set up in Home Assistant.
 
 ## ✨ Features
 
-- 🤖 **M.A.C.S.**, the animated assistant character, at the heart of the home screen
+- 🤖 **M.A.C.S.**, the animated assistant character, at the heart of the home screen, with the time and a short weather line
 - 🧙 **Setup wizard**: rooms, members, cameras and key elements are detected from your Home Assistant
 - 🏠 **Rooms**: lights, temperature, humidity and devices at a glance
 - 👨‍👩‍👧 **Members**: presence (tap the bar for arrivals and departures), arrival time, steps, phone battery and

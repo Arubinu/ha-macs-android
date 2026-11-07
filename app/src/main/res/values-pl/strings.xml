@@ -868,4 +868,8 @@
     <string name="peers_approve">Zatwierdź</string>
     <string name="peers_block">Zablokuj</string>
     <string name="peers_wyoming_help">Home Assistant jest akceptowany automatycznie. Każde inne urządzenie (np. Home Assistant za proxy) musi zostać zatwierdzone: otrzyma dźwięk z mikrofonu.</string>
+    <string name="clock_title">Zegar</string>
+    <string name="clock_weather">Pogoda pod godziną</string>
+    <string name="clock_weather_help">Temperatura, niebo oraz minimum / maksimum dnia.</string>
+    <string name="clock_weather_entity_help">Domyślnie encja pogody M.A.C.S.</string>
 </resources>

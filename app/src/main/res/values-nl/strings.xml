@@ -848,4 +848,8 @@
     <string name="peers_approve">Goedkeuren</string>
     <string name="peers_block">Blokkeren</string>
     <string name="peers_wyoming_help">Home Assistant wordt automatisch geaccepteerd. Elk ander apparaat (bijvoorbeeld Home Assistant achter een proxy) moet worden goedgekeurd: het ontvangt het geluid van de microfoon.</string>
+    <string name="clock_title">Klok</string>
+    <string name="clock_weather">Weer onder de tijd</string>
+    <string name="clock_weather_help">Temperatuur, lucht en minimum / maximum van vandaag.</string>
+    <string name="clock_weather_entity_help">Standaard de weerentiteit van M.A.C.S.</string>
 </resources>

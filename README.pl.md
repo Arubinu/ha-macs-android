@@ -21,7 +21,7 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 
 ## ✨ Funkcje
 
-- 🤖 **M.A.C.S.**, animowana postać, w centrum ekranu głównego
+- 🤖 **M.A.C.S.**, animowana postać, w centrum ekranu głównego, z godziną i krótką pogodą
 - 🧙 **Kreator konfiguracji**: pomieszczenia, domownicy, kamery i najważniejsze elementy wykrywane w Home Assistant
 - 🏠 **Pomieszczenia**: światła, temperatura, wilgotność i urządzenia w jednym miejscu
 - 👨‍👩‍👧 **Domownicy**: obecność (dotknij paska, aby zobaczyć przyjścia i wyjścia), godzina przybycia, kroki, bateria

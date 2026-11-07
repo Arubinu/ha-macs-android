@@ -46,7 +46,9 @@ import fr.pergens.hamacs.config.d
 import fr.pergens.hamacs.R
 import fr.pergens.hamacs.config.Card
 import fr.pergens.hamacs.config.i
+import fr.pergens.hamacs.config.o
 import fr.pergens.hamacs.config.s
+import androidx.compose.runtime.collectAsState
 import fr.pergens.hamacs.ha.Forecast
 import fr.pergens.hamacs.ha.subscribeForecast
 import fr.pergens.hamacs.ui.LocalDashState
@@ -326,6 +328,67 @@ private fun TempBar(lo: Double, hi: Double, min: Double, max: Double, current: D
  */
 @Composable
 fun ClockCard(card: Card, modifier: Modifier) {
+    val state = LocalDashState.current
+    val app = fr.pergens.hamacs.App.instance
+    val blocks by app.config.blocks.collectAsState()
+    val dash by app.config.dashboard.collectAsState()
+    val opts = blocks[CLOCK_KEY]
+    // Météo sous l'heure : activée par défaut, entité du bloc sinon celle de M.A.C.S.
+    val showWeather = opts?.b("weather") ?: card.b("weather", true)
+    val weatherId = opts?.s("weather_entity") ?: card.s("weather_entity")
+        ?: blocks[fr.pergens.hamacs.macs.MacsOptions.KEY]?.o("config")?.s("weather_entity") ?: dash.o("macs")?.s("weather_entity")
+    val edit = if (state.editMode) Modifier
+        .editOutline(true, androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+        .clickable { state.editTarget = fr.pergens.hamacs.ui.EditTarget.Clock() }
+    else Modifier
+    Column(modifier.then(edit)) {
+        ClockFace(card, Modifier)
+        if (showWeather && weatherId != null) ClockWeatherLine(weatherId, card.d("size", 64.0).toFloat(), Modifier.padding(top = 10.dp))
+    }
+}
+
+/** Clé des réglages du bloc horloge (mode édition). */
+const val CLOCK_KEY = "clock"
+
+/** Ligne météo succincte : icône, température, ciel, mini / maxi du jour. */
+@Composable
+private fun ClockWeatherLine(id: String, hourSize: Float, modifier: Modifier) {
+    val weather = entity(id) ?: return
+    val night = entity("sun.sun")?.state == "below_horizon"
+    val daily = rememberForecast(id, "daily")
+    val zone = ZoneId.systemDefault()
+    val today = daily.firstOrNull { Instant.ofEpochMilli(it.time).atZone(zone).toLocalDate() == LocalDate.now(zone) }
+    val temp = weather.attrDouble("temperature")
+    val big = (hourSize * 0.42f).sp
+    val small = (hourSize * 0.26f).sp
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        WeatherIcon(weather.state, night, Modifier.size((hourSize * 0.75f).dp), animated = true)
+        Text(
+            "${temp?.roundToInt() ?: "—"}°", Modifier.padding(start = 6.dp),
+            style = TextStyle(fontSize = big, color = Color.White),
+        )
+        Column(Modifier.padding(start = 12.dp)) {
+            Text(conditionLabel(weather.state), style = TextStyle(fontSize = small, color = Color.White), maxLines = 1)
+            if (today != null) {
+                val lo = today.templow?.roundToInt()
+                val hi = today.temperature?.roundToInt()
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (lo != null) {
+                        HaIcon("mdi:arrow-down", size = (hourSize * 0.22f).dp, tint = Color(155, 200, 235))
+                        Text("$lo°", Modifier.padding(end = 10.dp), style = TextStyle(fontSize = small, color = Color(255, 255, 255, 170)))
+                    }
+                    if (hi != null) {
+                        HaIcon("mdi:arrow-up", size = (hourSize * 0.22f).dp, tint = Color(250, 175, 95))
+                        Text("$hi°", style = TextStyle(fontSize = small, color = Color(255, 255, 255, 170)))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ClockFace(card: Card, modifier: Modifier) {
     val now = rememberNow(1000)
     val t = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault())
     val hourSize = card.d("size", 64.0).sp

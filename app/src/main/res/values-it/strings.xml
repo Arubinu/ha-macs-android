@@ -848,4 +848,8 @@
     <string name="peers_approve">Approva</string>
     <string name="peers_block">Blocca</string>
     <string name="peers_wyoming_help">Home Assistant è accettato automaticamente. Ogni altro dispositivo (Home Assistant dietro un proxy, per esempio) deve essere approvato: riceverà l\'audio del microfono.</string>
+    <string name="clock_title">Orologio</string>
+    <string name="clock_weather">Meteo sotto l\'ora</string>
+    <string name="clock_weather_help">Temperatura, cielo e minima / massima del giorno.</string>
+    <string name="clock_weather_entity_help">Per impostazione predefinita, l\'entità meteo di M.A.C.S.</string>
 </resources>

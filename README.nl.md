@@ -21,7 +21,7 @@ custom cards en zonder iets in te stellen in Home Assistant.
 
 ## ✨ Functies
 
-- 🤖 **M.A.C.S.**, het geanimeerde personage, centraal op het startscherm
+- 🤖 **M.A.C.S.**, het geanimeerde personage, centraal op het startscherm, met de tijd en een kort weerbericht
 - 🧙 **Installatieassistent**: kamers, leden, camera's en belangrijke elementen worden in Home Assistant gevonden
 - 🏠 **Kamers**: verlichting, temperatuur, luchtvochtigheid en apparaten in één oogopslag
 - 👨‍👩‍👧 **Leden**: aanwezigheid (tik op de balk voor aankomsten en vertrekken), aankomsttijd, stappen, telefoonaccu en

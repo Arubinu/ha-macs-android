@@ -21,7 +21,7 @@ card personalizzate e senza nulla da configurare in Home Assistant.
 
 ## ✨ Funzionalità
 
-- 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale
+- 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale, con l'ora e un meteo essenziale
 - 🧙 **Procedura guidata**: stanze, membri, telecamere ed elementi principali rilevati in Home Assistant
 - 🏠 **Stanze**: luci, temperatura, umidità e dispositivi a colpo d'occhio
 - 👨‍👩‍👧 **Membri**: presenza (tocca la barra per arrivi e partenze), ora di arrivo, passi, batteria del telefono e
