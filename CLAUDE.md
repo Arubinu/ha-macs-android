@@ -160,7 +160,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   tcp:49494`, requêtes SOAP et SUBSCRIBE depuis le PC (rappel `http://10.0.2.2:…`) ; le multicast SSDP ne traverse pas
   l'émulateur.
 - **Satellite Wyoming** (`voice/WyomingSatellite.kt`, prefs `wyoming`) : Réglages › Assistant vocal, système *Passerelle*
-  ou *Home Assistant* (exclusifs). Serveur TCP 10700, mDNS `_wyoming._tcp`, `describe`/`info`, `ping`/`pong`,
+  ou *Home Assistant* (exclusifs). Serveur TCP 10700 (seuls l'IP du serveur HA de l'app, sinon le premier appareil
+  connecté, pref `peer` oubliée en désactivant ; boucle locale en débogage), mDNS `_wyoming._tcp`, `describe`/`info`, `ping`/`pong`,
   `run-satellite` ; appui sur le M.A.C.S. → `run-pipeline` (asr→tts) + audio 16 kHz ; mot d'activation → micro continu,
   `run-pipeline` depuis `wake`. Réception : `transcript`, `synthesize`, audio TTS (écrit dans l'AudioTrack sur une file
   unique : écrire en parallèle fait planter le code natif), `played`. Envois réseau jamais sur le fil principal (file
