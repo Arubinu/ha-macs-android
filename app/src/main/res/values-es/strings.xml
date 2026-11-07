@@ -766,4 +766,8 @@
     <string name="anim_off_grant">Para reactivarlas con un toque, autoriza la app una vez desde un ordenador: %1$s</string>
     <string name="player_hd_fallback">Esta tableta no admite la transmisión en alta definición: se muestra la estándar</string>
     <string name="video_unreadable">Vídeo no reproducible en esta tableta (formato demasiado pesado, p. ej. 4K H.265)</string>
+    <string name="player_loading">Cargando la transmisión…</string>
+    <string name="video_memo_title">Formatos de vídeo no compatibles</string>
+    <string name="video_memo_help">%1$d transmisiones o cámaras recordadas: esta tableta no puede decodificarlas, la app pasa directamente a la transmisión estándar (o lo indica). Restablece tras una actualización de la tableta o un cambio de ajuste.</string>
+    <string name="video_memo_reset">Restablecer</string>
 </resources>

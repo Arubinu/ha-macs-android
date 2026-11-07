@@ -797,4 +797,8 @@
     <string name="anim_off_grant">To turn them back on with one tap, allow the app once from a computer: %1$s</string>
     <string name="player_hd_fallback">High-definition stream not supported by this tablet: standard stream shown</string>
     <string name="video_unreadable">Video not playable on this tablet (format too heavy, e.g. 4K H.265)</string>
+    <string name="player_loading">Loading stream…</string>
+    <string name="video_memo_title">Video formats not supported</string>
+    <string name="video_memo_help">%1$d streams or cameras remembered: this tablet cannot decode them, so the app goes straight to the standard stream (or says so). Reset after a tablet update or a settings change.</string>
+    <string name="video_memo_reset">Reset</string>
 </resources>

@@ -735,6 +735,17 @@ private fun DisplaySection() {
         SwitchRow(stringResource(R.string.fullscreen_fill), stringResource(R.string.fullscreen_fill_help), settings.fullscreenFill) { on ->
             app.config.update { it.copy(fullscreenFill = on) }
         }
+        // Flux et caméras mémorisés comme illisibles par la tablette : réinitialisable (mise à jour, réglage changé).
+        val unplayable by fr.pergens.hamacs.ui.VideoCompat.unplayable.collectAsState()
+        if (unplayable.isNotEmpty()) {
+            GroupDivider()
+            SettingRow(stringResource(R.string.video_memo_title), stringResource(R.string.video_memo_help, unplayable.size)) {
+                OutlinedButton(
+                    onClick = { fr.pergens.hamacs.ui.VideoCompat.reset() }, Modifier.heightIn(min = 48.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                ) { Text(stringResource(R.string.video_memo_reset)) }
+            }
+        }
     }
 }
 

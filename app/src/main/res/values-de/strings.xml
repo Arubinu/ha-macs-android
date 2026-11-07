@@ -766,4 +766,8 @@
     <string name="anim_off_grant">Um sie mit einem Tippen wieder einzuschalten, erlaube es der App einmal von einem Computer aus: %1$s</string>
     <string name="player_hd_fallback">HD-Stream wird von diesem Tablet nicht unterstützt: Standard-Stream wird angezeigt</string>
     <string name="video_unreadable">Video auf diesem Tablet nicht abspielbar (Format zu anspruchsvoll, z. B. 4K H.265)</string>
+    <string name="player_loading">Stream wird geladen…</string>
+    <string name="video_memo_title">Nicht unterstützte Videoformate</string>
+    <string name="video_memo_help">%1$d Streams oder Kameras gespeichert: Dieses Tablet kann sie nicht dekodieren, die App nimmt direkt den Standard-Stream (oder zeigt es an). Nach einem Tablet-Update oder einer geänderten Einstellung zurücksetzen.</string>
+    <string name="video_memo_reset">Zurücksetzen</string>
 </resources>

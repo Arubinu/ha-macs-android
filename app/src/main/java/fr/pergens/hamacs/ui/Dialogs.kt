@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -439,8 +440,10 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
     val state = LocalDashState.current
     val ctx = LocalContext.current
     // Flux lu : celui demandé, ou celui de la carte si la tablette ne sait pas décoder le premier (4K H.265…).
-    var target by remember(requested) { mutableStateOf(requested) }
-    var fellBack by remember(requested) { mutableStateOf(false) }
+    // Flux déjà connu comme illisible par cette tablette : directement celui de la carte (gain de temps).
+    val known = fallback != null && VideoCompat.isUnplayable(requested)
+    var target by remember(requested) { mutableStateOf(if (known) fallback!! else requested) }
+    var fellBack by remember(requested) { mutableStateOf(known) }
     var url by remember(target) { mutableStateOf<String?>(if (target.startsWith("camera.")) null else target) }
     var error by remember(target) { mutableStateOf<String?>(null) }
     LaunchedEffect(target) {
@@ -466,6 +469,8 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
             override fun onRenderedFirstFrame() { rendered = true }
             override fun onPlayerError(e: androidx.media3.common.PlaybackException) {
                 note("erreur ${e.errorCodeName} : ${e.message}", e)
+                // Format refusé par la tablette : mémorisé pour les prochaines fois.
+                if (VideoCompat.isDecoderError(e)) VideoCompat.mark(target)
                 if (fallback != null && target != fallback) {
                     fellBack = true
                     target = fallback
@@ -517,6 +522,25 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                 },
                 modifier = Modifier.fillMaxSize(),
             )
+            // Chargement : dernière image de la caméra floutée, roue et message (au lieu d'un écran noir).
+            androidx.compose.animation.AnimatedVisibility(
+                !rendered && error == null, Modifier.fillMaxSize(),
+                enter = androidx.compose.animation.fadeIn(), exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(400)),
+            ) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    val cam = listOf(target, requested, fallback).firstOrNull { it?.startsWith("camera.") == true }
+                    val still = cam?.let { state.ha.resolveUrl(entity(it)?.attrString("entity_picture")) }
+                    if (still != null) coil.compose.AsyncImage(
+                        still, null, Modifier.fillMaxSize().blur(18.dp),
+                        contentScale = if (fill) androidx.compose.ui.layout.ContentScale.Crop else androidx.compose.ui.layout.ContentScale.Fit,
+                    )
+                    Box(Modifier.fillMaxSize().background(Color(0x99000000)))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        androidx.compose.material3.CircularProgressIndicator(color = Dash.colors.accent, strokeWidth = 3.dp, modifier = Modifier.size(44.dp))
+                        Text(stringResource(R.string.player_loading), color = Color.White, fontSize = 16.sp)
+                    }
+                }
+            }
             // Messages au-dessus de la vidéo (la vue du lecteur les cachait).
             error?.let { Text(stringResource(R.string.stream_unavailable, it), color = Color.White) }
             if (fellBack && error == null) Text(

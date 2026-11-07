@@ -329,6 +329,8 @@ private fun InlineLive(
     onFirstFrame: () -> Unit,
     onError: () -> Unit,
     onEnded: () -> Unit = {},
+    /** Format refusé par les décodeurs de la tablette. */
+    onDecoderError: () -> Unit = {},
 ) {
     val state = LocalDashState.current
     val ctx = LocalContext.current
@@ -361,6 +363,7 @@ private fun InlineLive(
                     ctx, "inline:$camId:${error.errorCodeName}", "Vidéo dans la carte",
                     "source : $camId\nadresse : ${fr.pergens.hamacs.CrashGuard.redact(url)}\nerreur ${error.errorCodeName} : ${error.message}", error,
                 )
+                if (fr.pergens.hamacs.ui.VideoCompat.isDecoderError(error)) onDecoderError()
                 onError()
             }
             override fun onPlaybackStateChanged(playbackState: Int) {
@@ -476,6 +479,7 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
             Box(
                 Modifier.fillMaxSize().tapHold({
                     val video = d.video ?: return@tapHold
+                    if (fr.pergens.hamacs.ui.VideoCompat.isUnplayable("capture:${d.camera}")) { unreadable = true; return@tapHold }
                     val fullscreen = App.instance.config.settings.value.tapFullscreen || (isPlaying && videoShown)
                     scope.launch {
                         val url = videoUrl ?: runCatching { video() }.onFailure {
@@ -499,9 +503,13 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                         Modifier.fillMaxSize().graphicsLayer { alpha = videoAlpha },
                         onFirstFrame = { videoShown = true },
                         onError = { videoFailed = true; unreadable = true; playing = null },
+                        onDecoderError = { fr.pergens.hamacs.ui.VideoCompat.mark("capture:${d.camera}") },
                         onEnded = { playing = null },
                     )
                 }
+                if (isPlaying && !videoShown && !videoFailed) androidx.compose.material3.CircularProgressIndicator(
+                    Modifier.align(Alignment.Center).size(36.dp), color = Color.White, strokeWidth = 3.dp,
+                )
                 if (unreadable) Text(
                     stringResource(R.string.video_unreadable),
                     Modifier.align(Alignment.Center).padding(16.dp)

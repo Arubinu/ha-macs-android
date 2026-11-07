@@ -766,4 +766,8 @@
     <string name="anim_off_grant">Om ze met één tik weer aan te zetten, geef de app eenmalig toestemming vanaf een computer: %1$s</string>
     <string name="player_hd_fallback">HD-stream niet ondersteund door deze tablet: standaardstream getoond</string>
     <string name="video_unreadable">Video niet afspeelbaar op deze tablet (formaat te zwaar, bv. 4K H.265)</string>
+    <string name="player_loading">Stream laden…</string>
+    <string name="video_memo_title">Niet-ondersteunde videoformaten</string>
+    <string name="video_memo_help">%1$d streams of camera\'s onthouden: deze tablet kan ze niet decoderen, de app gaat direct naar de standaardstream (of meldt het). Reset na een tabletupdate of een gewijzigde instelling.</string>
+    <string name="video_memo_reset">Resetten</string>
 </resources>

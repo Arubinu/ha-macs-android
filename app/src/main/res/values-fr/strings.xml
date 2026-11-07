@@ -784,4 +784,8 @@
     <string name="anim_off_grant">Pour les réactiver d\'un geste, autorisez une fois l\'app depuis un ordinateur : %1$s</string>
     <string name="player_hd_fallback">Flux haute définition non pris en charge par cette tablette : flux standard affiché</string>
     <string name="video_unreadable">Vidéo non lisible par cette tablette (format trop lourd, ex. 4K H.265)</string>
+    <string name="player_loading">Chargement du flux…</string>
+    <string name="video_memo_title">Formats vidéo non pris en charge</string>
+    <string name="video_memo_help">%1$d flux ou caméras mémorisés : la tablette ne sait pas les lire, l\'app passe directement au flux standard (ou l\'indique). Réinitialisez après une mise à jour de la tablette ou un changement de réglage.</string>
+    <string name="video_memo_reset">Réinitialiser</string>
 </resources>
