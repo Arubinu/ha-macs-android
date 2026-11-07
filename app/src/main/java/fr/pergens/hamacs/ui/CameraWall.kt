@@ -427,7 +427,19 @@ private fun WallTile(
     var tick by remember { mutableIntStateOf(0) }
     LaunchedEffect(refresh) { while (true) { delay(refresh * 1000L); tick++ } }
     var lastKey by remember { mutableStateOf<String?>(null) }
-    val url = state.ha.resolveUrl("/api/camera_proxy/$camId")?.let { "$it?t=w$tick" }
+    // Capture en échec (HA répond parfois 500 pour une caméra endormie) : nouveaux essais après 5 puis 15 s, l'écran
+    // d'attente restant affiché ; « hors ligne » seulement ensuite, le rafraîchissement continuant d'essayer.
+    var shown by remember { mutableStateOf(false) }
+    var fails by remember { mutableIntStateOf(0) }
+    var retry by remember { mutableIntStateOf(0) }
+    LaunchedEffect(fails) {
+        if (shown) return@LaunchedEffect
+        when (fails) {
+            1 -> { delay(5_000); retry++ }
+            2 -> { delay(15_000); retry++ }
+        }
+    }
+    val url = state.ha.resolveUrl("/api/camera_proxy/$camId")?.let { "$it?t=w$tick-$retry" }
     var liveShown by remember(live) { mutableStateOf(false) }
     var liveFailed by remember(live) { mutableStateOf(false) }
     val liveAlpha by animateFloatAsState(if (live && liveShown && !liveFailed) 1f else 0f, tween(400), label = "wall-live")
@@ -440,9 +452,26 @@ private fun WallTile(
         if (cam?.isUnavailable == true) {
             fr.pergens.hamacs.ui.cards.CameraPlaceholder(fr.pergens.hamacs.ui.cards.CameraPlaceholderKind.Offline, Modifier.fillMaxSize())
         } else {
+            if (!shown) fr.pergens.hamacs.ui.cards.CameraPlaceholder(
+                if (fails >= 3) fr.pergens.hamacs.ui.cards.CameraPlaceholderKind.Offline else fr.pergens.hamacs.ui.cards.CameraPlaceholderKind.Loading,
+                Modifier.fillMaxSize(),
+            )
+            // Dernière capture réussie dessous (mémoire de Coil) : un rafraîchissement raté ne vide pas la case.
+            lastKey?.let { k ->
+                AsyncImage(ImageRequest.Builder(ctx).data(k).memoryCacheKey(k).crossfade(false).build(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+            }
             AsyncImage(
                 ImageRequest.Builder(ctx).data(url).memoryCacheKey(url).placeholderMemoryCacheKey(lastKey).crossfade(false)
-                    .listener(onSuccess = { _, _ -> lastKey = url }).build(),
+                    .listener(
+                        onSuccess = { _, _ -> lastKey = url; shown = true; fails = 0 },
+                        onError = { _, r ->
+                            fails++
+                            fr.pergens.hamacs.CrashGuard.note(
+                                ctx, "wall:$camId:${r.throwable.javaClass.simpleName}", "Capture de caméra (mur)",
+                                "source : $camId\nerreur : ${r.throwable.message}", r.throwable,
+                            )
+                        },
+                    ).build(),
                 cam?.name, Modifier.fillMaxSize(), contentScale = ContentScale.Crop,
             )
             if (live && !liveFailed) fr.pergens.hamacs.ui.cards.InlineLive(
