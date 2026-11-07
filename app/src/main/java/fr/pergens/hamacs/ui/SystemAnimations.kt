@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -46,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.compose.animation.core.animateFloat
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import fr.pergens.hamacs.App
 import fr.pergens.hamacs.R
@@ -188,51 +193,138 @@ fun AnimationsSheet(beforeOpen: ((() -> Unit) -> Unit)? = null, onDismiss: () ->
             Text(animationsHelp(), style = TextStyle(fontSize = 13.sp, color = muted, lineHeight = 19.sp))
             LoginChoice("mdi:auto-fix", stringResource(R.string.anim_choice_auto), stringResource(R.string.anim_choice_auto_desc), !manual) { manual = false }
             LoginChoice("mdi:gesture-tap", stringResource(R.string.anim_choice_manual), stringResource(R.string.anim_choice_manual_desc), manual) { manual = true }
+            Spacer(Modifier.height(4.dp))
             if (!manual) {
-                if (granted) {
-                    Text(stringResource(R.string.anim_granted), style = body)
-                    NoticeButton(stringResource(R.string.anim_off_fix), primary = true) { SystemAnimations.fix(ctx); tick++ }
-                } else {
-                    Text(stringResource(R.string.anim_auto_step1), style = body)
-                    Text(stringResource(R.string.anim_auto_step2), style = body)
-                    val cmd = SystemAnimations.grantCommand(ctx)
-                    var copied by remember { mutableStateOf(false) }
-                    Row(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFF0E0E12)).padding(horizontal = 14.dp, vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        SelectionContainer(Modifier.weight(1f)) {
-                            Text(cmd, style = TextStyle(fontSize = 13.sp, color = Dash.colors.accent, fontFamily = FontFamily.Monospace))
-                        }
-                        NoticeButton(stringResource(if (copied) R.string.anim_copied else R.string.anim_copy), primary = false) {
-                            val cm = ctx.getSystemService(android.content.ClipboardManager::class.java)
-                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("adb", cmd))
-                            copied = true
-                        }
-                    }
-                    Text(stringResource(R.string.anim_auto_step3), style = body)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(8.dp).clip(CircleShape).background(Color(0xFFFFB74D)))
-                        Text(stringResource(R.string.anim_not_granted), Modifier.padding(start = 8.dp), style = TextStyle(fontSize = 13.sp, color = muted))
+                val dev = SystemAnimations.developerOptionsShown(ctx)
+                Step(1, stringResource(R.string.anim_step_debug_title), stringResource(R.string.anim_step_debug_desc), done = granted) {
+                    if (!granted) StepAction("mdi:developer-board", stringResource(if (dev) R.string.anim_off_dev else R.string.anim_open_about)) {
+                        open(if (dev) SystemAnimations.Screen.Developer else SystemAnimations.Screen.About)
                     }
                 }
+                Step(2, stringResource(R.string.anim_step_cmd_title), null, done = granted) {
+                    if (!granted) CommandBox(SystemAnimations.grantCommand(ctx))
+                }
+                Step(3, stringResource(R.string.anim_step_back_title), stringResource(R.string.anim_step_back_auto), last = true, done = granted) {
+                    if (granted) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            HaIcon("mdi:check-circle", size = 20.dp, tint = StepDone)
+                            Text(stringResource(R.string.anim_granted), Modifier.padding(start = 8.dp), style = TextStyle(fontSize = 14.sp, color = StepDone))
+                        }
+                        NoticeButton(stringResource(R.string.anim_off_fix), primary = true) { SystemAnimations.fix(ctx); tick++ }
+                    } else WaitingDot(stringResource(R.string.anim_waiting))
+                }
+            } else if (cause == SystemAnimations.Cause.Accessibility) {
+                Step(1, stringResource(R.string.anim_step_acc_title), stringResource(R.string.anim_step_acc_desc)) {
+                    StepAction("mdi:human", stringResource(R.string.anim_off_open)) { open(SystemAnimations.Screen.Accessibility) }
+                }
+                Step(2, stringResource(R.string.anim_step_back_title), stringResource(R.string.anim_step_back_manual), last = true) {}
             } else {
-                if (cause == SystemAnimations.Cause.Accessibility) {
-                    Text(stringResource(R.string.anim_manual_acc), style = body)
-                    NoticeButton(stringResource(R.string.anim_off_open), primary = true) { open(SystemAnimations.Screen.Accessibility) }
-                } else {
-                    // Options pour les développeurs cachées : comment les afficher d'abord (étape 1).
-                    val hidden = !SystemAnimations.developerOptionsShown(ctx)
-                    if (hidden) {
-                        Text(stringResource(R.string.anim_manual_dev_show), style = body)
-                        NoticeButton(stringResource(R.string.anim_open_about), primary = false) { open(SystemAnimations.Screen.About) }
-                    }
-                    Text((if (hidden) "2. " else "") + stringResource(R.string.anim_manual_dev_scales), style = body)
-                    NoticeButton(stringResource(R.string.anim_off_dev), primary = true) { open(SystemAnimations.Screen.Developer) }
+                // Options pour les développeurs cachées : comment les afficher d'abord.
+                val hidden = !SystemAnimations.developerOptionsShown(ctx)
+                var n = 1
+                if (hidden) Step(n++, stringResource(R.string.anim_step_show_title), stringResource(R.string.anim_step_show_desc)) {
+                    StepAction("mdi:information-outline", stringResource(R.string.anim_open_about)) { open(SystemAnimations.Screen.About) }
                 }
-                Text(stringResource(R.string.anim_names_vary), style = TextStyle(fontSize = 12.sp, color = muted))
+                Step(n++, stringResource(R.string.anim_step_scales_title), stringResource(R.string.anim_step_scales_desc)) {
+                    Column(
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFF0E0E12)).padding(horizontal = 14.dp, vertical = 6.dp),
+                    ) {
+                        listOf(R.string.anim_scale_window, R.string.anim_scale_transition, R.string.anim_scale_duration).forEach { res ->
+                            Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text(stringResource(res), Modifier.weight(1f), style = TextStyle(fontSize = 14.sp, color = Color.White))
+                                Text(
+                                    "1x", Modifier.clip(RoundedCornerShape(8.dp)).background(Dash.colors.accent.copy(alpha = 0.15f)).padding(horizontal = 10.dp, vertical = 2.dp),
+                                    style = TextStyle(fontSize = 13.sp, color = Dash.colors.accent, fontWeight = FontWeight.SemiBold),
+                                )
+                            }
+                        }
+                    }
+                    StepAction("mdi:developer-board", stringResource(R.string.anim_off_dev)) { open(SystemAnimations.Screen.Developer) }
+                }
+                Step(n, stringResource(R.string.anim_step_back_title), stringResource(R.string.anim_step_back_manual), last = true) {}
+            }
+            Text(stringResource(R.string.anim_names_vary), Modifier.padding(start = 48.dp), style = TextStyle(fontSize = 12.sp, color = Color(0xFF7C7C86)))
+        }
+    }
+}
+
+private val StepDone = Color(0xFF4CD964)
+
+/**
+ * Étape d'un parcours : pastille numérotée (coche une fois faite) reliée à la suivante par un trait, titre, explication
+ * et contenu (action, commande…).
+ */
+@Composable
+private fun Step(number: Int, title: String, desc: String?, last: Boolean = false, done: Boolean = false, content: @Composable () -> Unit) {
+    val accent = if (done) StepDone else Dash.colors.accent
+    Row(Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Min)) {
+        Column(Modifier.width(32.dp).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(Modifier.size(32.dp).clip(CircleShape).background(accent.copy(alpha = 0.15f)).border(1.5.dp, accent, CircleShape), contentAlignment = Alignment.Center) {
+                if (done) HaIcon("mdi:check", size = 18.dp, tint = accent)
+                else Text("$number", style = TextStyle(fontSize = 15.sp, color = accent, fontWeight = FontWeight.SemiBold))
+            }
+            if (!last) Box(Modifier.padding(vertical = 4.dp).width(2.dp).weight(1f).clip(RoundedCornerShape(1.dp)).background(Color(0xFF2C2C33)))
+        }
+        Column(Modifier.weight(1f).padding(start = 16.dp, bottom = if (last) 4.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(title, Modifier.padding(top = 5.dp), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+            desc?.let { Text(it, style = TextStyle(fontSize = 13.sp, color = Color(0xFFA3A3AD), lineHeight = 19.sp)) }
+            content()
+        }
+    }
+}
+
+/** Action d'une étape : pastille avec icône et flèche, discrète. */
+@Composable
+private fun StepAction(icon: String, text: String, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(12.dp)
+    Row(
+        Modifier.clip(shape).border(1.dp, Dash.colors.accent.copy(alpha = 0.6f), shape).clickable(onClick = onClick)
+            .padding(start = 12.dp, end = 10.dp, top = 9.dp, bottom = 9.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        HaIcon(icon, size = 18.dp, tint = Dash.colors.accent)
+        Text(text, Modifier.padding(horizontal = 8.dp), style = TextStyle(fontSize = 14.sp, color = Dash.colors.accent, fontWeight = FontWeight.Medium))
+        HaIcon("mdi:chevron-right", size = 18.dp, tint = Dash.colors.accent)
+    }
+}
+
+/** Commande à lancer : texte sélectionnable et icône copier, remplacée quelques secondes par une coche. */
+@Composable
+private fun CommandBox(cmd: String) {
+    val ctx = LocalContext.current
+    var copied by remember { mutableStateOf(false) }
+    LaunchedEffect(copied) { if (copied) { kotlinx.coroutines.delay(2000); copied = false } }
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFF0E0E12))
+            .padding(start = 14.dp, end = 4.dp, top = 6.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        SelectionContainer(Modifier.weight(1f).padding(vertical = 6.dp)) {
+            Text(cmd, style = TextStyle(fontSize = 13.sp, color = Dash.colors.accent, fontFamily = FontFamily.Monospace, lineHeight = 19.sp))
+        }
+        Box(
+            Modifier.size(44.dp).clip(CircleShape).clickable {
+                ctx.getSystemService(android.content.ClipboardManager::class.java)?.setPrimaryClip(android.content.ClipData.newPlainText("adb", cmd))
+                copied = true
+            },
+            contentAlignment = Alignment.Center,
+        ) {
+            androidx.compose.animation.Crossfade(copied, label = "copy") { c ->
+                HaIcon(if (c) "mdi:check" else "mdi:content-copy", size = 20.dp, tint = if (c) StepDone else Color(0xFFA3A3AD))
             }
         }
+    }
+}
+
+/** Attente (autorisation pas encore accordée) : point orange qui pulse. */
+@Composable
+private fun WaitingDot(text: String) {
+    val alpha by androidx.compose.animation.core.rememberInfiniteTransition(label = "wait").animateFloat(
+        0.3f, 1f, androidx.compose.animation.core.infiniteRepeatable(androidx.compose.animation.core.tween(900), androidx.compose.animation.core.RepeatMode.Reverse), label = "a",
+    )
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(8.dp).clip(CircleShape).background(Color(0xFFFFB74D).copy(alpha = alpha)))
+        Text(text, Modifier.padding(start = 8.dp), style = TextStyle(fontSize = 13.sp, color = Color(0xFFFFB74D)))
     }
 }
 
