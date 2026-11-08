@@ -71,9 +71,18 @@ Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'
 
 ## 🍓 Raspberry Pi
 
-Un Raspberry Pi 4 ou 5 avec un écran tactile fait un bon écran mural : installez-y Android (LineageOS de KonstaKANG),
-puis l'APK `arm64-v8a`. Une webcam USB se choisit dans Réglages › Veille et présence › *Caméra*. Sans les services
-Google, le détourage des avatars est un peu moins précis. Détails : [référence technique](docs/reference.fr.md#raspberry-pi).
+Un Raspberry Pi 4 ou 5 avec un écran tactile fait un bon écran mural. Il faut d'abord y installer Android :
+
+1. 📥 **LineageOS** (Android sans les services Google) : sur le site de KonstaKANG, page du [Pi 4](https://konstakang.com/devices/rpi4/) ou du
+   [Pi 5](https://konstakang.com/devices/rpi5/), ouvrez la version LineageOS la plus récente (pas « Android TV ») et téléchargez son `.zip` (rubrique
+   *Download*). Seule la dernière version est proposée en direct ; les anciennes sont dans *Previous builds*.
+2. 💾 **Carte microSD** : installez [Raspberry Pi Imager](https://www.raspberrypi.com/software/), choisissez votre modèle de Pi, puis dans la liste des
+   systèmes la dernière option, *Use custom* (image personnalisée) : sélectionnez le `.zip` téléchargé, puis la carte.
+3. 📲 **L'app** : démarrez le Pi, terminez la configuration d'Android, puis téléchargez `…-arm64-v8a.apk` depuis la
+   [dernière Release](https://github.com/Arubinu/ha-macs-android/releases/latest) avec le navigateur du Pi (autorisez l'installation d'applications inconnues).
+
+Une webcam USB se choisit dans Réglages › Veille et présence › *Caméra*. Sans les services Google, le détourage des
+avatars est un peu moins précis. Détails : [référence technique](docs/reference.fr.md#raspberry-pi).
 
 ## ⚙️ Au quotidien
 

@@ -72,10 +72,18 @@ En el primer arranque, el **asistente** encuentra Home Assistant en la red, inic
 
 ## 🍓 Raspberry Pi
 
-Una Raspberry Pi 4 o 5 con pantalla táctil es un buen panel de pared: instala Android (LineageOS de KonstaKANG) y luego
-el APK `arm64-v8a`. Una webcam USB se elige en Ajustes › Reposo y presencia › *Cámara*. Sin los servicios de Google, el
-recorte de los avatares es algo menos preciso. Detalles: [referencia técnica](docs/reference.fr.md#raspberry-pi) (en
-francés).
+Una Raspberry Pi 4 o 5 con pantalla táctil es un buen panel de pared. Primero hay que instalarle Android:
+
+1. 📥 **LineageOS** (Android sin los servicios de Google): en la web de KonstaKANG, abre la página de la [Pi 4](https://konstakang.com/devices/rpi4/) o
+   de la [Pi 5](https://konstakang.com/devices/rpi5/), elige la versión de LineageOS más reciente (no «Android TV») y descarga su `.zip` (sección
+   *Download*). Solo la última versión está enlazada directamente; las anteriores están en *Previous builds*.
+2. 💾 **Tarjeta microSD**: instala [Raspberry Pi Imager](https://www.raspberrypi.com/software/), elige tu modelo de Pi y, en la lista de sistemas, la
+   última opción, *Use custom* (imagen personalizada): selecciona el `.zip` descargado y luego la tarjeta.
+3. 📲 **La app**: arranca la Pi, termina la configuración de Android y descarga `…-arm64-v8a.apk` de la
+   [última Release](https://github.com/Arubinu/ha-macs-android/releases/latest) con el navegador de la Pi (permite instalar aplicaciones desconocidas).
+
+Una webcam USB se elige en Ajustes › Reposo y presencia › *Cámara*. Sin los servicios de Google, el recorte de los
+avatares es algo menos preciso. Detalles: [referencia técnica](docs/reference.fr.md#raspberry-pi) (en francés).
 
 ## ⚙️ En el día a día
 

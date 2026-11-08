@@ -71,10 +71,18 @@ tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.
 
 ## 🍓 Raspberry Pi
 
-Un Raspberry Pi 4 o 5 con touchscreen è un ottimo pannello a parete: installa Android (LineageOS di KonstaKANG), poi
-l'APK `arm64-v8a`. Una webcam USB si sceglie in Impostazioni › Standby e presenza › *Fotocamera*. Senza i servizi
-Google, il ritaglio degli avatar è un po' meno preciso. Dettagli: [riferimento tecnico](docs/reference.fr.md#raspberry-pi)
-(in francese).
+Un Raspberry Pi 4 o 5 con touchscreen è un ottimo pannello a parete. Prima bisogna installarci Android:
+
+1. 📥 **LineageOS** (Android senza i servizi Google): sul sito di KonstaKANG apri la pagina del [Pi 4](https://konstakang.com/devices/rpi4/) o del
+   [Pi 5](https://konstakang.com/devices/rpi5/), scegli la versione di LineageOS più recente (non «Android TV») e scarica il suo `.zip` (sezione
+   *Download*). Solo l'ultima versione è collegata direttamente; quelle precedenti sono in *Previous builds*.
+2. 💾 **Scheda microSD**: installa [Raspberry Pi Imager](https://www.raspberrypi.com/software/), scegli il modello di Pi, poi nell'elenco dei sistemi
+   l'ultima opzione, *Use custom* (immagine personalizzata): seleziona lo `.zip` scaricato, poi la scheda.
+3. 📲 **L'app**: avvia il Pi, completa la configurazione di Android, poi scarica `…-arm64-v8a.apk` dall'
+   [ultima Release](https://github.com/Arubinu/ha-macs-android/releases/latest) con il browser del Pi (consenti l'installazione di app sconosciute).
+
+Una webcam USB si sceglie in Impostazioni › Standby e presenza › *Fotocamera*. Senza i servizi Google, il ritaglio
+degli avatar è un po' meno preciso. Dettagli: [riferimento tecnico](docs/reference.fr.md#raspberry-pi) (in francese).
 
 ## ⚙️ Nell'uso quotidiano
 

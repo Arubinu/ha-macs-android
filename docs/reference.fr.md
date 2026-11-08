@@ -195,22 +195,37 @@ L'app n'a besoin que d'Android : sur un Raspberry Pi, on installe Android puis l
 
 **Matériel**
 
-- Raspberry Pi 5 (conseillé) ou Pi 4 avec 4 Go de mémoire ou plus, carte microSD rapide (ou SSD), alimentation officielle.
-- Écran tactile : l'écran officiel du Raspberry Pi (Touch Display 2) ou un écran HDMI avec tactile USB. La luminosité
-  réglée par l'app (atténuation, mode nuit) dépend de la prise en charge de l'écran par Android.
-- Caméra (facultative, détection de présence et avatars) : webcam USB, ou module caméra du Pi si la version d'Android
-  le prend en charge.
+- Raspberry Pi 4 (4 Go de mémoire ou plus) ou Pi 5, carte microSD rapide (ou SSD), alimentation officielle.
+- Écran tactile : l'écran officiel du Raspberry Pi (DSI), un écran HDMI avec tactile USB ou un écran SPI Waveshare.
+  Un écran DSI s'active dans les *Raspberry Pi settings* d'Android, sans écran HDMI branché. La luminosité réglée par
+  l'app (atténuation, mode nuit) dépend de la prise en charge de l'écran par Android.
+- Caméra (facultative, détection de présence et avatars) : de préférence une webcam USB (UVC) ; les modules caméra
+  du Pi (CSI) fonctionnent, avec des problèmes connus selon les modules.
 
 **Installation**
 
-1. Télécharger la version de LineageOS de KonstaKANG pour le modèle de Pi (Android sans les services Google) et
-   l'écrire sur la carte avec Raspberry Pi Imager (*Use custom*).
-2. Au premier démarrage, activer les options pour les développeurs et le débogage ADB (USB ou sans fil).
-3. Installer l'APK : `adb install ha-macs-android-<version>-arm64-v8a.apk`, ou le télécharger depuis la page des
-   Releases avec le navigateur du Pi (autoriser l'installation d'applications inconnues).
-4. L'assistant de l'app fait le reste. Pour le kiosque complet :
+1. **Image Android** : LineageOS « non officiel » de KonstaKANG (Android sans les services Google), page du
+   [Pi 4](https://konstakang.com/devices/rpi4/) ou du [Pi 5](https://konstakang.com/devices/rpi5/). Prendre la
+   version LineageOS la plus récente (pas les versions « Android TV »), puis le fichier
+   `lineage-<version>-<date>-UNOFFICIAL-KonstaKANG-rpi4.zip` (ou `-rpi5`) de la rubrique *Download*, pas le
+   `…-ota.zip` (mise à jour depuis la récupération TWRP). Seule la dernière version a un lien direct ; les
+   précédentes sont dans le dossier *Previous builds*. Une empreinte SHA-256 est donnée pour vérifier le fichier.
+2. **Carte microSD** : [Raspberry Pi Imager](https://www.raspberrypi.com/software/) (Windows, macOS, Linux). Choisir
+   le modèle de Pi, puis, dans la liste des systèmes d'exploitation, la dernière option *Use custom* (image
+   personnalisée) et le `.zip` téléchargé (Imager lit le `.zip` directement ; sinon en extraire le `.img`). Choisir
+   la carte et écrire. Ne pas utiliser la personnalisation de l'OS proposée par Imager (prévue pour Raspberry Pi OS).
+3. **Premier démarrage** : terminer la configuration d'Android (langue, Wi-Fi).
+4. **L'app** : avec le navigateur du Pi, ouvrir la
+   [dernière Release](https://github.com/Arubinu/ha-macs-android/releases/latest), télécharger
+   `ha-macs-android-<version>-arm64-v8a.apk` et l'ouvrir (autoriser l'installation d'applications inconnues). Ou,
+   depuis un ordinateur : Paramètres › À propos de la tablette › toucher 7 fois *Numéro de build*, activer le
+   débogage ADB dans les options pour les développeurs, puis `adb install ha-macs-android-<version>-arm64-v8a.apk`.
+5. L'assistant de l'app fait le reste. Pour le kiosque complet :
    `adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin` (Réglages › Sécurité › *Préparer la
    tablette*).
+
+Services Google (facultatif, utile seulement pour un détourage des avatars plus net) : KonstaKANG explique sur la page
+de chaque version comment ajouter MindTheGapps depuis la récupération TWRP.
 
 **Différences avec une tablette**
 
@@ -218,8 +233,8 @@ L'app n'a besoin que d'Android : sur un Raspberry Pi, on installe Android puis l
 - Webcam USB : Android la présente comme une caméra « externe » quand la version le permet. Elle se choisit dans
   Réglages › Veille et présence › *Caméra* (bouton *Aperçu* pour vérifier) ; une caméra branchée ou débranchée est
   détectée sans redémarrer l'app.
-- Vidéo des caméras : le Pi 5 n'a pas de décodeur matériel H.264 (le processeur suffit en général pour un ou deux flux
-  1080p) ; les décodeurs proposés dépendent de la version d'Android. Le mur de caméras adapte le nombre de directs
+- Vidéo des caméras : le Pi 4 décode en matériel le H.264 et le H.265 (indiqué par KonstaKANG) ; le Pi 5 n'a pas de
+  décodeur matériel H.264 (le processeur suffit en général pour un ou deux flux 1080p). Le mur de caméras adapte le nombre de directs
   simultanés à ce que l'appareil sait décoder (Réglages › Affichage).
 
 ## Passerelle vocale

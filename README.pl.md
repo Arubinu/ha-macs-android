@@ -70,10 +70,18 @@ domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
 
 ## 🍓 Raspberry Pi
 
-Raspberry Pi 4 lub 5 z ekranem dotykowym to dobry panel ścienny: zainstaluj na nim Androida (LineageOS od KonstaKANG),
-a potem plik APK `arm64-v8a`. Kamerę USB wybiera się w Ustawienia › Czuwanie i obecność › *Kamera*. Bez usług Google
-wycinanie awatarów jest nieco mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.fr.md#raspberry-pi)
-(po francusku).
+Raspberry Pi 4 lub 5 z ekranem dotykowym to dobry panel ścienny. Najpierw trzeba zainstalować na nim Androida:
+
+1. 📥 **LineageOS** (Android bez usług Google): na stronie KonstaKANG otwórz stronę [Pi 4](https://konstakang.com/devices/rpi4/) lub [Pi 5](https://konstakang.com/devices/rpi5/),
+   wybierz najnowszą wersję LineageOS (nie „Android TV”) i pobierz jej plik `.zip` (sekcja *Download*). Bezpośrednio
+   dostępna jest tylko najnowsza wersja; starsze są w *Previous builds*.
+2. 💾 **Karta microSD**: zainstaluj [Raspberry Pi Imager](https://www.raspberrypi.com/software/), wybierz model Pi, a na liście systemów ostatnią
+   opcję, *Use custom* (własny obraz): wskaż pobrany plik `.zip`, a potem kartę.
+3. 📲 **Aplikacja**: uruchom Pi, dokończ konfigurację Androida i pobierz `…-arm64-v8a.apk` z
+   [najnowszego wydania](https://github.com/Arubinu/ha-macs-android/releases/latest) w przeglądarce Pi (zezwól na instalowanie nieznanych aplikacji).
+
+Kamerę USB wybiera się w Ustawienia › Czuwanie i obecność › *Kamera*. Bez usług Google wycinanie awatarów jest nieco
+mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.fr.md#raspberry-pi) (po francusku).
 
 ## ⚙️ Na co dzień
 

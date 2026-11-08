@@ -70,10 +70,18 @@ Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.
 
 ## 🍓 Raspberry Pi
 
-Ein Raspberry Pi 4 oder 5 mit Touchscreen ergibt ein gutes Wandpanel: Android darauf installieren (LineageOS von
-KonstaKANG), dann die `arm64-v8a`-APK. Eine USB-Webcam wählst du in Einstellungen › Ruhezustand & Anwesenheit › *Kamera*.
-Ohne Google-Dienste ist das Freistellen der Avatare etwas ungenauer. Details:
-[technische Referenz](docs/reference.fr.md#raspberry-pi) (Französisch).
+Ein Raspberry Pi 4 oder 5 mit Touchscreen ergibt ein gutes Wandpanel. Zuerst Android darauf installieren:
+
+1. 📥 **LineageOS** (Android ohne Google-Dienste): auf der Website von KonstaKANG die Seite für den [Pi 4](https://konstakang.com/devices/rpi4/) oder
+   den [Pi 5](https://konstakang.com/devices/rpi5/) öffnen, die neueste LineageOS-Version wählen (nicht „Android TV“) und ihre `.zip` herunterladen
+   (Abschnitt *Download*). Direkt verlinkt ist nur die neueste Version; ältere liegen unter *Previous builds*.
+2. 💾 **microSD-Karte**: [Raspberry Pi Imager](https://www.raspberrypi.com/software/) installieren, das Pi-Modell wählen, dann in der Liste der
+   Betriebssysteme die letzte Option, *Use custom* (eigenes Image): die heruntergeladene `.zip` und dann die Karte wählen.
+3. 📲 **Die App**: den Pi starten, die Android-Einrichtung abschließen und `…-arm64-v8a.apk` aus der
+   [neuesten Release](https://github.com/Arubinu/ha-macs-android/releases/latest) mit dem Browser des Pi herunterladen (Installation unbekannter Apps erlauben).
+
+Eine USB-Webcam wählst du in Einstellungen › Ruhezustand & Anwesenheit › *Kamera*. Ohne Google-Dienste ist das
+Freistellen der Avatare etwas ungenauer. Details: [technische Referenz](docs/reference.fr.md#raspberry-pi) (Französisch).
 
 ## ⚙️ Im Alltag
 

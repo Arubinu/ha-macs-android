@@ -71,10 +71,18 @@ huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent
 
 ## 🍓 Raspberry Pi
 
-Een Raspberry Pi 4 of 5 met touchscreen is een goed wandpaneel: installeer er Android op (LineageOS van KonstaKANG),
-daarna de `arm64-v8a`-APK. Een USB-webcam kies je in Instellingen › Stand-by & aanwezigheid › *Camera*. Zonder
-Google-diensten is het uitknippen van avatars iets minder nauwkeurig. Details:
-[technische referentie](docs/reference.fr.md#raspberry-pi) (Frans).
+Een Raspberry Pi 4 of 5 met touchscreen is een goed wandpaneel. Installeer er eerst Android op:
+
+1. 📥 **LineageOS** (Android zonder Google-diensten): open op de site van KonstaKANG de pagina van de [Pi 4](https://konstakang.com/devices/rpi4/) of
+   de [Pi 5](https://konstakang.com/devices/rpi5/), kies de nieuwste LineageOS-versie (niet „Android TV”) en download de `.zip` (onderdeel
+   *Download*). Alleen de nieuwste versie staat er rechtstreeks; oudere staan onder *Previous builds*.
+2. 💾 **microSD-kaart**: installeer [Raspberry Pi Imager](https://www.raspberrypi.com/software/), kies je Pi-model en in de lijst met
+   besturingssystemen de laatste optie, *Use custom* (eigen image): selecteer de gedownloade `.zip` en daarna de kaart.
+3. 📲 **De app**: start de Pi, rond de Android-configuratie af en download `…-arm64-v8a.apk` van de
+   [nieuwste Release](https://github.com/Arubinu/ha-macs-android/releases/latest) met de browser van de Pi (sta het installeren van onbekende apps toe).
+
+Een USB-webcam kies je in Instellingen › Stand-by & aanwezigheid › *Camera*. Zonder Google-diensten is het uitknippen
+van avatars iets minder nauwkeurig. Details: [technische referentie](docs/reference.fr.md#raspberry-pi) (Frans).
 
 ## ⚙️ Dagelijks gebruik
 

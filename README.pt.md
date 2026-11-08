@@ -71,10 +71,18 @@ tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.
 
 ## 🍓 Raspberry Pi
 
-Um Raspberry Pi 4 ou 5 com ecrã tátil é um bom painel de parede: instale o Android (LineageOS de KonstaKANG) e depois o
-APK `arm64-v8a`. Uma webcam USB escolhe-se em Definições › Repouso e presença › *Câmara*. Sem os serviços Google, o
-recorte dos avatares é um pouco menos preciso. Detalhes: [referência técnica](docs/reference.fr.md#raspberry-pi) (em
-francês).
+Um Raspberry Pi 4 ou 5 com ecrã tátil é um bom painel de parede. Primeiro é preciso instalar-lhe o Android:
+
+1. 📥 **LineageOS** (Android sem os serviços Google): no site de KonstaKANG, abra a página do [Pi 4](https://konstakang.com/devices/rpi4/) ou do
+   [Pi 5](https://konstakang.com/devices/rpi5/), escolha a versão do LineageOS mais recente (não «Android TV») e descarregue o seu `.zip` (secção
+   *Download*). Só a última versão tem ligação direta; as anteriores estão em *Previous builds*.
+2. 💾 **Cartão microSD**: instale o [Raspberry Pi Imager](https://www.raspberrypi.com/software/), escolha o modelo do Pi e, na lista de sistemas, a
+   última opção, *Use custom* (imagem personalizada): selecione o `.zip` descarregado e depois o cartão.
+3. 📲 **A app**: arranque o Pi, conclua a configuração do Android e descarregue `…-arm64-v8a.apk` da
+   [última Release](https://github.com/Arubinu/ha-macs-android/releases/latest) com o navegador do Pi (autorize a instalação de apps desconhecidas).
+
+Uma webcam USB escolhe-se em Definições › Repouso e presença › *Câmara*. Sem os serviços Google, o recorte dos avatares
+é um pouco menos preciso. Detalhes: [referência técnica](docs/reference.fr.md#raspberry-pi) (em francês).
 
 ## ⚙️ No dia a dia
 

@@ -69,9 +69,18 @@ home. Already have a backup? **Import** it on the first step and you are done.
 
 ## 🍓 Raspberry Pi
 
-A Raspberry Pi 4 or 5 with a touchscreen makes a good wall panel: install Android on it (LineageOS by KonstaKANG), then
-the `arm64-v8a` APK. A USB webcam is chosen in Settings › Standby & presence › *Camera*. Without Google services, avatar
-cut-outs are a bit less precise. Details: [technical reference](docs/reference.fr.md#raspberry-pi).
+A Raspberry Pi 4 or 5 with a touchscreen makes a good wall panel. First install Android on it:
+
+1. 📥 **LineageOS** (Android without Google services): on KonstaKANG's site, open the [Pi 4](https://konstakang.com/devices/rpi4/) or [Pi 5](https://konstakang.com/devices/rpi5/)
+   page, pick the most recent LineageOS version (not "Android TV") and download its `.zip` (*Download* section). Only
+   the latest version is linked directly; older ones are under *Previous builds*.
+2. 💾 **microSD card**: install [Raspberry Pi Imager](https://www.raspberrypi.com/software/), choose your Pi model, then the last option of the
+   operating system list, *Use custom*: select the downloaded `.zip`, then the card.
+3. 📲 **The app**: start the Pi, finish the Android setup, then download `…-arm64-v8a.apk` from the
+   [latest Release](https://github.com/Arubinu/ha-macs-android/releases/latest) with the Pi's browser (allow installing unknown apps).
+
+A USB webcam is chosen in Settings › Standby & presence › *Camera*. Without Google services, avatar cut-outs are a bit
+less precise. Details: [technical reference](docs/reference.fr.md#raspberry-pi).
 
 ## ⚙️ Everyday use
 
