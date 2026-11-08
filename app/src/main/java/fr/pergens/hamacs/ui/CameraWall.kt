@@ -192,27 +192,10 @@ object CameraWall {
             val obj = s.entityId.substringAfter('.')
             obj.startsWith(prefix + "_") && ("battery_state" in obj || "charging" in obj || "charge_state" in obj)
         } ?: return CameraPower.Battery
-        val now = sensor.state.lowercase()
         val seen = chargeHistory[sensor.entityId]
         requestHistory(sensor.entityId)
-        if (seen == null) return when {
-            now in FULL -> CameraPower.Mains
-            now in CHARGING -> CameraPower.Solar
-            else -> CameraPower.Battery
-        }
-        val all = seen + now
-        val discharges = all.any { it in DISCHARGING }
-        val charges = all.any { it in CHARGING || it in FULL }
-        return when {
-            !discharges -> CameraPower.Mains
-            charges -> CameraPower.Solar
-            else -> CameraPower.Battery
-        }
+        return WallLogic.classify(sensor.state, seen)
     }
-
-    private val FULL = setOf("chargecomplete", "charge_complete", "charged", "full", "plugged")
-    private val CHARGING = setOf("charging", "on")
-    private val DISCHARGING = setOf("discharging", "not_charging", "notcharging", "off", "unplugged")
 
     /** États de charge vus sur 24 h, par capteur (état Compose : la carte se met à jour à l'arrivée). */
     private val chargeHistory = androidx.compose.runtime.mutableStateMapOf<String, Set<String>>()
@@ -275,18 +258,6 @@ object CameraWall {
     }
 }
 
-/** Colonnes de la grille qui donnent les plus grandes cases 16:9 dans [w] × [h]. */
-private fun bestColumns(n: Int, w: Float, h: Float): Int {
-    var best = 1
-    var bestArea = 0f
-    for (c in 1..n) {
-        val r = ceil(n / c.toFloat())
-        val tileW = min(w / c, h / r * 16f / 9f)
-        val area = tileW * tileW * 9f / 16f
-        if (area > bestArea + 1f) { bestArea = area; best = c }
-    }
-    return best
-}
 
 @Composable
 fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
@@ -335,25 +306,20 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
     val limit = if (learned >= 0) CameraWall.limit(settings.wallMaxLive) else 1
     val forced = liveAll > now
     val paused = state.player != null
-    // Caméras qui devraient être en direct mais restent en capture faute de place (limite de directs atteinte).
-    var capped: Set<String> = emptySet()
-    val live: Set<String> = if (paused) emptySet() else {
-        val ranked = cams.mapNotNull { c ->
+    // `capped` : en capture faute de place (limite de directs atteinte) ; `saving` : solaire sous le seuil de batterie
+    // de « Tout en direct », laissée en capture.
+    val selection = if (paused) WallLogic.Selection(emptySet(), emptySet(), emptySet()) else WallLogic.select(
+        cams.mapNotNull { c ->
             val id = c.s("entity") ?: return@mapNotNull null
-            val power = CameraWall.power(c, blocks, states)
-            val prio = when {
-                id in moving -> 0
-                id == focus -> 1
-                // Secteur avant « tout en direct » : une caméra sur secteur ne cède jamais sa place à une autre forcée.
-                power == CameraPower.Mains -> 2
-                forced && power != CameraPower.Battery -> 3
-                else -> null
-            }
-            prio?.let { id to it }
-        }
-        val sorted = ranked.sortedBy { it.second }.map { it.first }
-        capped = sorted.drop(limit).toSet()
-        sorted.take(limit).toSet()
+            WallLogic.Cam(id, CameraWall.power(c, blocks, states), c.s("battery")?.let { states[it]?.state?.toFloatOrNull() })
+        },
+        moving, focus, forced, limit, settings.wallSolarMin,
+    )
+    val live = selection.live
+    fun badgeOf(c: JsonObject): Int? = when (c.s("entity")) {
+        in selection.capped -> R.string.wall_capped
+        in selection.saving -> R.string.wall_saving
+        else -> null
     }
 
     // Fermeture : délai de l'événement, sinon celui du mur (ou du plein écran) ; jamais pendant une détection
@@ -398,20 +364,20 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
                     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(gap)) {
                         Box(Modifier.weight(3f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                             Box(Modifier.aspectRatio(16f / 9f)) {
-                                WallTile(big, big.s("entity") in live, big.s("entity") in moving, blocks, states, live.size, big.s("entity") in capped) { open(state, big) }
+                                WallTile(big, big.s("entity") in live, big.s("entity") in moving, blocks, states, live.size, badgeOf(big)) { open(state, big) }
                             }
                         }
                         Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(gap, Alignment.CenterVertically)) {
                             others.take(4).forEach { c ->
                                 Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f)) {
-                                    WallTile(c, c.s("entity") in live, c.s("entity") in moving, blocks, states, live.size, c.s("entity") in capped) { focus = c.s("entity") }
+                                    WallTile(c, c.s("entity") in live, c.s("entity") in moving, blocks, states, live.size, badgeOf(c)) { focus = c.s("entity") }
                                 }
                             }
                         }
                     }
                 } else {
                     val n = shown.size
-                    val cols = bestColumns(n, maxWidth.value, maxHeight.value)
+                    val cols = WallLogic.bestColumns(n, maxWidth.value, maxHeight.value)
                     val rows = ceil(n / cols.toFloat()).toInt()
                     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(gap, Alignment.CenterVertically)) {
                         for (r in 0 until rows) {
@@ -421,7 +387,7 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
                                     // Case aux proportions de l'image (16:9), centrée : rien n'est rogné.
                                     Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                                         if (cam != null) Box(Modifier.aspectRatio(16f / 9f)) {
-                                            WallTile(cam, cam.s("entity") in live, cam.s("entity") in moving, blocks, states, live.size, cam.s("entity") in capped) { open(state, cam) }
+                                            WallTile(cam, cam.s("entity") in live, cam.s("entity") in moving, blocks, states, live.size, badgeOf(cam)) { open(state, cam) }
                                         }
                                     }
                                 }
@@ -466,7 +432,7 @@ private fun RailButton(icon: String, label: String?, active: Boolean, onClick: (
 @Composable
 private fun WallTile(
     card: JsonObject, live: Boolean, moving: Boolean, blocks: Map<String, JsonObject>, states: Map<String, EntityState>,
-    running: Int, capped: Boolean, onTap: () -> Unit,
+    running: Int, badge: Int?, onTap: () -> Unit,
 ) {
     val state = LocalDashState.current
     val ctx = LocalContext.current
@@ -581,13 +547,13 @@ private fun WallTile(
             }
         }
         // Devrait être en direct mais la limite de directs simultanés est atteinte : capture, avec un badge discret.
-        if (capped) Row(
+        if (badge != null) Row(
             Modifier.align(Alignment.TopStart).padding(8.dp).background(Color(0xB3000000), RoundedCornerShape(6.dp))
                 .padding(horizontal = 8.dp, vertical = 3.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             HaIcon("mdi:image-outline", size = 13.dp, tint = Color.White)
-            Text(stringResource(R.string.wall_capped), Modifier.padding(start = 5.dp), style = TextStyle(fontSize = 11.sp, color = Color.White))
+            Text(stringResource(badge), Modifier.padding(start = 5.dp), style = TextStyle(fontSize = 11.sp, color = Color.White))
         }
         // Batterie (réglage « dans le mur » de la caméra, jamais sur secteur).
         val battery = card.s("battery")?.let { states[it] }

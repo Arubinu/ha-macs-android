@@ -891,4 +891,9 @@
     <string name="camera_battery_card">Op de kaart</string>
     <string name="camera_battery_wall">In de camerawand</string>
     <string name="wall_capped">Livelimiet bereikt</string>
+    <string name="wall_saving">Batterij sparen</string>
+    <string name="wall_solar_min">Camerawand: zonnecamera\'s bij „Alles live”</string>
+    <string name="wall_solar_min_help">Onder dit batterijniveau blijft een zonnecamera bij momentopnamen (live alleen bij beweging of aanraking).</string>
+    <string name="wall_solar_always">Altijd</string>
+    <string name="wall_solar_above">Vanaf %1$d %%</string>
 </resources>

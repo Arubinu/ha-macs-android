@@ -44,6 +44,14 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   doit être ajoutée partout.
 - Mettre à jour les README (8 langues) quand une fonctionnalité visible change.
 
+## Tests automatiques
+
+- `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q :app:testDebugUnitTest` (JUnit sur le PC, < 1 s de tests) :
+  `app/src/test/`. Seulement des fonctions sans Android (les sortir dans un objet à part si besoin, ex.
+  `ui/WallLogic.kt`, `config/PrefValue.kt`) ; `ResourcesTest` vérifie les chaînes des 8 langues (mêmes noms, mêmes
+  paramètres), l'agencement d'exemple et les fins de ligne. Lancés aussi par `release.yml` avant la compilation.
+- Tablette de l'utilisateur : prévenir avant d'installer (l'app redémarre) et revenir à l'accueil après un test.
+
 ## Tests sur l'émulateur (erreurs déjà commises, à ne pas refaire)
 
 - Utiliser `tools/emulator.sh` (`. tools/emulator.sh` puis `open_avatar_editor`, `tapt "texte"`, `shot nom`) au lieu
@@ -208,7 +216,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   secteur, charge et décharge → solaire, décharge seule → batterie). Batterie
   affichée (`CameraWall.showBattery`) : jamais sur secteur, sinon options `battery_card` / `battery_wall` du bloc
   caméra (éditeur, « Niveau de batterie »). Direct : secteur toujours, mouvement (+ `motion_delay`) pour tous,
-  « Tout en direct » 2 min sauf batterie ; limite = réglage `wall_max_live` ou estimation (décodeur H.264 matériel :
+  « Tout en direct » 2 min sauf batterie, et sauf solaire sous `wall_solar_min` % (défaut 30, 0 = toujours ; badge
+  « Économie de batterie ») ; calculs purs dans `ui/WallLogic.kt` (testés) ; limite = réglage `wall_max_live` ou estimation (décodeur H.264 matériel :
   fps 720p atteignables / 30, bornés par ses instances), abaissée après un échec de décodeur (prefs `video`
   `wall_learned`). Captures : secteur 10 s, solaire 15 s, batterie `refresh`. Fermeture `wall_seconds` (-1 = comme
   le plein écran), suspendue pendant une détection ou une caméra agrandie. Sonnette : `event_also` (liste d'entités

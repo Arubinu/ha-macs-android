@@ -909,4 +909,9 @@
     <string name="camera_battery_card">Sur la carte</string>
     <string name="camera_battery_wall">Dans le mur de caméras</string>
     <string name="wall_capped">Limite de directs atteinte</string>
+    <string name="wall_saving">Économie de batterie</string>
+    <string name="wall_solar_min">Mur de caméras : caméras solaires en « Tout en direct »</string>
+    <string name="wall_solar_min_help">Sous ce niveau de batterie, une caméra solaire reste en instantanés (direct seulement sur mouvement ou au toucher).</string>
+    <string name="wall_solar_always">Toujours</string>
+    <string name="wall_solar_above">Dès %1$d %%</string>
 </resources>

@@ -72,6 +72,10 @@ android {
         compose = true
         buildConfig = true
     }
+    // Tests sur le PC (sans appareil) : fonctions sans Android ; un appel a Android renvoie une valeur par defaut.
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 kotlin {
@@ -120,4 +124,6 @@ dependencies {
     // Detections zone storages: SMB 2/3 shares and NFS v3 exports (pure Java clients).
     implementation("com.hierynomus:smbj:0.14.0")
     implementation("com.emc.ecs:nfs-client:1.1.0")
+
+    testImplementation("junit:junit:4.13.2")
 }

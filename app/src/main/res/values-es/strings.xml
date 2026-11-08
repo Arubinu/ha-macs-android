@@ -891,4 +891,9 @@
     <string name="camera_battery_card">En la tarjeta</string>
     <string name="camera_battery_wall">En el muro de cámaras</string>
     <string name="wall_capped">Límite de directos alcanzado</string>
+    <string name="wall_saving">Ahorro de batería</string>
+    <string name="wall_solar_min">Muro de cámaras: cámaras solares en «Todo en directo»</string>
+    <string name="wall_solar_min_help">Por debajo de este nivel de batería, una cámara solar se queda en instantáneas (directo solo con movimiento o al tocarla).</string>
+    <string name="wall_solar_always">Siempre</string>
+    <string name="wall_solar_above">Desde %1$d %%</string>
 </resources>

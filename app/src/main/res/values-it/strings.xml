@@ -891,4 +891,9 @@
     <string name="camera_battery_card">Sulla scheda</string>
     <string name="camera_battery_wall">Nel muro di telecamere</string>
     <string name="wall_capped">Limite di dirette raggiunto</string>
+    <string name="wall_saving">Risparmio batteria</string>
+    <string name="wall_solar_min">Muro di telecamere: telecamere solari in «Tutto in diretta»</string>
+    <string name="wall_solar_min_help">Sotto questo livello di batteria, una telecamera solare resta sulle istantanee (diretta solo con movimento o al tocco).</string>
+    <string name="wall_solar_always">Sempre</string>
+    <string name="wall_solar_above">Da %1$d %%</string>
 </resources>

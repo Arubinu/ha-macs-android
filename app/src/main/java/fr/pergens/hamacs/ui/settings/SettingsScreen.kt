@@ -427,6 +427,17 @@ private fun WallSettings(settings: fr.pergens.hamacs.config.Settings) {
             ) { Text(stringResource(R.string.wall_live_reset)) }
         }
     }
+    GroupDivider()
+    Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(stringResource(R.string.wall_solar_min), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+        Text(stringResource(R.string.wall_solar_min_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            chip(settings.wallSolarMin == 0, stringResource(R.string.wall_solar_always)) { app.config.update { it.copy(wallSolarMin = 0) } }
+            listOf(20, 30, 50, 70).forEach { pc ->
+                chip(settings.wallSolarMin == pc, stringResource(R.string.wall_solar_above, pc)) { app.config.update { it.copy(wallSolarMin = pc) } }
+            }
+        }
+    }
 }
 
 /** Choix d'un délai : Jamais, 30 s, 1, 2, 5, 10 ou 30 min. */

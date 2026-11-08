@@ -44,6 +44,7 @@ data class Settings(
     val wallSeconds: Int = -1,
     /** Mur de caméras : directs simultanés (0 = automatique, d'après les décodeurs de la tablette). */
     val wallMaxLive: Int = 0,
+    val wallSolarMin: Int = 30,
     /** Couleur principale (#rrggbb) imposée à tout le tableau de bord et à M.A.C.S. ; vide = celle du thème. */
     val accentColor: String = "",
     /** Kiosk mode: the app cannot be left (nor the tablet switched off) without the access code. */
@@ -95,6 +96,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         fullscreenSeconds = prefs.getInt("fullscreen_seconds", 0),
         wallSeconds = prefs.getInt("wall_seconds", -1),
         wallMaxLive = prefs.getInt("wall_max_live", 0),
+        wallSolarMin = prefs.getInt("wall_solar_min", 30),
         accentColor = prefs.getString("accent_color", null) ?: "",
         kioskEnabled = prefs.getBoolean("kiosk_enabled", false),
         nightEnabled = prefs.getBoolean("night_enabled", false),
@@ -123,6 +125,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             .putInt("fullscreen_seconds", s.fullscreenSeconds)
             .putInt("wall_seconds", s.wallSeconds)
             .putInt("wall_max_live", s.wallMaxLive)
+            .putInt("wall_solar_min", s.wallSolarMin)
             .putString("accent_color", s.accentColor)
             .putBoolean("kiosk_enabled", s.kioskEnabled)
             .putBoolean("night_enabled", s.nightEnabled)
@@ -233,11 +236,6 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         val missing = unreadable.groupBy { (groupOf?.get(it) as? kotlinx.serialization.json.JsonPrimitive)?.content ?: it }.values
             .map { keys -> keys.sortedBy { if (it == "access_code") 0 else if (it == "master_code") 1 else 2 } }
             .sortedBy { g -> if ("access_code" in g) 0 else if ("master_code" in g) 1 else 2 }
-        // Nombres : type lu par l'app (Float ou Int). Oui/non : valeur JSON non textuelle (true/false).
-        val types = mapOf(
-            "text_scale" to "f", "dim_level" to "f", "idle_seconds" to "i", "presence_sensitivity" to "i", "dim_seconds" to "i",
-            "night_seconds" to "i", "night_level" to "f",
-        )
         prefs.edit().apply {
             clear()
             settings.forEach { (k, v) ->
@@ -248,15 +246,14 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
                     k in SECRETS && DeviceSecret.isEncrypted(p.content) -> putString(k, DeviceSecret.decrypt(context, p.content).orEmpty())
                     // Codes chiffrés : déchiffrés ici, sinon à redéfinir (rien n'est écrit, pas de code par défaut).
                     isCode(k) && DeviceSecret.isEncrypted(p.content) -> DeviceSecret.decrypt(context, p.content)?.let { putString(k, it) }
-                    types[k] == "f" -> putFloat(k, p.content.toFloat())
-                    types[k] == "i" -> putInt(k, p.content.toDouble().toInt())
-                    !p.isString && (p.content == "true" || p.content == "false") -> putBoolean(k, p.content.toBoolean())
-                    // Autres nombres (réglage ajouté depuis) : entier ou décimal d'après la valeur, jamais du texte
-                    // (relu avec getInt / getFloat, un texte ferait planter l'app au démarrage).
-                    !p.isString && p.content.toIntOrNull() != null -> putInt(k, p.content.toInt())
-                    !p.isString && p.content.toLongOrNull() != null -> putLong(k, p.content.toLong())
-                    !p.isString && p.content.toFloatOrNull() != null -> putFloat(k, p.content.toFloat())
-                    else -> putString(k, p.content)
+                    // Le reste : type lu par l'app, sinon d'après la valeur (PrefValue).
+                    else -> when (val pv = PrefValue.of(k, p)) {
+                        is PrefValue.F -> putFloat(k, pv.v)
+                        is PrefValue.I -> putInt(k, pv.v)
+                        is PrefValue.L -> putLong(k, pv.v)
+                        is PrefValue.B -> putBoolean(k, pv.v)
+                        is PrefValue.S -> putString(k, pv.v)
+                    }
                 }
             }
             // Pas de jeton utilisable : vide (et non absent, sinon le jeton par défaut du build serait repris).
