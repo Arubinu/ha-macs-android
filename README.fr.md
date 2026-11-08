@@ -22,18 +22,18 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 
 ## ✨ Fonctionnalités
 
-- 🤖 **M.A.C.S.**, le personnage animé, au cœur de l'écran d'accueil, avec l'heure et une météo succincte
+- 🤖 **M.A.C.S.**, le personnage animé, au cœur de l'écran d'accueil, avec l'heure et une météo succincte ; ses yeux suivent votre doigt
 - 🧙 **Assistant de configuration** : pièces, membres, caméras et éléments principaux détectés dans Home Assistant
 - 🏠 **Pièces** : lumières, température, humidité et appareils d'un coup d'œil
 - 👨‍👩‍👧 **Membres** : présence (touchez la barre pour les arrivées et départs), heure d'arrivée, pas, batterie du
   téléphone et événements à venir
 - 🧑‍🎨 **Avatars** : photo prise avec la tablette, un fichier ou un téléphone (QR code), détourée sur l'appareil,
   filtres au choix, tête qui dépasse d'un cercle aux couleurs du tableau de bord
-- 📹 **Caméras** : direct, onglets personnalisables, plein écran en haute définition, dernières détections (média HA,
-  SMB, NFS, stockage local)
-  ; plein écran refermé tout seul après un délai (Réglages › Affichage), jamais pendant une détection
-  ; 🧱 **mur de caméras** : grille par onglet ou toutes, depuis les onglets ou l'accueil, direct selon l'alimentation
-  (secteur, solaire, batterie) ; une sonnette peut ouvrir sa caméra en grand avec d'autres en vignettes
+- 📹 **Caméras** : direct, onglets personnalisables, plein écran en haute définition avec zoom, dernières détections et
+  leur historique (média HA, SMB, NFS, stockage local) ; plein écran refermé tout seul après un délai
+  (Réglages › Affichage), jamais pendant une détection
+  ; 🧱 **mur de caméras** : grille par onglet ou toutes, depuis les onglets, l'accueil ou la tuile « +N », direct selon
+  l'alimentation (secteur, solaire, batterie) ; une sonnette peut ouvrir sa caméra en grand avec d'autres en vignettes
 - 🚨 **Alertes** : portage natif de l'[AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thèmes, son,
   synthèse vocale et notifications
 - 🌦️ **Météo et graphiques** : prévisions, radar Windy, consommation électrique, prix des carburants avec la station la
@@ -85,6 +85,10 @@ Un Raspberry Pi 4 ou 5 avec un écran tactile fait un bon écran mural. Il faut 
 Une webcam USB se choisit dans Réglages › Veille et présence › *Caméra*. Sans les services Google, le détourage des
 avatars est un peu moins précis. Détails : [référence technique](docs/reference.fr.md#raspberry-pi).
 
+⚡ **Alimentation** : utilisez l'alimentation officielle (5,1 V / 3 A pour le Pi 4, 5 V / 5 A pour le Pi 5). Le Pi ne
+négocie pas l'USB Power Delivery : un port de dock ou de chargeur est souvent trop faible, surtout avec des webcams USB.
+Quand la tension chute (signal HDMI perdu, ralentissements), l'app affiche *Alimentation trop faible* en bas de l'écran.
+
 ## ⚙️ Au quotidien
 
 - ⚙️ **Réglages** : appui long sur le coin supérieur gauche (connexion, affichage, veille, code d'accès, langue…)
@@ -121,6 +125,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Sans ordinateur : *Préparer la tablette* (ci-dessous) affiche un QR code à scanner sur l'écran de bienvenue après
 une réinitialisation (6 touches au même endroit). Plus simple : choisir l'app comme écran d'accueil ; elle revient avec
 le bouton Accueil et au démarrage, mais un geste d'Android peut retirer l'épinglage d'écran.
+
+🔁 Propriétaire, l'app peut aussi redémarrer l'appareil : Réglages › Sécurité › *Redémarrer l'appareil*
+(Android ne permet pas à une application de l'éteindre).
 
 ⚠️ Avant de désinstaller : Réglages › Sécurité › *Retirer les droits de propriétaire*.
 

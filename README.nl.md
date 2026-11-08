@@ -22,18 +22,18 @@ custom cards en zonder iets in te stellen in Home Assistant.
 
 ## ✨ Functies
 
-- 🤖 **M.A.C.S.**, het geanimeerde personage, centraal op het startscherm, met de tijd en een kort weerbericht
+- 🤖 **M.A.C.S.**, het geanimeerde personage, centraal op het startscherm, met de tijd en een kort weerbericht; zijn ogen volgen je vinger
 - 🧙 **Installatieassistent**: kamers, leden, camera's en belangrijke elementen worden in Home Assistant gevonden
 - 🏠 **Kamers**: verlichting, temperatuur, luchtvochtigheid en apparaten in één oogopslag
 - 👨‍👩‍👧 **Leden**: aanwezigheid (tik op de balk voor aankomsten en vertrekken), aankomsttijd, stappen, telefoonaccu en
   komende afspraken
 - 🧑‍🎨 **Avatars**: foto met de tabletcamera, uit een bestand of vanaf een telefoon (QR-code), op het apparaat
   uitgeknipt, optionele filters, hoofd dat uit een cirkel in de dashboardkleur steekt
-- 📹 **Camera's**: live beeld, eigen tabbladen, volledig scherm in hoge resolutie, laatste detecties (HA-media, SMB,
-  NFS, lokaal)
-  ; volledig scherm sluit vanzelf na een tijd (Instellingen › Weergave), nooit tijdens een detectie
-  ; 🧱 **camerawand**: raster per tabblad of alle camera's, via de tabbladen of het startscherm, live volgens de
-  voeding (net, zon, batterij); een deurbel kan zijn camera groot openen met andere als miniaturen
+- 📹 **Camera's**: live beeld, eigen tabbladen, volledig scherm in hoge resolutie met zoom, laatste detecties en hun
+  geschiedenis (HA-media, SMB, NFS, lokaal); volledig scherm sluit vanzelf na een tijd (Instellingen › Weergave), nooit
+  tijdens een detectie
+  ; 🧱 **camerawand**: raster per tabblad of alle camera's, via de tabbladen, het startscherm of de tegel „+N”, live
+  volgens de voeding (net, zon, batterij); een deurbel kan zijn camera groot openen met andere als miniaturen
 - 🚨 **Meldingen**: native versie van [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 thema's,
   geluid, spraak en pushmeldingen
 - 🌦️ **Weer en grafieken**: verwachting, Windy-radar, stroomverbruik, brandstofprijzen met het goedkoopste tankstation
@@ -85,6 +85,10 @@ Een Raspberry Pi 4 of 5 met touchscreen is een goed wandpaneel. Installeer er ee
 Een USB-webcam kies je in Instellingen › Stand-by & aanwezigheid › *Camera*. Zonder Google-diensten is het uitknippen
 van avatars iets minder nauwkeurig. Details: [technische referentie](docs/reference.fr.md#raspberry-pi) (Frans).
 
+⚡ **Voeding**: gebruik de officiële voeding (5,1 V / 3 A voor de Pi 4, 5 V / 5 A voor de Pi 5). De Pi onderhandelt
+geen USB Power Delivery: een poort van een dock of lader is vaak te zwak, zeker met USB-webcams. Zakt de spanning
+(HDMI-signaal weg, haperingen), dan toont de app onderaan *Voeding te zwak*.
+
 ## ⚙️ Dagelijks gebruik
 
 - ⚙️ **Instellingen**: lang drukken op de linkerbovenhoek (verbinding, weergave, slaapstand, toegangscode, taal…)
@@ -121,6 +125,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Zonder computer: *Tablet voorbereiden* (hieronder) toont een QR-code om na een reset op het welkomstscherm te
 scannen (6 keer op dezelfde plek tikken). Eenvoudiger: kies de app als startscherm; ze komt terug met de Home-knop en
 bij het opstarten, maar een Android-gebaar kan scherm vastzetten opheffen.
+
+🔁 Als apparaateigenaar kan de app het apparaat ook herstarten: Instellingen › Beveiliging › *Apparaat opnieuw opstarten*
+(Android laat een app het apparaat niet uitschakelen).
 
 ⚠️ Voor het verwijderen: Instellingen › Beveiliging › *Rechten van apparaateigenaar intrekken*.
 

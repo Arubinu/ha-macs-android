@@ -22,18 +22,18 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 
 ## ✨ Funkcje
 
-- 🤖 **M.A.C.S.**, animowana postać, w centrum ekranu głównego, z godziną i krótką pogodą
+- 🤖 **M.A.C.S.**, animowana postać, w centrum ekranu głównego, z godziną i krótką pogodą; jego oczy podążają za palcem
 - 🧙 **Kreator konfiguracji**: pomieszczenia, domownicy, kamery i najważniejsze elementy wykrywane w Home Assistant
 - 🏠 **Pomieszczenia**: światła, temperatura, wilgotność i urządzenia w jednym miejscu
 - 👨‍👩‍👧 **Domownicy**: obecność (dotknij paska, aby zobaczyć przyjścia i wyjścia), godzina przybycia, kroki, bateria
   telefonu i nadchodzące wydarzenia
 - 🧑‍🎨 **Awatary**: zdjęcie z aparatu tabletu, z pliku lub z telefonu (kod QR), wycięte z tła na urządzeniu,
   opcjonalne filtry, głowa wychodzi poza koło w kolorze pulpitu
-- 📹 **Kamery**: podgląd na żywo, własne karty, pełny ekran w wysokiej rozdzielczości, ostatnie wykrycia (media HA,
-  SMB, NFS, pamięć lokalna)
-  ; pełny ekran zamyka się sam po czasie (Ustawienia › Wyświetlanie), nigdy podczas wykrycia
-  ; 🧱 **ściana kamer**: siatka według karty lub wszystkie, z kart lub ekranu głównego, na żywo zależnie od zasilania
-  (sieć, słoneczne, bateria); dzwonek może otworzyć swoją kamerę w dużym oknie z innymi jako miniatury
+- 📹 **Kamery**: podgląd na żywo, własne karty, pełny ekran w wysokiej rozdzielczości z powiększaniem, ostatnie wykrycia
+  i ich historia (media HA, SMB, NFS, pamięć lokalna); pełny ekran zamyka się sam po czasie (Ustawienia › Wyświetlanie),
+  nigdy podczas wykrycia
+  ; 🧱 **ściana kamer**: siatka według karty lub wszystkie, z kart, ekranu głównego lub kafelka „+N”, na żywo zależnie
+  od zasilania (sieć, słoneczne, bateria); dzwonek może otworzyć swoją kamerę w dużym oknie z innymi jako miniatury
 - 🚨 **Alerty**: natywna wersja [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 motywy, dźwięk,
   synteza mowy i powiadomienia
 - 🌦️ **Pogoda i wykresy**: prognoza, radar Windy, zużycie prądu, ceny paliw z najtańszą stacją (dotknij wykresu: każda
@@ -84,6 +84,10 @@ Raspberry Pi 4 lub 5 z ekranem dotykowym to dobry panel ścienny. Najpierw trzeb
 Kamerę USB wybiera się w Ustawienia › Czuwanie i obecność › *Kamera*. Bez usług Google wycinanie awatarów jest nieco
 mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.fr.md#raspberry-pi) (po francusku).
 
+⚡ **Zasilanie**: używaj oficjalnego zasilacza (5,1 V / 3 A dla Pi 4, 5 V / 5 A dla Pi 5). Pi nie negocjuje USB Power
+Delivery: port stacji dokującej lub ładowarki często nie wystarcza, zwłaszcza z kamerami USB. Gdy napięcie spada
+(utrata sygnału HDMI, spowolnienia), aplikacja pokazuje na dole ekranu *Zbyt słabe zasilanie*.
+
 ## ⚙️ Na co dzień
 
 - ⚙️ **Ustawienia**: długie naciśnięcie lewego górnego rogu (połączenie, wyświetlanie, uśpienie, kod dostępu, język…)
@@ -120,6 +124,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Bez komputera: *Przygotuj tablet* (poniżej) pokazuje kod QR do zeskanowania na ekranie powitalnym po przywróceniu
 ustawień fabrycznych (6 dotknięć w tym samym miejscu). Prościej: wybrać aplikację jako ekran główny; wraca po
 naciśnięciu przycisku ekranu głównego i przy starcie, ale gest Androida może zdjąć przypięcie ekranu.
+
+🔁 Jako właściciel aplikacja może też ponownie uruchomić urządzenie: Ustawienia › Bezpieczeństwo › *Uruchom ponownie urządzenie*
+(Android nie pozwala aplikacji go wyłączyć).
 
 ⚠️ Przed odinstalowaniem: Ustawienia › Bezpieczeństwo › *Usuń uprawnienia właściciela*.
 

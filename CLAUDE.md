@@ -243,7 +243,40 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   essais avec le faux serveur par `adb reverse tcp:8123 tcp:8123` et l'adresse `http://127.0.0.1:8123`).
 - **M.A.C.S. (carte)** : toucher (voix) et appui long (`hold_action`, ex. retour à l'accueil) seulement dans un cercle
   invisible centré (diamètre 90 % de la plus petite dimension de la tuile, zones noires comprises) ; ailleurs rien (mode
-  édition : ses réglages). Raison : la tuile est sous le coin des réglages (appui long en (30, 40)).
+  édition : ses réglages). Raison : la tuile est sous le coin des réglages (appui long en (30, 40)). Grand M.A.C.S. de
+  l'accueil (`"position": "fill"`) : pas d'appui long. Les yeux suivent le doigt posé (`MacsController.look` /
+  `lookEnd`) : M.A.C.S. tourne dans un iframe et ne suit la souris qu'au repos, l'app injecte une règle CSS
+  (`body.hamacs-look .iris`) dans l'iframe. Test : débogage WebView (`adb forward tcp:9222
+  localabstract:webview_devtools_remote_<pid>`, `Runtime.evaluate` dans `iframe.contentDocument`).
+- **Colonne des caméras** (`ui/cards/CameraFitColumn.kt`) : hors mode édition, les premières caméras de l'onglet
+  (ordre de l'éditeur des onglets) qui tiennent, puis une tuile « +N » vers le mur. Nombre calculé sans composer les
+  cartes (hauteur = largeur / `aspect_ratio`, `WallLogic.visibleCount`) : une caméra cachée n'est jamais chargée.
+  Hauteur suivie par `rememberRootHeight` ; espace réparti par une `FitColumn` publié par `LocalColumnSlack` (sinon,
+  en rétrécissant, le bloc descend et se croit à l'étroit). Même chose pour `BottomFadeScroll` (pièces, calendrier).
+- **Connexion WebSocket** : rien n'est envoyé avant `auth_ok` (HA prenait le message pour l'authentification :
+  `auth_invalid` « incorrectly formatted », et l'app restait bloquée) ; ce refus-là provoque une reconnexion.
+- **Historique des détections** (`ui/DetectionHistory.kt`, calculs dans `detections/HistoryLogic.kt`, testés) : bouton
+  rond en haut à droite de la zone des détections → `DashState.detectionHistory` (plein écran, ouvert avant le mur et le
+  lecteur dans `Overlays`). `DetectionScanner.scan` sur un an, relu toutes les 2 min ; périodes (aujourd'hui, hier, 7 /
+  30 jours, jour choisi : calendrier limité aux jours avec détections), filtre caméra, histogramme (heure / jour, une
+  barre filtre son créneau), grille groupée, aperçu (lecture muette sur place, plein écran avec le son). Stockage
+  `entities` : pas d'historique (message). Fermeture après 3 min sans toucher. Démo : `recordings()` de `demo_ha.py`.
+- **Zoom du plein écran** (`PlayerDialog`, calculs dans `ui/ZoomLogic.kt`, testés) : pincer (×5 au plus), glisser,
+  double toucher (×2,5 / retour) ; `graphicsLayer` sur la vue du lecteur (TextureView `player_texture`, une SurfaceView
+  ignorerait la transformation). Zoomé : un toucher ne ferme pas ; chaque geste relance la fermeture automatique.
+- **Alimentation** (`PowerSupply.kt`) : capteur de sous-tension hwmon (`rpi_volt`, `in0_lcrit_alarm`) relu toutes les
+  2 s → pastille *Alimentation trop faible* 10 min et note du journal. Le Pi 4 ne négocie pas l'USB PD (port de dock
+  trop faible : HDMI coupé, journal `hwmon0: Undervoltage detected!`). Lecture du capteur par l'app pas encore vérifiée.
+- **Redémarrer l'appareil** (Réglages › Sécurité, propriétaire seulement, `Kiosk.reboot`) ; l'arrêt est réservé aux
+  apps système. Le débogage sans fil du Pi se coupe au redémarrage : sans écran, plus d'adb.
+- **Mises à jour en débogage** : pas d'installation automatique depuis les vraies Releases (clé différente : fenêtre
+  « applis inconnues » à répétition sur l'émulateur), seulement avec `update_url`.
+- **Lecteurs vidéo** : `VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF` partout (sinon la fréquence de l'écran suit la vidéo :
+  un écran HDMI du Raspberry Pi perd le signal quelques secondes).
+- **Webcams branchées à chaud** (`Cameras.provider` / `reset` / `forget`) : CameraX fige sa liste à l'initialisation
+  (jamais l'initialiser sans caméra, l'échec reste en mémoire). Débrancher la caméra ouverte ne déclenche pas
+  l'AvailabilityCallback (« occupée » → « absente ») : liste aussi revue à chaque erreur de caméra. Relance de CameraX
+  (≈ 6 s de gel) seulement si la caméra utilisée disparaît ou change.
 - **Vérifier un écran en test** : ne pas chercher un texte accentué avec `grep` dans le dump uiautomator (l'accent tapé
   ici arrive en cp1252, la recherche échoue toujours) : prendre une capture, ou chercher un texte sans accent.
 - **Détails au toucher** : graphique à plusieurs courbes → `GraphDetailsSheet` (valeur, écart, 3 derniers changements

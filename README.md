@@ -22,17 +22,17 @@ nothing to set up in Home Assistant.
 
 ## ✨ Features
 
-- 🤖 **M.A.C.S.**, the animated assistant character, at the heart of the home screen, with the time and a short weather line
+- 🤖 **M.A.C.S.**, the animated assistant character, at the heart of the home screen, with the time and a short weather line; its eyes follow your finger
 - 🧙 **Setup wizard**: rooms, members, cameras and key elements are detected from your Home Assistant
 - 🏠 **Rooms**: lights, temperature, humidity and devices at a glance
 - 👨‍👩‍👧 **Members**: presence (tap the bar for arrivals and departures), arrival time, steps, phone battery and
   upcoming events
 - 🧑‍🎨 **Avatars**: photo from the tablet camera, a file or a phone (QR code), cut out on the device, optional
   filters, head standing out of a circle that takes the dashboard colour
-- 📹 **Cameras**: live view, custom tabs, fullscreen in high definition, latest detections (HA media, SMB, NFS, local)
-  ; fullscreen can close by itself after a delay (Settings › Display), never during a detection
-  ; 🧱 **camera wall**: grid by tab or all cameras, from the tabs or the home screen, live depending on the power
-  supply (mains, solar, battery); a doorbell can open its camera large with others as thumbnails
+- 📹 **Cameras**: live view, custom tabs, fullscreen in high definition with zoom, latest detections and their history
+  (HA media, SMB, NFS, local); fullscreen can close by itself after a delay (Settings › Display), never during a detection
+  ; 🧱 **camera wall**: grid by tab or all cameras, from the tabs, the home screen or the "+N" tile, live depending on
+  the power supply (mains, solar, battery); a doorbell can open its camera large with others as thumbnails
 - 🚨 **Alerts**: native port of [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 themes, sound,
   speech and push notifications
 - 🌦️ **Weather and graphs**: forecast, Windy radar, power consumption, fuel prices with the cheapest station (tap a
@@ -83,6 +83,10 @@ A Raspberry Pi 4 or 5 with a touchscreen makes a good wall panel. First install 
 A USB webcam is chosen in Settings › Standby & presence › *Camera*. Without Google services, avatar cut-outs are a bit
 less precise. Details: [technical reference](docs/reference.fr.md#raspberry-pi).
 
+⚡ **Power**: use the official power supply (5.1 V / 3 A for the Pi 4, 5 V / 5 A for the Pi 5). The Pi does not
+negotiate USB Power Delivery: a dock or charger port is often too weak, especially with USB webcams. When the voltage
+drops (lost HDMI signal, slowdowns), the app shows *Power supply too weak* at the bottom of the screen.
+
 ## ⚙️ Everyday use
 
 - ⚙️ **Settings**: long press on the top-left corner (connection, display, sleep, access code, language…)
@@ -117,6 +121,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Without a computer: *Prepare the tablet* (below) shows a QR code to scan on the welcome screen after a factory
 reset (tap the same spot 6 times). Simpler: choose the app as home screen; it comes back with the Home button and at
 startup, but an Android gesture can remove the screen pinning.
+
+🔁 As device owner, the app can also restart the device: Settings › Security › *Restart the device*
+(Android does not let an app turn it off).
 
 ⚠️ Before uninstalling: Settings › Security › *Remove device owner rights*.
 

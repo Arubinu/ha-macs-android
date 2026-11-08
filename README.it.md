@@ -22,18 +22,19 @@ card personalizzate e senza nulla da configurare in Home Assistant.
 
 ## ✨ Funzionalità
 
-- 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale, con l'ora e un meteo essenziale
+- 🤖 **M.A.C.S.**, il personaggio animato, al centro della schermata iniziale, con l'ora e un meteo essenziale; i suoi occhi seguono il tuo dito
 - 🧙 **Procedura guidata**: stanze, membri, telecamere ed elementi principali rilevati in Home Assistant
 - 🏠 **Stanze**: luci, temperatura, umidità e dispositivi a colpo d'occhio
 - 👨‍👩‍👧 **Membri**: presenza (tocca la barra per arrivi e partenze), ora di arrivo, passi, batteria del telefono e
   prossimi eventi
 - 🧑‍🎨 **Avatar**: foto con la fotocamera del tablet, da un file o da un telefono (codice QR), scontornata sul
   dispositivo, filtri facoltativi, testa che esce da un cerchio con il colore della dashboard
-- 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione, ultimi rilevamenti (media
-  HA, SMB, NFS, locale)
-  ; lo schermo intero si chiude da solo dopo un tempo (Impostazioni › Visualizzazione), mai durante un rilevamento
-  ; 🧱 **muro di telecamere**: griglia per scheda o tutte, dalle schede o dalla schermata iniziale, diretta secondo
-  l'alimentazione (rete, solare, batteria); un campanello può aprire la sua telecamera in grande con altre in miniatura
+- 📹 **Telecamere**: diretta, schede personalizzabili, schermo intero in alta definizione con zoom, ultimi rilevamenti e
+  la loro cronologia (media HA, SMB, NFS, locale); lo schermo intero si chiude da solo dopo un tempo
+  (Impostazioni › Visualizzazione), mai durante un rilevamento
+  ; 🧱 **muro di telecamere**: griglia per scheda o tutte, dalle schede, dalla schermata iniziale o dal riquadro «+N»,
+  diretta secondo l'alimentazione (rete, solare, batteria); un campanello può aprire la sua telecamera in grande con
+  altre in miniatura
 - 🚨 **Avvisi**: versione nativa di [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temi, suono,
   sintesi vocale e notifiche
 - 🌦️ **Meteo e grafici**: previsioni, radar Windy, consumo elettrico, prezzi del carburante con il distributore più
@@ -85,6 +86,10 @@ Un Raspberry Pi 4 o 5 con touchscreen è un ottimo pannello a parete. Prima biso
 Una webcam USB si sceglie in Impostazioni › Standby e presenza › *Fotocamera*. Senza i servizi Google, il ritaglio
 degli avatar è un po' meno preciso. Dettagli: [riferimento tecnico](docs/reference.fr.md#raspberry-pi) (in francese).
 
+⚡ **Alimentazione**: usa l'alimentatore ufficiale (5,1 V / 3 A per il Pi 4, 5 V / 5 A per il Pi 5). Il Pi non negozia
+l'USB Power Delivery: la porta di un dock o di un caricatore spesso non basta, soprattutto con webcam USB. Quando la
+tensione cala (segnale HDMI perso, rallentamenti), l'app mostra *Alimentazione insufficiente* in fondo allo schermo.
+
 ## ⚙️ Nell'uso quotidiano
 
 - ⚙️ **Impostazioni**: pressione prolungata sull'angolo in alto a sinistra (connessione, display, standby, codice di
@@ -123,6 +128,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Senza computer: *Preparare il tablet* (sotto) mostra un codice QR da scansionare nella schermata di benvenuto dopo
 un ripristino (6 tocchi nello stesso punto). Più semplice: scegliere l'app come schermata Home; torna con il tasto Home
 e all'avvio, ma un gesto di Android può togliere il blocco su schermo.
+
+🔁 Da proprietaria, l'app può anche riavviare il dispositivo: Impostazioni › Sicurezza › *Riavvia il dispositivo*
+(Android non permette a un'app di spegnerlo).
 
 ⚠️ Prima di disinstallare: Impostazioni › Sicurezza › *Rimuovi i diritti di proprietario*.
 

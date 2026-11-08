@@ -201,6 +201,11 @@ injoignable »). Le Pi 5 n'a pas été essayé.
 **Matériel**
 
 - Raspberry Pi 4 (4 Go de mémoire ou plus) ou Pi 5, carte microSD rapide (ou SSD), alimentation officielle.
+- Alimentation : 5,1 V / 3 A (Pi 4) ou 5 V / 5 A (Pi 5). Le Pi 4 ne négocie pas l'USB Power Delivery : branché sur un
+  port de dock USB-C (même « PD ») ou de chargeur, il ne reçoit que le 5 V de base, souvent trop juste avec des webcams
+  USB. Sous-tension (journal : `hwmon0: Undervoltage detected!`) : signal HDMI coupé (« Aucun signal » sur l'écran),
+  ralentissements. L'app lit le capteur `rpi_volt` (`/sys/class/hwmon/*/in0_lcrit_alarm`, `PowerSupply.kt`) : pastille
+  *Alimentation trop faible* 10 min après la dernière alerte et note dans le journal (Réglages › À propos).
 - Écran tactile : l'écran officiel du Raspberry Pi (DSI), un écran HDMI avec tactile USB ou un écran SPI Waveshare.
   Un écran DSI s'active dans les *Raspberry Pi settings* d'Android, sans écran HDMI branché. La luminosité réglée par
   l'app (atténuation, mode nuit) dépend de la prise en charge de l'écran par Android.

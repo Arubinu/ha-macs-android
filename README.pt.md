@@ -22,18 +22,19 @@ personalizados e sem nada para configurar no Home Assistant.
 
 ## ✨ Funcionalidades
 
-- 🤖 **M.A.C.S.**, a personagem animada, no centro do ecrã inicial, com a hora e uma meteorologia resumida
+- 🤖 **M.A.C.S.**, a personagem animada, no centro do ecrã inicial, com a hora e uma meteorologia resumida; os seus olhos seguem o seu dedo
 - 🧙 **Assistente de configuração**: divisões, membros, câmaras e elementos principais detetados no Home Assistant
 - 🏠 **Divisões**: luzes, temperatura, humidade e aparelhos num relance
 - 👨‍👩‍👧 **Membros**: presença (toque na barra para ver chegadas e saídas), hora de chegada, passos, bateria do telemóvel
   e próximos eventos
 - 🧑‍🎨 **Avatares**: foto com a câmara do tablet, de um ficheiro ou de um telemóvel (código QR), recortada no
   dispositivo, filtros opcionais, cabeça a sair de um círculo com a cor do painel
-- 📹 **Câmaras**: em direto, separadores personalizáveis, ecrã inteiro em alta definição, últimas deteções (multimédia
-  do HA, SMB, NFS, local)
-  ; o ecrã inteiro fecha-se sozinho após um tempo (Definições › Ecrã), nunca durante uma deteção
-  ; 🧱 **mural de câmaras**: grelha por separador ou todas, a partir dos separadores ou do ecrã inicial, direto conforme
-  a alimentação (corrente, solar, bateria); uma campainha pode abrir a sua câmara em grande com outras em miniatura
+- 📹 **Câmaras**: em direto, separadores personalizáveis, ecrã inteiro em alta definição com zoom, últimas deteções e o
+  seu histórico (multimédia do HA, SMB, NFS, local); o ecrã inteiro fecha-se sozinho após um tempo (Definições › Ecrã),
+  nunca durante uma deteção
+  ; 🧱 **mural de câmaras**: grelha por separador ou todas, a partir dos separadores, do ecrã inicial ou do mosaico «+N»,
+  direto conforme a alimentação (corrente, solar, bateria); uma campainha pode abrir a sua câmara em grande com outras
+  em miniatura
 - 🚨 **Alertas**: versão nativa do [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 temas, som,
   voz e notificações
 - 🌦️ **Meteorologia e gráficos**: previsão, radar Windy, consumo elétrico, preços dos combustíveis com o posto mais
@@ -85,6 +86,10 @@ Um Raspberry Pi 4 ou 5 com ecrã tátil é um bom painel de parede. Primeiro é 
 Uma webcam USB escolhe-se em Definições › Repouso e presença › *Câmara*. Sem os serviços Google, o recorte dos avatares
 é um pouco menos preciso. Detalhes: [referência técnica](docs/reference.fr.md#raspberry-pi) (em francês).
 
+⚡ **Alimentação**: use a fonte oficial (5,1 V / 3 A para o Pi 4, 5 V / 5 A para o Pi 5). O Pi não negocia USB Power
+Delivery: a porta de uma dock ou de um carregador é muitas vezes fraca demais, sobretudo com webcams USB. Quando a tensão
+desce (sinal HDMI perdido, lentidão), a app mostra *Alimentação insuficiente* no fundo do ecrã.
+
 ## ⚙️ No dia a dia
 
 - ⚙️ **Definições**: toque longo no canto superior esquerdo (ligação, ecrã, suspensão, código de acesso, idioma…)
@@ -121,6 +126,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Sem computador: *Preparar o tablet* (abaixo) mostra um código QR para ler no ecrã de boas-vindas após uma
 reposição (6 toques no mesmo sítio). Mais simples: escolher a app como ecrã inicial; volta com o botão Início e no
 arranque, mas um gesto do Android pode retirar a fixação de ecrã.
+
+🔁 Como proprietária, a app também pode reiniciar o dispositivo: Definições › Segurança › *Reiniciar o dispositivo*
+(o Android não permite que uma app o desligue).
 
 ⚠️ Antes de desinstalar: Definições › Segurança › *Retirar os direitos de proprietário*.
 

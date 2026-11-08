@@ -22,17 +22,18 @@ Custom Cards und ohne Einrichtung in Home Assistant.
 
 ## ✨ Funktionen
 
-- 🤖 **M.A.C.S.**, die animierte Assistenzfigur, im Mittelpunkt des Startbildschirms, mit Uhrzeit und kurzem Wetter
+- 🤖 **M.A.C.S.**, die animierte Assistenzfigur, im Mittelpunkt des Startbildschirms, mit Uhrzeit und kurzem Wetter; seine Augen folgen Ihrem Finger
 - 🧙 **Einrichtungsassistent**: Räume, Mitglieder, Kameras und wichtige Elemente werden in Home Assistant erkannt
 - 🏠 **Räume**: Licht, Temperatur, Luftfeuchtigkeit und Geräte auf einen Blick
 - 👨‍👩‍👧 **Mitglieder**: Anwesenheit (Balken antippen für Ankünfte und Abfahrten), Ankunftszeit, Schritte, Handy-Akku
   und anstehende Termine
 - 🧑‍🎨 **Avatare**: Foto mit der Tablet-Kamera, aus einer Datei oder vom Handy (QR-Code), auf dem Gerät freigestellt,
   optionale Filter, Kopf ragt aus einem Kreis in der Farbe des Dashboards
-- 📹 **Kameras**: Livebild, eigene Tabs, Vollbild in hoher Auflösung, letzte Erkennungen (HA-Medien, SMB, NFS, lokal)
-  ; Vollbild schließt sich nach einer Wartezeit selbst (Einstellungen › Anzeige), nie während einer Erkennung
-  ; 🧱 **Kamerawand**: Raster pro Tab oder alle Kameras, über die Tabs oder den Startbildschirm, live je nach
-  Stromversorgung (Netz, Solar, Akku); eine Türklingel kann ihre Kamera groß mit anderen als Miniaturen öffnen
+- 📹 **Kameras**: Livebild, eigene Tabs, Vollbild in hoher Auflösung mit Zoom, letzte Erkennungen und ihr Verlauf
+  (HA-Medien, SMB, NFS, lokal); Vollbild schließt sich nach einer Wartezeit selbst (Einstellungen › Anzeige), nie
+  während einer Erkennung
+  ; 🧱 **Kamerawand**: Raster pro Tab oder alle Kameras, über die Tabs, den Startbildschirm oder die Kachel „+N“, live
+  je nach Stromversorgung (Netz, Solar, Akku); eine Türklingel kann ihre Kamera groß mit anderen als Miniaturen öffnen
 - 🚨 **Warnungen**: native Umsetzung der [AlertTicker Card](https://github.com/djdevil/AlertTicker-Card), 63 Themes,
   Ton, Sprachausgabe und Benachrichtigungen
 - 🌦️ **Wetter und Diagramme**: Vorhersage, Windy-Radar, Stromverbrauch, Spritpreise mit der günstigsten Tankstelle
@@ -84,6 +85,10 @@ Ein Raspberry Pi 4 oder 5 mit Touchscreen ergibt ein gutes Wandpanel. Zuerst And
 Eine USB-Webcam wählst du in Einstellungen › Ruhezustand & Anwesenheit › *Kamera*. Ohne Google-Dienste ist das
 Freistellen der Avatare etwas ungenauer. Details: [technische Referenz](docs/reference.fr.md#raspberry-pi) (Französisch).
 
+⚡ **Stromversorgung**: das offizielle Netzteil verwenden (5,1 V / 3 A für den Pi 4, 5 V / 5 A für den Pi 5). Der Pi
+handelt kein USB Power Delivery aus: ein Dock- oder Ladegerätanschluss ist oft zu schwach, besonders mit USB-Webcams.
+Sinkt die Spannung (HDMI-Signal weg, Ruckeln), zeigt die App unten *Stromversorgung zu schwach* an.
+
 ## ⚙️ Im Alltag
 
 - ⚙️ **Einstellungen**: lange auf die obere linke Ecke drücken (Verbindung, Anzeige, Ruhezustand, Zugangscode,
@@ -122,6 +127,9 @@ adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin
 📷 Ohne Computer: *Tablet vorbereiten* (unten) zeigt einen QR-Code, der nach dem Zurücksetzen auf dem
 Begrüßungsbildschirm gescannt wird (6-mal auf dieselbe Stelle tippen). Einfacher: die App als Startbildschirm wählen; sie
 kommt mit der Home-Taste und beim Start zurück, aber eine Android-Geste kann das Bildschirmfixieren lösen.
+
+🔁 Als Geräteinhaber kann die App das Gerät auch neu starten: Einstellungen › Sicherheit › *Gerät neu starten*
+(Android erlaubt einer App nicht, es auszuschalten).
 
 ⚠️ Vor dem Deinstallieren: Einstellungen › Sicherheit › *Geräteinhaber-Rechte entfernen*.
 
