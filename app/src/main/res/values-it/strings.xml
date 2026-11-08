@@ -193,7 +193,7 @@
     <string name="idle_seconds">%1$d s</string>
     <string name="idle_minutes">%1$d min</string>
     <string name="presence">Rilevamento della presenza</string>
-    <string name="presence_help">Usa la fotocamera frontale per rilevare il movimento davanti al tablet. Le immagini sono analizzate sul dispositivo e mai inviate.</string>
+    <string name="presence_help">Usa la fotocamera del tablet (scelta qui sotto) per rilevare il movimento davanti. Le immagini sono analizzate sul dispositivo e mai inviate.</string>
     <string name="sensitivity">Sensibilità</string>
     <string name="sensitivity_low">Bassa</string>
     <string name="sensitivity_medium">Media</string>
@@ -878,4 +878,12 @@
     <string name="camera_event_also_help">Altre telecamere mostrate in miniatura accanto a questa.</string>
     <string name="camera_name">Nome</string>
     <string name="camera_name_help">Mostrato nel muro di telecamere. Vuoto: il nome dell\'area dei rilevamenti, altrimenti quello dell\'entità.</string>
+    <string name="camera_choice">Fotocamera</string>
+    <string name="camera_choice_help">Serve per il rilevamento della presenza e le foto degli avatar. Una webcam USB compare qui se il dispositivo la supporta (Android su Raspberry Pi, per esempio).</string>
+    <string name="camera_auto">Automatica (%1$s)</string>
+    <string name="camera_facing_front">Anteriore</string>
+    <string name="camera_facing_back">Posteriore</string>
+    <string name="camera_facing_usb">USB</string>
+    <string name="camera_none">Nessuna fotocamera trovata su questo dispositivo.</string>
+    <string name="camera_preview">Anteprima</string>
 </resources>

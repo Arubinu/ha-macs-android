@@ -58,7 +58,8 @@ personalizadas y sin nada que configurar en Home Assistant.
 
 ## 🚀 Instalación
 
-Todavía no hay ningún APK publicado: hay que compilarlo desde el código fuente.
+Descarga el APK de la [última Release](https://github.com/Arubinu/ha-macs-android/releases/latest) (`…-arm64-v8a.apk` para casi todas las tabletas recientes) e
+instálalo: después la app se actualiza sola. Para compilarlo tú mismo desde el código fuente:
 
 ```sh
 # Se necesitan Android SDK (plataforma 36) y JDK 17
@@ -68,6 +69,13 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 En el primer arranque, el **asistente** encuentra Home Assistant en la red, inicia sesión y adapta el panel a tu casa.
 ¿Ya tienes una copia de seguridad? **Impórtala** en el primer paso y listo.
+
+## 🍓 Raspberry Pi
+
+Una Raspberry Pi 4 o 5 con pantalla táctil es un buen panel de pared: instala Android (LineageOS de KonstaKANG) y luego
+el APK `arm64-v8a`. Una webcam USB se elige en Ajustes › Reposo y presencia › *Cámara*. Sin los servicios de Google, el
+recorte de los avatares es algo menos preciso. Detalles: [referencia técnica](docs/reference.fr.md#raspberry-pi) (en
+francés).
 
 ## ⚙️ En el día a día
 

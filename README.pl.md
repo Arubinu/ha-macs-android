@@ -56,7 +56,8 @@ niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 
 ## 🚀 Instalacja
 
-Nie ma jeszcze opublikowanego pliku APK: należy go zbudować ze źródeł.
+Pobierz plik APK z [najnowszego wydania](https://github.com/Arubinu/ha-macs-android/releases/latest) (`…-arm64-v8a.apk` dla prawie wszystkich nowych tabletów) i
+zainstaluj go: potem aplikacja aktualizuje się sama. Aby zbudować ją samodzielnie ze źródeł:
 
 ```sh
 # Wymagane Android SDK (platforma 36) i JDK 17
@@ -66,6 +67,13 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 Przy pierwszym uruchomieniu **kreator** znajduje Home Assistant w sieci i loguje się, a następnie dopasowuje pulpit do Twojego
 domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.
+
+## 🍓 Raspberry Pi
+
+Raspberry Pi 4 lub 5 z ekranem dotykowym to dobry panel ścienny: zainstaluj na nim Androida (LineageOS od KonstaKANG),
+a potem plik APK `arm64-v8a`. Kamerę USB wybiera się w Ustawienia › Czuwanie i obecność › *Kamera*. Bez usług Google
+wycinanie awatarów jest nieco mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.fr.md#raspberry-pi)
+(po francusku).
 
 ## ⚙️ Na co dzień
 

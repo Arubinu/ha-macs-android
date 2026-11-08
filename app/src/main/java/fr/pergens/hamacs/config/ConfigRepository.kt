@@ -28,6 +28,8 @@ data class Settings(
     val presenceDetection: Boolean,
     /** 0 = faible, 1 = moyenne, 2 = élevée. */
     val presenceSensitivity: Int,
+    /** Caméra de la tablette (identifiant Camera2 ; vide = automatique : avant, sinon webcam USB, sinon arrière). */
+    val cameraId: String = "",
     /** Atténuation de l'écran après ce délai sans activité (0 = jamais). */
     val dimSeconds: Int,
     /** Luminosité atténuée, de 0.01 à 1. */
@@ -85,6 +87,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
         idleSeconds = prefs.getInt("idle_seconds", 120),
         presenceDetection = prefs.getBoolean("presence_detection", true),
         presenceSensitivity = prefs.getInt("presence_sensitivity", 1),
+        cameraId = prefs.getString("camera_id", null) ?: "",
         dimSeconds = prefs.getInt("dim_seconds", 0),
         dimLevel = prefs.getFloat("dim_level", 0.1f),
         tapFullscreen = prefs.getBoolean("tap_fullscreen", false),
@@ -112,6 +115,7 @@ class ConfigRepository(private val context: Context, private val http: OkHttpCli
             .putInt("idle_seconds", s.idleSeconds)
             .putBoolean("presence_detection", s.presenceDetection)
             .putInt("presence_sensitivity", s.presenceSensitivity)
+            .putString("camera_id", s.cameraId)
             .putInt("dim_seconds", s.dimSeconds)
             .putFloat("dim_level", s.dimLevel)
             .putBoolean("tap_fullscreen", s.tapFullscreen)

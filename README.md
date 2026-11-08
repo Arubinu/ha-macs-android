@@ -55,7 +55,8 @@ nothing to set up in Home Assistant.
 
 ## 🚀 Installation
 
-No APK is published yet: build it from the sources.
+Download the APK of the [latest Release](https://github.com/Arubinu/ha-macs-android/releases/latest) (`…-arm64-v8a.apk` for almost every recent tablet) and install it:
+the app then updates itself. To build it from the sources instead:
 
 ```sh
 # Android SDK (platform 36) and JDK 17 required
@@ -65,6 +66,12 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 On first launch, the **wizard** finds Home Assistant on the network and signs in, then adapts the dashboard to your
 home. Already have a backup? **Import** it on the first step and you are done.
+
+## 🍓 Raspberry Pi
+
+A Raspberry Pi 4 or 5 with a touchscreen makes a good wall panel: install Android on it (LineageOS by KonstaKANG), then
+the `arm64-v8a` APK. A USB webcam is chosen in Settings › Standby & presence › *Camera*. Without Google services, avatar
+cut-outs are a bit less precise. Details: [technical reference](docs/reference.fr.md#raspberry-pi).
 
 ## ⚙️ Everyday use
 

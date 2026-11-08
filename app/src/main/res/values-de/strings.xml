@@ -193,7 +193,7 @@
     <string name="idle_seconds">%1$d s</string>
     <string name="idle_minutes">%1$d Min.</string>
     <string name="presence">Anwesenheitserkennung</string>
-    <string name="presence_help">Nutzt die Frontkamera, um Bewegungen vor dem Tablet zu erkennen. Die Bilder werden auf dem Gerät ausgewertet und nie gesendet.</string>
+    <string name="presence_help">Nutzt die Kamera des Tablets (unten gewählt), um Bewegungen davor zu erkennen. Die Bilder werden auf dem Gerät ausgewertet und nie gesendet.</string>
     <string name="sensitivity">Empfindlichkeit</string>
     <string name="sensitivity_low">Niedrig</string>
     <string name="sensitivity_medium">Mittel</string>
@@ -878,4 +878,12 @@
     <string name="camera_event_also_help">Weitere Kameras als Miniaturen neben dieser.</string>
     <string name="camera_name">Name</string>
     <string name="camera_name_help">In der Kamerawand angezeigt. Leer: der Name aus dem Erkennungsbereich, sonst der der Entität.</string>
+    <string name="camera_choice">Kamera</string>
+    <string name="camera_choice_help">Für die Anwesenheitserkennung und die Fotos der Avatare. Eine USB-Webcam erscheint hier, wenn das Gerät sie unterstützt (zum Beispiel Android auf dem Raspberry Pi).</string>
+    <string name="camera_auto">Automatisch (%1$s)</string>
+    <string name="camera_facing_front">Vorne</string>
+    <string name="camera_facing_back">Hinten</string>
+    <string name="camera_facing_usb">USB</string>
+    <string name="camera_none">Keine Kamera auf diesem Gerät gefunden.</string>
+    <string name="camera_preview">Vorschau</string>
 </resources>

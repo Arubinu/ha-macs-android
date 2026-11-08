@@ -20,6 +20,8 @@
 
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- Webcam USB (caméra « externe ») : Android sur Raspberry Pi, certains boîtiers. -->
+    <uses-feature android:name="android.hardware.camera.external" android:required="false" />
 
     <!-- Kiosk: find the system launcher to open when leaving kiosk mode. -->
     <queries>

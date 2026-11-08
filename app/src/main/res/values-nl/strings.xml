@@ -193,7 +193,7 @@
     <string name="idle_seconds">%1$d s</string>
     <string name="idle_minutes">%1$d min</string>
     <string name="presence">Aanwezigheidsdetectie</string>
-    <string name="presence_help">Gebruikt de voorcamera om beweging voor de tablet te detecteren. Beelden worden op het apparaat geanalyseerd en nooit verzonden.</string>
+    <string name="presence_help">Gebruikt de camera van de tablet (hieronder gekozen) om beweging ervoor te detecteren. Beelden worden op het apparaat geanalyseerd en nooit verzonden.</string>
     <string name="sensitivity">Gevoeligheid</string>
     <string name="sensitivity_low">Laag</string>
     <string name="sensitivity_medium">Gemiddeld</string>
@@ -878,4 +878,12 @@
     <string name="camera_event_also_help">Andere camera\'s als miniaturen naast deze.</string>
     <string name="camera_name">Naam</string>
     <string name="camera_name_help">Getoond in de camerawand. Leeg: de naam uit het detectiegebied, anders die van de entiteit.</string>
+    <string name="camera_choice">Camera</string>
+    <string name="camera_choice_help">Voor de aanwezigheidsdetectie en de foto\'s van de avatars. Een USB-webcam verschijnt hier als het apparaat die ondersteunt (bijvoorbeeld Android op een Raspberry Pi).</string>
+    <string name="camera_auto">Automatisch (%1$s)</string>
+    <string name="camera_facing_front">Voor</string>
+    <string name="camera_facing_back">Achter</string>
+    <string name="camera_facing_usb">USB</string>
+    <string name="camera_none">Geen camera gevonden op dit apparaat.</string>
+    <string name="camera_preview">Voorbeeld</string>
 </resources>

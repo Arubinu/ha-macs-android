@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import fr.pergens.hamacs.ui.theme.parseCssColor
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -1001,7 +1002,16 @@ private fun IdleSection(cameraPermissionTick: Int, requestCamera: () -> Unit) {
                 }
             } else {
                 Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.sensitivity), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+                    // Titre et état de la détection sur la même ligne (état à droite).
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.sensitivity), Modifier.weight(1f), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+                        val ago = ((now - lastMotion) / 1000).toInt()
+                        when {
+                            lastMotion == 0L -> StatusChip(TextSecondary, stringResource(R.string.presence_waiting))
+                            ago < 3 -> StatusChip(Success, stringResource(R.string.presence_now_detected))
+                            else -> StatusChip(TextSecondary, stringResource(R.string.presence_last, ago))
+                        }
+                    }
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         listOf(R.string.sensitivity_low, R.string.sensitivity_medium, R.string.sensitivity_high).forEachIndexed { i, res ->
                             SegmentedButton(
@@ -1011,14 +1021,81 @@ private fun IdleSection(cameraPermissionTick: Int, requestCamera: () -> Unit) {
                             ) { Text(stringResource(res)) }
                         }
                     }
-                    val ago = ((now - lastMotion) / 1000).toInt()
-                    when {
-                        lastMotion == 0L -> StatusChip(TextSecondary, stringResource(R.string.presence_waiting))
-                        ago < 3 -> StatusChip(Success, stringResource(R.string.presence_now_detected))
-                        else -> StatusChip(TextSecondary, stringResource(R.string.presence_last, ago))
-                    }
+                    CameraChoice(settings.cameraId) { id -> app.config.update { it.copy(cameraId = id) } }
                 }
             }
+        }
+    }
+}
+
+/**
+ * Caméra de la tablette (détection de présence, photo des avatars) : automatique ou une caméra précise ; les webcams
+ * USB apparaissent comme caméras externes. Liste relue toutes les 3 s (webcam branchée ou débranchée).
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun CameraChoice(selected: String, onSelect: (String) -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    var cams by remember { mutableStateOf(fr.pergens.hamacs.presence.Cameras.list(ctx)) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            kotlinx.coroutines.delay(3_000)
+            cams = fr.pergens.hamacs.presence.Cameras.list(ctx)
+        }
+    }
+    val label = @Composable { c: fr.pergens.hamacs.presence.Cameras.Info ->
+        val same = cams.filter { it.facing == c.facing }
+        val base = stringResource(when (c.facing) {
+            fr.pergens.hamacs.presence.Cameras.Facing.Front -> R.string.camera_facing_front
+            fr.pergens.hamacs.presence.Cameras.Facing.Back -> R.string.camera_facing_back
+            fr.pergens.hamacs.presence.Cameras.Facing.External -> R.string.camera_facing_usb
+        })
+        if (same.size > 1) "$base ${same.indexOf(c) + 1}" else base
+    }
+    val auto = fr.pergens.hamacs.presence.Cameras.pick(ctx, null)
+    Text(stringResource(R.string.camera_choice), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
+    if (cams.isEmpty()) {
+        Text(stringResource(R.string.camera_none), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+        return
+    }
+    // Aperçu de la caméra utilisée (même ouverture que la détection de présence, qui continue) : bouton au bout de la
+    // ligne des caméras, séparé par un trait.
+    var show by remember { mutableStateOf(false) }
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
+        itemVerticalAlignment = Alignment.CenterVertically,
+    ) {
+        val chip = @Composable { on: Boolean, text: String, id: String ->
+            FilterChip(
+                selected = on, onClick = { onSelect(id) }, label = { Text(text) }, modifier = Modifier.heightIn(min = 40.dp),
+                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+            )
+        }
+        val chosenMissing = selected.isNotBlank() && cams.none { it.id == selected }
+        chip(selected.isBlank() || chosenMissing, stringResource(R.string.camera_auto, auto?.let { label(it) } ?: "—"), "")
+        cams.forEach { c -> chip(selected == c.id, label(c), c.id) }
+        Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(28.dp).background(Outline))
+        FilterChip(
+            selected = show, onClick = { show = !show }, label = { Text(stringResource(R.string.camera_preview)) },
+            leadingIcon = { HaIcon(if (show) "mdi:eye-off-outline" else "mdi:eye-outline", size = 18.dp) },
+            modifier = Modifier.heightIn(min = 40.dp),
+            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+        )
+    }
+    Text(stringResource(R.string.camera_choice_help), style = TextStyle(fontSize = 13.sp, color = TextSecondary))
+    if (show) {
+        val view = remember {
+            androidx.camera.view.PreviewView(ctx).apply { scaleType = androidx.camera.view.PreviewView.ScaleType.FIT_CENTER }
+        }
+        androidx.compose.runtime.DisposableEffect(view) {
+            fr.pergens.hamacs.App.instance.presence.setPreview(view.surfaceProvider)
+            onDispose { fr.pergens.hamacs.App.instance.presence.setPreview(null) }
+        }
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            androidx.compose.ui.viewinterop.AndroidView(
+                { view },
+                Modifier.fillMaxWidth(0.6f).then(Modifier.aspectRatio(4f / 3f)).clip(RoundedCornerShape(12.dp)).background(Color.Black),
+            )
         }
     }
 }

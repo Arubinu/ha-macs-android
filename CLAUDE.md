@@ -217,6 +217,13 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Horloge de l'accueil** (`ClockCard`) : ligne météo dessous (icône, température, ciel, mini / maxi du jour), active
   par défaut ; entité = surcharge `clock` (`weather`, `weather_entity`, éditeur `ClockFields`, `EditTarget.Clock`)
   sinon l'entité météo de M.A.C.S.
+- **Caméra de la tablette** (`presence/Cameras.kt`, pref `camera_id`, vide = automatique : avant, sinon externe/USB,
+  sinon arrière) : choix et *Aperçu* dans Réglages › Veille et présence (aperçu ajouté à la même ouverture que la
+  détection, `PresenceDetector.setPreview`). Sert à la présence et à la photo des avatars (le bouton passe d'une caméra
+  à l'autre). Robustesse : analyse sous `runCatching`, erreur de caméra → nouvel essai à 10 s, branchement /
+  débranchement suivi par `CameraManager.AvailabilityCallback` (liste comparée, pas l'état « disponible ») ; aucune
+  caméra → rien d'ouvert. Tablette de l'utilisateur : caméra arrière contre le mur, ne pas la laisser choisie.
+  Raspberry Pi : section dans les README et `docs/reference.fr.md` (non testé sur un vrai Pi).
 - **Détails au toucher** : graphique à plusieurs courbes → `GraphDetailsSheet` (valeur, écart, 3 derniers changements
   sur 7 jours) ; barre de présence → `PresenceDetailsSheet` (périodes des 24 h).
 - **Bouton Dashboard** : `assets/images/dashboard-button.webp` (WebP animé, Android 9+), généré par
@@ -237,7 +244,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   `RELEASE_KEYSTORE_BASE64`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS` (`hamacs`), `RELEASE_KEY_PASSWORD` → 5 APK
   joints à une Release brouillon du tag, préversion si le tag contient « - »). Notes (`private/release-notes-<tag>.md`,
   badge tree-hash) ajoutées puis publication à la main. En local, la clé est dans `local.properties`
-  (`release.store.file=private/release.jks`…), sinon clé de debug. `gh` n'est pas installé : API GitHub avec le jeton
+  (`release.store.file=private/release.jks`…, mots de passe au format `.properties` : `\` doublés), sinon clé de debug.
+  La tablette de l'utilisateur a l'app signée release (pas de `run-as`) : tester avec `assembleRelease` + `install -r`. `gh` n'est pas installé : API GitHub avec le jeton
   de `git credential fill` (jamais affiché ; suivre les redirections des journaux sans l'en-tête). Modifier un brouillon
   par l'API sans `tag_name` le détache de son tag (`untagged-…`) : toujours renvoyer `tag_name`. v1.0.0 publiée le
   2026-11-07, v1.0.1 (import des nombres) le même jour. Depuis, plus de format cassé sans lecture de l'ancien.

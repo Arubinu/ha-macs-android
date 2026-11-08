@@ -7,7 +7,6 @@ import android.graphics.Matrix
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -541,12 +540,17 @@ private fun AvatarCamera(onClose: () -> Unit, onPhoto: (Bitmap) -> Unit) {
     LaunchedEffect(Unit) { if (!granted) ask.launch(Manifest.permission.CAMERA) }
     var failed by remember { mutableStateOf(false) }
     var countdown by remember { mutableIntStateOf(0) }
-    var front by remember { mutableStateOf(true) }
+    // Caméra des réglages (sinon avant, sinon webcam USB, sinon arrière) ; le bouton passe à la suivante.
+    val cams = remember(granted) { fr.pergens.hamacs.presence.Cameras.list(context) }
+    var cam by remember(granted) {
+        mutableStateOf(fr.pergens.hamacs.presence.Cameras.pick(context, App.instance.config.settings.value.cameraId))
+    }
+    val front = cam?.facing == fr.pergens.hamacs.presence.Cameras.Facing.Front
     val capture = remember { ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build() }
     val previewView = remember { PreviewView(context).apply { scaleType = PreviewView.ScaleType.FILL_CENTER } }
     val scope = rememberCoroutineScope()
 
-    DisposableEffect(granted, front) {
+    DisposableEffect(granted, cam?.id) {
         App.instance.presence.stop()
         var provider: ProcessCameraProvider? = null
         if (granted) {
@@ -555,8 +559,7 @@ private fun AvatarCamera(onClose: () -> Unit, onPhoto: (Bitmap) -> Unit) {
                 runCatching {
                     val p = future.get()
                     provider = p
-                    val wanted = if (front) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
-                    val selector = if (p.hasCamera(wanted)) wanted else if (front) CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+                    val selector = fr.pergens.hamacs.presence.Cameras.selector(cam?.id ?: error("aucune caméra"))
                     val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
                     p.unbindAll()
                     p.bindToLifecycle(owner, selector, preview, capture)
@@ -605,7 +608,9 @@ private fun AvatarCamera(onClose: () -> Unit, onPhoto: (Bitmap) -> Unit) {
                 HaIcon("mdi:close", size = 26.dp, tint = Color.White)
             }
             Row(Modifier.align(Alignment.BottomCenter).padding(24.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Pill("mdi:camera-flip-outline", stringResource(R.string.avatar_camera_switch)) { front = !front }
+                if (cams.size > 1) Pill("mdi:camera-flip-outline", stringResource(R.string.avatar_camera_switch)) {
+                    cam = cams[(cams.indexOfFirst { it.id == cam?.id } + 1) % cams.size]
+                }
                 Pill("mdi:camera", stringResource(R.string.avatar_camera_capture), primary = true, enabled = granted && !failed && countdown == 0) { shoot() }
             }
         }

@@ -206,7 +206,7 @@
     <string name="idle_seconds">%1$d s</string>
     <string name="idle_minutes">%1$d min</string>
     <string name="presence">Détection de présence</string>
-    <string name="presence_help">Utilise la caméra frontale pour détecter un mouvement devant la tablette. Les images sont analysées sur l\'appareil et ne sont jamais envoyées.</string>
+    <string name="presence_help">Utilise la caméra de la tablette (choisie plus bas) pour détecter un mouvement devant elle. Les images sont analysées sur l\'appareil et ne sont jamais envoyées.</string>
     <string name="sensitivity">Sensibilité</string>
     <string name="sensitivity_low">Faible</string>
     <string name="sensitivity_medium">Moyenne</string>
@@ -896,4 +896,12 @@
     <string name="camera_event_also_help">Autres caméras affichées en vignettes à côté de celle-ci.</string>
     <string name="camera_name">Nom</string>
     <string name="camera_name_help">Affiché dans le mur de caméras. Vide : le nom de la zone des détections, sinon celui de l\'entité.</string>
+    <string name="camera_choice">Caméra</string>
+    <string name="camera_choice_help">Sert à la détection de présence et aux photos des avatars. Une webcam USB apparaît ici si l\'appareil la prend en charge (Android sur Raspberry Pi, par exemple).</string>
+    <string name="camera_auto">Automatique (%1$s)</string>
+    <string name="camera_facing_front">Avant</string>
+    <string name="camera_facing_back">Arrière</string>
+    <string name="camera_facing_usb">USB</string>
+    <string name="camera_none">Aucune caméra trouvée sur cet appareil.</string>
+    <string name="camera_preview">Aperçu</string>
 </resources>

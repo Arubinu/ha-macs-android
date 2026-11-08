@@ -57,7 +57,8 @@ navigateur, sans cartes personnalisées et sans rien à configurer dans Home Ass
 
 ## 🚀 Installation
 
-Aucun APK n'est encore publié : il faut le compiler depuis les sources.
+Téléchargez l'APK de la [dernière Release](https://github.com/Arubinu/ha-macs-android/releases/latest) (`…-arm64-v8a.apk` pour presque toutes les tablettes récentes) et
+installez-le : l'app se met ensuite à jour toute seule. Pour le compiler vous-même depuis les sources :
 
 ```sh
 # Android SDK (plateforme 36) et JDK 17 nécessaires
@@ -67,6 +68,12 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'y connecte, puis adapte le tableau de bord
 à votre maison. Vous avez déjà une sauvegarde ? **Importez-la** dès la première étape, et c'est terminé.
+
+## 🍓 Raspberry Pi
+
+Un Raspberry Pi 4 ou 5 avec un écran tactile fait un bon écran mural : installez-y Android (LineageOS de KonstaKANG),
+puis l'APK `arm64-v8a`. Une webcam USB se choisit dans Réglages › Veille et présence › *Caméra*. Sans les services
+Google, le détourage des avatars est un peu moins précis. Détails : [référence technique](docs/reference.fr.md#raspberry-pi).
 
 ## ⚙️ Au quotidien
 

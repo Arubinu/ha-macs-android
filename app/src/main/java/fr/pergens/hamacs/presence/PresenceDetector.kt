@@ -3,7 +3,6 @@ package fr.pergens.hamacs.presence
 import android.content.Context
 import android.util.Log
 import android.util.Size
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.core.resolutionselector.ResolutionStrategy
@@ -17,7 +16,8 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 
 /**
- * Détection de mouvement devant la tablette avec la caméra frontale, entièrement sur l'appareil :
+ * Détection de mouvement devant la tablette avec sa caméra (choisie dans les réglages, sinon frontale, sinon webcam
+ * USB), entièrement sur l'appareil :
  * l'image est réduite à une grille de luminance 32×24, comparée à la précédente ~3 fois par seconde.
  * Aucune image n'est conservée ni transmise.
  */
@@ -32,14 +32,52 @@ class PresenceDetector(private val context: Context) {
     private var lastFrame = 0L
     @Volatile var sensitivity = 1
 
+    private var owner: LifecycleOwner? = null
+    /** Aperçu affiché dans les réglages (null = aucun) : ajouté à la même caméra que l'analyse. */
+    private var preview: androidx.camera.core.Preview.SurfaceProvider? = null
+
+    /** Affiche (ou retire, null) l'aperçu de la caméra utilisée, sans interrompre la détection. */
+    fun setPreview(provider: androidx.camera.core.Preview.SurfaceProvider?) {
+        preview = provider
+        owner?.let { start(it) }
+    }
+
+    /** Caméras présentes au dernier démarrage : une caméra branchée ou débranchée relance la détection. */
+    private var knownIds: Set<String> = emptySet()
+    private var listening = false
+
+    private fun watchCameras() {
+        if (listening) return
+        listening = true
+        val manager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
+        manager.registerAvailabilityCallback(object : android.hardware.camera2.CameraManager.AvailabilityCallback() {
+            override fun onCameraAvailable(id: String) = changed()
+            override fun onCameraUnavailable(id: String) = changed()
+            // Disponible / indisponible change aussi quand une app ouvre la caméra : seule la liste compte.
+            private fun changed() {
+                val ids = Cameras.list(context).map { it.id }.toSet()
+                if (ids != knownIds) owner?.let { start(it) }
+            }
+        }, main)
+    }
+
     fun start(owner: LifecycleOwner) {
+        this.owner = owner
+        watchCameras()
+        knownIds = Cameras.list(context).map { it.id }.toSet()
         val future = ProcessCameraProvider.getInstance(context)
         future.addListener({
             runCatching {
                 val p = future.get()
                 provider = p
-                val selector = if (p.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA
-                else CameraSelector.DEFAULT_BACK_CAMERA
+                // Caméra choisie dans les réglages, sinon avant, sinon webcam USB, sinon arrière.
+                val cam = Cameras.pick(context, fr.pergens.hamacs.App.instance.config.settings.value.cameraId)
+                if (cam == null) {
+                    // Aucune caméra : rien à ouvrir ; un branchement relancera la détection (watchCameras).
+                    p.unbindAll()
+                    return@runCatching
+                }
+                val selector = Cameras.selector(cam.id)
                 val analysis = ImageAnalysis.Builder()
                     .setResolutionSelector(
                         ResolutionSelector.Builder()
@@ -50,24 +88,59 @@ class PresenceDetector(private val context: Context) {
                     .build()
                 analysis.setAnalyzer(executor) { image ->
                     image.use {
-                        val now = System.currentTimeMillis()
-                        if (now - lastFrame < 330) return@use
-                        lastFrame = now
-                        val plane = it.planes[0]
-                        val grid = downsample(plane.buffer, plane.rowStride, it.width, it.height)
-                        previous?.let { prev -> if (isMotion(prev, grid)) _lastMotion.value = now }
-                        previous = grid
+                        // Fil à part : une image inattendue (format d'une webcam USB…) ne doit jamais faire planter l'app.
+                        runCatching {
+                            val now = System.currentTimeMillis()
+                            if (now - lastFrame < 330) return@use
+                            lastFrame = now
+                            val plane = it.planes[0]
+                            val grid = downsample(plane.buffer, plane.rowStride, it.width, it.height)
+                            previous?.let { prev -> if (isMotion(prev, grid)) _lastMotion.value = now }
+                            previous = grid
+                        }.onFailure { e -> noteOnce("analyse", e) }
                     }
                 }
                 p.unbindAll()
-                p.bindToLifecycle(owner, selector, analysis)
-            }.onFailure { Log.w(TAG, "Caméra indisponible : ${it.message}") }
+                val shown = preview?.let { sp -> androidx.camera.core.Preview.Builder().build().also { it.surfaceProvider = sp } }
+                val camera = if (shown != null) p.bindToLifecycle(owner, selector, analysis, shown)
+                else p.bindToLifecycle(owner, selector, analysis)
+                // Caméra en erreur : nouvel essai dans 10 s (un débranchement est vu par watchCameras).
+                watched?.removeObservers(owner)
+                watched = camera.cameraInfo.cameraState
+                camera.cameraInfo.cameraState.observe(owner) { st ->
+                    if (st.error != null && st.type == androidx.camera.core.CameraState.Type.CLOSED) scheduleRetry("erreur caméra ${st.error?.code}")
+                }
+            }.onFailure {
+                Log.w(TAG, "Caméra indisponible : ${it.message}")
+                noteOnce("ouverture", it)
+                scheduleRetry(it.message ?: "ouverture impossible")
+            }
         }, ContextCompat.getMainExecutor(context))
     }
+
+    /** État de la caméra suivi (un seul observateur, retiré à chaque nouvelle ouverture). */
+    private var watched: androidx.lifecycle.LiveData<androidx.camera.core.CameraState>? = null
+    private val main = android.os.Handler(android.os.Looper.getMainLooper())
+    private var retryPending = false
+
+    /** Relance de la détection après une erreur de caméra (une seule relance en attente à la fois). */
+    private fun scheduleRetry(why: String) {
+        if (retryPending) return
+        retryPending = true
+        Log.w(TAG, "Nouvel essai de la caméra dans 10 s ($why)")
+        main.postDelayed({
+            retryPending = false
+            owner?.let { start(it) }
+        }, 10_000)
+    }
+
+    private fun noteOnce(what: String, e: Throwable) =
+        fr.pergens.hamacs.CrashGuard.note(context, "presence:$what:${e.javaClass.simpleName}", "Caméra (présence)", "$what : ${e.message}", e)
 
     fun stop() {
         provider?.unbindAll()
         provider = null
+        owner = null
         previous = null
     }
 

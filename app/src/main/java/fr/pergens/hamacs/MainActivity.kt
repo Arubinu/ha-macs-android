@@ -156,7 +156,7 @@ class MainActivity : ComponentActivity() {
                 if (settings.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            LaunchedEffect(settings.presenceDetection, settings.presenceSensitivity) { updatePresence() }
+            LaunchedEffect(settings.presenceDetection, settings.presenceSensitivity, settings.cameraId) { updatePresence() }
             // Atténuation de l'écran : contact ou mouvement devant la caméra = activité.
             val lastMotion by app.presence.lastMotion.collectAsState()
             val lastActivity = maxOf(state.lastInteraction, if (settings.presenceDetection) lastMotion else 0L)

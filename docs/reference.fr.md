@@ -188,6 +188,40 @@ Renderer ») et crée une entité `media_player` : `tts.speak`, `media_player.pl
 volume est celui des médias d'Android. Une pastille affiche la lecture en cours avec pause et arrêt (en bas à gauche sur
 l'accueil, à côté de la barre d'onglets ailleurs). Port HTTP fixe : 49494.
 
+## Raspberry Pi
+
+L'app n'a besoin que d'Android : sur un Raspberry Pi, on installe Android puis l'APK `arm64-v8a` de la Release.
+**Non testé à ce jour sur un vrai Pi** : les points ci-dessous sont à confirmer.
+
+**Matériel**
+
+- Raspberry Pi 5 (conseillé) ou Pi 4 avec 4 Go de mémoire ou plus, carte microSD rapide (ou SSD), alimentation officielle.
+- Écran tactile : l'écran officiel du Raspberry Pi (Touch Display 2) ou un écran HDMI avec tactile USB. La luminosité
+  réglée par l'app (atténuation, mode nuit) dépend de la prise en charge de l'écran par Android.
+- Caméra (facultative, détection de présence et avatars) : webcam USB, ou module caméra du Pi si la version d'Android
+  le prend en charge.
+
+**Installation**
+
+1. Télécharger la version de LineageOS de KonstaKANG pour le modèle de Pi (Android sans les services Google) et
+   l'écrire sur la carte avec Raspberry Pi Imager (*Use custom*).
+2. Au premier démarrage, activer les options pour les développeurs et le débogage ADB (USB ou sans fil).
+3. Installer l'APK : `adb install ha-macs-android-<version>-arm64-v8a.apk`, ou le télécharger depuis la page des
+   Releases avec le navigateur du Pi (autoriser l'installation d'applications inconnues).
+4. L'assistant de l'app fait le reste. Pour le kiosque complet :
+   `adb shell dpm set-device-owner fr.pergens.hamacs/.kiosk.KioskAdmin` (Réglages › Sécurité › *Préparer la
+   tablette*).
+
+**Différences avec une tablette**
+
+- Pas de services Google : le détourage des avatars utilise le modèle embarqué (contours un peu moins nets).
+- Webcam USB : Android la présente comme une caméra « externe » quand la version le permet. Elle se choisit dans
+  Réglages › Veille et présence › *Caméra* (bouton *Aperçu* pour vérifier) ; une caméra branchée ou débranchée est
+  détectée sans redémarrer l'app.
+- Vidéo des caméras : le Pi 5 n'a pas de décodeur matériel H.264 (le processeur suffit en général pour un ou deux flux
+  1080p) ; les décodeurs proposés dépendent de la version d'Android. Le mur de caméras adapte le nombre de directs
+  simultanés à ce que l'appareil sait décoder (Réglages › Affichage).
+
 ## Passerelle vocale
 
 ```sh

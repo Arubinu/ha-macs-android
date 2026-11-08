@@ -201,7 +201,7 @@
     <string name="idle_seconds">%1$d s</string>
     <string name="idle_minutes">%1$d min</string>
     <string name="presence">Wykrywanie obecności</string>
-    <string name="presence_help">Używa przedniej kamery do wykrywania ruchu przed tabletem. Obrazy są analizowane na urządzeniu i nigdy nie są wysyłane.</string>
+    <string name="presence_help">Używa kamery tabletu (wybranej poniżej) do wykrywania ruchu przed nim. Obrazy są analizowane na urządzeniu i nigdy nie są wysyłane.</string>
     <string name="sensitivity">Czułość</string>
     <string name="sensitivity_low">Niska</string>
     <string name="sensitivity_medium">Średnia</string>
@@ -898,4 +898,12 @@
     <string name="camera_event_also_help">Inne kamery jako miniatury obok tej.</string>
     <string name="camera_name">Nazwa</string>
     <string name="camera_name_help">Wyświetlana na ścianie kamer. Puste: nazwa z obszaru wykryć, w przeciwnym razie nazwa encji.</string>
+    <string name="camera_choice">Kamera</string>
+    <string name="camera_choice_help">Służy do wykrywania obecności i zdjęć awatarów. Kamera USB pojawi się tutaj, jeśli urządzenie ją obsługuje (na przykład Android na Raspberry Pi).</string>
+    <string name="camera_auto">Automatycznie (%1$s)</string>
+    <string name="camera_facing_front">Przednia</string>
+    <string name="camera_facing_back">Tylna</string>
+    <string name="camera_facing_usb">USB</string>
+    <string name="camera_none">Nie znaleziono kamery w tym urządzeniu.</string>
+    <string name="camera_preview">Podgląd</string>
 </resources>
