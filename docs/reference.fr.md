@@ -191,7 +191,12 @@ l'accueil, à côté de la barre d'onglets ailleurs). Port HTTP fixe : 49494.
 ## Raspberry Pi
 
 L'app n'a besoin que d'Android : sur un Raspberry Pi, on installe Android puis l'APK `arm64-v8a` de la Release.
-**Non testé à ce jour sur un vrai Pi** : les points ci-dessous sont à confirmer.
+**Testé sur un Pi 4 (8 Go, LineageOS 23.2 / Android 16, écran HDMI 1920×1080)** : tout l'affichage tient en
+1080 px de haut (la colonne des caméras du tableau de bord déborde un peu en bas) ; accueil ≈ 40 images/s, tableau de
+bord ≈ 25 images/s (processeur, M.A.C.S. compris) ; ≈ 165 Mo de mémoire. Décodage H.264 matériel
+(`c2.v4l2.avc.decoder`) pour le plein écran et le mur (3 directs à la fois sans souci, estimation automatique : 8) ;
+H.265 en logiciel seulement. Sans caméra ni micro : rien ne plante (« Aucune caméra », « Passerelle vocale
+injoignable »). Le Pi 5 n'a pas été essayé.
 
 **Matériel**
 
