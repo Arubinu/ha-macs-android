@@ -153,6 +153,8 @@ private fun FitColumn(
     modifier: Modifier,
     content: @Composable () -> Unit,
 ) {
+    val slack = androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    androidx.compose.runtime.CompositionLocalProvider(LocalColumnSlack provides slack) {
     Layout(content, modifier) { measurables, constraints ->
         val width = constraints.maxWidth
         val loose = Constraints(minWidth = 0, maxWidth = width)
@@ -176,6 +178,7 @@ private fun FitColumn(
         // Sans carte flexible : l'espace libre est réparti entre les blocs (comme SpaceBetween).
         val extra = if (flexCount == 0 && total < availablePx && placeables.size > 1) (availablePx - total) / (placeables.size - 1) else 0
         val height = maxOf(total + extra * (placeables.size - 1).coerceAtLeast(0), minOf(availablePx, total))
+        slack.intValue = extra * (placeables.size - 1).coerceAtLeast(0)
         layout(width, height) {
             var y = 0
             placeables.forEachIndexed { i, p ->
@@ -184,7 +187,15 @@ private fun FitColumn(
             }
         }
     }
+    }
 }
+
+/**
+ * Espace libre (px) qu'une colonne ajustée répartit entre ses blocs. Un bloc qui s'adapte à la hauteur restante
+ * (caméras du bas de colonne) l'ajoute à la place mesurée : sinon, en rétrécissant, il descendrait d'autant et se
+ * croirait toujours à l'étroit.
+ */
+val LocalColumnSlack = androidx.compose.runtime.compositionLocalOf<androidx.compose.runtime.MutableIntState?> { null }
 
 /** Cartes superposées et positionnées (écran d'accueil M.A.C.S.). */
 @Composable

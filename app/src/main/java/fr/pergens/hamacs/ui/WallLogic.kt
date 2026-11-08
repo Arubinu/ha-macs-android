@@ -90,4 +90,23 @@ internal object WallLogic {
         }
         return best
     }
+
+    /**
+     * Colonne de caméras limitée à [available] : nombre de caméras (dans l'ordre, hauteurs [heights], écart [gap])
+     * affichées. Toutes si elles tiennent ; sinon celles qui tiennent avec la tuile « +N » ([moreHeight]) sous elles,
+     * au moins une.
+     */
+    fun visibleCount(heights: List<Float>, gap: Float, available: Float, moreHeight: Float): Int {
+        if (heights.isEmpty()) return 0
+        if (heights.sum() + gap * (heights.size - 1) <= available) return heights.size
+        var used = 0f
+        var k = 0
+        for (h in heights) {
+            val next = used + (if (k > 0) gap else 0f) + h
+            if (next + gap + moreHeight > available) break
+            used = next
+            k++
+        }
+        return k.coerceAtLeast(1)
+    }
 }

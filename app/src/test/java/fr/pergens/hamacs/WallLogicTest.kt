@@ -125,4 +125,20 @@ class WallLogicTest {
     @Test fun `ecran en hauteur - une seule colonne pour deux cameras`() {
         assertEquals(1, WallLogic.bestColumns(2, 800f, 1280f))
     }
+
+    @Test fun `colonne de cameras - toutes si elles tiennent`() {
+        assertEquals(3, WallLogic.visibleCount(listOf(100f, 100f, 100f), 10f, 320f, 50f))
+        assertEquals(0, WallLogic.visibleCount(emptyList(), 10f, 320f, 50f))
+    }
+
+    @Test fun `colonne de cameras - les premieres et la tuile plus N`() {
+        // 4 x 100 + 3 x 10 = 430 > 400 : 3 cameras (320) + 10 + 50 = 380 tiennent.
+        assertEquals(3, WallLogic.visibleCount(listOf(100f, 100f, 100f, 100f), 10f, 400f, 50f))
+        // 3 cameras + tuile = 380 > 360 : 2 seulement.
+        assertEquals(2, WallLogic.visibleCount(listOf(100f, 100f, 100f, 100f), 10f, 360f, 50f))
+    }
+
+    @Test fun `colonne de cameras - au moins une`() {
+        assertEquals(1, WallLogic.visibleCount(listOf(500f, 100f), 10f, 300f, 50f))
+    }
 }

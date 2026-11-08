@@ -53,7 +53,8 @@ fun RoomGrid(card: Card, modifier: Modifier) {
     val rooms = card.objs("rooms")
     // Mode édition : une tuile « Ajouter une pièce » termine la grille.
     val items: List<Card?> = if (editing) rooms + listOf(null) else rooms
-    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(gap)) {
+    // Plus de pièces que la hauteur : la grille défile et s'efface en fondu en bas (comme le calendrier des membres).
+    fr.pergens.hamacs.ui.components.BottomFadeScroll(modifier, card.d("bottom_margin", 24.0).dp, gap) {
         items.withIndex().toList().rows(card.columns(2)).forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
                 row.forEach { (i, room) ->

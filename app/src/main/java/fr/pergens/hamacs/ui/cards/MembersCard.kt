@@ -67,6 +67,7 @@ import fr.pergens.hamacs.ha.StateSpan
 import fr.pergens.hamacs.ha.calendarEvents
 import fr.pergens.hamacs.ha.history
 import fr.pergens.hamacs.ui.LocalDashState
+import fr.pergens.hamacs.ui.components.BottomFadeScroll
 import fr.pergens.hamacs.ui.components.DashCard
 import fr.pergens.hamacs.ui.components.HaIcon
 import fr.pergens.hamacs.ui.components.SectionTitle
@@ -358,19 +359,7 @@ fun CalendarCard(card: Card, modifier: Modifier) {
     val today = LocalDate.now()
     // Hauteur limitée au bas de l'écran moins la marge du bas (= niveau du bas des caméras) : au-delà, la liste
     // défile seule et s'efface en fondu au lieu d'être coupée net.
-    val view = androidx.compose.ui.platform.LocalView.current
-    val density = androidx.compose.ui.platform.LocalDensity.current
-    var top by remember { mutableStateOf<Float?>(null) }
-    val maxHeight = top?.let { with(density) { (view.rootView.height - it).toDp() } - card.d("bottom_margin", 24.0).dp }
-    val scroll = androidx.compose.foundation.rememberScrollState()
-    Box(
-        modifier.fillMaxWidth()
-            .onGloballyPositioned { top = it.positionInWindow().y }
-            // Toujours une hauteur maximale finie (liste défilante dans une colonne qui défile) : provisoire tant
-            // que la position n'est pas mesurée, sinon Compose plante.
-            .heightIn(max = maxHeight?.coerceAtLeast(120.dp) ?: 400.dp),
-    ) {
-    Column(Modifier.fillMaxWidth().verticalScroll(scroll), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    BottomFadeScroll(modifier, card.d("bottom_margin", 24.0).dp, 8.dp) {
         if (events.isEmpty()) {
             Text(stringResource(R.string.events_none), Modifier.fillMaxWidth(), style = TextStyle(fontSize = 14.sp, color = Color(255, 255, 255, 140), textAlign = TextAlign.Center))
         }
@@ -411,17 +400,6 @@ fun CalendarCard(card: Card, modifier: Modifier) {
                 }
             }
         }
-    }
-    val bg = Dash.colors.background
-    if (scroll.canScrollForward) Box(
-        Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
-            .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(bg.copy(alpha = 0f), bg))),
-    )
-    // Liste déjà défilée : fondu court en haut, sous le titre, au lieu d'une coupure nette.
-    if (scroll.canScrollBackward) Box(
-        Modifier.align(Alignment.TopCenter).fillMaxWidth().height(24.dp)
-            .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(bg, bg.copy(alpha = 0f)))),
-    )
     }
 }
 

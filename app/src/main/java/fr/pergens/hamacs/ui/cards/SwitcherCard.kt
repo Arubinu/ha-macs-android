@@ -70,6 +70,8 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
         ?: card.s("default") ?: pageIds.first()
     val select = { p: String -> state.pages[id] = p; state.lastInteraction = System.currentTimeMillis() }
     val vertical = card.s("nav") == "rail"
+    // Onglets de caméras (bloc reconnu par les surcharges) : clé de leur éditeur, et colonne ajustée à la hauteur.
+    val tabsKey = card.s("_key")?.takeIf { it.startsWith("tabs:") } ?: fr.pergens.hamacs.config.BlockOverrides.cameraTabsKey(card)
 
     val content = @Composable {
         AnimatedContent(
@@ -89,7 +91,11 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
             label = "switcher-$id",
         ) { pageId ->
             val page = pages.firstOrNull { it.s("id") == pageId } ?: pages.first()
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
+            // Caméras plus hautes que l'écran : les premières (ordre de l'onglet) et une tuile « +N » vers le mur.
+            // Mode édition : toutes, pour pouvoir régler chacune.
+            if (tabsKey != null && !state.editMode) CameraFitColumn(page.objs("cards"), card.d("bottom_margin", 24.0).dp) {
+                state.wall = fr.pergens.hamacs.ui.WallRequest(page = pageId)
+            } else Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
                 page.objs("cards").forEach { RenderCard(it) }
             }
         }
@@ -108,7 +114,6 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
         "none" -> Box(modifier.fillMaxWidth()) { content() }
         else -> Column(modifier.fillMaxWidth()) {
             // Mode édition : une pilule ✎ ouvre l'éditeur des onglets (onglets de caméras).
-            val tabsKey = card.s("_key")?.takeIf { it.startsWith("tabs:") } ?: fr.pergens.hamacs.config.BlockOverrides.cameraTabsKey(card)
             // Onglets de caméras : leur fenêtre complète ; autres onglets : nom et icône.
             val pagesKey = card.s("_key")?.takeIf { it.startsWith("pages:") } ?: fr.pergens.hamacs.config.BlockOverrides.pagesKey(card)
             PillMenu(pages, current, select, onEdit = when {
