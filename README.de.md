@@ -15,7 +15,8 @@ Custom Cards und ohne Einrichtung in Home Assistant.
   <img src="docs/screenshots/de/cameras-energy.jpg" width="49%" alt="">
 </p>
 <p align="center">
-  <img src="docs/screenshots/de/avatar-editor.jpg" width="66%" alt="">
+  <img src="docs/screenshots/de/avatar-editor.jpg" width="49%" alt="">
+  <img src="docs/screenshots/de/camera-wall.jpg" width="49%" alt="">
 </p>
 <p align="center">📸 <em>Demodaten.</em></p>
 

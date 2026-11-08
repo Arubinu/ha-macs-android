@@ -34,7 +34,7 @@
     <string name="cond_windy">Wietrznie</string>
     <string name="cond_windy_variant">Wietrznie i pochmurno</string>
     <string name="cond_exceptional">Wyjątkowe</string>
-    <string name="detections_none">Brak wykryć w ciągu ostatnich %1$d min</string>
+    <string name="detections_none">Brak wykryć w ciągu ostatnich %1$d minut</string>
     <string name="camera_live">NA ŻYWO</string>
     <string name="camera_loading">Ładowanie ...</string>
     <string name="camera_offline">Kamera offline</string>

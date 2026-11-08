@@ -15,7 +15,8 @@ personalizados e sem nada para configurar no Home Assistant.
   <img src="docs/screenshots/pt/cameras-energy.jpg" width="49%" alt="">
 </p>
 <p align="center">
-  <img src="docs/screenshots/pt/avatar-editor.jpg" width="66%" alt="">
+  <img src="docs/screenshots/pt/avatar-editor.jpg" width="49%" alt="">
+  <img src="docs/screenshots/pt/camera-wall.jpg" width="49%" alt="">
 </p>
 <p align="center">📸 <em>Dados de demonstração.</em></p>
 

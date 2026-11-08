@@ -34,7 +34,7 @@
     <string name="cond_windy">Windig</string>
     <string name="cond_windy_variant">Windig und bewölkt</string>
     <string name="cond_exceptional">Außergewöhnlich</string>
-    <string name="detections_none">Keine Erkennung in den letzten %1$d Min.</string>
+    <string name="detections_none">Keine Erkennung in den letzten %1$d Minuten</string>
     <string name="camera_live">LIVE</string>
     <string name="camera_loading">Wird geladen ...</string>
     <string name="camera_offline">Kamera offline</string>

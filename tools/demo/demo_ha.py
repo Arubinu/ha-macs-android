@@ -180,6 +180,10 @@ def build_states() -> dict[str, dict]:
         'state': 'Vert', 'last_changed': NOW, 'last_updated': NOW,
         'attributes': {'friendly_name': 'Valmont Weather alert', 'Vent violent': 'Vert', 'Orages': 'Vert', 'Pluie-inondation': 'Vert'},
     }
+    # Alimentation des caméras (mur de caméras) : 1 et 2 sur secteur (direct permanent), 3 solaire, 4 sur batterie.
+    for i, charge in ((1, 'chargecomplete'), (2, 'chargecomplete'), (3, 'charging'), (4, 'discharging')):
+        st[f'sensor.argus_{i}_battery_state'] = {'state': charge, 'last_changed': NOW, 'last_updated': NOW,
+                                               'attributes': {'friendly_name': f'Argus {i} Battery state'}}
     return st
 
 
@@ -219,11 +223,26 @@ def history(eid: str, start: datetime, end: datetime) -> list[dict]:
                 last = s
             t += timedelta(minutes=30)
         return rows
+    if eid == 'sensor.argus_3_battery_state':
+        # Panneau solaire : charge le jour, décharge la nuit.
+        t = start.replace(minute=0, second=0, microsecond=0)
+        last = None
+        while t < end:
+            s = 'charging' if 8 <= (t.hour + 1) % 24 < 17 else 'discharging'
+            if s != last:
+                rows.append({'s': s, 'lu': ts(t)})
+                last = s
+            t += timedelta(hours=1)
+        return rows
     state = STATES.get(eid, {}).get('state')
     try:
         base = float(state)
     except (TypeError, ValueError):
-        return [{'s': state or 'unknown', 'lu': ts(start)}]
+        # Etat texte : valeur actuelle depuis son dernier changement (capteur oui/non actif : inactif avant).
+        changed = STATES.get(eid, {}).get('last_changed', start)
+        if eid.startswith('binary_sensor.') and state == 'on' and start < changed < end:
+            return [{'s': 'off', 'lu': ts(start)}, {'s': 'on', 'lu': ts(changed)}]
+        return [{'s': state or 'unknown', 'lu': ts(max(start, changed))}]
     step = timedelta(minutes=5)
     t = start
     is_power = eid.endswith('_power') or eid.endswith('_power_a')
@@ -395,8 +414,9 @@ async def websocket(request):
             elif kind in ('get_services', 'config/label_registry/list', 'assist_pipeline/pipeline/list'):
                 await result(mid, [] if kind != 'get_services' else {})
             elif kind == 'camera/stream':
-                if m.get('entity_id', '').startswith('camera.argus_1'):
-                    await result(mid, {'url': '/demo/stream/argus_1.m3u8'})
+                cam = re.match(r'camera\.(argus_\d)', m.get('entity_id', ''))
+                if cam and (HERE / 'stream' / f'{cam.group(1)}.m3u8').exists():
+                    await result(mid, {'url': f'/demo/stream/{cam.group(1)}.m3u8'})
                 else:
                     await result(mid, success=False)
             elif kind == 'render_template':
@@ -634,20 +654,22 @@ def app() -> web.Application:
 
 
 def ensure_stream():
-    """Flux HLS de la caméra « en direct » (badge DIRECT), généré une fois avec ffmpeg depuis son image."""
-    out = HERE / 'stream' / 'argus_1.m3u8'
-    if out.exists():
-        return
-    import shutil, subprocess
-    ffmpeg = shutil.which('ffmpeg')
-    if not ffmpeg:
-        print('ffmpeg introuvable : pas de flux vidéo (la caméra restera en image fixe).')
-        return
-    out.parent.mkdir(exist_ok=True)
-    subprocess.run([ffmpeg, '-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-loop', '1',
-                    '-i', str(HERE / 'cameras' / 'camera.argus_1_fluent.jpg'), '-t', '20', '-r', '10',
-                    '-vf', 'scale=1280:720,format=yuv420p', '-c:v', 'libx264', '-preset', 'veryfast', '-g', '20',
-                    '-hls_time', '4', '-hls_list_size', '0', '-hls_playlist_type', 'vod', '-f', 'hls', str(out)], check=False)
+    """Flux HLS des caméras (badge DIRECT, mur de caméras), générés une fois avec ffmpeg depuis leurs images."""
+    import os, shutil, subprocess
+    ffmpeg = os.environ.get('DEMO_FFMPEG') or shutil.which('ffmpeg')
+    for i in range(1, 5):
+        out = HERE / 'stream' / f'argus_{i}.m3u8'
+        if out.exists():
+            continue
+        if not ffmpeg:
+            print('ffmpeg introuvable (DEMO_FFMPEG) : pas de flux vidéo (les caméras resteront en image fixe).')
+            return
+        out.parent.mkdir(exist_ok=True)
+        subprocess.run([ffmpeg, '-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-loop', '1',
+                        '-i', str(HERE / 'cameras' / f'camera.argus_{i}_fluent.jpg'), '-t', '20', '-r', '10',
+                        '-vf', 'scale=1280:720,format=yuv420p', '-c:v', 'libx264', '-preset', 'veryfast', '-g', '20',
+                        '-hls_time', '4', '-hls_list_size', '0', '-hls_playlist_type', 'vod', '-f', 'hls',
+                        str(out)], check=False)
 
 
 if __name__ == '__main__':

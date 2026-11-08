@@ -9,6 +9,8 @@ export MSYS_NO_PATHCONV=1
 ADB="${ADB:-$LOCALAPPDATA/Android/Sdk/platform-tools/adb}"
 WORK="${DEMO_WORK:?DEMO_WORK non défini}"
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
+# Git Bash : chemins au format C:/… pour le Python de Windows et adb (MSYS_NO_PATHCONV ne convertit plus /c/…).
+if command -v cygpath >/dev/null 2>&1; then REPO="$(cygpath -m "$REPO")"; WORK="$(cygpath -m "$WORK")"; fi
 OUT="$WORK/shots/$L"
 mkdir -p "$OUT"
 
@@ -17,10 +19,12 @@ shot() { "$ADB" exec-out screencap -p > "$OUT/$1.png"; }
 # État de démo + langue de l'app + config traduite, avec la page centrale $1 affichée d'office.
 prepare() {
   "$ADB" shell am force-stop fr.pergens.hamacs
+  # Autorisations données d'office : leur demande s'afficherait devant l'écran capturé.
+  for p in CAMERA RECORD_AUDIO POST_NOTIFICATIONS; do "$ADB" shell pm grant fr.pergens.hamacs android.permission.$p 2>/dev/null; done
   python "$REPO/tools/demo/translate_dashboard.py" "$L" "$WORK/dash_tmp.json" "$1"
   "$ADB" push "$WORK/demo_base.tar" /data/local/tmp/app.tar >/dev/null
   "$ADB" push "$WORK/dash_tmp.json" /data/local/tmp/dash.json >/dev/null
-  "$ADB" shell "chmod 644 /data/local/tmp/app.tar /data/local/tmp/dash.json; run-as fr.pergens.hamacs tar xf /data/local/tmp/app.tar; run-as fr.pergens.hamacs cp /data/local/tmp/dash.json files/dashboard.json"
+  "$ADB" shell "chmod 644 /data/local/tmp/app.tar /data/local/tmp/dash.json; run-as fr.pergens.hamacs tar xf /data/local/tmp/app.tar; run-as fr.pergens.hamacs rm -f shared_prefs/alert_ticker.xml; run-as fr.pergens.hamacs cp /data/local/tmp/dash.json files/dashboard.json"
   "$ADB" shell "run-as fr.pergens.hamacs sed -i 's#</map>#    <string name=\"app_language\">$L</string>\n</map>#' shared_prefs/settings.xml"
   # Lancement explicite (monkey peut ouvrir le choix de l'écran d'accueil).
   "$ADB" shell am start -n fr.pergens.hamacs/.MainActivity >/dev/null
@@ -35,6 +39,10 @@ prepare rooms
 shot home
 "$ADB" shell input tap 960 1090; sleep 6          # bouton « Dashboard »
 shot dashboard
+
+prepare rooms
+"$ADB" shell input tap 1835 1115; sleep 20        # bouton du mur de caméras (accueil) : directs des caméras sur secteur
+shot camera-wall
 
 prepare members
 "$ADB" shell input tap 960 1090; sleep 6

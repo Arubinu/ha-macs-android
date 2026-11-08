@@ -15,7 +15,8 @@ nothing to set up in Home Assistant.
   <img src="docs/screenshots/en/cameras-energy.jpg" width="49%" alt="">
 </p>
 <p align="center">
-  <img src="docs/screenshots/en/avatar-editor.jpg" width="66%" alt="">
+  <img src="docs/screenshots/en/avatar-editor.jpg" width="49%" alt="">
+  <img src="docs/screenshots/en/camera-wall.jpg" width="49%" alt="">
 </p>
 <p align="center">📸 <em>Demo data.</em></p>
 

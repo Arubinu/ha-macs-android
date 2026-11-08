@@ -21,7 +21,9 @@ Pour refaire les captures (une série par langue de l'app) :
    état dans `$DEMO_WORK/demo_base.tar` (même commande `tar` qu'en 1) et arrêter le serveur ;
 4. `DEMO_WORK=… sh tools/demo/capture.sh <langue>` pour chaque langue (`en fr de es it nl pt pl`) : config
    d'exemple traduite (`translate_dashboard.py`, textes dans `translations.json`), événements du faux serveur
-   traduits (`DEMO_LANG`), langue de l'app réglée ;
+   traduits (`DEMO_LANG`), langue de l'app réglée, autorisations données d'office. Avant : émulateur à l'heure
+   française (`adb shell cmd alarm set-timezone Europe/Paris`) et galerie sans photo personnelle (la capture de
+   l'éditeur d'avatar prend la **première** photo : y mettre seulement la photo CC0 d'Alex, dans `/sdcard/Pictures`) ;
 5. enregistrer en JPEG 1440 px dans `docs/screenshots/<langue>/` ;
 6. réinstaller la version personnelle et restaurer les données sauvegardées en 1 (`tar xf`), puis redonner
    l'autorisation caméra (`pm clear` la retire).
@@ -29,8 +31,9 @@ Pour refaire les captures (une série par langue de l'app) :
 ## Images
 
 Images des caméras (`cameras/`, recadrées et horodatées) d'après des photos de Wikimedia Commons du domaine public
-ou en CC0. Le flux vidéo de la caméra « en direct » (`stream/`, non versionné) est généré au démarrage avec ffmpeg
-s'il est installé.
+ou en CC0. Les flux vidéo des caméras (`stream/`, non versionné) sont générés au démarrage avec ffmpeg (`DEMO_FFMPEG`
+ou dans le `PATH`). Alimentation simulée pour le mur de caméras : 1 et 2 sur secteur (en direct), 3 solaire, 4 sur
+batterie.
 
 - [Sidewalk Leads to Front Porch with Chair Near Door](https://commons.wikimedia.org/wiki/File:Sidewalk_Leads_to_Front_Porch_with_Chair_Near_Door_-_DPLA_-_71848c65252a2cc89f232fa8f946b63a.jpg) (domaine public)
 - [Interior view, first floor, hallway — W. K. Bowman-O'Neal Apartment Building](https://commons.wikimedia.org/wiki/File:Interior_view,_first_floor,_detail,_hallway_looking_north_-_W._K._Bowman-O%27Neal_Apartment_Building,_4313_East_Kellogg_Street,_Wichita,_Sedgwick_County,_KS_HABS_KANS,87-WICH.V,1-35.tif) (domaine public, HABS)

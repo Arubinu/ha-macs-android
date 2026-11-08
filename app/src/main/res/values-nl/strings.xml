@@ -34,7 +34,7 @@
     <string name="cond_windy">Winderig</string>
     <string name="cond_windy_variant">Winderig en bewolkt</string>
     <string name="cond_exceptional">Uitzonderlijk</string>
-    <string name="detections_none">Geen detectie in de laatste %1$d min</string>
+    <string name="detections_none">Geen detectie in de laatste %1$d minuten</string>
     <string name="camera_live">LIVE</string>
     <string name="camera_loading">Laden ...</string>
     <string name="camera_offline">Camera offline</string>

@@ -15,7 +15,8 @@ custom cards en zonder iets in te stellen in Home Assistant.
   <img src="docs/screenshots/nl/cameras-energy.jpg" width="49%" alt="">
 </p>
 <p align="center">
-  <img src="docs/screenshots/nl/avatar-editor.jpg" width="66%" alt="">
+  <img src="docs/screenshots/nl/avatar-editor.jpg" width="49%" alt="">
+  <img src="docs/screenshots/nl/camera-wall.jpg" width="49%" alt="">
 </p>
 <p align="center">📸 <em>Demogegevens.</em></p>
 

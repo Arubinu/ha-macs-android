@@ -34,7 +34,7 @@
     <string name="cond_windy">Ventoso</string>
     <string name="cond_windy_variant">Ventoso e nuvoloso</string>
     <string name="cond_exceptional">Eccezionale</string>
-    <string name="detections_none">Nessun rilevamento negli ultimi %1$d min</string>
+    <string name="detections_none">Nessun rilevamento negli ultimi %1$d minuti</string>
     <string name="camera_live">LIVE</string>
     <string name="camera_loading">Caricamento ...</string>
     <string name="camera_offline">Telecamera offline</string>
