@@ -662,6 +662,8 @@
     <string name="update_downloading">Versie %1$s downloaden… %2$d %%</string>
     <string name="update_installing">Versie %1$s installeren…</string>
     <string name="update_failed">Update mislukt: %1$s</string>
+    <string name="update_permission">Versie %1$s gedownload: sta HA-MACS toe apps te installeren (eenmalig), daarna gaat de update vanzelf verder.</string>
+    <string name="update_permission_allow">Toestaan</string>
     <string name="update_install">Installeren</string>
     <string name="update_check">Controleren</string>
     <string name="update_auto">Updates automatisch installeren</string>

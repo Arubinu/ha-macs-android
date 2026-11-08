@@ -1591,11 +1591,18 @@ private fun UpdateGroup() {
             is UpdateState.Available -> stringResource(if (s.release.prerelease) R.string.update_available_pre else R.string.update_available, s.release.version)
             is UpdateState.Downloading -> stringResource(R.string.update_downloading, s.release.version, (s.progress * 100).toInt())
             is UpdateState.Installing -> stringResource(R.string.update_installing, s.release.version)
+            is UpdateState.NeedsPermission -> stringResource(R.string.update_permission, s.release.version)
             is UpdateState.Failed -> stringResource(R.string.update_failed, s.message)
         }
+        val ctx = LocalContext.current
         SettingRow(stringResource(R.string.update_title), text) {
             when (val s = state) {
                 is UpdateState.Available -> Button(onClick = { updater.install(s.release) }, Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.update_install)) }
+                // Écran d'Android « Installer des applis inconnues » ; l'installation reprend seule au retour.
+                is UpdateState.NeedsPermission -> Button(
+                    onClick = { (ctx as? android.app.Activity)?.let { fr.pergens.hamacs.ui.Readiness.open(it, updater.permissionIntent()) } },
+                    Modifier.heightIn(min = 48.dp),
+                ) { Text(stringResource(R.string.update_permission_allow)) }
                 is UpdateState.Downloading, is UpdateState.Installing, UpdateState.Checking -> CircularProgressIndicator(Modifier.size(24.dp), color = Dash.colors.accent, strokeWidth = 2.5.dp)
                 else -> OutlinedButton(
                     onClick = { updater.check() }, Modifier.heightIn(min = 48.dp),

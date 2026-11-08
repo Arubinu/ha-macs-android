@@ -662,6 +662,8 @@
     <string name="update_downloading">Descargando la versión %1$s… %2$d %%</string>
     <string name="update_installing">Instalando la versión %1$s…</string>
     <string name="update_failed">Error de actualización: %1$s</string>
+    <string name="update_permission">Versión %1$s descargada: permita que HA-MACS instale aplicaciones (solo una vez); después la actualización continúa sola.</string>
+    <string name="update_permission_allow">Permitir</string>
     <string name="update_install">Instalar</string>
     <string name="update_check">Comprobar</string>
     <string name="update_auto">Instalar las actualizaciones automáticamente</string>

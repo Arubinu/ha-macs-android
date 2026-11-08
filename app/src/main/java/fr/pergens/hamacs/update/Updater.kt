@@ -44,7 +44,68 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
         data class Available(val release: Release) : State
         data class Downloading(val release: Release, val progress: Float) : State
         data class Installing(val release: Release) : State
+        /** Téléchargée, mais Android n'autorise pas encore l'app à installer des applications (réglage à ouvrir). */
+        data class NeedsPermission(val release: Release) : State
         data class Failed(val message: String) : State
+    }
+
+    /** APK téléchargé en attente de l'autorisation d'installer. */
+    private var pendingFile: File? = null
+    /** Session confiée à Android (confirmation demandée) et moment de la demande. */
+    private var sessionId = -1
+    private var userActionAt = 0L
+    private val main = android.os.Handler(android.os.Looper.getMainLooper())
+
+    init {
+        // Fin de session (installée, refusée ou abandonnée par Android) : rien n'est envoyé au récepteur quand la
+        // fenêtre d'Android est quittée par ses paramètres ; sans ce suivi, l'état restait « installation en cours ».
+        runCatching {
+            context.packageManager.packageInstaller.registerSessionCallback(object : PackageInstaller.SessionCallback() {
+                override fun onCreated(id: Int) {}
+                override fun onBadgingChanged(id: Int) {}
+                override fun onActiveChanged(id: Int, active: Boolean) {}
+                override fun onProgressChanged(id: Int, progress: Float) {}
+                override fun onFinished(id: Int, success: Boolean) {
+                    if (id == sessionId && !success) backToAvailable()
+                }
+            }, main)
+        }
+    }
+
+    /** Installation non aboutie : la version reste proposée (bouton Installer). */
+    private fun backToAvailable() {
+        val r = (_state.value as? State.Installing)?.release ?: return
+        sessionId = -1
+        userActionAt = 0L
+        _state.value = State.Available(r)
+    }
+
+    /** Android peut installer pour l'app (propriétaire de l'appareil, ou « Installer des applis inconnues » permis). */
+    fun canInstall(): Boolean =
+        fr.pergens.hamacs.kiosk.Kiosk.isDeviceOwner(context) ||
+            Build.VERSION.SDK_INT < 26 || context.packageManager.canRequestPackageInstalls()
+
+    /** Écran d'Android qui autorise l'app à installer des applications. */
+    fun permissionIntent(): Intent =
+        Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, android.net.Uri.parse("package:${context.packageName}"))
+
+    /**
+     * Retour dans l'app : autorisation donnée entre-temps → installation reprise ; confirmation d'Android restée sans
+     * réponse (fenêtre quittée) → la version redevient disponible au bout de 20 s.
+     */
+    fun onForeground() {
+        when (val s = _state.value) {
+            is State.NeedsPermission -> if (canInstall()) {
+                val file = pendingFile
+                pendingFile = null
+                if (file != null && file.exists()) commitNow(s.release, file) else { _state.value = State.Available(s.release); install(s.release) }
+            }
+            is State.Installing -> if (userActionAt > 0L) {
+                val id = sessionId
+                main.postDelayed({ if (sessionId == id && _state.value is State.Installing) backToAvailable() }, 20_000L)
+            }
+            else -> {}
+        }
     }
 
     private val _state = MutableStateFlow<State>(State.Idle)
@@ -102,18 +163,33 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
                 _state.value = State.Failed(it.message ?: it.javaClass.simpleName)
                 return@launch
             }
-            _state.value = State.Installing(release)
-            // Notes gardées pour le « Quoi de neuf » de la nouvelle version.
-            WhatsNew.remember(context, release.version, release.notes)
-            runCatching { withContext(Dispatchers.Main) { commit(file) } }.onFailure {
-                _state.value = State.Failed(it.message ?: it.javaClass.simpleName)
+            // Pas encore le droit d'installer : on le demande d'abord (sinon la fenêtre d'Android envoie vers ses
+            // paramètres et l'installation en attente n'est jamais reprise).
+            if (!canInstall()) {
+                pendingFile = file
+                _state.value = State.NeedsPermission(release)
+                return@launch
             }
+            withContext(Dispatchers.Main) { commitNow(release, file) }
+        }
+    }
+
+    private fun commitNow(release: Release, file: File) {
+        _state.value = State.Installing(release)
+        // Notes gardées pour le « Quoi de neuf » de la nouvelle version.
+        WhatsNew.remember(context, release.version, release.notes)
+        runCatching { commit(file) }.onFailure {
+            _state.value = State.Failed(it.message ?: it.javaClass.simpleName)
         }
     }
 
     internal fun onResult(status: Int, message: String?) {
-        if (status != PackageInstaller.STATUS_SUCCESS && status != PackageInstaller.STATUS_PENDING_USER_ACTION) {
-            _state.value = State.Failed(message ?: "status $status")
+        when (status) {
+            PackageInstaller.STATUS_SUCCESS -> {}
+            PackageInstaller.STATUS_PENDING_USER_ACTION -> userActionAt = System.currentTimeMillis()
+            // Confirmation refusée par l'utilisateur : rien d'anormal, la version reste proposée.
+            PackageInstaller.STATUS_FAILURE_ABORTED -> backToAvailable()
+            else -> { sessionId = -1; _state.value = State.Failed(message ?: "status $status") }
         }
     }
 
@@ -186,6 +262,8 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
             if (Build.VERSION.SDK_INT >= 31) setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
         }
         val id = installer.createSession(params)
+        sessionId = id
+        userActionAt = 0L
         installer.openSession(id).use { session ->
             session.openWrite("app.apk", 0, file.length()).use { out -> file.inputStream().use { it.copyTo(out) }; session.fsync(out) }
             val intent = Intent(context, InstallReceiver::class.java)

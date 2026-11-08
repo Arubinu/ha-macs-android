@@ -391,6 +391,8 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         fr.pergens.hamacs.kiosk.Kiosk.onResume(this)
+        // Mise à jour : reprise après l'autorisation d'installer, ou confirmation d'Android restée sans réponse.
+        (application as App).updater.onForeground()
         // Test du journal et de la relance après plantage (versions de débogage uniquement) :
         // am start -n fr.pergens.hamacs/.MainActivity --ez debug_crash true
         if (BuildConfig.DEBUG && intent?.getBooleanExtra("debug_crash", false) == true) {

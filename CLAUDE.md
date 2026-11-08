@@ -155,6 +155,12 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   Version = tag (`-PappVersion`, release.yml), `versionCode` = 10000·maj + 100·min + patch. Test (débogage) : pref
   `update_url` vers un faux JSON servi depuis le PC (`http://10.0.2.2:…`), APK construit avec `-PappVersion=1.0.1` ;
   revenir ensuite avec `adb install -r -d`. Une release ne met à jour qu'une app signée avec la même clé.
+  Autorisation « Installer des applis inconnues » vérifiée avant l'installation (`canInstall`) : sinon état
+  `NeedsPermission` (bouton *Autoriser* → `ACTION_MANAGE_UNKNOWN_APP_SOURCES` via `Readiness.open`), reprise seule au
+  retour (`onForeground`, appelé par `MainActivity.onResume`). Raison : la fenêtre d'Android qui renvoie vers ses
+  paramètres ne reprend pas la session et ne prévient pas l'app (« installation en cours » à vie). Session suivie
+  (`SessionCallback.onFinished`, `STATUS_FAILURE_ABORTED`, 20 s sans réponse après retour) → version de nouveau
+  proposée. Test : `appops set fr.pergens.hamacs REQUEST_INSTALL_PACKAGES deny` (remettre `default` après).
 - **Mode nuit** (`ui/NightMode.kt`, prefs `night_*`) : début / fin = `sun` (heure de `next_setting` / `next_rising` de
   `sun.sun`, sinon 21:30 / 7:00) ou `HH:MM`. La nuit, après `night_seconds` : écran noir (`MainActivity.nightBlackout`,
   au-dessus de tout, M.A.C.S. masqué, absorbe le premier contact) ou luminosité `night_level`. En test, couper la
