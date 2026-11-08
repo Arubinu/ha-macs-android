@@ -203,6 +203,7 @@
     <string name="presence_now_detected">Zojuist beweging gedetecteerd</string>
     <string name="presence_last">Laatste beweging %1$d s geleden</string>
     <string name="presence_waiting">Wachten op beweging…</string>
+    <string name="presence_no_camera">Geen camera</string>
     <string name="dim_title">Scherm dimmen</string>
     <string name="dim_help">Verlaagt de helderheid na deze tijd zonder aanraking of gedetecteerde aanwezigheid. Ze komt terug zodra er activiteit is.</string>
     <string name="dim_level">Gedimde helderheid</string>

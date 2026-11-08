@@ -229,6 +229,7 @@
     <string name="presence_now_detected">Movement detected just now</string>
     <string name="presence_last">Last movement %1$d s ago</string>
     <string name="presence_waiting">Waiting for movement…</string>
+    <string name="presence_no_camera">No camera</string>
     <string name="dim_title">Dim the screen</string>
     <string name="dim_help">Lowers the brightness after this time without touch or detected presence. It comes back as soon as activity is detected.</string>
     <string name="dim_level">Dimmed brightness</string>

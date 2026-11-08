@@ -203,6 +203,7 @@
     <string name="presence_now_detected">Movimento detetado agora mesmo</string>
     <string name="presence_last">Último movimento há %1$d s</string>
     <string name="presence_waiting">À espera de movimento…</string>
+    <string name="presence_no_camera">Sem câmara</string>
     <string name="dim_title">Escurecer o ecrã</string>
     <string name="dim_help">Reduz o brilho após este tempo sem toque nem presença detetada. Volta assim que for detetada atividade.</string>
     <string name="dim_level">Brilho reduzido</string>

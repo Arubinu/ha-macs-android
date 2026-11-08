@@ -211,6 +211,7 @@
     <string name="presence_now_detected">Przed chwilą wykryto ruch</string>
     <string name="presence_last">Ostatni ruch %1$d s temu</string>
     <string name="presence_waiting">Oczekiwanie na ruch…</string>
+    <string name="presence_no_camera">Brak kamery</string>
     <string name="dim_title">Przyciemnianie ekranu</string>
     <string name="dim_help">Zmniejsza jasność po tym czasie bez dotyku ani wykrytej obecności. Wraca, gdy tylko zostanie wykryta aktywność.</string>
     <string name="dim_level">Przyciemniona jasność</string>

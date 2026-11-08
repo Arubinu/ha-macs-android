@@ -203,6 +203,7 @@
     <string name="presence_now_detected">Movimento rilevato adesso</string>
     <string name="presence_last">Ultimo movimento %1$d s fa</string>
     <string name="presence_waiting">In attesa di movimento…</string>
+    <string name="presence_no_camera">Nessuna fotocamera</string>
     <string name="dim_title">Attenua lo schermo</string>
     <string name="dim_help">Abbassa la luminosità dopo questo tempo senza tocchi né presenza rilevata. Torna appena viene rilevata un\'attività.</string>
     <string name="dim_level">Luminosità attenuata</string>

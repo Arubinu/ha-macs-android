@@ -1017,7 +1017,11 @@ private fun IdleSection(cameraPermissionTick: Int, requestCamera: () -> Unit) {
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.sensitivity), Modifier.weight(1f), style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextPrimary))
                         val ago = ((now - lastMotion) / 1000).toInt()
+                        // Sans caméra (Raspberry Pi sans webcam…), rien ne peut être détecté : le dire plutôt qu'attendre.
+                        val ctx = androidx.compose.ui.platform.LocalContext.current
+                        val noCamera = remember(now / 3_000) { fr.pergens.hamacs.presence.Cameras.list(ctx).isEmpty() }
                         when {
+                            noCamera -> StatusChip(TextSecondary, stringResource(R.string.presence_no_camera))
                             lastMotion == 0L -> StatusChip(TextSecondary, stringResource(R.string.presence_waiting))
                             ago < 3 -> StatusChip(Success, stringResource(R.string.presence_now_detected))
                             else -> StatusChip(TextSecondary, stringResource(R.string.presence_last, ago))

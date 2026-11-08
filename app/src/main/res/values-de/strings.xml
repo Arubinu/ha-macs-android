@@ -203,6 +203,7 @@
     <string name="presence_now_detected">Gerade Bewegung erkannt</string>
     <string name="presence_last">Letzte Bewegung vor %1$d s</string>
     <string name="presence_waiting">Warte auf Bewegung…</string>
+    <string name="presence_no_camera">Keine Kamera</string>
     <string name="dim_title">Bildschirm abdunkeln</string>
     <string name="dim_help">Senkt die Helligkeit nach dieser Zeit ohne Berührung oder erkannte Anwesenheit. Sie kehrt zurück, sobald Aktivität erkannt wird.</string>
     <string name="dim_level">Gedimmte Helligkeit</string>

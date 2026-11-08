@@ -216,6 +216,7 @@
     <string name="presence_now_detected">Mouvement détecté à l\'instant</string>
     <string name="presence_last">Dernier mouvement il y a %1$d s</string>
     <string name="presence_waiting">En attente de mouvement…</string>
+    <string name="presence_no_camera">Aucune caméra</string>
     <string name="dim_title">Atténuer l\'écran</string>
     <string name="dim_help">Baisse la luminosité après cette durée sans contact ni présence détectée. Elle remonte dès qu\'une activité est détectée.</string>
     <string name="dim_level">Luminosité atténuée</string>

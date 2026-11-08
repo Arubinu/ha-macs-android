@@ -419,8 +419,9 @@ private fun RailButton(icon: String, label: String?, active: Boolean, onClick: (
         ) { HaIcon(icon, size = 24.dp, tint = if (active) c.menuActiveButton else Color.White) }
         // Nom affiché seulement pour l'onglet actif (comme la barre d'onglets).
         if (active && label != null) Text(
-            label, Modifier.padding(top = 4.dp).width(68.dp), maxLines = 1, overflow = TextOverflow.Ellipsis,
-            style = TextStyle(fontSize = 11.sp, color = Color.White, textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+            // Deux lignes : « Tout en direct » et les noms d'onglets longs ne sont pas coupés.
+            label, Modifier.padding(top = 4.dp).width(68.dp), maxLines = 2, overflow = TextOverflow.Ellipsis,
+            style = TextStyle(fontSize = 11.sp, lineHeight = 13.sp, color = Color.White, textAlign = androidx.compose.ui.text.style.TextAlign.Center),
         )
     }
 }

@@ -203,6 +203,7 @@
     <string name="presence_now_detected">Movimiento detectado ahora mismo</string>
     <string name="presence_last">Último movimiento hace %1$d s</string>
     <string name="presence_waiting">Esperando movimiento…</string>
+    <string name="presence_no_camera">Sin cámara</string>
     <string name="dim_title">Atenuar la pantalla</string>
     <string name="dim_help">Reduce el brillo tras este tiempo sin toques ni presencia detectada. Vuelve en cuanto se detecta actividad.</string>
     <string name="dim_level">Brillo atenuado</string>
