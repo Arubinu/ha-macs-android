@@ -910,4 +910,5 @@
     <string name="camera_battery_help">Nigdy nie jest pokazywany dla kamery zasilanej z sieci.</string>
     <string name="camera_battery_card">Na karcie</string>
     <string name="camera_battery_wall">Na ścianie kamer</string>
+    <string name="wall_capped">Osiągnięto limit podglądów</string>
 </resources>

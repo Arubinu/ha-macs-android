@@ -908,4 +908,5 @@
     <string name="camera_battery_help">Jamais affiché pour une caméra sur secteur.</string>
     <string name="camera_battery_card">Sur la carte</string>
     <string name="camera_battery_wall">Dans le mur de caméras</string>
+    <string name="wall_capped">Limite de directs atteinte</string>
 </resources>

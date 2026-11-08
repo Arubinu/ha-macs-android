@@ -335,6 +335,8 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
     val limit = if (learned >= 0) CameraWall.limit(settings.wallMaxLive) else 1
     val forced = liveAll > now
     val paused = state.player != null
+    // Caméras qui devraient être en direct mais restent en capture faute de place (limite de directs atteinte).
+    var capped: Set<String> = emptySet()
     val live: Set<String> = if (paused) emptySet() else {
         val ranked = cams.mapNotNull { c ->
             val id = c.s("entity") ?: return@mapNotNull null
@@ -342,13 +344,16 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
             val prio = when {
                 id in moving -> 0
                 id == focus -> 1
-                forced && power != CameraPower.Battery -> 2
-                power == CameraPower.Mains -> 3
+                // Secteur avant « tout en direct » : une caméra sur secteur ne cède jamais sa place à une autre forcée.
+                power == CameraPower.Mains -> 2
+                forced && power != CameraPower.Battery -> 3
                 else -> null
             }
             prio?.let { id to it }
         }
-        ranked.sortedBy { it.second }.take(limit).map { it.first }.toSet()
+        val sorted = ranked.sortedBy { it.second }.map { it.first }
+        capped = sorted.drop(limit).toSet()
+        sorted.take(limit).toSet()
     }
 
     // Fermeture : délai de l'événement, sinon celui du mur (ou du plein écran) ; jamais pendant une détection
@@ -393,13 +398,13 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
                     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(gap)) {
                         Box(Modifier.weight(3f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                             Box(Modifier.aspectRatio(16f / 9f)) {
-                                WallTile(big, big.s("entity") in live, big.s("entity") in moving, blocks, states, live.size) { open(state, big) }
+                                WallTile(big, big.s("entity") in live, big.s("entity") in moving, blocks, states, live.size, big.s("entity") in capped) { open(state, big) }
                             }
                         }
                         Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(gap, Alignment.CenterVertically)) {
                             others.take(4).forEach { c ->
                                 Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f)) {
-                                    WallTile(c, c.s("entity") in live, c.s("entity") in moving, blocks, states, live.size) { focus = c.s("entity") }
+                                    WallTile(c, c.s("entity") in live, c.s("entity") in moving, blocks, states, live.size, c.s("entity") in capped) { focus = c.s("entity") }
                                 }
                             }
                         }
@@ -416,7 +421,7 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
                                     // Case aux proportions de l'image (16:9), centrée : rien n'est rogné.
                                     Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                                         if (cam != null) Box(Modifier.aspectRatio(16f / 9f)) {
-                                            WallTile(cam, cam.s("entity") in live, cam.s("entity") in moving, blocks, states, live.size) { open(state, cam) }
+                                            WallTile(cam, cam.s("entity") in live, cam.s("entity") in moving, blocks, states, live.size, cam.s("entity") in capped) { open(state, cam) }
                                         }
                                     }
                                 }
@@ -461,7 +466,7 @@ private fun RailButton(icon: String, label: String?, active: Boolean, onClick: (
 @Composable
 private fun WallTile(
     card: JsonObject, live: Boolean, moving: Boolean, blocks: Map<String, JsonObject>, states: Map<String, EntityState>,
-    running: Int, onTap: () -> Unit,
+    running: Int, capped: Boolean, onTap: () -> Unit,
 ) {
     val state = LocalDashState.current
     val ctx = LocalContext.current
@@ -491,11 +496,24 @@ private fun WallTile(
     val url = state.ha.resolveUrl("/api/camera_proxy/$camId")?.let { "$it?t=w$tick-$retry" }
     var liveShown by remember(live) { mutableStateOf(false) }
     var liveFailed by remember(live) { mutableStateOf(false) }
+    // Direct en échec (caméra lente à démarrer, pont qui se reconnecte) : 2 nouveaux essais à 3 s, comme la carte ;
+    // format illisible : pas de nouvel essai (la limite de directs a été abaissée).
+    var liveErrors by remember(live) { mutableIntStateOf(0) }
+    var liveAttempt by remember(live) { mutableIntStateOf(0) }
+    var decoderFailed by remember(live) { mutableStateOf(false) }
+    LaunchedEffect(liveErrors) {
+        when {
+            liveErrors == 0 -> {}
+            decoderFailed || liveErrors > 2 -> liveFailed = true
+            else -> { delay(3_000); liveShown = false; liveAttempt++ }
+        }
+    }
     val liveAlpha by animateFloatAsState(if (live && liveShown && !liveFailed) 1f else 0f, tween(400), label = "wall-live")
+    // Liseré de mouvement : apparaît et s'efface en fondu.
+    val motionAlpha by animateFloatAsState(if (moving) 1f else 0f, tween(500), label = "wall-motion")
     val shape = RoundedCornerShape(12.dp)
     Box(
         Modifier.fillMaxSize().clip(shape).background(Color(0xFF1A1A1E))
-            .then(if (moving) Modifier.border(2.dp, Dash.colors.accent, shape) else Modifier)
             .tapHold({ onTap() }),
     ) {
         if (cam?.isUnavailable == true) {
@@ -523,12 +541,14 @@ private fun WallTile(
                     ).build(),
                 cam?.name, Modifier.fillMaxSize(), contentScale = ContentScale.Crop,
             )
-            if (live && !liveFailed) fr.pergens.hamacs.ui.cards.InlineLive(
-                card.s("live_url"), camId, Modifier.fillMaxSize().graphicsLayer { alpha = liveAlpha },
-                onFirstFrame = { liveShown = true },
-                onError = { liveFailed = true },
-                onDecoderError = { CameraWall.learnFailure(running) },
-            )
+            if (live && !liveFailed) androidx.compose.runtime.key(liveAttempt) {
+                fr.pergens.hamacs.ui.cards.InlineLive(
+                    card.s("live_url"), camId, Modifier.fillMaxSize().graphicsLayer { alpha = liveAlpha },
+                    onFirstFrame = { liveShown = true },
+                    onError = { liveErrors++ },
+                    onDecoderError = { decoderFailed = true; CameraWall.learnFailure(running) },
+                )
+            }
         }
         // Nom en bas, sur un dégradé ; badge DIRECT quand le flux est affiché.
         Box(
@@ -545,6 +565,37 @@ private fun WallTile(
                     style = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Medium), maxLines = 1,
                 )
             }
+        }
+        // Liseré de mouvement, par-dessus la vidéo : trait sombre large dessous (ombre, lisible sur une image claire),
+        // trait de la couleur d'accent dessus ; fondu à l'apparition et à la disparition.
+        if (motionAlpha > 0f) {
+            val accent = Dash.colors.accent
+            androidx.compose.foundation.Canvas(Modifier.matchParentSize().graphicsLayer { alpha = motionAlpha }) {
+                val r = 12.dp.toPx()
+                val shadowW = 7.dp.toPx()
+                val lineW = 2.5.dp.toPx()
+                drawRoundRect(
+                    Color(0x73000000), topLeft = androidx.compose.ui.geometry.Offset(shadowW / 2, shadowW / 2),
+                    size = androidx.compose.ui.geometry.Size(size.width - shadowW, size.height - shadowW),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(r - shadowW / 2),
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(shadowW),
+                )
+                drawRoundRect(
+                    accent, topLeft = androidx.compose.ui.geometry.Offset(lineW / 2, lineW / 2),
+                    size = androidx.compose.ui.geometry.Size(size.width - lineW, size.height - lineW),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(r - lineW / 2),
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(lineW),
+                )
+            }
+        }
+        // Devrait être en direct mais la limite de directs simultanés est atteinte : capture, avec un badge discret.
+        if (capped) Row(
+            Modifier.align(Alignment.TopStart).padding(8.dp).background(Color(0xB3000000), RoundedCornerShape(6.dp))
+                .padding(horizontal = 8.dp, vertical = 3.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HaIcon("mdi:image-outline", size = 13.dp, tint = Color.White)
+            Text(stringResource(R.string.wall_capped), Modifier.padding(start = 5.dp), style = TextStyle(fontSize = 11.sp, color = Color.White))
         }
         // Batterie (réglage « dans le mur » de la caméra, jamais sur secteur).
         val battery = card.s("battery")?.let { states[it] }

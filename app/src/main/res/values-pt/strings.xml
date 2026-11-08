@@ -890,4 +890,5 @@
     <string name="camera_battery_help">Nunca mostrado numa câmara ligada à corrente.</string>
     <string name="camera_battery_card">No cartão</string>
     <string name="camera_battery_wall">No mural de câmaras</string>
+    <string name="wall_capped">Limite de diretos atingido</string>
 </resources>

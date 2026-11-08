@@ -890,4 +890,5 @@
     <string name="camera_battery_help">Mai mostrato per una telecamera alimentata dalla rete.</string>
     <string name="camera_battery_card">Sulla scheda</string>
     <string name="camera_battery_wall">Nel muro di telecamere</string>
+    <string name="wall_capped">Limite di dirette raggiunto</string>
 </resources>

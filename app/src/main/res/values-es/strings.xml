@@ -890,4 +890,5 @@
     <string name="camera_battery_help">Nunca se muestra en una cámara conectada a la red.</string>
     <string name="camera_battery_card">En la tarjeta</string>
     <string name="camera_battery_wall">En el muro de cámaras</string>
+    <string name="wall_capped">Límite de directos alcanzado</string>
 </resources>

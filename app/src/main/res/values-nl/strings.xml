@@ -890,4 +890,5 @@
     <string name="camera_battery_help">Nooit getoond voor een camera op netstroom.</string>
     <string name="camera_battery_card">Op de kaart</string>
     <string name="camera_battery_wall">In de camerawand</string>
+    <string name="wall_capped">Livelimiet bereikt</string>
 </resources>

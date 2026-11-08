@@ -890,4 +890,5 @@
     <string name="camera_battery_help">Bei einer Kamera mit Netzstrom nie angezeigt.</string>
     <string name="camera_battery_card">Auf der Karte</string>
     <string name="camera_battery_wall">In der Kamerawand</string>
+    <string name="wall_capped">Live-Grenze erreicht</string>
 </resources>

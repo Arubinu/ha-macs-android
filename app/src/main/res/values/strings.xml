@@ -921,4 +921,5 @@
     <string name="camera_battery_help">Never shown for a camera on mains power.</string>
     <string name="camera_battery_card">On the card</string>
     <string name="camera_battery_wall">In the camera wall</string>
+    <string name="wall_capped">Live limit reached</string>
 </resources>
