@@ -44,6 +44,8 @@ class PresenceDetector(private val context: Context) {
 
     /** Caméras présentes au dernier démarrage : une caméra branchée ou débranchée relance la détection. */
     private var knownIds: Set<String> = emptySet()
+    /** Caméra ouverte (null = aucune). */
+    private var current: String? = null
     private var listening = false
 
     private fun watchCameras() {
@@ -51,32 +53,51 @@ class PresenceDetector(private val context: Context) {
         listening = true
         val manager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
         manager.registerAvailabilityCallback(object : android.hardware.camera2.CameraManager.AvailabilityCallback() {
-            override fun onCameraAvailable(id: String) = changed()
-            override fun onCameraUnavailable(id: String) = changed()
             // Disponible / indisponible change aussi quand une app ouvre la caméra : seule la liste compte.
-            private fun changed() {
-                val ids = Cameras.list(context).map { it.id }.toSet()
-                if (ids != knownIds) owner?.let { start(it) }
-            }
+            override fun onCameraAvailable(id: String) { camerasChanged() }
+            override fun onCameraUnavailable(id: String) { camerasChanged() }
         }, main)
+    }
+
+    /**
+     * Liste des caméras changée : CameraX arrêté puis relancé (il ne suit pas seul un branchement / débranchement).
+     * Une caméra débranchée pendant qu'elle est ouverte ne déclenche pas l'AvailabilityCallback (elle passe
+     * d'« occupée » à « absente », indisponible dans les deux cas) : aussi vérifié à chaque erreur de la caméra.
+     */
+    private fun camerasChanged(): Boolean {
+        val ids = Cameras.list(context).map { it.id }.toSet()
+        if (ids == knownIds) return false
+        Cameras.forget(knownIds - ids)
+        knownIds = ids
+        // Caméra en cours toujours branchée et toujours celle à utiliser : rien à relancer (relancer CameraX fige le
+        // flux quelques secondes). Une caméra rebranchée sera réinitialisée quand elle sera choisie (Cameras.provider).
+        val want = Cameras.pick(context, fr.pergens.hamacs.App.instance.config.settings.value.cameraId)?.id
+        if (current != null && current in ids && want == current) {
+            Log.i(TAG, "Caméras changées : $ids, $current conservée")
+            return false
+        }
+        Log.i(TAG, "Caméras changées : $ids, CameraX relancé")
+        current = null
+        provider = null
+        Cameras.reset(context) { owner?.let { start(it) } }
+        return true
     }
 
     fun start(owner: LifecycleOwner) {
         this.owner = owner
         watchCameras()
         knownIds = Cameras.list(context).map { it.id }.toSet()
-        val future = ProcessCameraProvider.getInstance(context)
-        future.addListener({
+        // Aucune caméra : CameraX n'est pas initialisé (un échec d'initialisation reste en mémoire jusqu'à la fermeture
+        // de l'app, une webcam branchée ensuite ne serait jamais vue) ; un branchement relancera la détection.
+        if (knownIds.isEmpty()) {
+            provider?.unbindAll()
+            return
+        }
+        // Caméra choisie dans les réglages, sinon avant, sinon webcam USB, sinon arrière.
+        val cam = Cameras.pick(context, fr.pergens.hamacs.App.instance.config.settings.value.cameraId) ?: return
+        Cameras.provider(context, cam.id, onError = { failed(it) }) { p ->
             runCatching {
-                val p = future.get()
                 provider = p
-                // Caméra choisie dans les réglages, sinon avant, sinon webcam USB, sinon arrière.
-                val cam = Cameras.pick(context, fr.pergens.hamacs.App.instance.config.settings.value.cameraId)
-                if (cam == null) {
-                    // Aucune caméra : rien à ouvrir ; un branchement relancera la détection (watchCameras).
-                    p.unbindAll()
-                    return@runCatching
-                }
                 val selector = Cameras.selector(cam.id)
                 val analysis = ImageAnalysis.Builder()
                     .setResolutionSelector(
@@ -104,18 +125,24 @@ class PresenceDetector(private val context: Context) {
                 val shown = preview?.let { sp -> androidx.camera.core.Preview.Builder().build().also { it.surfaceProvider = sp } }
                 val camera = if (shown != null) p.bindToLifecycle(owner, selector, analysis, shown)
                 else p.bindToLifecycle(owner, selector, analysis)
-                // Caméra en erreur : nouvel essai dans 10 s (un débranchement est vu par watchCameras).
+                current = cam.id
+                // Caméra en erreur : débranchée (liste revue tout de suite et 1 s après, le temps qu'Android la retire),
+                // sinon nouvel essai dans 10 s.
                 watched?.removeObservers(owner)
                 watched = camera.cameraInfo.cameraState
                 camera.cameraInfo.cameraState.observe(owner) { st ->
-                    if (st.error != null && st.type == androidx.camera.core.CameraState.Type.CLOSED) scheduleRetry("erreur caméra ${st.error?.code}")
+                    if (st.error == null || camerasChanged()) return@observe
+                    main.postDelayed({ camerasChanged() }, 1_000)
+                    if (st.type == androidx.camera.core.CameraState.Type.CLOSED) scheduleRetry("erreur caméra ${st.error?.code}")
                 }
-            }.onFailure {
-                Log.w(TAG, "Caméra indisponible : ${it.message}")
-                noteOnce("ouverture", it)
-                scheduleRetry(it.message ?: "ouverture impossible")
-            }
-        }, ContextCompat.getMainExecutor(context))
+            }.onFailure { failed(it) }
+        }
+    }
+
+    private fun failed(e: Throwable) {
+        Log.w(TAG, "Caméra indisponible : ${e.message}")
+        noteOnce("ouverture", e)
+        scheduleRetry(e.message ?: "ouverture impossible")
     }
 
     /** État de la caméra suivi (un seul observateur, retiré à chaque nouvelle ouverture). */
@@ -140,6 +167,7 @@ class PresenceDetector(private val context: Context) {
     fun stop() {
         provider?.unbindAll()
         provider = null
+        current = null
         owner = null
         previous = null
     }

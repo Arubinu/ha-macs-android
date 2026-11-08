@@ -553,18 +553,18 @@ private fun AvatarCamera(onClose: () -> Unit, onPhoto: (Bitmap) -> Unit) {
     DisposableEffect(granted, cam?.id) {
         App.instance.presence.stop()
         var provider: ProcessCameraProvider? = null
-        if (granted) {
-            val future = ProcessCameraProvider.getInstance(context)
-            future.addListener({
+        // Sans caméra, CameraX n'est pas initialisé : son échec resterait en mémoire jusqu'à la fermeture de l'app.
+        if (granted && cam == null) failed = true
+        val id = cam?.id
+        if (granted && id != null) {
+            fr.pergens.hamacs.presence.Cameras.provider(context, id, onError = { failed = true }) { p ->
                 runCatching {
-                    val p = future.get()
                     provider = p
-                    val selector = fr.pergens.hamacs.presence.Cameras.selector(cam?.id ?: error("aucune caméra"))
                     val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
                     p.unbindAll()
-                    p.bindToLifecycle(owner, selector, preview, capture)
+                    p.bindToLifecycle(owner, fr.pergens.hamacs.presence.Cameras.selector(id), preview, capture)
                 }.onFailure { failed = true }
-            }, ContextCompat.getMainExecutor(context))
+            }
         }
         onDispose {
             provider?.unbindAll()
