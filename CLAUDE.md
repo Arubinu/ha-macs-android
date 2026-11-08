@@ -239,7 +239,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   à l'autre). Robustesse : analyse sous `runCatching`, erreur de caméra → nouvel essai à 10 s, branchement /
   débranchement suivi par `CameraManager.AvailabilityCallback` (liste comparée, pas l'état « disponible ») ; aucune
   caméra → rien d'ouvert. Tablette de l'utilisateur : caméra arrière contre le mur, ne pas la laisser choisie.
-  Raspberry Pi : section dans les README et `docs/reference.fr.md` (non testé sur un vrai Pi).
+  Raspberry Pi : section dans les README et `docs/reference.fr.md` (testé sur le Pi 4 de l'utilisateur, adb sans fil ;
+  essais avec le faux serveur par `adb reverse tcp:8123 tcp:8123` et l'adresse `http://127.0.0.1:8123`).
 - **M.A.C.S. (carte)** : toucher (voix) et appui long (`hold_action`, ex. retour à l'accueil) seulement dans un cercle
   invisible centré (diamètre 90 % de la plus petite dimension de la tuile, zones noires comprises) ; ailleurs rien (mode
   édition : ses réglages). Raison : la tuile est sous le coin des réglages (appui long en (30, 40)).
