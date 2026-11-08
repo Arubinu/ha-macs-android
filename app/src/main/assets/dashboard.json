@@ -500,6 +500,10 @@
               "tap_action": {
                 "action": "voice"
               },
+              "hold_action": {
+                "action": "screen",
+                "screen": "home"
+              },
               "flex": true,
               "min_height": 100,
               "overflow_bottom": 60,

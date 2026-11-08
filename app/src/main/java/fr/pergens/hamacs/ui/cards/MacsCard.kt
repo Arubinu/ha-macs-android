@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -68,16 +69,19 @@ fun MacsCard(card: Card, modifier: Modifier) {
                 modifier = Modifier.fillMaxSize(),
             )
         }
+        val onTap = {
+            // Mode édition : réglages de M.A.C.S. (capteurs, batterie, satellite…).
+            if (!state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs())) state.perform(card.o("tap_action"), null, defaultAction = "voice")
+        }
+        // Hors du centre : rien, sauf en mode édition (réglages de M.A.C.S.). L'appui long est capté pour ne pas compter
+        // comme un toucher. La tuile touche le coin qui ouvre les réglages : un doigt qui débordait changeait de page
+        // ou lançait la voix.
+        Box(Modifier.fillMaxSize().tapHold(onTap = { state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs()) }, onHold = {}))
+        // Au centre de la tuile, autour du visage : toucher = parler, appui long = `hold_action` (ex. retour à l'accueil).
         Box(
-            Modifier.fillMaxSize().tapHold(
-                onTap = {
-                    // Mode édition : réglages de M.A.C.S. (capteurs, batterie, satellite…).
-                    if (state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs())) return@tapHold
-                    state.perform(card.o("tap_action"), null, defaultAction = "voice")
-                },
-                // Pas d'appui long : M.A.C.S. est sous le coin qui ouvre les réglages (appui long), un doigt qui débordait
-                // changeait de page au lieu d'ouvrir les réglages.
-                onHold = null,
+            Modifier.align(Alignment.Center).fillMaxSize(0.5f).tapHold(
+                onTap = onTap,
+                onHold = { if (!state.editMode) state.perform(card.o("hold_action"), null, defaultAction = "none") },
             )
         )
     }

@@ -227,6 +227,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   débranchement suivi par `CameraManager.AvailabilityCallback` (liste comparée, pas l'état « disponible ») ; aucune
   caméra → rien d'ouvert. Tablette de l'utilisateur : caméra arrière contre le mur, ne pas la laisser choisie.
   Raspberry Pi : section dans les README et `docs/reference.fr.md` (non testé sur un vrai Pi).
+- **M.A.C.S. (carte)** : toucher (voix) et appui long (`hold_action`, ex. retour à l'accueil) seulement au centre de la
+  tuile (moitié de sa largeur et de sa hauteur) ; ailleurs rien (mode édition : ses réglages), l'appui long y est capté
+  pour ne pas compter comme un toucher. Raison : la tuile est sous le coin des réglages (appui long en (30, 40)).
 - **Détails au toucher** : graphique à plusieurs courbes → `GraphDetailsSheet` (valeur, écart, 3 derniers changements
   sur 7 jours) ; barre de présence → `PresenceDetailsSheet` (périodes des 24 h).
 - **Bouton Dashboard** : `assets/images/dashboard-button.webp` (WebP animé, Android 9+), généré par
