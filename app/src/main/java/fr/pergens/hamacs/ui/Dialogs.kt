@@ -69,6 +69,7 @@ import fr.pergens.hamacs.config.s
 import fr.pergens.hamacs.ha.cameraStreamUrl
 import fr.pergens.hamacs.ui.cards.RenderCard
 import fr.pergens.hamacs.ui.components.HaIcon
+import fr.pergens.hamacs.ui.components.bind
 import fr.pergens.hamacs.ui.components.tapHold
 import fr.pergens.hamacs.ui.theme.Dash
 import kotlinx.coroutines.delay
@@ -518,6 +519,19 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
         }
     }
     DisposableEffect(Unit) { onDispose { player.release() } }
+    // Avancement (enregistrements seulement : un direct n'a pas de durée).
+    val progress = fr.pergens.hamacs.ui.components.rememberPlaybackProgress()
+    progress.bind(player)
+    var paused by remember { mutableStateOf(false) }
+    DisposableEffect(player) {
+        val l = object : androidx.media3.common.Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                paused = !isPlaying && (!player.playWhenReady || player.playbackState == androidx.media3.common.Player.STATE_ENDED)
+            }
+        }
+        player.addListener(l)
+        onDispose { player.removeListener(l) }
+    }
     // Erreurs notées dans le journal (Réglages › À propos) : le flux plein écran peut rester noir sans autre signe.
     fun note(what: String, e: Throwable? = null) = fr.pergens.hamacs.CrashGuard.note(
         ctx, "fullscreen:$target:$what", "Vidéo plein écran",
@@ -650,6 +664,38 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                     .background(Color(0xB3000000), androidx.compose.foundation.shape.RoundedCornerShape(12.dp)).padding(horizontal = 14.dp, vertical = 8.dp),
                 color = Color.White, fontSize = 13.sp,
             )
+            // Enregistrement : lecture / pause, temps écoulé, barre (toucher ou glisser pour se déplacer) et durée.
+            androidx.compose.animation.AnimatedVisibility(
+                rendered && error == null && progress.hasProgress, Modifier.align(Alignment.BottomCenter),
+                enter = androidx.compose.animation.fadeIn(), exit = androidx.compose.animation.fadeOut(),
+            ) {
+                Row(
+                    Modifier.fillMaxWidth()
+                        .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(Color.Transparent, Color(0xCC000000))))
+                        .padding(start = 24.dp, end = 32.dp, top = 48.dp, bottom = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(
+                        Modifier.size(52.dp).clip(androidx.compose.foundation.shape.CircleShape).background(Color(0x33FFFFFF))
+                            .tapHold({
+                                touchedAt = System.currentTimeMillis()
+                                when {
+                                    player.playbackState == androidx.media3.common.Player.STATE_ENDED -> { player.seekTo(0); player.playWhenReady = true }
+                                    player.playWhenReady -> player.pause()
+                                    else -> player.play()
+                                }
+                            }),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        val ended = progress.duration > 0 && progress.position >= progress.duration
+                        HaIcon(if (ended) "mdi:replay" else if (paused) "mdi:play" else "mdi:pause", size = 30.dp)
+                    }
+                    fr.pergens.hamacs.ui.components.PlaybackTimeline(
+                        progress, Modifier.weight(1f).padding(start = 18.dp),
+                        onSeek = { touchedAt = System.currentTimeMillis() },
+                    )
+                }
+            }
             HaIcon("mdi:close", Modifier.align(Alignment.TopEnd).padding(24.dp).tapHold(onDismiss), 32.dp)
         }
     }

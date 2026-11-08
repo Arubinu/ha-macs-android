@@ -60,6 +60,8 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
+import fr.pergens.hamacs.ui.components.PlaybackBar
+import fr.pergens.hamacs.ui.components.bind
 import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -400,6 +402,8 @@ internal fun InlineLive(
     onEnded: () -> Unit = {},
     /** Format refusé par les décodeurs de la tablette. */
     onDecoderError: () -> Unit = {},
+    /** Avancement de la lecture (enregistrements), pour une barre affichée par l'appelant. */
+    progress: fr.pergens.hamacs.ui.components.PlaybackProgress? = null,
 ) {
     val state = LocalDashState.current
     val ctx = LocalContext.current
@@ -414,6 +418,7 @@ internal fun InlineLive(
         }
     }
     DisposableEffect(Unit) { onDispose { player.release() } }
+    if (progress != null) progress.bind(player)
     // Une seule erreur signalée par lecteur (erreur de lecture et délai dépassé peuvent se suivre).
     var failed by remember { mutableStateOf(false) }
     val fail = { if (!failed) { failed = true; onError() } }
@@ -559,6 +564,7 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                 }
             }
             val videoAlpha by animateFloatAsState(if (isPlaying && videoShown && !videoFailed) 1f else 0f, tween(450), label = "vid")
+            val progress = remember(d.id) { fr.pergens.hamacs.ui.components.PlaybackProgress() }
             Box(
                 Modifier.fillMaxSize().tapHold({
                     val video = d.video ?: return@tapHold
@@ -588,6 +594,7 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                         onError = { videoFailed = true; unreadable = true; playing = null },
                         onDecoderError = { fr.pergens.hamacs.ui.VideoCompat.mark("capture:${d.camera}") },
                         onEnded = { playing = null },
+                        progress = progress,
                     )
                 }
                 if (isPlaying && !videoShown && !videoFailed) androidx.compose.material3.CircularProgressIndicator(
@@ -611,6 +618,10 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
                     Text(d.camera, Modifier.weight(1f), style = TextStyle(fontSize = 14.sp, color = Color.White))
                     Text(d.time.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(fontSize = 14.sp, color = Color.White))
                 }
+                // Avancement de la vidéo, au ras du bas de la carte (un toucher ouvre le plein écran : pas de déplacement ici).
+                if (isPlaying && progress.hasProgress) PlaybackBar(
+                    progress, Modifier.align(Alignment.BottomCenter).graphicsLayer { alpha = videoAlpha },
+                )
             }
         }
         if (items.size > 1) {

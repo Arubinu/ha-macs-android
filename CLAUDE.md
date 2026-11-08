@@ -264,6 +264,11 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Zoom du plein écran** (`PlayerDialog`, calculs dans `ui/ZoomLogic.kt`, testés) : pincer (×5 au plus), glisser,
   double toucher (×2,5 / retour) ; `graphicsLayer` sur la vue du lecteur (TextureView `player_texture`, une SurfaceView
   ignorerait la transformation). Zoomé : un toucher ne ferme pas ; chaque geste relance la fermeture automatique.
+- **Avancement des enregistrements** (`ui/components/PlaybackBar.kt`, calculs `ui/PlaybackLogic.kt`, testés) :
+  `PlaybackProgress` relié au lecteur (`bind`, position relue 10 fois/s ; `InlineLive(progress = …)`), affiché seulement
+  si durée connue et pas un direct. Carte des détections : barre fine au ras du bas (pas de déplacement, le toucher
+  ouvre le plein écran) ; aperçu de l'historique : temps, barre touchable, durée ; plein écran : en plus lecture / pause /
+  reprise. Un déplacement après la fin relance la lecture ; un geste sur la barre relance la fermeture automatique.
 - **Alimentation** (`PowerSupply.kt`) : capteur de sous-tension hwmon (`rpi_volt`, `in0_lcrit_alarm`) relu toutes les
   2 s → pastille *Alimentation trop faible* 10 min et note du journal. Le Pi 4 ne négocie pas l'USB PD (port de dock
   trop faible : HDMI coupé, journal `hwmon0: Undervoltage detected!`). Lecture du capteur par l'app pas encore vérifiée.

@@ -429,6 +429,7 @@ private fun Preview(d: Detection?, items: List<Detection>, modifier: Modifier, o
         suspend fun video(): String? = videoUrl ?: d.video?.let { v -> runCatching { v() }.getOrNull() }?.also { videoUrl = it }
 
         val shape = RoundedCornerShape(Dash.shapes.roundedRadius)
+        val progress = remember(d.id) { fr.pergens.hamacs.ui.components.PlaybackProgress() }
         Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(shape).background(Faint)) {
             AsyncImage(image, d.camera, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             if (playing && videoUrl != null) fr.pergens.hamacs.ui.cards.InlineLive(
@@ -437,8 +438,21 @@ private fun Preview(d: Detection?, items: List<Detection>, modifier: Modifier, o
                 onFirstFrame = { shownFrame = true },
                 onError = { failed = true; playing = false },
                 onEnded = { playing = false; shownFrame = false },
+                progress = progress,
             )
             if (playing && !shownFrame) CircularProgressIndicator(Modifier.align(Alignment.Center).size(40.dp), color = Color.White, strokeWidth = 3.dp)
+            // Avancement : temps écoulé, barre (toucher ou glisser pour se déplacer) et durée, sur un dégradé.
+            androidx.compose.animation.AnimatedVisibility(
+                playing && shownFrame && progress.hasProgress, Modifier.align(Alignment.BottomCenter),
+                enter = androidx.compose.animation.fadeIn(), exit = androidx.compose.animation.fadeOut(),
+            ) {
+                fr.pergens.hamacs.ui.components.PlaybackTimeline(
+                    progress,
+                    Modifier.fillMaxWidth()
+                        .background(Brush.verticalGradient(listOf(Color.Transparent, Color(0xB3000000))))
+                        .padding(start = 16.dp, end = 16.dp, top = 28.dp, bottom = 6.dp),
+                )
+            }
         }
         Spacer(Modifier.height(18.dp))
         Text(d.camera, style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Medium, color = Color.White), maxLines = 1, overflow = TextOverflow.Ellipsis)
