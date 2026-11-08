@@ -23,8 +23,11 @@ Pour refaire les captures (une série par langue de l'app) :
    d'exemple traduite (`translate_dashboard.py`, textes dans `translations.json`), événements du faux serveur
    traduits (`DEMO_LANG`), langue de l'app réglée, autorisations données d'office. Avant : émulateur à l'heure
    française (`adb shell cmd alarm set-timezone Europe/Paris`) et galerie sans photo personnelle (la capture de
-   l'éditeur d'avatar prend la **première** photo : y mettre seulement la photo CC0 d'Alex, dans `/sdcard/Pictures`) ;
-5. enregistrer en JPEG 1440 px dans `docs/screenshots/<langue>/` ;
+   l'éditeur d'avatar prend la **première** photo de toute la galerie : seulement la photo CC0 d'Alex, dans
+   `/sdcard/Pictures`, et rien dans `/sdcard/DCIM` ni ailleurs ; vérifier avec
+   `adb shell content query --uri content://media/external/images/media --projection _display_name`) ;
+5. enregistrer en JPEG 1440 px dans `docs/screenshots/<langue>/` ; le plein écran zoomé, sans texte, n'est fait qu'en
+   anglais et va dans `docs/screenshots/fullscreen-zoom.jpg` (commun aux 8 README) ;
 6. réinstaller la version personnelle et restaurer les données sauvegardées en 1 (`tar xf`), puis redonner
    l'autorisation caméra (`pm clear` la retire).
 

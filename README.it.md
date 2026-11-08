@@ -18,6 +18,10 @@ card personalizzate e senza nulla da configurare in Home Assistant.
   <img src="docs/screenshots/it/avatar-editor.jpg" width="49%" alt="">
   <img src="docs/screenshots/it/camera-wall.jpg" width="49%" alt="">
 </p>
+<p align="center">
+  <img src="docs/screenshots/it/detection-history.jpg" width="49%" alt="">
+  <img src="docs/screenshots/fullscreen-zoom.jpg" width="49%" alt="">
+</p>
 <p align="center">📸 <em>Dati dimostrativi.</em></p>
 
 ## ✨ Funzionalità

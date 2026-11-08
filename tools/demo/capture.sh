@@ -53,6 +53,19 @@ prepare consumption
 "$ADB" shell input tap 1590 665; sleep 10         # caméra du haut : flux vidéo (badge DIRECT)
 shot cameras-energy
 
+prepare rooms
+"$ADB" shell input tap 960 1090; sleep 6
+"$ADB" shell input tap 1828 80; sleep 8           # historique des détections (bouton rond de la zone des détections)
+"$ADB" shell input tap 450 171; sleep 3           # période « 7 jours »
+"$ADB" shell input tap 220 890; sleep 3           # 4e capture (2e ligne)
+shot detection-history
+# Plein écran zoomé : sans texte, une seule image pour toutes les langues (docs/screenshots/fullscreen-zoom.jpg).
+if [ "$L" = en ]; then
+  "$ADB" shell input tap 1758 824; sleep 8        # plein écran de la capture choisie
+  "$ADB" shell "input tap 1300 750 & sleep 0.12; input tap 1300 750"; sleep 3   # double toucher : zoom
+  shot fullscreen-zoom
+fi
+
 prepare members
 "$ADB" shell input tap 960 1090; sleep 4
 for i in 1 2 3; do                                # réglages : appui long en (30, 40)

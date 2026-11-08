@@ -18,6 +18,10 @@ personalizadas y sin nada que configurar en Home Assistant.
   <img src="docs/screenshots/es/avatar-editor.jpg" width="49%" alt="">
   <img src="docs/screenshots/es/camera-wall.jpg" width="49%" alt="">
 </p>
+<p align="center">
+  <img src="docs/screenshots/es/detection-history.jpg" width="49%" alt="">
+  <img src="docs/screenshots/fullscreen-zoom.jpg" width="49%" alt="">
+</p>
 <p align="center">📸 <em>Datos de demostración.</em></p>
 
 ## ✨ Funciones
