@@ -90,7 +90,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-private fun parseAspect(s: String?, default: Float = 16f / 9.15f): Float {
+internal fun parseAspect(s: String?, default: Float = 16f / 9.15f): Float {
     if (s == null) return default
     val parts = s.split('/', ':').mapNotNull { it.trim().toFloatOrNull() }
     return if (parts.size == 2 && parts[1] > 0) parts[0] / parts[1] else default
@@ -406,7 +406,12 @@ internal fun InlineLive(
     var url by remember(camId) { mutableStateOf(liveUrl) }
     val player = remember {
         // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format (4K H.265 sur Galaxy Tab A8).
-        ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().apply { volume = 0f }
+        ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().apply {
+            volume = 0f
+            // Pas de changement de fréquence de l'écran selon la vidéo : sur un écran HDMI (Raspberry Pi), il coupe
+            // le signal quelques secondes (« Aucun signal »).
+            setVideoChangeFrameRateStrategy(androidx.media3.common.C.VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF)
+        }
     }
     DisposableEffect(Unit) { onDispose { player.release() } }
     // Une seule erreur signalée par lecteur (erreur de lecture et délai dépassé peuvent se suivre).
@@ -503,6 +508,12 @@ fun CameraDetectionsCard(card: Card, modifier: Modifier) {
         if (state.editMode && key != null) {
             Box(Modifier.matchParentSize().zIndex(1f).tapHold({ state.editTarget = EditTarget.Detections(key) }))
         }
+        // Historique de toutes les détections (période, jour, caméra) : bouton rond en haut à droite.
+        if (!state.editMode) Box(
+            Modifier.align(Alignment.TopEnd).zIndex(1f).padding(10.dp).size(38.dp).clip(CircleShape)
+                .background(Color(0x99000000)).tapHold({ state.detectionHistory = card }),
+            contentAlignment = Alignment.Center,
+        ) { HaIcon("mdi:history", size = 22.dp) }
         if (items.isEmpty()) {
             Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
                 HaIcon("mdi:camera-outline", size = 40.dp, tint = Color(255, 255, 255, 120))

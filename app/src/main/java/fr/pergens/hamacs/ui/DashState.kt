@@ -111,8 +111,10 @@ class DashState(
     var player by mutableStateOf<String?>(null)
     /** Mur de caméras ouvert (grille plein écran). */
     var wall by mutableStateOf<WallRequest?>(null)
-    /** Plein écran (caméra seule ou mur) : l'affichage du tableau de bord est mis en pause dessous. */
-    val fullscreen: Boolean get() = player != null || wall != null
+    /** Historique des détections ouvert : configuration de la zone des détections. */
+    var detectionHistory by mutableStateOf<kotlinx.serialization.json.JsonObject?>(null)
+    /** Plein écran (caméra seule, mur, historique) : l'affichage du tableau de bord est mis en pause dessous. */
+    val fullscreen: Boolean get() = player != null || wall != null || detectionHistory != null
     /** Flux de repli du plein écran (celui de la carte) si la tablette ne sait pas décoder [player] (4K H.265…). */
     var playerFallback: String? = null
 

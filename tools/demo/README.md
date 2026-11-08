@@ -33,7 +33,8 @@ Pour refaire les captures (une série par langue de l'app) :
 Images des caméras (`cameras/`, recadrées et horodatées) d'après des photos de Wikimedia Commons du domaine public
 ou en CC0. Les flux vidéo des caméras (`stream/`, non versionné) sont générés au démarrage avec ffmpeg (`DEMO_FFMPEG`
 ou dans le `PATH`). Alimentation simulée pour le mur de caméras : 1 et 2 sur secteur (en direct), 3 solaire, 4 sur
-batterie.
+batterie. Détections : dossier `media-source://media_source/enregistrements` fictif (`recordings()`), captures et
+vidéos de 6 s des 10 derniers jours (deux dans les 20 dernières minutes), servies sous `/local/media/Enregistrements/`.
 
 - [Sidewalk Leads to Front Porch with Chair Near Door](https://commons.wikimedia.org/wiki/File:Sidewalk_Leads_to_Front_Porch_with_Chair_Near_Door_-_DPLA_-_71848c65252a2cc89f232fa8f946b63a.jpg) (domaine public)
 - [Interior view, first floor, hallway — W. K. Bowman-O'Neal Apartment Building](https://commons.wikimedia.org/wiki/File:Interior_view,_first_floor,_detail,_hallway_looking_north_-_W._K._Bowman-O%27Neal_Apartment_Building,_4313_East_Kellogg_Street,_Wichita,_Sedgwick_County,_KS_HABS_KANS,87-WICH.V,1-35.tif) (domaine public, HABS)

@@ -29,6 +29,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.mutableFloatStateOf
@@ -79,7 +82,8 @@ fun Overlays(dashboard: JsonObject) {
     val state = LocalDashState.current
     state.popup?.let { id -> dashboard.o("popups")?.o(id)?.let { PopupDialog(it) { state.popup = null } } }
     state.moreInfo?.let { MoreInfoDialog(it) { state.moreInfo = null } }
-    // Mur avant le lecteur : une caméra agrandie depuis le mur s'ouvre par-dessus.
+    // Historique et mur avant le lecteur : une vidéo ou une caméra agrandie depuis eux s'ouvre par-dessus.
+    state.detectionHistory?.let { DetectionHistoryDialog(it) { state.detectionHistory = null } }
     state.wall?.let { CameraWallDialog(it) { state.wall = null } }
     state.player?.let { PlayerDialog(it, state.playerFallback) { state.player = null; state.playerFallback = null } }
     state.pin?.let { req -> PinDialog(req) { state.pin = null } }
@@ -489,7 +493,9 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
         }
     }
     // Autre décodeur (logiciel) essayé si celui de la tablette refuse le format, avant le flux de repli.
-    val player = remember { ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build() }
+    val player = remember { ExoPlayer.Builder(ctx, androidx.media3.exoplayer.DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build()
+        // Pas de changement de fréquence de l'écran selon la vidéo (écran HDMI : signal coupé quelques secondes).
+        .apply { setVideoChangeFrameRateStrategy(androidx.media3.common.C.VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF) } }
     val settings = fr.pergens.hamacs.App.instance.config.settings.collectAsState().value
     val fill = settings.fullscreenFill
     // Fermeture automatique (Réglages › Affichage) : retour au tableau de bord si personne ne l'a fermé. Jamais
@@ -502,7 +508,10 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
         cameraMotion(dash, ids) + ids.mapNotNull { blocks[it]?.s("event_entity") }
     }
     val motionOn = motionIds.any { entity(it)?.state == "on" }
-    LaunchedEffect(settings.fullscreenSeconds, motionOn) {
+    // Zoom (pincer, glisser, double toucher) ; chaque geste relance le délai de fermeture automatique.
+    var zoom by remember { mutableStateOf(ZoomLogic.Zoom()) }
+    var touchedAt by remember { mutableStateOf(0L) }
+    LaunchedEffect(settings.fullscreenSeconds, motionOn, touchedAt) {
         if (settings.fullscreenSeconds > 0 && !motionOn) {
             delay(settings.fullscreenSeconds * 1000L)
             onDismiss()
@@ -573,7 +582,29 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
             }
             onDispose { }
         }
-        Box(Modifier.fillMaxSize().background(Color.Black).tapHold(onDismiss), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.fillMaxSize().background(Color.Black)
+                // Pincer pour zoomer, glisser pour se déplacer (l'image couvre toujours l'écran).
+                .pointerInput(Unit) {
+                    detectTransformGestures { centroid, pan, factor, _ ->
+                        zoom = ZoomLogic.transform(
+                            zoom, centroid.x, centroid.y, factor, pan.x, pan.y, size.width.toFloat(), size.height.toFloat(),
+                        )
+                        touchedAt = System.currentTimeMillis()
+                    }
+                }
+                // Toucher : fermer (sauf zoomé, pour ne pas le fermer par mégarde) ; double toucher : zoom ou retour.
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { if (!zoom.zoomed) onDismiss() },
+                        onDoubleTap = { p ->
+                            zoom = ZoomLogic.doubleTap(zoom, p.x, p.y, size.width.toFloat(), size.height.toFloat())
+                            touchedAt = System.currentTimeMillis()
+                        },
+                    )
+                },
+            contentAlignment = Alignment.Center,
+        ) {
             AndroidView(
                 factory = {
                     (android.view.LayoutInflater.from(it).inflate(R.layout.player_texture, null) as PlayerView).apply { this.player = player }
@@ -584,7 +615,13 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                     it.resizeMode = if (fill) androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                     else androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
                 },
-                modifier = Modifier.fillMaxSize(),
+                // Vue du lecteur en TextureView : elle suit l'agrandissement (une SurfaceView l'ignorerait).
+                modifier = Modifier.fillMaxSize().graphicsLayer {
+                    scaleX = zoom.scale
+                    scaleY = zoom.scale
+                    translationX = zoom.x
+                    translationY = zoom.y
+                },
             )
             // Chargement : dernière image de la caméra floutée, roue et message (au lieu d'un écran noir).
             androidx.compose.animation.AnimatedVisibility(

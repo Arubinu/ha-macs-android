@@ -446,7 +446,13 @@ async def websocket(request):
                 await result(mid, {'context': {}})
                 await media_service(m)
             elif kind == 'media_source/browse_media':
-                await result(mid, {'title': 'Media', 'media_content_id': m.get('media_content_id', ''), 'children': [], 'can_expand': True})
+                cid = m.get('media_content_id', '')
+                children = []
+                if cid.rstrip('/').endswith('/enregistrements'):
+                    children = [{'title': n, 'media_class': 'image' if n.endswith('.jpg') else 'video', 'media_content_id': f'{cid.rstrip("/")}/{n}',
+                                 'media_content_type': 'image/jpeg' if n.endswith('.jpg') else 'video/mp4', 'can_play': True, 'can_expand': False}
+                                for n in recordings()]
+                await result(mid, {'title': 'Media', 'media_content_id': cid, 'children': children, 'can_expand': True})
             else:
                 await result(mid)  # call_service, subscribe_events, unsubscribe… : acquittés sans effet
     return ws
@@ -650,7 +656,42 @@ def app() -> web.Application:
     a.router.add_get('/api/camera_proxy/{entity}', camera_proxy)
     a.router.add_get('/api/calendars/{entity}', calendars)
     a.router.add_static('/demo/stream/', HERE / 'stream')
+    a.router.add_get('/local/media/Enregistrements/{name}', recording_file)
     return a
+
+
+def recordings() -> list:
+    """Enregistrements fictifs des détections (dossier « enregistrements ») : captures et vidéos des 10 derniers jours,
+    plus nombreuses le jour, deux dans les 20 dernières minutes. Même tirage à chaque appel dans la même minute."""
+    now = datetime.now().replace(second=0, microsecond=0)
+    rnd = random.Random(now.strftime('%Y%m%d%H'))
+    times = [now - timedelta(minutes=4), now - timedelta(minutes=13)]
+    for d in range(10):
+        day = (now - timedelta(days=d)).replace(hour=0, minute=0)
+        for _ in range(rnd.randint(6, 16)):
+            hour = rnd.choice([7, 8, 8, 9, 12, 13, 17, 18, 18, 19, 20, 21, 2])
+            t = day + timedelta(hours=hour, minutes=rnd.randint(0, 59), seconds=rnd.randint(0, 59))
+            if t < now - timedelta(minutes=30):
+                times.append(t)
+    names = []
+    for t in sorted(set(times), reverse=True):
+        stem = f'Argus {rnd.randint(1, 4)}_{t:%Y%m%d%H%M%S}'
+        names += [stem + '.jpg', stem + '.mp4']
+    return names
+
+
+async def recording_file(request):
+    """Fichier d'un enregistrement : capture = image de la caméra, vidéo = courte vidéo générée depuis cette image."""
+    name = request.match_info['name']
+    m = re.match(r'Argus (\d)_', name)
+    if not m:
+        raise web.HTTPNotFound()
+    if name.endswith('.mp4'):
+        path = HERE / 'stream' / f'argus_{m.group(1)}.mp4'
+        if not path.exists():
+            raise web.HTTPNotFound()
+        return web.FileResponse(path)
+    return web.FileResponse(HERE / 'cameras' / f'camera.argus_{m.group(1)}_fluent.jpg')
 
 
 def ensure_stream():
@@ -659,6 +700,14 @@ def ensure_stream():
     ffmpeg = os.environ.get('DEMO_FFMPEG') or shutil.which('ffmpeg')
     for i in range(1, 5):
         out = HERE / 'stream' / f'argus_{i}.m3u8'
+        mp4 = HERE / 'stream' / f'argus_{i}.mp4'
+        # Vidéo des enregistrements fictifs (historique des détections) : 6 s, même image.
+        if ffmpeg and not mp4.exists():
+            mp4.parent.mkdir(exist_ok=True)
+            subprocess.run([ffmpeg, '-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-loop', '1',
+                            '-i', str(HERE / 'cameras' / f'camera.argus_{i}_fluent.jpg'), '-t', '6', '-r', '10',
+                            '-vf', 'scale=1280:720,format=yuv420p', '-c:v', 'libx264', '-preset', 'veryfast',
+                            '-movflags', '+faststart', str(mp4)], check=False)
         if out.exists():
             continue
         if not ffmpeg:
