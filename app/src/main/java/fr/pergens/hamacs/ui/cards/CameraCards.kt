@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -350,14 +351,20 @@ internal val BATTERY_MARGIN = 9.33.dp
  */
 @Composable
 internal fun BatteryBadge(pct: Double, modifier: Modifier) {
+    val icon = when {
+        pct >= 90 -> "mdi:battery"
+        pct >= 10 -> "mdi:battery-${(pct / 10).toInt() * 10}"
+        else -> "mdi:battery-outline"
+    }
+    // Ombre légère (icône floutée sombre dessous, ombre du texte) : lisible même sur une image très claire.
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Box(Modifier.size(width = 25.dp, height = 12.dp), contentAlignment = Alignment.Center) {
+            if (android.os.Build.VERSION.SDK_INT >= 31) HaIcon(
+                icon, Modifier.requiredSize(25.dp).rotate(90f).blur(2.5.dp, androidx.compose.ui.draw.BlurredEdgeTreatment.Unbounded),
+                size = 25.dp, tint = Color(0xCC000000),
+            )
             HaIcon(
-                when {
-                    pct >= 90 -> "mdi:battery"
-                    pct >= 10 -> "mdi:battery-${(pct / 10).toInt() * 10}"
-                    else -> "mdi:battery-outline"
-                },
+                icon,
                 Modifier.requiredSize(25.dp).rotate(90f),
                 size = 25.dp,
                 tint = when {
@@ -368,7 +375,13 @@ internal fun BatteryBadge(pct: Double, modifier: Modifier) {
             )
         }
         // 5 px d'écart avec l'icône sur la tablette (densité 1,5).
-        Text("${pct.toInt()} %", Modifier.padding(top = 3.33.dp), style = TextStyle(fontSize = 13.sp, color = Color.White, lineHeight = 15.sp))
+        Text(
+            "${pct.toInt()} %", Modifier.padding(top = 3.33.dp),
+            style = TextStyle(
+                fontSize = 13.sp, color = Color.White, lineHeight = 15.sp,
+                shadow = androidx.compose.ui.graphics.Shadow(Color(0xCC000000), androidx.compose.ui.geometry.Offset(0f, 1f), 6f),
+            ),
+        )
     }
 }
 

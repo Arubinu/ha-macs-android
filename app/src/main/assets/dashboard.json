@@ -42,10 +42,6 @@
           "position": "fill",
           "tap_action": {
             "action": "voice"
-          },
-          "hold_action": {
-            "action": "screen",
-            "screen": "dashboard"
           }
         },
         {
@@ -503,10 +499,6 @@
               "type": "macs",
               "tap_action": {
                 "action": "voice"
-              },
-              "hold_action": {
-                "action": "screen",
-                "screen": "home"
               },
               "flex": true,
               "min_height": 100,

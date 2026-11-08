@@ -75,7 +75,9 @@ fun MacsCard(card: Card, modifier: Modifier) {
                     if (state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs())) return@tapHold
                     state.perform(card.o("tap_action"), null, defaultAction = "voice")
                 },
-                onHold = { state.perform(card.o("hold_action"), null, defaultAction = "none") },
+                // Pas d'appui long : M.A.C.S. est sous le coin qui ouvre les réglages (appui long), un doigt qui débordait
+                // changeait de page au lieu d'ouvrir les réglages.
+                onHold = null,
             )
         )
     }

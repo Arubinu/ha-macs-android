@@ -566,20 +566,12 @@ private fun WallTile(
                 )
             }
         }
-        // Liseré de mouvement, par-dessus la vidéo : trait sombre large dessous (ombre, lisible sur une image claire),
-        // trait de la couleur d'accent dessus ; fondu à l'apparition et à la disparition.
+        // Liseré de mouvement, par-dessus la vidéo ; fondu à l'apparition et à la disparition.
         if (motionAlpha > 0f) {
             val accent = Dash.colors.accent
             androidx.compose.foundation.Canvas(Modifier.matchParentSize().graphicsLayer { alpha = motionAlpha }) {
                 val r = 12.dp.toPx()
-                val shadowW = 7.dp.toPx()
                 val lineW = 2.5.dp.toPx()
-                drawRoundRect(
-                    Color(0x73000000), topLeft = androidx.compose.ui.geometry.Offset(shadowW / 2, shadowW / 2),
-                    size = androidx.compose.ui.geometry.Size(size.width - shadowW, size.height - shadowW),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(r - shadowW / 2),
-                    style = androidx.compose.ui.graphics.drawscope.Stroke(shadowW),
-                )
                 drawRoundRect(
                     accent, topLeft = androidx.compose.ui.geometry.Offset(lineW / 2, lineW / 2),
                     size = androidx.compose.ui.geometry.Size(size.width - lineW, size.height - lineW),
