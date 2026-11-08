@@ -260,6 +260,24 @@ private fun HourlyRow(hourly: List<Forecast>, nextRising: String?, nextSetting: 
     }
 }
 
+/**
+ * Texte sur une ligne : s'il ne tient pas dans la largeur, il est abrégé avec un point (« Vandaag » → « Vand. »)
+ * au lieu de passer à la ligne.
+ */
+@Composable
+private fun AbbreviatedText(text: String, modifier: Modifier, style: TextStyle) {
+    val measurer = androidx.compose.ui.text.rememberTextMeasurer()
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier) {
+        val max = constraints.maxWidth
+        fun fits(s: String) = measurer.measure(s, style, maxLines = 1, softWrap = false).size.width <= max
+        val shown = remember(text, max, style) {
+            if (fits(text)) text
+            else (text.length - 1 downTo 1).map { text.take(it).trimEnd() + "." }.firstOrNull { fits(it) } ?: text.take(1)
+        }
+        Text(shown, style = style, maxLines = 1, softWrap = false)
+    }
+}
+
 @Composable
 private fun DailyBars(daily: List<Forecast>, current: Double?, zone: ZoneId, animated: Boolean) {
     if (daily.isEmpty()) return
@@ -282,7 +300,7 @@ private fun DailyBars(daily: List<Forecast>, current: Double?, zone: ZoneId, ani
                 layout(p.width, p.height - cut) { p.place(0, 0) }
             } else Modifier
             Row(trim, verticalAlignment = Alignment.CenterVertically) {
-                Text(label, Modifier.width(40.dp), style = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold))
+                AbbreviatedText(label, Modifier.width(40.dp), TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold))
                 WeatherIcon(f.condition, false, Modifier.size(24.dp), animated)
                 Text(
                     "${lo.roundToInt()}°C", Modifier.width(44.dp).padding(start = 4.dp),

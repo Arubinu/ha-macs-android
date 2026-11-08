@@ -471,6 +471,42 @@ class MacsController(
         webView?.evaluateJavascript("window.macsPost($msg)", null)
     }
 
+    private var lastLook = 0L
+
+    /**
+     * Les yeux suivent le doigt posé en [fx], [fy] (0..1 dans la WebView), quelle que soit l'humeur. M.A.C.S. tourne
+     * dans un iframe et ne suit la souris qu'au repos (cursorFx.js) : une règle CSS injectée dans l'iframe déplace
+     * directement les iris (mêmes amplitudes, 20 × 12 px) tant que la classe `hamacs-look` est posée. Au plus ~30
+     * envois par seconde ; [lookEnd] les ramène au centre.
+     */
+    fun look(fx: Float, fy: Float) {
+        val now = android.os.SystemClock.uptimeMillis()
+        if (now - lastLook < 33) return
+        lastLook = now
+        val x = ((fx - 0.5f) * 2f).coerceIn(-1f, 1f) * 20f
+        val y = ((fy - 0.5f) * 2f).coerceIn(-1f, 1f) * 12f
+        lookJs("d.documentElement.style.setProperty('--hamacs-look-x','${"%.1f".format(java.util.Locale.ROOT, x)}px');" +
+            "d.documentElement.style.setProperty('--hamacs-look-y','${"%.1f".format(java.util.Locale.ROOT, y)}px');" +
+            "clearTimeout(window.hamacsLookEnd);d.body.classList.add('hamacs-look');")
+    }
+
+    /** Doigt levé : les iris reviennent au centre en douceur, puis l'animation de l'humeur reprend. */
+    fun lookEnd() {
+        lastLook = 0
+        lookJs("d.documentElement.style.setProperty('--hamacs-look-x','0px');d.documentElement.style.setProperty('--hamacs-look-y','0px');" +
+            "clearTimeout(window.hamacsLookEnd);window.hamacsLookEnd=setTimeout(function(){d.body.classList.remove('hamacs-look')},300);")
+    }
+
+    private fun lookJs(body: String) {
+        webView?.evaluateJavascript(
+            "(function(){var f=document.querySelector('iframe');var d=f&&f.contentDocument;if(!d||!d.body)return;" +
+                "if(!d.getElementById('hamacs-look')){var s=d.createElement('style');s.id='hamacs-look';" +
+                "s.textContent='body.hamacs-look .iris{transform:translate(var(--hamacs-look-x,0px),var(--hamacs-look-y,0px)) !important;" +
+                "transition:transform .15s ease-out !important}';d.head.appendChild(s);}" + body + "})()",
+            null,
+        )
+    }
+
     private fun num(v: Double?) = v?.let { JsonPrimitive(it) } ?: JsonNull
 
     private fun turnsJson(): JsonArray = JsonArray(voice.turns.value.take(macsConfig().i("max_turns", 2)).map { t ->

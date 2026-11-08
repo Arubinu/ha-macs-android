@@ -513,7 +513,6 @@
             {
               "type": "alarm",
               "entity": "alarm_control_panel.alarmo",
-              "name": "Alarme",
               "space_after": 2
             },
             {

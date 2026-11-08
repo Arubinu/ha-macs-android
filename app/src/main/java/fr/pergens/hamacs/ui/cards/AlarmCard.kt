@@ -49,6 +49,9 @@ private val MODES = listOf(
     AlarmMode("armed_home", R.string.alarm_mode_home, "mdi:home", "alarm_arm_home"),
 )
 
+/** Noms par défaut de la carte dans les 8 langues (`alarm_name`) : remplacés par celui de la langue affichée. */
+private val DEFAULT_ALARM_NAMES = setOf("alarm", "alarme", "alarma", "allarme")
+
 @Composable
 private fun stateLabel(s: String?): String = when (s) {
     "disarmed" -> stringResource(R.string.alarm_state_disarmed)
@@ -112,7 +115,9 @@ fun AlarmCard(card: Card, modifier: Modifier) {
                     contentAlignment = Alignment.Center,
                 ) { HaIcon(stateIcon(e?.state), size = 28.dp, tint = Color(255, 255, 255, 140)) }
                 Column(Modifier.padding(start = 22.dp)) {
-                    Text(card.s("name") ?: stringResource(R.string.alarm_name), style = TextStyle(fontSize = 26.sp, color = Color.White))
+                    // Nom resté sur un nom par défaut (« Alarm », « Alarme »… d'anciennes configs) : celui de la langue.
+                    val name = card.s("name")?.takeUnless { it.trim().lowercase() in DEFAULT_ALARM_NAMES }
+                    Text(name ?: stringResource(R.string.alarm_name), style = TextStyle(fontSize = 26.sp, color = Color.White))
                     Text(stateLabel(e?.state), style = TextStyle(fontSize = 14.sp, color = Color.White))
                 }
             }

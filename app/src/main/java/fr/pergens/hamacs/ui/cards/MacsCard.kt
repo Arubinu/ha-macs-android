@@ -78,8 +78,28 @@ fun MacsCard(card: Card, modifier: Modifier) {
         // Grand cercle invisible centré sur M.A.C.S. (90 % de la plus petite dimension de la tuile) : toucher = parler,
         // appui long = `hold_action` (ex. retour à l'accueil), zones noires comprises. Hors du cercle : rien, sauf en mode
         // édition (réglages de M.A.C.S.) ; la tuile touche le coin des réglages, un doigt qui débordait changeait de page.
+        // Le doigt posé (et glissé) sur M.A.C.S. : ses yeux le suivent. Observation seule (rien n'est consommé).
+        val fill = card.s("position") == "fill"
         Box(
-            Modifier.fillMaxSize().pointerInput(card, state.editMode) {
+            Modifier.fillMaxSize().pointerInput(Unit) {
+                awaitPointerEventScope {
+                    var down = false
+                    while (true) {
+                        val e = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                        val c = e.changes.firstOrNull { it.pressed }
+                        if (c == null) {
+                            if (down) macs.lookEnd()
+                            down = false
+                            continue
+                        }
+                        down = true
+                        // Couche au premier plan : la WebView déborde en bas de `overflow_bottom`.
+                        val area = this.size
+                        val h = area.height + (if (front) overflowPx else 0)
+                        macs.look(c.position.x / area.width.coerceAtLeast(1), c.position.y / h.coerceAtLeast(1))
+                    }
+                }
+            }.pointerInput(card, state.editMode) {
                 val zone = this
                 fun inCircle(p: androidx.compose.ui.geometry.Offset): Boolean {
                     val w = zone.size.width.toFloat()
@@ -91,8 +111,9 @@ fun MacsCard(card: Card, modifier: Modifier) {
                 }
                 detectTapGestures(
                     onTap = { p -> if (inCircle(p)) onTap() else state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs()) },
+                    // Grand M.A.C.S. de l'accueil (plein écran) : pas d'appui long, le doigt posé sert à guider ses yeux.
                     onLongPress = { p ->
-                        if (inCircle(p) && !state.editMode) state.perform(card.o("hold_action"), null, defaultAction = "none")
+                        if (!fill && inCircle(p) && !state.editMode) state.perform(card.o("hold_action"), null, defaultAction = "none")
                     },
                 )
             }
