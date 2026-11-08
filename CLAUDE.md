@@ -203,8 +203,11 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Mur de caméras** (`ui/CameraWall.kt`, `DashState.wall`) : grille plein écran des caméras du premier bloc d'onglets
   de caméras (onglet ou toutes), colonne d'icônes des onglets ; ouvert par l'icône de grille à droite des onglets ou le
   bouton de l'accueil (`WallHomeButton`, masquable : surcharge `wall` / `home_button`, `EditTarget.Wall`). Direct selon
-  l'alimentation (option `power` du bloc caméra : `mains` / `solar` / `battery`, sinon devinée par un capteur
-  `…_battery_state` / `…_charging` du même préfixe) : secteur toujours, mouvement (+ `motion_delay`) pour tous,
+  l'alimentation (option `power` du bloc caméra : `mains` / `solar` / `battery`, sinon devinée par le capteur
+  `…_battery_state` / `…_charging` du même préfixe sur 24 h d'historique, relu toutes les heures : jamais en décharge →
+  secteur, charge et décharge → solaire, décharge seule → batterie). Batterie
+  affichée (`CameraWall.showBattery`) : jamais sur secteur, sinon options `battery_card` / `battery_wall` du bloc
+  caméra (éditeur, « Niveau de batterie »). Direct : secteur toujours, mouvement (+ `motion_delay`) pour tous,
   « Tout en direct » 2 min sauf batterie ; limite = réglage `wall_max_live` ou estimation (décodeur H.264 matériel :
   fps 720p atteignables / 30, bornés par ses instances), abaissée après un échec de décodeur (prefs `video`
   `wall_learned`). Captures : secteur 10 s, solaire 15 s, batterie `refresh`. Fermeture `wall_seconds` (-1 = comme

@@ -886,4 +886,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Nenhuma câmara encontrada neste dispositivo.</string>
     <string name="camera_preview">Pré-visualização</string>
+    <string name="camera_battery_title">Nível da bateria</string>
+    <string name="camera_battery_help">Nunca mostrado numa câmara ligada à corrente.</string>
+    <string name="camera_battery_card">No cartão</string>
+    <string name="camera_battery_wall">No mural de câmaras</string>
 </resources>

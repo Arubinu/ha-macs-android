@@ -64,6 +64,8 @@ import fr.pergens.hamacs.ui.components.HaIcon
 import fr.pergens.hamacs.ui.components.tapHold
 import fr.pergens.hamacs.ui.theme.Dash
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import fr.pergens.hamacs.ha.history
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -161,6 +163,16 @@ object CameraWall {
         return out
     }
 
+    /**
+     * Batterie affichée sur la carte ([wall] = false) ou dans le mur ([wall] = true) : jamais sur secteur, sinon selon
+     * l'option `battery_card` / `battery_wall` de l'éditeur de la caméra (affichée par défaut).
+     */
+    fun showBattery(card: JsonObject, blocks: Map<String, JsonObject>, states: Map<String, EntityState>, wall: Boolean): Boolean {
+        if (card.s("battery") == null || power(card, blocks, states) == CameraPower.Mains) return false
+        val opt = card.s("entity")?.let { blocks[it] }?.get(if (wall) "battery_wall" else "battery_card")
+        return (opt as? kotlinx.serialization.json.JsonPrimitive)?.content != "false"
+    }
+
     /** Alimentation choisie dans l'éditeur de la caméra, sinon [guessPower]. */
     fun power(card: JsonObject, blocks: Map<String, JsonObject>, states: Map<String, EntityState>): CameraPower {
         val chosen = card.s("entity")?.let { blocks[it]?.s("power") }
@@ -168,18 +180,55 @@ object CameraWall {
     }
 
     /**
-     * Sans batterie déclarée : secteur. Avec batterie : secteur si un capteur d'état de charge du même appareil
-     * (`sensor.<préfixe>_battery_state`, `…_charging`) indique qu'elle est branchée, batterie sinon.
+     * Sans batterie déclarée : secteur. Avec batterie, d'après le capteur d'état de charge du même appareil
+     * (`sensor.<préfixe>_battery_state`, `…_charging`) sur les dernières 24 h (historique de HA, relu toutes les heures) :
+     * jamais en décharge → secteur ; charge et décharge alternées → solaire ; décharge seulement → batterie. En attendant
+     * l'historique, l'état actuel : « charge terminée » → secteur, « en charge » → solaire, sinon batterie.
      */
     fun guessPower(card: JsonObject, states: Map<String, EntityState>): CameraPower {
         val battery = card.s("battery") ?: return CameraPower.Mains
         val prefix = battery.substringAfter('.').substringBeforeLast('_')
-        val plugged = setOf("charging", "chargecomplete", "charge_complete", "charged", "full", "plugged", "on")
-        val charge = states.values.filter { s ->
+        val sensor = states.values.firstOrNull { s ->
             val obj = s.entityId.substringAfter('.')
             obj.startsWith(prefix + "_") && ("battery_state" in obj || "charging" in obj || "charge_state" in obj)
+        } ?: return CameraPower.Battery
+        val now = sensor.state.lowercase()
+        val seen = chargeHistory[sensor.entityId]
+        requestHistory(sensor.entityId)
+        if (seen == null) return when {
+            now in FULL -> CameraPower.Mains
+            now in CHARGING -> CameraPower.Solar
+            else -> CameraPower.Battery
         }
-        return if (charge.any { it.state.lowercase() in plugged }) CameraPower.Mains else CameraPower.Battery
+        val all = seen + now
+        val discharges = all.any { it in DISCHARGING }
+        val charges = all.any { it in CHARGING || it in FULL }
+        return when {
+            !discharges -> CameraPower.Mains
+            charges -> CameraPower.Solar
+            else -> CameraPower.Battery
+        }
+    }
+
+    private val FULL = setOf("chargecomplete", "charge_complete", "charged", "full", "plugged")
+    private val CHARGING = setOf("charging", "on")
+    private val DISCHARGING = setOf("discharging", "not_charging", "notcharging", "off", "unplugged")
+
+    /** États de charge vus sur 24 h, par capteur (état Compose : la carte se met à jour à l'arrivée). */
+    private val chargeHistory = androidx.compose.runtime.mutableStateMapOf<String, Set<String>>()
+    private val historyAt = java.util.concurrent.ConcurrentHashMap<String, Long>()
+
+    private fun requestHistory(id: String) {
+        val t = System.currentTimeMillis()
+        val last = historyAt[id]
+        if (last != null && t - last < 3_600_000L) return
+        historyAt[id] = t
+        val app = App.instance
+        app.scope.launch {
+            runCatching { app.ha.history(listOf(id), 24)[id].orEmpty().map { it.state.lowercase() }.toSet() }
+                .onSuccess { seen -> kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { chargeHistory[id] = seen } }
+                .onFailure { historyAt.remove(id) }
+        }
     }
 
     private val prefs by lazy { App.instance.getSharedPreferences("video", Context.MODE_PRIVATE) }
@@ -496,6 +545,14 @@ private fun WallTile(
                     style = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Medium), maxLines = 1,
                 )
             }
+        }
+        // Batterie (réglage « dans le mur » de la caméra, jamais sur secteur).
+        val battery = card.s("battery")?.let { states[it] }
+        if (battery != null && !battery.isUnavailable && CameraWall.showBattery(card, blocks, states, wall = true)) {
+            fr.pergens.hamacs.ui.cards.BatteryBadge(
+                battery.numeric ?: 0.0,
+                Modifier.align(Alignment.TopEnd).padding(top = fr.pergens.hamacs.ui.cards.BATTERY_MARGIN, end = fr.pergens.hamacs.ui.cards.BATTERY_MARGIN),
+            )
         }
         if (live && liveShown && !liveFailed) Row(
             Modifier.align(Alignment.TopStart).padding(8.dp).background(Color(0xCCE53935), RoundedCornerShape(6.dp))

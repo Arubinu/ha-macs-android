@@ -245,6 +245,7 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                 // Nom affiché (mur de caméras) et alimentation (direct permanent sur secteur, capture sinon).
                 CameraNameField(optionKey, options, original)
                 CameraPowerFields(optionKey, options, original)
+                CameraBatteryFields(optionKey, options, original)
                 // Sonnette, détecteur : ouverture en plein écran quand une entité se déclenche.
                 CameraEventFields(optionKey, options)
             }

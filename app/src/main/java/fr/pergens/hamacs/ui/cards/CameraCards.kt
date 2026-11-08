@@ -325,7 +325,9 @@ fun CameraCard(card: Card, modifier: Modifier) {
                     style = TextStyle(fontSize = 11.sp, color = Color.White, fontWeight = FontWeight.Bold))
             }
         }
-        if (battery != null && !battery.isUnavailable) {
+        // Batterie : pas sur secteur, et selon le réglage « sur la carte » de la caméra.
+        val states by state.ha.states.collectAsState()
+        if (battery != null && !battery.isUnavailable && fr.pergens.hamacs.ui.CameraWall.showBattery(card, blocks, states, wall = false)) {
             BatteryBadge(battery.numeric ?: 0.0, Modifier.align(Alignment.TopEnd).padding(top = BATTERY_MARGIN, end = BATTERY_MARGIN))
         }
     }
@@ -340,14 +342,14 @@ private fun PlaceholderLayer(url: String?, kind: CameraPlaceholderKind, modifier
 
 private val BADGE_MARGIN = 10.dp
 /** Un pixel plus près des bords que le badge DIRECT (tablette à densité 1,5). */
-private val BATTERY_MARGIN = 9.33.dp
+internal val BATTERY_MARGIN = 9.33.dp
 
 /**
  * Batterie horizontale (borne à droite) au-dessus de son pourcentage. L'icône est recadrée sur sa
  * silhouette réelle : à 100 %, le bloc est à la même distance du bord haut que du bord droit.
  */
 @Composable
-private fun BatteryBadge(pct: Double, modifier: Modifier) {
+internal fun BatteryBadge(pct: Double, modifier: Modifier) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Box(Modifier.size(width = 25.dp, height = 12.dp), contentAlignment = Alignment.Center) {
             HaIcon(

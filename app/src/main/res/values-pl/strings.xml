@@ -906,4 +906,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Nie znaleziono kamery w tym urządzeniu.</string>
     <string name="camera_preview">Podgląd</string>
+    <string name="camera_battery_title">Poziom baterii</string>
+    <string name="camera_battery_help">Nigdy nie jest pokazywany dla kamery zasilanej z sieci.</string>
+    <string name="camera_battery_card">Na karcie</string>
+    <string name="camera_battery_wall">Na ścianie kamer</string>
 </resources>

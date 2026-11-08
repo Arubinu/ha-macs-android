@@ -917,4 +917,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">No camera found on this device.</string>
     <string name="camera_preview">Preview</string>
+    <string name="camera_battery_title">Battery level</string>
+    <string name="camera_battery_help">Never shown for a camera on mains power.</string>
+    <string name="camera_battery_card">On the card</string>
+    <string name="camera_battery_wall">In the camera wall</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -180,6 +181,32 @@ internal fun CameraPowerFields(optionKey: String, options: JsonObject?, card: Js
             }
             chip(chosen == null, stringResource(R.string.camera_power_auto, label(guess)), null)
             CameraPower.entries.forEach { p -> chip(chosen == p.key, label(p), p.key) }
+        }
+    }
+}
+
+/**
+ * Batterie affichée sur la carte et dans le mur de caméras, chacune à part. Seulement pour une caméra avec une entité
+ * batterie et une alimentation autre que le secteur (sur secteur, jamais affichée).
+ */
+@Composable
+internal fun CameraBatteryFields(optionKey: String, options: JsonObject?, card: JsonObject?) {
+    val app = App.instance
+    val states by app.ha.states.collectAsState()
+    val blocks by app.config.blocks.collectAsState()
+    if (card?.s("battery") == null || CameraWall.power(card, blocks, states) == CameraPower.Mains) return
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(stringResource(R.string.camera_battery_title), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+        Text(stringResource(R.string.camera_battery_help), style = TextStyle(fontSize = 13.sp, color = Color(255, 255, 255, 150)))
+        listOf("battery_card" to R.string.camera_battery_card, "battery_wall" to R.string.camera_battery_wall).forEach { (key, label) ->
+            val on = (options?.get(key) as? JsonPrimitive)?.content != "false"
+            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(label), Modifier.weight(1f), style = TextStyle(fontSize = 15.sp, color = Color.White))
+                Switch(
+                    on, { app.config.setBlockOption(optionKey, key, if (it) null else false) },
+                    colors = SwitchDefaults.colors(checkedTrackColor = Dash.colors.accent, checkedThumbColor = Color.Black),
+                )
+            }
         }
     }
 }

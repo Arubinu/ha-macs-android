@@ -886,4 +886,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Geen camera gevonden op dit apparaat.</string>
     <string name="camera_preview">Voorbeeld</string>
+    <string name="camera_battery_title">Batterijniveau</string>
+    <string name="camera_battery_help">Nooit getoond voor een camera op netstroom.</string>
+    <string name="camera_battery_card">Op de kaart</string>
+    <string name="camera_battery_wall">In de camerawand</string>
 </resources>
