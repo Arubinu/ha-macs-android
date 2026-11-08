@@ -11,6 +11,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -73,16 +75,27 @@ fun MacsCard(card: Card, modifier: Modifier) {
             // Mode édition : réglages de M.A.C.S. (capteurs, batterie, satellite…).
             if (!state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs())) state.perform(card.o("tap_action"), null, defaultAction = "voice")
         }
-        // Hors du centre : rien, sauf en mode édition (réglages de M.A.C.S.). L'appui long est capté pour ne pas compter
-        // comme un toucher. La tuile touche le coin qui ouvre les réglages : un doigt qui débordait changeait de page
-        // ou lançait la voix.
-        Box(Modifier.fillMaxSize().tapHold(onTap = { state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs()) }, onHold = {}))
-        // Au centre de la tuile, autour du visage : toucher = parler, appui long = `hold_action` (ex. retour à l'accueil).
+        // Grand cercle invisible centré sur M.A.C.S. (90 % de la plus petite dimension de la tuile) : toucher = parler,
+        // appui long = `hold_action` (ex. retour à l'accueil), zones noires comprises. Hors du cercle : rien, sauf en mode
+        // édition (réglages de M.A.C.S.) ; la tuile touche le coin des réglages, un doigt qui débordait changeait de page.
         Box(
-            Modifier.align(Alignment.Center).fillMaxSize(0.5f).tapHold(
-                onTap = onTap,
-                onHold = { if (!state.editMode) state.perform(card.o("hold_action"), null, defaultAction = "none") },
-            )
+            Modifier.fillMaxSize().pointerInput(card, state.editMode) {
+                val zone = this
+                fun inCircle(p: androidx.compose.ui.geometry.Offset): Boolean {
+                    val w = zone.size.width.toFloat()
+                    val h = zone.size.height.toFloat()
+                    val r = minOf(w, h) * 0.45f
+                    val dx = p.x - w / 2f
+                    val dy = p.y - h / 2f
+                    return dx * dx + dy * dy <= r * r
+                }
+                detectTapGestures(
+                    onTap = { p -> if (inCircle(p)) onTap() else state.editInstead(fr.pergens.hamacs.ui.EditTarget.Macs()) },
+                    onLongPress = { p ->
+                        if (inCircle(p) && !state.editMode) state.perform(card.o("hold_action"), null, defaultAction = "none")
+                    },
+                )
+            }
         )
     }
 }
