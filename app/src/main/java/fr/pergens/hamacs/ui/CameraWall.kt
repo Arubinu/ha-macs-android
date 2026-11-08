@@ -426,7 +426,7 @@ private fun RailButton(icon: String, label: String?, active: Boolean, onClick: (
 }
 
 /**
- * Case du mur : capture rafraîchie (secteur hors direct 10 s, solaire 15 s, batterie `refresh` de la carte), direct
+ * Case du mur : capture rafraîchie ([WallLogic.snapshotSeconds]), direct
  * muet par-dessus quand il est accordé. Un échec de décodeur abaisse la limite de directs.
  */
 @Composable
@@ -439,11 +439,10 @@ private fun WallTile(
     val camId = card.s("entity") ?: return
     val cam = states[camId]
     val power = CameraWall.power(card, blocks, states)
-    val refresh = when (power) {
-        CameraPower.Mains -> 10
-        CameraPower.Solar -> 15
-        CameraPower.Battery -> card.i("refresh", 60)
-    }
+    val solarMin = App.instance.config.settings.collectAsState().value.wallSolarMin
+    val refresh = WallLogic.snapshotSeconds(
+        power, card.s("battery")?.let { states[it]?.state?.toFloatOrNull() }, solarMin, card.i("refresh", 60),
+    )
     var tick by remember { mutableIntStateOf(0) }
     LaunchedEffect(refresh) { while (true) { delay(refresh * 1000L); tick++ } }
     var lastKey by remember { mutableStateOf<String?>(null) }

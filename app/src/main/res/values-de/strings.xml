@@ -893,7 +893,7 @@
     <string name="wall_capped">Live-Grenze erreicht</string>
     <string name="wall_saving">Akku sparen</string>
     <string name="wall_solar_min">Kamerawand: Solarkameras bei „Alle live“</string>
-    <string name="wall_solar_min_help">Unter diesem Akkustand bleibt eine Solarkamera bei Standbildern (live nur bei Bewegung oder Berührung).</string>
+    <string name="wall_solar_min_help">Unter diesem Akkustand bleibt eine Solarkamera bei Standbildern im Takt einer Akkukamera (live nur bei Bewegung oder Berührung).</string>
     <string name="wall_solar_always">Immer</string>
     <string name="wall_solar_above">Ab %1$d %%</string>
 </resources>

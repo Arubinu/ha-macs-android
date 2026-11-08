@@ -924,7 +924,7 @@
     <string name="wall_capped">Live limit reached</string>
     <string name="wall_saving">Battery saving</string>
     <string name="wall_solar_min">Camera wall: solar cameras in “All live”</string>
-    <string name="wall_solar_min_help">Below this battery level, a solar camera stays on snapshots (live only on motion or when touched).</string>
+    <string name="wall_solar_min_help">Below this battery level, a solar camera stays on snapshots, spaced like a battery camera (live only on motion or when touched).</string>
     <string name="wall_solar_always">Always</string>
     <string name="wall_solar_above">From %1$d %%</string>
 </resources>

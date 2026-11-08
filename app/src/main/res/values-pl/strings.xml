@@ -913,7 +913,7 @@
     <string name="wall_capped">Osiągnięto limit podglądów</string>
     <string name="wall_saving">Oszczędzanie baterii</string>
     <string name="wall_solar_min">Ściana kamer: kamery solarne w „Wszystko na żywo”</string>
-    <string name="wall_solar_min_help">Poniżej tego poziomu baterii kamera solarna pozostaje przy zdjęciach (na żywo tylko przy ruchu lub dotknięciu).</string>
+    <string name="wall_solar_min_help">Poniżej tego poziomu baterii kamera solarna pozostaje przy zdjęciach, odświeżanych jak w kamerze na baterii (na żywo tylko przy ruchu lub dotknięciu).</string>
     <string name="wall_solar_always">Zawsze</string>
     <string name="wall_solar_above">Od %1$d %%</string>
 </resources>

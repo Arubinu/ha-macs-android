@@ -68,6 +68,16 @@ internal object WallLogic {
         return Selection(sorted.take(n).toSet(), sorted.drop(n).toSet(), saving)
     }
 
+    /**
+     * Intervalle des captures hors direct : secteur 10 s, solaire 15 s, batterie [batteryRefresh] (option `refresh` de
+     * la carte) ; une caméra solaire sous [solarMin] % de batterie prend le rythme des caméras sur batterie.
+     */
+    fun snapshotSeconds(power: CameraPower, battery: Float?, solarMin: Int, batteryRefresh: Int): Int = when (power) {
+        CameraPower.Mains -> 10
+        CameraPower.Solar -> if (solarMin > 0 && battery != null && battery < solarMin) batteryRefresh else 15
+        CameraPower.Battery -> batteryRefresh
+    }
+
     /** Colonnes de la grille qui donnent les plus grandes cases 16:9 pour [n] caméras dans [w] × [h]. */
     fun bestColumns(n: Int, w: Float, h: Float): Int {
         var best = 1

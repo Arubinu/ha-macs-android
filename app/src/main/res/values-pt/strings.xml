@@ -893,7 +893,7 @@
     <string name="wall_capped">Limite de diretos atingido</string>
     <string name="wall_saving">Poupança de bateria</string>
     <string name="wall_solar_min">Mural de câmaras: câmaras solares em «Tudo em direto»</string>
-    <string name="wall_solar_min_help">Abaixo deste nível de bateria, uma câmara solar fica em instantâneos (direto só com movimento ou ao tocar).</string>
+    <string name="wall_solar_min_help">Abaixo deste nível de bateria, uma câmara solar fica em instantâneos, espaçados como com bateria (direto só com movimento ou ao tocar).</string>
     <string name="wall_solar_always">Sempre</string>
     <string name="wall_solar_above">A partir de %1$d %%</string>
 </resources>

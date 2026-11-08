@@ -101,6 +101,15 @@ class WallLogicTest {
         assertEquals(setOf("entree", "salon"), WallLogic.select(cams, emptySet(), null, false, -3, 30).capped)
     }
 
+    @Test fun `rythme des captures - solaire faible comme la batterie`() {
+        assertEquals(10, WallLogic.snapshotSeconds(Mains, null, 30, 60))
+        assertEquals(15, WallLogic.snapshotSeconds(Solar, 80f, 30, 60))
+        assertEquals(60, WallLogic.snapshotSeconds(Solar, 25f, 30, 60))
+        assertEquals(15, WallLogic.snapshotSeconds(Solar, 25f, 0, 60))
+        assertEquals(15, WallLogic.snapshotSeconds(Solar, null, 30, 60))
+        assertEquals(120, WallLogic.snapshotSeconds(Battery, 90f, 30, 120))
+    }
+
     // --- Grille -----------------------------------------------------------------------------------
 
     @Test fun `colonnes de la grille sur un ecran 16-10`() {
