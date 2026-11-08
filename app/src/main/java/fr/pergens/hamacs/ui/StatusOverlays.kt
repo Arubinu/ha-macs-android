@@ -63,6 +63,13 @@ fun BoxScope.StatusOverlays(state: DashState) {
     // Dernière heure connue : la pastille la garde pendant son fondu de disparition (sinon « 1 janv. 00:00 »).
     var lastSince by remember { mutableStateOf(0L) }
     since?.let { lastSince = it }
+    // Sous-tension de l'alimentation : pastille pendant 10 min après la dernière alerte.
+    val lowAt by fr.pergens.hamacs.PowerSupply.lastLow.collectAsState()
+    val now = fr.pergens.hamacs.ui.cards.rememberNow(30_000)
+    val lowPower = lowAt?.let { now - it < 10 * 60_000 } == true
+    var lastLow by remember { mutableStateOf(0L) }
+    lowAt?.let { lastLow = it }
+    val pillsHeight = (if (unreachable) 34.dp else 0.dp) + (if (lowPower) 34.dp else 0.dp)
 
     // --- Action refusée ------------------------------------------------------------------------------
     var refusal by remember { mutableStateOf<String?>(null) }
@@ -77,7 +84,7 @@ fun BoxScope.StatusOverlays(state: DashState) {
     AnimatedVisibility(
         refusal != null,
         // Au-dessus du bandeau du mode édition et de la pastille « injoignable » s'ils sont affichés.
-        Modifier.align(Alignment.BottomCenter).padding(bottom = base + if (unreachable) 40.dp else 0.dp),
+        Modifier.align(Alignment.BottomCenter).padding(bottom = base + pillsHeight + if (pillsHeight > 0.dp) 6.dp else 0.dp),
         enter = fadeIn(tween(200)) + slideInVertically(tween(250)) { it / 2 },
         exit = fadeOut(tween(250)),
     ) {
@@ -115,6 +122,26 @@ fun BoxScope.StatusOverlays(state: DashState) {
             HaIcon("mdi:lan-disconnect", size = 14.dp, tint = Danger.copy(alpha = 0.85f))
             Text(
                 stringResource(R.string.ha_unreachable_since, label), Modifier.padding(start = 6.dp),
+                style = TextStyle(fontSize = 12.sp, color = Color.White.copy(alpha = 0.75f)),
+            )
+        }
+    }
+
+    // --- Alimentation trop faible (au-dessus de la pastille « injoignable ») -----------------------------
+    AnimatedVisibility(
+        lowPower,
+        Modifier.align(Alignment.BottomCenter).padding(bottom = base + if (unreachable) 34.dp else 0.dp),
+        enter = fadeIn(tween(400)), exit = fadeOut(tween(400)),
+    ) {
+        val label = Instant.ofEpochMilli(lastLow).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
+        val shape = RoundedCornerShape(16.dp)
+        Row(
+            Modifier.clip(shape).background(Color(0xB3141416), shape).padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HaIcon("mdi:flash-alert-outline", size = 14.dp, tint = Color(0xFFFFB74D))
+            Text(
+                stringResource(R.string.power_low, label), Modifier.padding(start = 6.dp),
                 style = TextStyle(fontSize = 12.sp, color = Color.White.copy(alpha = 0.75f)),
             )
         }

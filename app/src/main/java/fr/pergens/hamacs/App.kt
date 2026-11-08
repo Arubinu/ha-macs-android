@@ -73,6 +73,8 @@ class App : Application(), ImageLoaderFactory {
         voice = VoiceAssistant(this, http, ha, config, scope)
         macs = MacsController(this, ha, config, voice, scope).also { it.start() }
         presence = PresenceDetector(this)
+        // Alimentation trop faible (capteur de sous-tension, quand l'appareil en a un).
+        PowerSupply.start(this, scope)
         alerts = fr.pergens.hamacs.ui.cards.alerts.AlertHub(this, ha, config).also { it.start() }
         // Mises à jour depuis les Releases GitHub (vérification toutes les 12 h).
         updater = fr.pergens.hamacs.update.Updater(this, http, scope).also { it.start() }

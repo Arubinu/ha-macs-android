@@ -1483,6 +1483,24 @@ private fun KioskGroup() {
                 ) { Text(stringResource(R.string.kiosk_home_action)) }
             }
         } else {
+            // Propriétaire : redémarrage de l'appareil (Android ne permet pas à une application de l'éteindre).
+            GroupDivider()
+            var confirmReboot by remember { mutableStateOf(false) }
+            SettingRow(stringResource(R.string.device_reboot), stringResource(R.string.device_reboot_help)) {
+                OutlinedButton(
+                    onClick = { confirmReboot = true },
+                    Modifier.heightIn(min = 48.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
+                ) { Text(stringResource(R.string.device_reboot_action)) }
+            }
+            if (confirmReboot) AlertDialog(
+                onDismissRequest = { confirmReboot = false },
+                confirmButton = {
+                    TextButton(onClick = { confirmReboot = false; kiosk.reboot(ctx) }) { Text(stringResource(R.string.device_reboot_action)) }
+                },
+                dismissButton = { TextButton(onClick = { confirmReboot = false }) { Text(stringResource(R.string.cancel)) } },
+                text = { Text(stringResource(R.string.device_reboot_confirm)) },
+            )
             GroupDivider()
             SettingRow(stringResource(R.string.kiosk_remove_owner), stringResource(R.string.kiosk_remove_owner_help)) {
                 OutlinedButton(

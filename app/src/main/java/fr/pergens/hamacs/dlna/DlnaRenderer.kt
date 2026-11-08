@@ -371,6 +371,8 @@ class DlnaRenderer(
     // ------------------------------------------------------------------------------------------------------------
 
     private fun ensurePlayer(): ExoPlayer = player ?: ExoPlayer.Builder(ctx).setMediaSourceFactory(fr.pergens.hamacs.App.instance.mediaSources(ctx)).build().also { p ->
+        // Pas de changement de fréquence de l'écran selon la vidéo (écran HDMI : signal coupé quelques secondes).
+        p.setVideoChangeFrameRateStrategy(androidx.media3.common.C.VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
         p.addListener(object : Player.Listener {
             override fun onEvents(player: Player, events: Player.Events) = updateState()
