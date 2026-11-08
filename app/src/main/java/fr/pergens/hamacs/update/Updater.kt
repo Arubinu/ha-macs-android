@@ -87,7 +87,10 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
                 return@launch
             }
             _state.value = if (release != null && newer(release.version, BuildConfig.VERSION_NAME)) State.Available(release) else State.UpToDate
-            if (auto && autoInstall && release != null && _state.value is State.Available) install(release)
+            // Version de débogage : pas d'installation automatique depuis les vraies Releases (autre clé de
+            // signature, Android refuserait) ; seulement avec un faux serveur de test (`update_url`).
+            val testServer = apiUrl != RELEASES
+            if (auto && autoInstall && (!BuildConfig.DEBUG || testServer) && release != null && _state.value is State.Available) install(release)
         }
     }
 

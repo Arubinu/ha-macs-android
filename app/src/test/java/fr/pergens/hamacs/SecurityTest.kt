@@ -31,7 +31,9 @@ class SecurityTest {
 
     @Test fun `valeur alteree ou invalide - null sans planter`() {
         val enc = DeviceSecret.encryptWith(device, "1234")
-        val flipped = enc.dropLast(2) + (if (enc[enc.length - 2] == 'A') "B" else "A") + enc.last()
+        // Caractère du milieu (les derniers peuvent ne porter que des bits de remplissage base64 : rien ne change).
+        val i = enc.length / 2
+        val flipped = enc.substring(0, i) + (if (enc[i] == 'A') "B" else "A") + enc.substring(i + 1)
         assertNull(DeviceSecret.decryptWith(device, flipped))
         assertNull(DeviceSecret.decryptWith(device, "enc:v1:pas-du-base64!"))
         assertNull(DeviceSecret.decryptWith(device, "enc:v1:"))
