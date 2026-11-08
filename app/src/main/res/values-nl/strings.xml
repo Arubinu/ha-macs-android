@@ -897,4 +897,27 @@
     <string name="wall_solar_min_help">Onder dit batterijniveau blijft een zonnecamera bij momentopnamen, zo vaak als bij een batterijcamera (live alleen bij beweging of aanraking).</string>
     <string name="wall_solar_always">Altijd</string>
     <string name="wall_solar_above">Vanaf %1$d %%</string>
+    <string name="power_low">Voeding te zwak (onderspanning om %1$s)</string>
+    <string name="device_reboot">Apparaat opnieuw opstarten</string>
+    <string name="device_reboot_help">Mogelijk omdat de app apparaateigenaar is. Android laat een app het apparaat niet uitschakelen, alleen opnieuw opstarten.</string>
+    <string name="device_reboot_action">Opnieuw opstarten</string>
+    <string name="device_reboot_confirm">Het apparaat wordt nu opnieuw opgestart. Doorgaan?</string>
+    <string name="det_history_title">Detectiegeschiedenis</string>
+    <string name="det_history_entities">Geen geschiedenis met Home Assistant-entiteiten: alleen de laatste opname van elke camera is bekend.</string>
+    <string name="det_history_loading">Detecties laden…</string>
+    <string name="det_history_none">Geen detectie in deze periode</string>
+    <string name="det_history_pick">Tik op een opname om die hier te tonen</string>
+    <string name="det_history_no_video">Geen video bij deze opname</string>
+    <string name="det_history_play">Afspelen</string>
+    <string name="det_history_stop">Stoppen</string>
+    <string name="det_period_today">Vandaag</string>
+    <string name="det_period_yesterday">Gisteren</string>
+    <string name="det_period_week">7 dagen</string>
+    <string name="det_period_month">30 dagen</string>
+    <string name="det_period_day">Kies een dag</string>
+    <string name="det_all_cameras">Alle</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d detectie</item>
+        <item quantity="other">%1$d detecties</item>
+    </plurals>
 </resources>

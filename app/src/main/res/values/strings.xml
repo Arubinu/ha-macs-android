@@ -928,4 +928,27 @@
     <string name="wall_solar_min_help">Below this battery level, a solar camera stays on snapshots, spaced like a battery camera (live only on motion or when touched).</string>
     <string name="wall_solar_always">Always</string>
     <string name="wall_solar_above">From %1$d %%</string>
+    <string name="power_low">Power supply too weak (under-voltage at %1$s)</string>
+    <string name="device_reboot">Restart the device</string>
+    <string name="device_reboot_help">Available because the app is the device owner. Android does not let an app turn the device off, only restart it.</string>
+    <string name="device_reboot_action">Restart</string>
+    <string name="device_reboot_confirm">The device will restart now. Continue?</string>
+    <string name="det_history_title">Detection history</string>
+    <string name="det_history_entities">History is not available with Home Assistant entities: only the latest capture of each camera is known.</string>
+    <string name="det_history_loading">Loading detections…</string>
+    <string name="det_history_none">No detection for this period</string>
+    <string name="det_history_pick">Touch a capture to show it here</string>
+    <string name="det_history_no_video">No video for this capture</string>
+    <string name="det_history_play">Play</string>
+    <string name="det_history_stop">Stop</string>
+    <string name="det_period_today">Today</string>
+    <string name="det_period_yesterday">Yesterday</string>
+    <string name="det_period_week">7 days</string>
+    <string name="det_period_month">30 days</string>
+    <string name="det_period_day">Pick a day</string>
+    <string name="det_all_cameras">All</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d detection</item>
+        <item quantity="other">%1$d detections</item>
+    </plurals>
 </resources>

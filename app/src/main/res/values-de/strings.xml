@@ -897,4 +897,27 @@
     <string name="wall_solar_min_help">Unter diesem Akkustand bleibt eine Solarkamera bei Standbildern im Takt einer Akkukamera (live nur bei Bewegung oder Berührung).</string>
     <string name="wall_solar_always">Immer</string>
     <string name="wall_solar_above">Ab %1$d %%</string>
+    <string name="power_low">Stromversorgung zu schwach (Unterspannung um %1$s)</string>
+    <string name="device_reboot">Gerät neu starten</string>
+    <string name="device_reboot_help">Möglich, weil die App Geräteinhaber ist. Android erlaubt einer App nicht, das Gerät auszuschalten, nur es neu zu starten.</string>
+    <string name="device_reboot_action">Neu starten</string>
+    <string name="device_reboot_confirm">Das Gerät wird jetzt neu gestartet. Fortfahren?</string>
+    <string name="det_history_title">Erkennungsverlauf</string>
+    <string name="det_history_entities">Mit Home-Assistant-Entitäten ist kein Verlauf verfügbar: bekannt ist nur die letzte Aufnahme jeder Kamera.</string>
+    <string name="det_history_loading">Erkennungen werden geladen…</string>
+    <string name="det_history_none">Keine Erkennung in diesem Zeitraum</string>
+    <string name="det_history_pick">Tippe auf eine Aufnahme, um sie hier anzuzeigen</string>
+    <string name="det_history_no_video">Kein Video zu dieser Aufnahme</string>
+    <string name="det_history_play">Abspielen</string>
+    <string name="det_history_stop">Stoppen</string>
+    <string name="det_period_today">Heute</string>
+    <string name="det_period_yesterday">Gestern</string>
+    <string name="det_period_week">7 Tage</string>
+    <string name="det_period_month">30 Tage</string>
+    <string name="det_period_day">Tag wählen</string>
+    <string name="det_all_cameras">Alle</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d Erkennung</item>
+        <item quantity="other">%1$d Erkennungen</item>
+    </plurals>
 </resources>

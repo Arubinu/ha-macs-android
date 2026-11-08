@@ -917,4 +917,29 @@
     <string name="wall_solar_min_help">Poniżej tego poziomu baterii kamera solarna pozostaje przy zdjęciach, odświeżanych jak w kamerze na baterii (na żywo tylko przy ruchu lub dotknięciu).</string>
     <string name="wall_solar_always">Zawsze</string>
     <string name="wall_solar_above">Od %1$d %%</string>
+    <string name="power_low">Zbyt słabe zasilanie (za niskie napięcie o %1$s)</string>
+    <string name="device_reboot">Uruchom ponownie urządzenie</string>
+    <string name="device_reboot_help">Możliwe, ponieważ aplikacja jest właścicielem urządzenia. Android nie pozwala aplikacji go wyłączyć, tylko uruchomić ponownie.</string>
+    <string name="device_reboot_action">Uruchom ponownie</string>
+    <string name="device_reboot_confirm">Urządzenie zostanie teraz uruchomione ponownie. Kontynuować?</string>
+    <string name="det_history_title">Historia wykryć</string>
+    <string name="det_history_entities">Historia jest niedostępna z encjami Home Assistant: znane jest tylko ostatnie ujęcie każdej kamery.</string>
+    <string name="det_history_loading">Wczytywanie wykryć…</string>
+    <string name="det_history_none">Brak wykryć w tym okresie</string>
+    <string name="det_history_pick">Dotknij ujęcia, aby je tu wyświetlić</string>
+    <string name="det_history_no_video">Brak wideo dla tego ujęcia</string>
+    <string name="det_history_play">Odtwórz</string>
+    <string name="det_history_stop">Zatrzymaj</string>
+    <string name="det_period_today">Dzisiaj</string>
+    <string name="det_period_yesterday">Wczoraj</string>
+    <string name="det_period_week">7 dni</string>
+    <string name="det_period_month">30 dni</string>
+    <string name="det_period_day">Wybierz dzień</string>
+    <string name="det_all_cameras">Wszystkie</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d wykrycie</item>
+        <item quantity="few">%1$d wykrycia</item>
+        <item quantity="many">%1$d wykryć</item>
+        <item quantity="other">%1$d wykrycia</item>
+    </plurals>
 </resources>

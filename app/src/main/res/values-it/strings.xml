@@ -897,4 +897,27 @@
     <string name="wall_solar_min_help">Sotto questo livello di batteria, una telecamera solare resta sulle istantanee, distanziate come a batteria (diretta solo con movimento o al tocco).</string>
     <string name="wall_solar_always">Sempre</string>
     <string name="wall_solar_above">Da %1$d %%</string>
+    <string name="power_low">Alimentazione insufficiente (sottotensione alle %1$s)</string>
+    <string name="device_reboot">Riavvia il dispositivo</string>
+    <string name="device_reboot_help">Possibile perché l\'app è proprietaria del dispositivo. Android non permette a un\'app di spegnerlo, solo di riavviarlo.</string>
+    <string name="device_reboot_action">Riavvia</string>
+    <string name="device_reboot_confirm">Il dispositivo verrà riavviato ora. Continuare?</string>
+    <string name="det_history_title">Cronologia dei rilevamenti</string>
+    <string name="det_history_entities">Cronologia non disponibile con le entità di Home Assistant: è nota solo l\'ultima acquisizione di ogni telecamera.</string>
+    <string name="det_history_loading">Caricamento dei rilevamenti…</string>
+    <string name="det_history_none">Nessun rilevamento in questo periodo</string>
+    <string name="det_history_pick">Tocca un\'acquisizione per mostrarla qui</string>
+    <string name="det_history_no_video">Nessun video per questa acquisizione</string>
+    <string name="det_history_play">Riproduci</string>
+    <string name="det_history_stop">Ferma</string>
+    <string name="det_period_today">Oggi</string>
+    <string name="det_period_yesterday">Ieri</string>
+    <string name="det_period_week">7 giorni</string>
+    <string name="det_period_month">30 giorni</string>
+    <string name="det_period_day">Scegli un giorno</string>
+    <string name="det_all_cameras">Tutte</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d rilevamento</item>
+        <item quantity="other">%1$d rilevamenti</item>
+    </plurals>
 </resources>

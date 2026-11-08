@@ -897,4 +897,27 @@
     <string name="wall_solar_min_help">Por debajo de este nivel de batería, una cámara solar se queda en instantáneas, espaciadas como con batería (directo solo con movimiento o al tocarla).</string>
     <string name="wall_solar_always">Siempre</string>
     <string name="wall_solar_above">Desde %1$d %%</string>
+    <string name="power_low">Alimentación insuficiente (baja tensión a las %1$s)</string>
+    <string name="device_reboot">Reiniciar el dispositivo</string>
+    <string name="device_reboot_help">Posible porque la app es propietaria del dispositivo. Android no permite que una app lo apague, solo reiniciarlo.</string>
+    <string name="device_reboot_action">Reiniciar</string>
+    <string name="device_reboot_confirm">El dispositivo se reiniciará ahora. ¿Continuar?</string>
+    <string name="det_history_title">Historial de detecciones</string>
+    <string name="det_history_entities">El historial no está disponible con las entidades de Home Assistant: solo se conoce la última captura de cada cámara.</string>
+    <string name="det_history_loading">Cargando detecciones…</string>
+    <string name="det_history_none">Ninguna detección en este periodo</string>
+    <string name="det_history_pick">Toca una captura para verla aquí</string>
+    <string name="det_history_no_video">Sin vídeo para esta captura</string>
+    <string name="det_history_play">Reproducir</string>
+    <string name="det_history_stop">Detener</string>
+    <string name="det_period_today">Hoy</string>
+    <string name="det_period_yesterday">Ayer</string>
+    <string name="det_period_week">7 días</string>
+    <string name="det_period_month">30 días</string>
+    <string name="det_period_day">Elegir un día</string>
+    <string name="det_all_cameras">Todas</string>
+    <plurals name="det_count">
+        <item quantity="one">%1$d detección</item>
+        <item quantity="other">%1$d detecciones</item>
+    </plurals>
 </resources>
