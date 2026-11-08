@@ -303,7 +303,7 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   La tablette de l'utilisateur a l'app signée release (pas de `run-as`) : tester avec `assembleRelease` + `install -r`. `gh` n'est pas installé : API GitHub avec le jeton
   de `git credential fill` (jamais affiché ; suivre les redirections des journaux sans l'en-tête). Modifier un brouillon
   par l'API sans `tag_name` le détache de son tag (`untagged-…`) : toujours renvoyer `tag_name`. v1.0.0 publiée le
-  2026-11-07, v1.0.1 (import des nombres) le même jour. Depuis, plus de format cassé sans lecture de l'ancien.
+  2026-11-07, v1.0.1 (import des nombres) le même jour, v1.1.0 (historique des détections, zoom, Raspberry Pi) le 2026-11-08. Depuis, plus de format cassé sans lecture de l'ancien.
 - **Avatars** (`ui/avatar/`, `config/AvatarStore.kt`) : éditeur dans les réglages du membre (mode édition). Source :
   caméra de la tablette (CameraX, dans l'app : rien d'externe en kiosque), fichier (sélecteur de photos), téléphone
   (QR code → mini serveur HTTP local, code aléatoire, un seul envoi), photo HA. Détourage ML Kit (services Google,
