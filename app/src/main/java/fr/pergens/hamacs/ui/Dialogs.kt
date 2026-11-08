@@ -523,6 +523,10 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
     val progress = fr.pergens.hamacs.ui.components.rememberPlaybackProgress()
     progress.bind(player)
     var paused by remember { mutableStateOf(false) }
+    // Commandes d'un enregistrement : un toucher les montre / masque ; masquées seules après 3 s de lecture sans toucher
+    // (toujours visibles en pause ou à la fin).
+    var controls by remember { mutableStateOf(true) }
+    var controlsAt by remember { mutableStateOf(0L) }
     DisposableEffect(player) {
         val l = object : androidx.media3.common.Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -610,7 +614,13 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                 // Toucher : fermer (sauf zoomé, pour ne pas le fermer par mégarde) ; double toucher : zoom ou retour.
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onTap = { if (!zoom.zoomed) onDismiss() },
+                        // Enregistrement : le toucher montre / masque ses commandes (fermeture par la croix).
+                        onTap = {
+                            when {
+                                progress.hasProgress -> { controls = !controls; controlsAt = System.currentTimeMillis(); touchedAt = controlsAt }
+                                !zoom.zoomed -> onDismiss()
+                            }
+                        },
                         onDoubleTap = { p ->
                             zoom = ZoomLogic.doubleTap(zoom, p.x, p.y, size.width.toFloat(), size.height.toFloat())
                             touchedAt = System.currentTimeMillis()
@@ -665,8 +675,11 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                 color = Color.White, fontSize = 13.sp,
             )
             // Enregistrement : lecture / pause, temps écoulé, barre (toucher ou glisser pour se déplacer) et durée.
+            LaunchedEffect(controls, controlsAt, touchedAt, paused) {
+                if (controls && !paused) { delay(3_000); controls = false }
+            }
             androidx.compose.animation.AnimatedVisibility(
-                rendered && error == null && progress.hasProgress, Modifier.align(Alignment.BottomCenter),
+                controls && rendered && error == null && progress.hasProgress, Modifier.align(Alignment.BottomCenter),
                 enter = androidx.compose.animation.fadeIn(), exit = androidx.compose.animation.fadeOut(),
             ) {
                 Row(
@@ -696,7 +709,13 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                     )
                 }
             }
-            HaIcon("mdi:close", Modifier.align(Alignment.TopEnd).padding(24.dp).tapHold(onDismiss), 32.dp)
+            // Croix : avec les commandes pour un enregistrement (masquée et réaffichée au toucher), toujours sinon.
+            androidx.compose.animation.AnimatedVisibility(
+                controls || !progress.hasProgress, Modifier.align(Alignment.TopEnd),
+                enter = androidx.compose.animation.fadeIn(), exit = androidx.compose.animation.fadeOut(),
+            ) {
+                HaIcon("mdi:close", Modifier.padding(24.dp).tapHold(onDismiss), 32.dp)
+            }
         }
     }
 }

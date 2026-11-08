@@ -269,6 +269,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   si durée connue et pas un direct. Carte des détections : barre fine au ras du bas (pas de déplacement, le toucher
   ouvre le plein écran) ; aperçu de l'historique : temps, barre touchable, durée ; plein écran : en plus lecture / pause /
   reprise. Un déplacement après la fin relance la lecture ; un geste sur la barre relance la fermeture automatique.
+  Plein écran d'un enregistrement : un toucher montre / masque barre et croix (masquées seules après 3 s de lecture,
+  visibles en pause et à la fin) au lieu de fermer ; un direct se ferme toujours d'un toucher, croix toujours visible.
 - **Alimentation** (`PowerSupply.kt`) : capteur de sous-tension hwmon (`rpi_volt`, `in0_lcrit_alarm`) relu toutes les
   2 s → pastille *Alimentation trop faible* 10 min et note du journal. Le Pi 4 ne négocie pas l'USB PD (port de dock
   trop faible : HDMI coupé, journal `hwmon0: Undervoltage detected!`). Lecture du capteur par l'app pas encore vérifiée.
