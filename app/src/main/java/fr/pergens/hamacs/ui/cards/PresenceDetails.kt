@@ -38,12 +38,12 @@ import java.time.format.DateTimeFormatter
 private val Muted = Color(0xFFA3A3AD)
 
 /** Période continue à la maison ([home]) ou ailleurs ([zone] : nom de la zone, null si simplement absent). */
-private class Period(val start: Long, val end: Long, val home: Boolean, val zone: String?)
+internal data class Period(val start: Long, val end: Long, val home: Boolean, val zone: String?)
 
 private fun isHome(s: String) = s == "home" || s == "on"
 
 /** Périodes des [hours] dernières heures, les états inconnus prolongeant la période précédente. */
-private fun periods(spans: List<StateSpan>, hours: Int, now: Long): List<Period> {
+internal fun periods(spans: List<StateSpan>, hours: Int, now: Long): List<Period> {
     val from = now - hours * 3_600_000L
     val known = spans.sortedBy { it.start }.filter { it.state !in setOf("unknown", "unavailable") }
     val out = mutableListOf<Period>()
@@ -60,7 +60,7 @@ private fun periods(spans: List<StateSpan>, hours: Int, now: Long): List<Period>
     return out
 }
 
-private fun duration(ms: Long): String {
+internal fun duration(ms: Long): String {
     val min = (ms / 60_000L).coerceAtLeast(1)
     return if (min >= 60) "%d h %02d".format(min / 60, min % 60) else "$min min"
 }

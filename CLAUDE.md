@@ -48,8 +48,12 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 
 - `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q :app:testDebugUnitTest` (JUnit sur le PC, < 1 s de tests) :
   `app/src/test/`. Seulement des fonctions sans Android (les sortir dans un objet à part si besoin, ex.
-  `ui/WallLogic.kt`, `config/PrefValue.kt`) ; `ResourcesTest` vérifie les chaînes des 8 langues (mêmes noms, mêmes
-  paramètres), l'agencement d'exemple et les fins de ligne. Lancés aussi par `release.yml` avant la compilation.
+  `ui/WallLogic.kt`, `config/PrefValue.kt`, `voice/WyomingProtocol.kt`, `DeviceSecret.encryptWith`,
+  `Updater.parseRelease` / `latestOf`, `parseHistory`, `compareState` / `evalJinja` / `triggerTimeLabel` des alertes,
+  `CameraStreams.*Of`). `ResourcesTest` / `AssetsTest` vérifient les chaînes des 8 langues (mêmes noms, mêmes
+  paramètres), les traductions et thèmes des alertes, les icônes `mdi:` / `hue:` / météo utilisées, les descriptions
+  DLNA, l'agencement d'exemple et les fins de ligne. Lancés aussi par `release.yml` avant la compilation. Ne pas
+  appeler de code qui touche `App.instance` (non initialisé dans les tests) : lui passer la valeur en paramètre.
 - Tablette de l'utilisateur : prévenir avant d'installer (l'app redémarre) et revenir à l'accueil après un test.
 
 ## Tests sur l'émulateur (erreurs déjà commises, à ne pas refaire)

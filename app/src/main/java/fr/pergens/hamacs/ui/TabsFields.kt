@@ -83,7 +83,7 @@ internal fun newCamera(entity: String, template: JsonObject?, fullscreen: String
  * plus défini.
  */
 object CameraStreams {
-    private fun norm(s: String) = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")
+    internal fun norm(s: String) = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")
     private val SNAP = Regex("snapshot|instantan")
     private val LOW = Regex("fluent|fluide|sub|low|basse|mobile|(^|[^a-z])(sd|ld|lq)([^a-z]|$)")
     private val HIGH = Regex("clear|clair|(^|[^a-z])net([^a-z]|$)|main|high|haute|(^|[^a-z])(hd|hq|4k|uhd)([^a-z]|$)")
@@ -94,10 +94,15 @@ object CameraStreams {
     }
 
     /** Rang pour la carte (0 = flux léger). */
-    fun previewRank(id: String): Int = text(id).let { t -> when { SNAP.containsMatchIn(t) -> 3; LOW.containsMatchIn(t) -> 0; HIGH.containsMatchIn(t) -> 2; else -> 1 } }
+    fun previewRank(id: String): Int = previewRankOf(text(id))
+
+    /** Rang pour la carte d'un texte deja normalise ([norm] de l'entite et de son nom). */
+    internal fun previewRankOf(t: String): Int = run { when { SNAP.containsMatchIn(t) -> 3; LOW.containsMatchIn(t) -> 0; HIGH.containsMatchIn(t) -> 2; else -> 1 } }
 
     /** Rang pour le plein écran (0 = flux le plus défini). */
-    fun fullscreenRank(id: String): Int = text(id).let { t -> when { SNAP.containsMatchIn(t) -> 3; HIGH.containsMatchIn(t) -> 0; LOW.containsMatchIn(t) -> 2; else -> 1 } }
+    fun fullscreenRank(id: String): Int = fullscreenRankOf(text(id))
+
+    internal fun fullscreenRankOf(t: String): Int = run { when { SNAP.containsMatchIn(t) -> 3; HIGH.containsMatchIn(t) -> 0; LOW.containsMatchIn(t) -> 2; else -> 1 } }
 
     /** Entités `camera.*` du même appareil que [entity] (lui compris). */
     fun siblings(entity: String): List<String> {
@@ -115,7 +120,10 @@ object CameraStreams {
 
     /** Libellé court d'un flux : son nom sans celui de l'appareil (« Argus 1 Fluide » → « Fluide »). */
     fun label(id: String, device: String?): String {
-        val name = App.instance.ha.states.value[id]?.name ?: id
+        return labelOf(App.instance.ha.states.value[id]?.name ?: id, device)
+    }
+
+    internal fun labelOf(name: String, device: String?): String {
         if (device.isNullOrBlank()) return name
         val rest = if (name.startsWith(device, ignoreCase = true)) name.substring(device.length).trim(' ', ':', '-', '·') else name
         return rest.ifBlank { name }.replaceFirstChar { it.uppercase() }

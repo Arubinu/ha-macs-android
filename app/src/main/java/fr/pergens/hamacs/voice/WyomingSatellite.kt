@@ -150,7 +150,7 @@ class WyomingSatellite(
         val input = BufferedInputStream(s.getInputStream())
         try {
             while (true) {
-                val ev = read(input) ?: break
+                val ev = WyomingProtocol.read(input) ?: break
                 when (ev.type) {
                     "describe" -> send("info", info())
                     "ping" -> send("pong", buildJsonObject { (ev.data["text"] as? JsonPrimitive)?.let { put("text", it) } })
@@ -192,17 +192,10 @@ class WyomingSatellite(
     }
 
     private fun write(o: OutputStream, type: String, data: JsonObject, payload: ByteArray?) {
-        val length = payload?.size ?: 0
-        val header = buildJsonObject {
-            put("type", type)
-            put("version", VERSION)
-            if (data.isNotEmpty()) put("data", data)
-            if (payload != null && length > 0) put("payload_length", length)
-        }.toString() + "\n"
+        val frame = WyomingProtocol.encode(type, data, payload)
         runCatching {
             synchronized(writeLock) {
-                o.write(header.toByteArray())
-                if (payload != null && length > 0) o.write(payload, 0, length)
+                o.write(frame)
                 o.flush()
             }
         }.onFailure { Log.d(TAG, "envoi $type", it) }
@@ -223,46 +216,6 @@ class WyomingSatellite(
     private fun audioFormat() = buildJsonObject {
         put("rate", VoiceAssistant.SAMPLE_RATE); put("width", 2); put("channels", 1)
         put("timestamp", System.currentTimeMillis())
-    }
-
-    private fun read(input: InputStream): Event? {
-        val line = readLine(input) ?: return null
-        if (line.isBlank()) return Event("", JsonObject(emptyMap()), null)
-        val head = runCatching { json.parseToJsonElement(line).jsonObject }.getOrNull() ?: return Event("", JsonObject(emptyMap()), null)
-        var data = (head["data"] as? JsonObject) ?: JsonObject(emptyMap())
-        val dataLength = (head["data_length"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 0
-        // Tailles annoncées plafonnées : une valeur énorme ferait allouer des Go et planter l'app.
-        if (dataLength > MAX_DATA) return null
-        if (dataLength > 0) {
-            val extra = readExactly(input, dataLength) ?: return null
-            runCatching { json.parseToJsonElement(extra.toString(Charsets.UTF_8)).jsonObject }.getOrNull()?.let { data = JsonObject(data + it) }
-        }
-        val payloadLength = (head["payload_length"] as? JsonPrimitive)?.content?.toIntOrNull() ?: 0
-        if (payloadLength > MAX_PAYLOAD) return null
-        val payload = if (payloadLength > 0) readExactly(input, payloadLength) ?: return null else null
-        return Event((head["type"] as? JsonPrimitive)?.content ?: "", data, payload)
-    }
-
-    private fun readExactly(input: InputStream, n: Int): ByteArray? {
-        val b = ByteArray(n)
-        var read = 0
-        while (read < n) {
-            val k = input.read(b, read, n - read)
-            if (k < 0) return null
-            read += k
-        }
-        return b
-    }
-
-    private fun readLine(input: InputStream): String? {
-        val b = ByteArrayOutputStream()
-        while (true) {
-            val c = input.read()
-            if (c < 0) return null
-            if (c == '\n'.code) return b.toString("UTF-8")
-            b.write(c)
-            if (b.size() > 1_000_000) return null
-        }
     }
 
     // mDNS : Home Assistant découvre le satellite (intégration Wyoming Protocol, « Découvert »).
@@ -291,10 +244,6 @@ class WyomingSatellite(
     companion object {
         private const val TAG = "WyomingSatellite"
         const val PORT = 10700
-        private const val VERSION = "1.5.4"
-        private const val MAX_DATA = 1_000_000
-        /** Morceau d'audio (TTS en 22 kHz : quelques Ko ; marge large). */
-        private const val MAX_PAYLOAD = 8_000_000
 
         fun text(e: Event): String = (e.data["text"] as? JsonPrimitive)?.content.orEmpty()
         fun int(e: Event, k: String, def: Int): Int = (e.data[k] as? JsonPrimitive)?.content?.toIntOrNull() ?: def

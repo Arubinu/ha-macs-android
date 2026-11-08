@@ -3,8 +3,8 @@ package fr.pergens.hamacs.config
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
-import android.util.Base64
 import java.security.MessageDigest
+import java.util.Base64
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
@@ -22,25 +22,29 @@ object DeviceSecret {
     fun isEncrypted(value: String) = value.startsWith(PREFIX)
 
     @SuppressLint("HardwareIds")
-    private fun key(context: Context): SecretKeySpec {
-        val id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID).orEmpty()
-        val bytes = MessageDigest.getInstance("SHA-256").digest("hadash-token:${context.packageName}:$id".toByteArray())
-        return SecretKeySpec(bytes, "AES")
-    }
+    private fun seed(context: Context): String =
+        "hadash-token:${context.packageName}:" + Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID).orEmpty()
 
-    fun encrypt(context: Context, plain: String): String {
+    fun encrypt(context: Context, plain: String): String = encryptWith(seed(context), plain)
+
+    fun decrypt(context: Context, value: String): String? = decryptWith(seed(context), value)
+
+    private fun key(seed: String) = SecretKeySpec(MessageDigest.getInstance("SHA-256").digest(seed.toByteArray(Charsets.UTF_8)), "AES")
+
+    /** Chiffre avec la cle tiree de [seed] (paquet + ANDROID_ID sur l'appareil). */
+    internal fun encryptWith(seed: String, plain: String): String {
         val iv = ByteArray(12).also { SecureRandom().nextBytes(it) }
-        val cipher = Cipher.getInstance("AES/GCM/NoPadding").apply { init(Cipher.ENCRYPT_MODE, key(context), GCMParameterSpec(128, iv)) }
-        val data = iv + cipher.doFinal(plain.toByteArray())
-        return PREFIX + Base64.encodeToString(data, Base64.NO_WRAP)
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding").apply { init(Cipher.ENCRYPT_MODE, key(seed), GCMParameterSpec(128, iv)) }
+        val data = iv + cipher.doFinal(plain.toByteArray(Charsets.UTF_8))
+        return PREFIX + Base64.getEncoder().encodeToString(data)
     }
 
-    /** Valeur en clair, ou null si elle a été chiffrée sur un autre appareil (ou est illisible). */
-    fun decrypt(context: Context, value: String): String? = runCatching {
-        val data = Base64.decode(value.removePrefix(PREFIX), Base64.NO_WRAP)
+    /** Valeur en clair, ou null si elle a ete chiffree avec une autre cle (autre appareil) ou est illisible. */
+    internal fun decryptWith(seed: String, value: String): String? = runCatching {
+        val data = Base64.getDecoder().decode(value.removePrefix(PREFIX))
         val cipher = Cipher.getInstance("AES/GCM/NoPadding").apply {
-            init(Cipher.DECRYPT_MODE, key(context), GCMParameterSpec(128, data, 0, 12))
+            init(Cipher.DECRYPT_MODE, key(seed), GCMParameterSpec(128, data, 0, 12))
         }
-        String(cipher.doFinal(data, 12, data.size - 12))
+        String(cipher.doFinal(data, 12, data.size - 12), Charsets.UTF_8)
     }.getOrNull()
 }

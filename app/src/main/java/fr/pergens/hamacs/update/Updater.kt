@@ -132,7 +132,7 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
         http.newCall(req).execute().use { r ->
             if (!r.isSuccessful) return@withContext null
             val list = (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
-                .filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }.mapNotNull { release(it) }
+                .filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }.mapNotNull { parseRelease(it, Build.SUPPORTED_ABIS.toList()) }
             (list.firstOrNull { it.version == version }
                 ?: list.filter { !it.prerelease }.reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a })?.apkUrl
         }
@@ -145,27 +145,8 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
             if (r.code == 404) return@withContext null
             if (!r.isSuccessful) error("HTTP ${r.code}")
             val list = (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
-            list.filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }
-                .mapNotNull { release(it) }
-                .filter { prereleases || !it.prerelease }
-                .reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a }
+            latestOf(list, prereleases, Build.SUPPORTED_ABIS.toList())
         }
-    }
-
-    private fun release(o: JsonObject): Release? {
-        val tag = o["tag_name"]?.jsonPrimitive?.contentOrNull ?: return null
-        val assets = (o["assets"] as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
-        fun asset(suffix: String) = assets.firstOrNull { it["name"]?.jsonPrimitive?.contentOrNull?.endsWith(suffix) == true }
-        // APK de l'architecture de la tablette (le plus léger), sinon l'universel.
-        val apk = Build.SUPPORTED_ABIS.firstNotNullOfOrNull { asset("-$it.apk") } ?: asset("-universal.apk") ?: return null
-        return Release(
-            version = tag.removePrefix("v"),
-            notes = o["body"]?.jsonPrimitive?.contentOrNull.orEmpty(),
-            apkUrl = apk["browser_download_url"]?.jsonPrimitive?.contentOrNull ?: return null,
-            apkName = apk["name"]?.jsonPrimitive?.contentOrNull.orEmpty(),
-            size = apk["size"]?.jsonPrimitive?.longOrNull ?: 0L,
-            prerelease = o["prerelease"]?.jsonPrimitive?.contentOrNull == "true",
-        )
     }
 
     private suspend fun download(release: Release): File = withContext(Dispatchers.IO) {
@@ -211,6 +192,29 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
     }
 
     companion object {
+        internal fun parseRelease(o: JsonObject, abis: List<String>): Release? {
+            val tag = o["tag_name"]?.jsonPrimitive?.contentOrNull ?: return null
+            val assets = (o["assets"] as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
+            fun asset(suffix: String) = assets.firstOrNull { it["name"]?.jsonPrimitive?.contentOrNull?.endsWith(suffix) == true }
+            // APK de l'architecture de la tablette (le plus léger), sinon l'universel.
+            val apk = abis.firstNotNullOfOrNull { asset("-$it.apk") } ?: asset("-universal.apk") ?: return null
+            return Release(
+                version = tag.removePrefix("v"),
+                notes = o["body"]?.jsonPrimitive?.contentOrNull.orEmpty(),
+                apkUrl = apk["browser_download_url"]?.jsonPrimitive?.contentOrNull ?: return null,
+                apkName = apk["name"]?.jsonPrimitive?.contentOrNull.orEmpty(),
+                size = apk["size"]?.jsonPrimitive?.longOrNull ?: 0L,
+                prerelease = o["prerelease"]?.jsonPrimitive?.contentOrNull == "true",
+            )
+        }
+
+        /** Release la plus recente hors brouillons (preversions comprises si [prereleases]), APK choisi pour [abis]. */
+        internal fun latestOf(list: List<JsonObject>, prereleases: Boolean, abis: List<String>): Release? =
+            list.filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }
+                .mapNotNull { parseRelease(it, abis) }
+                .filter { prereleases || !it.prerelease }
+                .reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a }
+
         private const val TAG = "Updater"
         const val RELEASES = "https://api.github.com/repos/Arubinu/ha-macs-android/releases?per_page=20"
 

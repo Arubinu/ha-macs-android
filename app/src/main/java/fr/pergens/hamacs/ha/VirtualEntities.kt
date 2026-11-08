@@ -31,19 +31,22 @@ object VirtualEntities {
     fun isVirtual(entityId: String) = entityId.startsWith(PREFIX)
 
     /** États de HA complétés des entités calculées. */
-    fun augment(states: Map<String, EntityState>): Map<String, EntityState> {
+    fun augment(
+        states: Map<String, EntityState>,
+        title: (Int) -> String = { App.instance.getString(it) },
+        now: Long = System.currentTimeMillis(),
+    ): Map<String, EntityState> {
         val out = HashMap(states)
-        weatherAlerts(states).forEach { out[it.entityId] = it }
+        weatherAlerts(states, title, now).forEach { out[it.entityId] = it }
         return out
     }
 
-    private fun weatherAlerts(states: Map<String, EntityState>): List<EntityState> {
+    private fun weatherAlerts(states: Map<String, EntityState>, title: (Int) -> String, now: Long): List<EntityState> {
         // Capteur de vigilance Météo-France : phénomène → couleur (Vert, Jaune, Orange, Rouge).
         val source = states.values.firstOrNull { e ->
             e.domain == "sensor" && e.entityId.endsWith("_weather_alert") &&
                 e.attributes.values.count { (it as? JsonPrimitive)?.content in LEVEL_VALUES } > 0
         } ?: return emptyList()
-        val ctx = App.instance
         return Level.entries.map { level ->
             val names = source.attributes.entries
                 .filter { (k, v) -> k != "friendly_name" && (v as? JsonPrimitive)?.content == level.value }
@@ -55,10 +58,9 @@ object VirtualEntities {
                 "array" to JsonArray(names.map { JsonPrimitive(it) }),
                 "source" to JsonPrimitive(source.entityId),
                 "icon" to JsonPrimitive(level.icon),
-                "friendly_name" to JsonPrimitive(ctx.getString(level.title)),
+                "friendly_name" to JsonPrimitive(title(level.title)),
             ))
             val prev = previous[id]
-            val now = System.currentTimeMillis()
             val changed = prev == null || prev.state != state || prev.attributes["names"] != attrs["names"]
             EntityState(
                 entityId = id, state = state, attributes = attrs,

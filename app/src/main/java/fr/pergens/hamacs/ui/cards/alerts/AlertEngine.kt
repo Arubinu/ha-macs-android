@@ -267,13 +267,86 @@ fun jsString(e: JsonElement?): String = when (e) {
 fun rawValue(e: EntityState, attribute: String?): String =
     if (attribute.isNullOrEmpty()) e.state else jsString(resolveAttrPath(e.attributes, attribute))
 
-private fun jsFloat(s: String): Double? = Regex("^\\s*[-+]?(\\d+\\.?\\d*|\\.\\d+)([eE][-+]?\\d+)?").find(s)?.value?.trim()?.toDoubleOrNull()
+internal fun jsFloat(s: String): Double? = Regex("^\\s*[-+]?(\\d+\\.?\\d*|\\.\\d+)([eE][-+]?\\d+)?").find(s)?.value?.trim()?.toDoubleOrNull()
 
 /** Horodatage ISO ou epoch (s / ms) pour les opérateurs « older » / « newer ». */
-private fun parseTimestamp(v: String): Long? {
+internal fun parseTimestamp(v: String): Long? {
     v.toDoubleOrNull()?.let { n -> return if (n > 1e11) n.toLong() else (n * 1000).toLong() }
     return runCatching { OffsetDateTime.parse(v).toInstant().toEpochMilli() }.getOrNull()
         ?: runCatching { Instant.parse(v).toEpochMilli() }.getOrNull()
+}
+
+/**
+ * Comparaison d'une condition (`_matchesState` de la carte d'origine) : nombres comparés comme nombres (préfixe
+ * numérique, comme `parseFloat`), sinon texte ; `older` / `newer` : âge en secondes d'un horodatage par rapport à [now].
+ */
+internal fun compareState(value: String, trigger: String, op: String, now: Long = System.currentTimeMillis()): Boolean {
+    val na = jsFloat(value)
+    val nt = jsFloat(trigger)
+    return when (op) {
+        "=", "==" -> if (na != null && nt != null) na == nt else value == trigger
+        "!=" -> if (na != null && nt != null) na != nt else value != trigger
+        "contains" -> value.lowercase().contains(trigger.lowercase())
+        "not_contains" -> !value.lowercase().contains(trigger.lowercase())
+        "older", "newer" -> {
+            val ms = parseTimestamp(value) ?: return false
+            val thr = trigger.toDoubleOrNull() ?: return false
+            val diff = (now - ms) / 1000.0
+            if (op == "older") diff > thr else diff < thr
+        }
+        ">" -> na != null && nt != null && na > nt
+        "<" -> na != null && nt != null && na < nt
+        ">=" -> na != null && nt != null && na >= nt
+        "<=" -> na != null && nt != null && na <= nt
+        else -> value == trigger
+    }
+}
+
+/**
+ * Heure d'un déclenchement : « 09:58 » aujourd'hui, sinon [yesterday] (« 18:20 (hier) ») ou [date] (« 18:20 (4 nov.) »).
+ */
+internal fun triggerTimeLabel(
+    ms: Long, today: java.time.LocalDate, zone: ZoneId, locale: Locale,
+    yesterday: (String) -> String, date: (String, String) -> String,
+): String {
+    val t = Instant.ofEpochMilli(ms).atZone(zone)
+    val time = DateTimeFormatter.ofPattern("HH:mm", locale).format(t)
+    return when (t.toLocalDate()) {
+        today -> time
+        today.minusDays(1) -> yesterday(time)
+        else -> date(time, DateTimeFormatter.ofPattern("d MMM", locale).format(t))
+    }
+}
+
+/**
+ * Évaluation locale d'un template simple en attendant HA : `states('x')`, `state_attr('x', 'a')`, `is_state('x', 'v')`,
+ * filtres `round(n)`, `int`, `float`, `upper`, `lower`, `default(v)`. Null si l'expression n'est pas reconnue.
+ */
+internal fun evalJinja(expr: String, states: Map<String, EntityState>, format: (EntityState) -> String): String? {
+    val parts = expr.split('|').map { it.trim() }
+    val base = parts[0]
+    var v: String? = null
+    Regex("^states\\(\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m -> v = states[m.groupValues[1]]?.let(format) ?: "unknown" }
+    if (v == null) Regex("^state_attr\\(\\s*['\"]([^'\"]+)['\"]\\s*,\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m ->
+        v = states[m.groupValues[1]]?.let { jsString(resolveAttrPath(it.attributes, m.groupValues[2])) } ?: ""
+    }
+    if (v == null) Regex("^is_state\\(\\s*['\"]([^'\"]+)['\"]\\s*,\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m ->
+        v = if (states[m.groupValues[1]]?.state == m.groupValues[2]) "true" else "false"
+    }
+    var r = v ?: return null
+    parts.drop(1).forEach { f ->
+        Regex("^round\\((\\d+)\\)$").find(f)?.let { m -> r = String.format(Locale.US, "%.${m.groupValues[1]}f", jsFloat(r) ?: Double.NaN); return@forEach }
+        when (f) {
+            "int" -> r = (jsFloat(r)?.toLong() ?: 0).toString()
+            "float" -> r = (jsFloat(r) ?: Double.NaN).toString()
+            "upper" -> r = r.uppercase()
+            "lower" -> r = r.lowercase()
+            else -> Regex("^default\\(\\s*['\"]?([^'\"]*?)['\"]?\\s*\\)$").find(f)?.let { m ->
+                if (r.isEmpty() || r == "unknown" || r == "unavailable") r = m.groupValues[1]
+            }
+        }
+    }
+    return r
 }
 
 class AlertEngine(
@@ -306,25 +379,7 @@ class AlertEngine(
         var trigger = (stEl as? JsonPrimitive)?.contentOrNull?.takeIf { it.isNotEmpty() } ?: "on"
         val op = cond.s("operator") ?: "="
         if (hasTemplate(trigger)) trigger = templates.get(trigger) ?: miniJinja(trigger)
-        val na = jsFloat(value)
-        val nt = jsFloat(trigger)
-        return when (op) {
-            "=", "==" -> if (na != null && nt != null) na == nt else value == trigger
-            "!=" -> if (na != null && nt != null) na != nt else value != trigger
-            "contains" -> value.lowercase().contains(trigger.lowercase())
-            "not_contains" -> !value.lowercase().contains(trigger.lowercase())
-            "older", "newer" -> {
-                val ms = parseTimestamp(value) ?: return false
-                val thr = trigger.toDoubleOrNull() ?: return false
-                val diff = (System.currentTimeMillis() - ms) / 1000.0
-                if (op == "older") diff > thr else diff < thr
-            }
-            ">" -> na != null && nt != null && na > nt
-            "<" -> na != null && nt != null && na < nt
-            ">=" -> na != null && nt != null && na >= nt
-            "<=" -> na != null && nt != null && na <= nt
-            else -> value == trigger
-        }
+        return compareState(value, trigger, op)
     }
 
     private fun conds(a: JsonObject): List<JsonObject> = when (val c = a["conditions"]) {
@@ -647,15 +702,11 @@ class AlertEngine(
      * « 18:20 (4 nov.) ». Se lit après « à » dans toutes les langues (« Détection à {trigger_time} »).
      */
     private fun triggerTime(ms: Long): String {
-        val t = Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault())
         val i18n = fr.pergens.hamacs.App.instance.alerts.i18n
-        val time = DateTimeFormatter.ofPattern("HH:mm", locale).format(t)
-        val today = java.time.LocalDate.now()
-        return when (t.toLocalDate()) {
-            today -> time
-            today.minusDays(1) -> i18n.a("when_yesterday", time)
-            else -> i18n.a("when_date", time, DateTimeFormatter.ofPattern("d MMM", locale).format(t))
-        }
+        return triggerTimeLabel(
+            ms, java.time.LocalDate.now(), ZoneId.systemDefault(), locale,
+            { i18n.a("when_yesterday", it) }, { time, day -> i18n.a("when_date", time, day) },
+        )
     }
 
     /** Évaluation immédiate des templates simples en attendant la réponse de HA. */
@@ -664,32 +715,8 @@ class AlertEngine(
 
     private fun haStates() = ha.states.value
 
-    private fun evalJinja(expr: String, states: Map<String, EntityState>): String? {
-        val parts = expr.split('|').map { it.trim() }
-        val base = parts[0]
-        var v: String? = null
-        Regex("^states\\(\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m -> v = states[m.groupValues[1]]?.let { formatState(it, null) } ?: "unknown" }
-        if (v == null) Regex("^state_attr\\(\\s*['\"]([^'\"]+)['\"]\\s*,\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m ->
-            v = states[m.groupValues[1]]?.let { jsString(resolveAttrPath(it.attributes, m.groupValues[2])) } ?: ""
-        }
-        if (v == null) Regex("^is_state\\(\\s*['\"]([^'\"]+)['\"]\\s*,\\s*['\"]([^'\"]+)['\"]\\s*\\)$").find(base)?.let { m ->
-            v = if (states[m.groupValues[1]]?.state == m.groupValues[2]) "true" else "false"
-        }
-        var r = v ?: return null
-        parts.drop(1).forEach { f ->
-            Regex("^round\\((\\d+)\\)$").find(f)?.let { m -> r = String.format(Locale.US, "%.${m.groupValues[1]}f", jsFloat(r) ?: Double.NaN); return@forEach }
-            when (f) {
-                "int" -> r = (jsFloat(r)?.toLong() ?: 0).toString()
-                "float" -> r = (jsFloat(r) ?: Double.NaN).toString()
-                "upper" -> r = r.uppercase()
-                "lower" -> r = r.lowercase()
-                else -> Regex("^default\\(\\s*['\"]?([^'\"]*?)['\"]?\\s*\\)$").find(f)?.let { m ->
-                    if (r.isEmpty() || r == "unknown" || r == "unavailable") r = m.groupValues[1]
-                }
-            }
-        }
-        return r
-    }
+    private fun evalJinja(expr: String, states: Map<String, EntityState>): String? =
+        fr.pergens.hamacs.ui.cards.alerts.evalJinja(expr, states) { formatState(it, null) }
 
     // ------------------------------------------------------------------------------------------
     // Minuteries (thèmes countdown, hourglass, timer_pulse, timer_ring)

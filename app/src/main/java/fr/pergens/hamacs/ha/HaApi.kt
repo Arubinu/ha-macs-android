@@ -55,7 +55,7 @@ data class MediaItem(
 private fun iso(ms: Long) = Instant.ofEpochMilli(ms).toString()
 
 /** Horodatage HA : ISO 8601, ou nombre en secondes (historique) ou millisecondes (statistiques). */
-private fun parseTs(el: kotlinx.serialization.json.JsonElement?): Long? {
+internal fun parseTs(el: kotlinx.serialization.json.JsonElement?): Long? {
     val p = el as? JsonPrimitive ?: return null
     p.doubleOrNull?.let { return if (it > 1e11) it.toLong() else (it * 1000).toLong() }
     return p.contentOrNull?.let { runCatching { OffsetDateTime.parse(it).toInstant().toEpochMilli() }.getOrNull() }
@@ -74,13 +74,16 @@ suspend fun HaClient.history(entityIds: List<String>, hours: Int): Map<String, L
         put("significant_changes_only", false)
     }, timeoutMs = 30_000).jsonObject
     // Conversion hors du thread principal : l'historique d'un capteur rapide compte des milliers de lignes.
-    return withContext(Dispatchers.Default) { res.mapValues { (_, arr) ->
-        arr.jsonArray.mapNotNull { row ->
-            val o = row.jsonObject
-            val t = parseTs(o["lu"]) ?: parseTs(o["lc"]) ?: return@mapNotNull null
-            StateSpan(t, o["s"]?.jsonPrimitive?.contentOrNull ?: "")
-        }
-    } }
+    return withContext(Dispatchers.Default) { parseHistory(res) }
+}
+
+/** Réponse de `history/history_during_period` (format minimal : `s`, `lu` / `lc`) → périodes par entité. */
+internal fun parseHistory(res: JsonObject): Map<String, List<StateSpan>> = res.mapValues { (_, arr) ->
+    (arr as? JsonArray).orEmpty().mapNotNull { row ->
+        val o = row as? JsonObject ?: return@mapNotNull null
+        val t = parseTs(o["lu"]) ?: parseTs(o["lc"]) ?: return@mapNotNull null
+        StateSpan(t, (o["s"] as? JsonPrimitive)?.contentOrNull ?: "")
+    }
 }
 
 /** Statistiques long terme (recorder/statistics_during_period). */
