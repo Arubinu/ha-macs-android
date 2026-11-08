@@ -151,8 +151,11 @@ class HaClient(
             }
 
             "auth_invalid" -> {
-                _conn.value = ConnState.AuthFailed
-                Log.e(TAG, "Authentification refusée: ${msg.str("message")}")
+                val message = msg.str("message").orEmpty()
+                Log.e(TAG, "Authentification refusée: $message")
+                // Message d'authentification mal formé (autre message arrivé avant) : pas un jeton refusé, on se reconnecte.
+                if (message.startsWith("Auth message incorrectly formatted")) socket.cancel()
+                else _conn.value = ConnState.AuthFailed
             }
 
             "result" -> {
@@ -189,6 +192,9 @@ class HaClient(
     private fun sendWithId(msg: JsonObject, before: (Int) -> Unit = {}): Pair<Int, Boolean> = synchronized(sendLock) {
         val id = ids.getAndIncrement()
         before(id)
+        // Rien avant l'authentification : HA prendrait le message pour celui d'authentification (« auth_invalid »).
+        // Les abonnements persistants sont rejoués après `auth_ok`, les appels échouent (« not connected »).
+        if (_conn.value != ConnState.Connected) return@synchronized id to false
         id to (ws?.send(JsonObject(msg + ("id" to JsonPrimitive(id))).toString()) ?: false)
     }
 
