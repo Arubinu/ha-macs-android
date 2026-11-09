@@ -88,7 +88,7 @@ Un Raspberry Pi 4 o 5 con touchscreen è un ottimo pannello a parete. Prima biso
    [ultima Release](https://github.com/Arubinu/ha-macs-android/releases/latest) con il browser del Pi (consenti l'installazione di app sconosciute).
 
 Una webcam USB si sceglie in Impostazioni › Standby e presenza › *Fotocamera*. Senza i servizi Google, il ritaglio
-degli avatar è un po' meno preciso. Dettagli: [riferimento tecnico](docs/reference.fr.md#raspberry-pi) (in francese).
+degli avatar è un po' meno preciso. Dettagli: [riferimento tecnico](docs/reference.md#raspberry-pi) (in inglese).
 
 ⚡ **Alimentazione**: usa l'alimentatore ufficiale (5,1 V / 3 A per il Pi 4, 5 V / 5 A per il Pi 5). Il Pi non negozia
 l'USB Power Delivery: la porta di un dock o di un caricatore spesso non basta, soprattutto con webcam USB. Quando la
@@ -153,9 +153,9 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Per approfondire
 
-- ❓ [FAQ](docs/faq.md) (in inglese): tablet compatibili, Raspberry Pi, telecamere, aggiornamenti, problemi
+- ❓ [FAQ](docs/faq.it.md): tablet compatibili, Raspberry Pi, telecamere, aggiornamenti, problemi
 - 🐛 Un problema? Impostazioni › Informazioni › *Registro degli arresti anomali*: copialo in una [segnalazione](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
-- 📖 [Riferimento tecnico](docs/reference.fr.md) (in francese): `dashboard.json`, tipi di card, rilevamenti,
+- 📖 [Riferimento tecnico](docs/reference.md) (in inglese): `dashboard.json`, tipi di card, rilevamenti,
   AlertTicker, modalità modifica, gateway vocale
 
 ## 📄 Licenza

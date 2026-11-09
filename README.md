@@ -85,7 +85,7 @@ A Raspberry Pi 4 or 5 with a touchscreen makes a good wall panel. First install 
    [latest Release](https://github.com/Arubinu/ha-macs-android/releases/latest) with the Pi's browser (allow installing unknown apps).
 
 A USB webcam is chosen in Settings › Standby & presence › *Camera*. Without Google services, avatar cut-outs are a bit
-less precise. Details: [technical reference](docs/reference.fr.md#raspberry-pi).
+less precise. Details: [technical reference](docs/reference.md#raspberry-pi).
 
 ⚡ **Power**: use the official power supply (5.1 V / 3 A for the Pi 4, 5 V / 5 A for the Pi 5). The Pi does not
 negotiate USB Power Delivery: a dock or charger port is often too weak, especially with USB webcams. When the voltage
@@ -148,7 +148,7 @@ cd gateway && docker compose up -d
 
 - ❓ [FAQ](docs/faq.md): supported tablets, Raspberry Pi, cameras, updates, troubleshooting
 - 🐛 Something wrong? Settings › About › *Crash log*: copy it into a [bug report](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
-- 📖 [Technical reference](docs/reference.fr.md) (in French): `dashboard.json`, card types, detections, AlertTicker,
+- 📖 [Technical reference](docs/reference.md): `dashboard.json`, card types, detections, AlertTicker,
   edit mode, voice gateway
 
 ## 📄 License

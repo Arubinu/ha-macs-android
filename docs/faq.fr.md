@@ -1,6 +1,6 @@
 # ❓ FAQ
 
-[English](faq.md) · **Français**
+[English](faq.md) · **Français** · [Deutsch](faq.de.md) · [Español](faq.es.md) · [Italiano](faq.it.md) · [Nederlands](faq.nl.md) · [Português](faq.pt.md) · [Polski](faq.pl.md)
 
 ## 📱 Appareils
 

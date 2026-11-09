@@ -87,7 +87,7 @@ Ein Raspberry Pi 4 oder 5 mit Touchscreen ergibt ein gutes Wandpanel. Zuerst And
    [neuesten Release](https://github.com/Arubinu/ha-macs-android/releases/latest) mit dem Browser des Pi herunterladen (Installation unbekannter Apps erlauben).
 
 Eine USB-Webcam wählst du in Einstellungen › Ruhezustand & Anwesenheit › *Kamera*. Ohne Google-Dienste ist das
-Freistellen der Avatare etwas ungenauer. Details: [technische Referenz](docs/reference.fr.md#raspberry-pi) (Französisch).
+Freistellen der Avatare etwas ungenauer. Details: [technische Referenz](docs/reference.md#raspberry-pi) (Englisch).
 
 ⚡ **Stromversorgung**: das offizielle Netzteil verwenden (5,1 V / 3 A für den Pi 4, 5 V / 5 A für den Pi 5). Der Pi
 handelt kein USB Power Delivery aus: ein Dock- oder Ladegerätanschluss ist oft zu schwach, besonders mit USB-Webcams.
@@ -152,9 +152,9 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Weiterführendes
 
-- ❓ [FAQ](docs/faq.md) (auf Englisch): unterstützte Tablets, Raspberry Pi, Kameras, Updates, Probleme
+- ❓ [FAQ](docs/faq.de.md): unterstützte Tablets, Raspberry Pi, Kameras, Updates, Probleme
 - 🐛 Ein Problem? Einstellungen › Über › *Absturzprotokoll*: in einen [Fehlerbericht](https://github.com/Arubinu/ha-macs-android/issues/new/choose) kopieren
-- 📖 [Technische Referenz](docs/reference.fr.md) (auf Französisch): `dashboard.json`, Kartentypen, Erkennungen,
+- 📖 [Technische Referenz](docs/reference.md) (auf Englisch): `dashboard.json`, Kartentypen, Erkennungen,
   AlertTicker, Bearbeitungsmodus, Sprach-Gateway
 
 ## 📄 Lizenz

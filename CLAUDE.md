@@ -26,7 +26,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   Ne jamais ajouter de ressource sous licence non redistribuable (ex. Flaticon gratuit) dans le dépôt.
 - **README en 8 langues** (`README.md` anglais + `README.<lang>.md`) : courts, avec emojis, même plan partout ; toute
   modification se reporte dans les 8. Libellés des menus = textes réels de l'app (`strings.xml` de la langue).
-  Le détail technique va dans `docs/reference.fr.md`.
+  Le détail technique va dans `docs/reference.fr.md` **et** `docs/reference.md` (anglais), tenus identiques. FAQ
+  utilisateur en 8 langues (`docs/faq.md`, `docs/faq.<lang>.md`), chaque README pointe vers la sienne : toute
+  modification se reporte dans les 8. Modèles d'issues dans `.github/ISSUE_TEMPLATE/` (anglais). `LICENSE` = MIT seul
+  (sinon GitHub ne reconnaît pas la licence) ; ressources tierces dans `NOTICE`. Textes de promotion : `private/promo/`.
 - Licence MIT pour le code ; `assets/macs/` et `assets/hue.json` restent en CC BY-NC-SA 4.0.
 
 ## Environnement (Windows)

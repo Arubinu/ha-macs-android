@@ -87,7 +87,7 @@ Een Raspberry Pi 4 of 5 met touchscreen is een goed wandpaneel. Installeer er ee
    [nieuwste Release](https://github.com/Arubinu/ha-macs-android/releases/latest) met de browser van de Pi (sta het installeren van onbekende apps toe).
 
 Een USB-webcam kies je in Instellingen › Stand-by & aanwezigheid › *Camera*. Zonder Google-diensten is het uitknippen
-van avatars iets minder nauwkeurig. Details: [technische referentie](docs/reference.fr.md#raspberry-pi) (Frans).
+van avatars iets minder nauwkeurig. Details: [technische referentie](docs/reference.md#raspberry-pi) (Engels).
 
 ⚡ **Voeding**: gebruik de officiële voeding (5,1 V / 3 A voor de Pi 4, 5 V / 5 A voor de Pi 5). De Pi onderhandelt
 geen USB Power Delivery: een poort van een dock of lader is vaak te zwak, zeker met USB-webcams. Zakt de spanning
@@ -150,9 +150,9 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Verder lezen
 
-- ❓ [FAQ](docs/faq.md) (in het Engels): geschikte tablets, Raspberry Pi, camera's, updates, problemen
+- ❓ [FAQ](docs/faq.nl.md): geschikte tablets, Raspberry Pi, camera's, updates, problemen
 - 🐛 Een probleem? Instellingen › Over › *Crashlogboek*: kopieer het in een [melding](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
-- 📖 [Technische referentie](docs/reference.fr.md) (in het Frans): `dashboard.json`, kaarttypen, detecties,
+- 📖 [Technische referentie](docs/reference.md) (in het Engels): `dashboard.json`, kaarttypen, detecties,
   AlertTicker, bewerkmodus, spraakgateway
 
 ## 📄 Licentie

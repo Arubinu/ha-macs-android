@@ -88,7 +88,7 @@ Una Raspberry Pi 4 o 5 con pantalla táctil es un buen panel de pared. Primero h
    [última Release](https://github.com/Arubinu/ha-macs-android/releases/latest) con el navegador de la Pi (permite instalar aplicaciones desconocidas).
 
 Una webcam USB se elige en Ajustes › Reposo y presencia › *Cámara*. Sin los servicios de Google, el recorte de los
-avatares es algo menos preciso. Detalles: [referencia técnica](docs/reference.fr.md#raspberry-pi) (en francés).
+avatares es algo menos preciso. Detalles: [referencia técnica](docs/reference.md#raspberry-pi) (en inglés).
 
 ⚡ **Alimentación**: usa la fuente oficial (5,1 V / 3 A para la Pi 4, 5 V / 5 A para la Pi 5). La Pi no negocia
 USB Power Delivery: el puerto de un dock o de un cargador suele quedarse corto, sobre todo con webcams USB. Cuando la
@@ -152,9 +152,9 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Para ir más lejos
 
-- ❓ [FAQ](docs/faq.md) (en inglés): tabletas compatibles, Raspberry Pi, cámaras, actualizaciones, problemas
+- ❓ [FAQ](docs/faq.es.md): tabletas compatibles, Raspberry Pi, cámaras, actualizaciones, problemas
 - 🐛 ¿Algún problema? Ajustes › Acerca de › *Registro de fallos*: cópielo en un [informe](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
-- 📖 [Referencia técnica](docs/reference.fr.md) (en francés): `dashboard.json`, tipos de tarjetas, detecciones,
+- 📖 [Referencia técnica](docs/reference.md) (en inglés): `dashboard.json`, tipos de tarjetas, detecciones,
   AlertTicker, modo edición, pasarela de voz
 
 ## 📄 Licencia

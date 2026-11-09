@@ -86,7 +86,7 @@ Raspberry Pi 4 lub 5 z ekranem dotykowym to dobry panel ścienny. Najpierw trzeb
    [najnowszego wydania](https://github.com/Arubinu/ha-macs-android/releases/latest) w przeglądarce Pi (zezwól na instalowanie nieznanych aplikacji).
 
 Kamerę USB wybiera się w Ustawienia › Czuwanie i obecność › *Kamera*. Bez usług Google wycinanie awatarów jest nieco
-mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.fr.md#raspberry-pi) (po francusku).
+mniej dokładne. Szczegóły: [dokumentacja techniczna](docs/reference.md#raspberry-pi) (po angielsku).
 
 ⚡ **Zasilanie**: używaj oficjalnego zasilacza (5,1 V / 3 A dla Pi 4, 5 V / 5 A dla Pi 5). Pi nie negocjuje USB Power
 Delivery: port stacji dokującej lub ładowarki często nie wystarcza, zwłaszcza z kamerami USB. Gdy napięcie spada
@@ -149,9 +149,9 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Więcej informacji
 
-- ❓ [FAQ](docs/faq.md) (po angielsku): obsługiwane tablety, Raspberry Pi, kamery, aktualizacje, problemy
+- ❓ [FAQ](docs/faq.pl.md): obsługiwane tablety, Raspberry Pi, kamery, aktualizacje, problemy
 - 🐛 Problem? Ustawienia › Informacje › *Dziennik awarii*: skopiuj go do [zgłoszenia](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
-- 📖 [Dokumentacja techniczna](docs/reference.fr.md) (po francusku): `dashboard.json`, typy kart, wykrycia,
+- 📖 [Dokumentacja techniczna](docs/reference.md) (po angielsku): `dashboard.json`, typy kart, wykrycia,
   AlertTicker, tryb edycji, bramka głosowa
 
 ## 📄 Licencja

@@ -1,5 +1,7 @@
 # Référence technique
 
+[English](reference.md) · **Français**
+
 > Détails de configuration pour aller plus loin. Pour une utilisation normale, l'assistant de premier démarrage et
 > le mode édition suffisent : rien n'oblige à modifier `dashboard.json` à la main.
 
@@ -110,6 +112,9 @@ Tout se règle en mode édition (toucher la carte), avec un bouton **Tester** qu
 captures récentes par caméra et la dernière capture trouvée. Les fichiers SMB / NFS sont téléchargés à la demande dans
 le cache (vidé après un jour).
 
+Un bouton rond en haut à droite de la carte ouvre l'**historique des détections** (toute l'année, par période ou par
+jour, filtre par caméra, histogramme d'activité, aperçu) ; il faut un stockage avec des fichiers (pas `entities`).
+
 ### AlertTicker
 
 Portage natif de l'AlertTicker Card v1.3.19 : les clés de configuration sont celles de la carte Lovelace (une
@@ -161,7 +166,9 @@ barre d'onglets ouvre la liste des onglets (nom, nombre de caméras, onglet par 
 toucher un onglet ouvre sa fenêtre (icône, nom, onglet par défaut, ses caméras : réglages, ordre, retrait, ajout).
 Fermer une fenêtre ouverte depuis une autre ramène à la précédente (caméra → onglet → liste des onglets). Une caméra ajoutée reprend les réglages de la première caméra, et sa
 batterie et ses capteurs de mouvement sont trouvés sur le même appareil dans Home Assistant. La batterie et les
-capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenêtre de réglages.
+capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenêtre de réglages. Hors mode édition, la
+colonne des caméras montre les premières caméras de l'onglet (ordre de l'éditeur des onglets) qui tiennent, puis une
+tuile « +N » qui ouvre le mur de caméras.
 
 Les réglages globaux (connexion, affichage, veille, code d'accès…) restent dans la page Réglages.
 
@@ -192,7 +199,7 @@ l'accueil, à côté de la barre d'onglets ailleurs). Port HTTP fixe : 49494.
 
 L'app n'a besoin que d'Android : sur un Raspberry Pi, on installe Android puis l'APK `arm64-v8a` de la Release.
 **Testé sur un Pi 4 (8 Go, LineageOS 23.2 / Android 16, écran HDMI 1920×1080)** : tout l'affichage tient en
-1080 px de haut (la colonne des caméras du tableau de bord déborde un peu en bas) ; accueil ≈ 40 images/s, tableau de
+1080 px de haut ; accueil ≈ 40 images/s, tableau de
 bord ≈ 25 images/s (processeur, M.A.C.S. compris) ; ≈ 165 Mo de mémoire. Décodage H.264 matériel
 (`c2.v4l2.avc.decoder`) pour le plein écran et le mur (3 directs à la fois sans souci, estimation automatique : 8) ;
 H.265 en logiciel seulement. Sans caméra ni micro : rien ne plante (« Aucune caméra », « Passerelle vocale
