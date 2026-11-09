@@ -72,7 +72,7 @@ prepare rooms
 "$ADB" shell input tap 1828 80; sleep 8           # historique des détections (bouton rond de la zone des détections)
 tap_prefix "7 "; sleep 3                          # période « 7 jours »
 "$ADB" shell input tap 220 890; sleep 3           # 4e capture (2e ligne)
-"$ADB" shell input tap 1555 824; sleep 2.5        # « Lire » : lecture sur place, barre d'avancement visible
+"$ADB" shell input tap 1555 824; sleep 3.5        # « Lire » : lecture sur place, barre d'avancement visible
 shot detection-history
 # Plein écran zoomé (avec la barre de lecture) : sans texte, une seule image pour toutes les langues
 # (docs/screenshots/fullscreen-zoom.jpg). Les commandes se masquent 3 s après la première image : le double toucher
