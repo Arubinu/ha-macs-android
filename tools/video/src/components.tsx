@@ -206,6 +206,43 @@ export const SceneIO: React.FC<{ duration: number; children: React.ReactNode; in
   );
 };
 
+/** Zone de l'écran à agrandir dans une loupe : centre (x, y) et largeur (w), en fractions de l'écran. */
+export type Region = { x: number; y: number; w: number };
+
+/**
+ * Loupe : vignette 16:9 agrandie d'un détail de l'écran (même capture ou même séquence que la tablette), sous la
+ * tablette en vertical. L'écran de la tablette, lui, reste entier.
+ */
+export const Callout: React.FC<{
+  src: string; video?: { src: string; from: number; rate?: number }; region: Region; width: number; delay?: number;
+}> = ({ src, video, region, width, delay = 18 }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const p = spring({ frame: frame - delay, fps, config: { damping: 14, stiffness: 120 } });
+  const pulse = beatPulse(frame);
+  const height = width * 9 / 16;
+  // Média dimensionné pour que la région remplisse la vignette (écran 16:10).
+  const mw = width / region.w;
+  const mh = mw * 10 / 16;
+  const left = width / 2 - region.x * mw;
+  const top = height / 2 - region.y * mh;
+  const media = { position: 'absolute' as const, left, top, width: mw, height: mh };
+  return (
+    <div style={{
+      width, height, borderRadius: width * 0.05, overflow: 'hidden', position: 'relative', background: '#000',
+      border: `2px solid rgba(${ACCENT_RGB},${0.55 + 0.35 * pulse})`,
+      boxShadow: `0 0 ${30 + 30 * pulse}px rgba(${ACCENT_RGB},0.35), 0 20px 60px rgba(0,0,0,0.8)`,
+      transform: `translateY(${(1 - p) * 80}px) scale(${0.8 + 0.2 * p})`, opacity: Math.min(1, p * 1.4),
+    }}>
+      {video ? (
+        <OffthreadVideo src={staticFile(video.src)} muted trimBefore={Math.round(video.from * fps)} playbackRate={video.rate ?? 1} style={media} />
+      ) : (
+        <Img src={staticFile(src)} style={media} />
+      )}
+    </div>
+  );
+};
+
 /** Éclair blanc bref (coupe sur un temps fort). */
 export const Flash: React.FC<{ at: number; strength?: number }> = ({ at: start, strength = 0.85 }) => {
   const frame = useCurrentFrame();

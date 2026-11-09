@@ -101,7 +101,13 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   finie, même provisoire, sinon Compose plante (c'est arrivé avec le calendrier des membres).
 - **Captures des README** : faux serveur Home Assistant `tools/demo/demo_ha.py` (données fictives) et script
   `tools/demo/capture.sh <langue>` ; procédure complète dans `tools/demo/README.md`. Une série par langue dans
-  `docs/screenshots/<langue>/`. Ne jamais faire de captures avec les vraies données de l'utilisateur.
+  `docs/screenshots/<langue>/`. Ne jamais faire de captures avec les vraies données de l'utilisateur. Les README
+  montrent une mosaïque cliquable (`gallery.jpg`, composition `Gallery` de `tools/video`) vers la page galerie de la
+  langue (`docs/screenshots/<langue>/README.md`, générée par `tools/demo/make_gallery.py`).
+- **Vidéo de présentation** (`tools/video/`, Remotion, `npm install` autorisé par l'utilisateur) : musique et sons
+  synthétisés (`audio/make_audio.py`, aucun échantillon tiers : rien de réclamable), séquences filmées sur l'émulateur
+  (`record.sh`, données de démo), compositions `Main` (16:9), `Vertical`, `Social` (aperçu 1280×640) et `Gallery`,
+  langue en props (`en` / `fr`). Médias générés non versionnés (`public/audio`, `public/rec`, `public/shots`, `out`).
 
 ## Architecture
 

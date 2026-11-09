@@ -6,21 +6,9 @@
 Lovelace w trybie kiosku do płynnej aplikacji Jetpack Compose, także na słabszych tabletach: bez przeglądarki, bez
 niestandardowych kart i bez żadnej konfiguracji w Home Assistant.
 
+<!-- video -->
 <p align="center">
-  <img src="docs/screenshots/pl/home.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pl/dashboard.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pl/members.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pl/cameras-energy.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pl/avatar-editor.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pl/camera-wall.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pl/detection-history.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fullscreen-zoom.jpg" width="49%" alt="">
+  <a href="docs/screenshots/pl/README.md"><img src="docs/screenshots/pl/gallery.jpg" width="100%" alt="Zrzuty ekranu"></a>
 </p>
 <p align="center">📸 <em>Dane demonstracyjne.</em></p>
 

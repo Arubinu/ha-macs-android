@@ -6,21 +6,9 @@ Un **tableau de bord Android natif pour Home Assistant**, pensé pour les tablet
 d'un dashboard Lovelace en mode kiosque dans une app Jetpack Compose fluide, même sur une tablette modeste : sans
 navigateur, sans cartes personnalisées et sans rien à configurer dans Home Assistant.
 
+<!-- video -->
 <p align="center">
-  <img src="docs/screenshots/fr/home.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fr/dashboard.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/fr/members.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fr/cameras-energy.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/fr/avatar-editor.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fr/camera-wall.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/fr/detection-history.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fullscreen-zoom.jpg" width="49%" alt="">
+  <a href="docs/screenshots/fr/README.md"><img src="docs/screenshots/fr/gallery.jpg" width="100%" alt="Captures d'écran"></a>
 </p>
 <p align="center">📸 <em>Données de démonstration.</em></p>
 

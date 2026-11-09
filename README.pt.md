@@ -6,21 +6,9 @@ Um **painel Android nativo para o Home Assistant**, pensado para tablets de pare
 Lovelace em modo quiosque para uma app Jetpack Compose fluida, mesmo em tablets modestos: sem navegador, sem cartões
 personalizados e sem nada para configurar no Home Assistant.
 
+<!-- video -->
 <p align="center">
-  <img src="docs/screenshots/pt/home.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pt/dashboard.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pt/members.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pt/cameras-energy.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pt/avatar-editor.jpg" width="49%" alt="">
-  <img src="docs/screenshots/pt/camera-wall.jpg" width="49%" alt="">
-</p>
-<p align="center">
-  <img src="docs/screenshots/pt/detection-history.jpg" width="49%" alt="">
-  <img src="docs/screenshots/fullscreen-zoom.jpg" width="49%" alt="">
+  <a href="docs/screenshots/pt/README.md"><img src="docs/screenshots/pt/gallery.jpg" width="100%" alt="Capturas de ecrã"></a>
 </p>
 <p align="center">📸 <em>Dados de demonstração.</em></p>
 

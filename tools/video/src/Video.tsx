@@ -2,7 +2,7 @@ import React from 'react';
 import {
   AbsoluteFill, Audio, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig, Easing,
 } from 'remotion';
-import { Background, CheckItem, Flash, Logo, SceneIO, Tablet, TitleWeight, Words } from './components';
+import { Background, Callout, CheckItem, Flash, Logo, Region, SceneIO, Tablet, TitleWeight, Words } from './components';
 import { Lang, LANGS, T } from './i18n';
 import { ACCENT, ACCENT_RGB, BODY, TITLE } from './theme';
 import { BAR, BEAT, CLIPS, DURATION, S } from './timing';
@@ -24,17 +24,20 @@ const useLayout = () => {
   const vertical = height > width;
   return {
     vertical, width, height,
-    tabletW: vertical ? width * 0.9 : width * 0.58,
-    titleSize: vertical ? 74 : 68,
-    titleTop: vertical ? height * 0.13 : height * 0.075,
-    tabletTop: vertical ? height * 0.36 : height * 0.25,
+    tabletW: vertical ? width * 0.92 : width * 0.58,
+    titleSize: vertical ? 78 : 68,
+    titleTop: vertical ? height * 0.08 : height * 0.075,
+    tabletTop: vertical ? height * 0.25 : height * 0.25,
+    // Vertical : loupe sous la tablette (détail agrandi), pour occuper la hauteur.
+    calloutTop: height * 0.6,
+    calloutW: width * 0.82,
   };
 };
 
 const FeatureScene: React.FC<{
   title: string; src: string; duration: number; focus?: { f: number; x: number; y: number; s: number }[]; tiltY?: number;
-  extra?: React.ReactNode; video?: { src: string; from: number; rate?: number };
-}> = ({ title, src, duration, focus, tiltY, extra, video }) => {
+  extra?: React.ReactNode; video?: { src: string; from: number; rate?: number }; region?: Region;
+}> = ({ title, src, duration, focus, tiltY, extra, video, region }) => {
   const L = useLayout();
   return (
     <SceneIO duration={duration}>
@@ -45,6 +48,11 @@ const FeatureScene: React.FC<{
         <div style={{ position: 'absolute', top: L.tabletTop }}>
           <Tablet src={src} width={L.tabletW} focus={focus} tiltY={tiltY} video={video} />
         </div>
+        {L.vertical && region && (
+          <div style={{ position: 'absolute', top: L.calloutTop }}>
+            <Callout src={src} video={video} region={region} width={L.calloutW} />
+          </div>
+        )}
         {extra}
       </AbsoluteFill>
     </SceneIO>
@@ -170,19 +178,19 @@ export const HaMacsVideo: React.FC<VideoProps> = ({ lang, titleWeight = 800 }) =
 
       {/* 7-14 : M.A.C.S. apparaît, puis réagit ; tableau de bord ; membres (séquences filmées) */}
       <Sequence from={f1} durationInFrames={sceneLen}>
-        <FeatureScene title={t.home} src={shot('home')} duration={sceneLen} video={clip('home_intro')}
+        <FeatureScene title={t.home} src={shot('home')} duration={sceneLen} video={clip('home_intro')} region={{ x: 0.5, y: 0.43, w: 0.5 }}
           focus={[{ f: 0, x: 0.5, y: 0.4, s: 1 }, { f: 220, x: 0.5, y: 0.38, s: 1.4 }]} />
       </Sequence>
       <Sequence from={f1 + sceneLen} durationInFrames={sceneLen}>
-        <FeatureScene title={t.moods} src={shot('home')} duration={sceneLen} tiltY={14} video={clip('home_moods')}
+        <FeatureScene title={t.moods} src={shot('home')} duration={sceneLen} tiltY={14} video={clip('home_moods')} region={{ x: 0.5, y: 0.45, w: 0.42 }}
           focus={[{ f: 0, x: 0.5, y: 0.4, s: 1.1 }, { f: 220, x: 0.5, y: 0.38, s: 1.5 }]} />
       </Sequence>
       <Sequence from={f1 + 2 * sceneLen} durationInFrames={sceneLen}>
-        <FeatureScene title={t.dashboard} src={shot('dashboard')} duration={sceneLen} video={clip('dashboard')}
+        <FeatureScene title={t.dashboard} src={shot('dashboard')} duration={sceneLen} video={clip('dashboard')} region={{ x: 0.47, y: 0.27, w: 0.42 }}
           focus={[{ f: 0, x: 0.5, y: 0.5, s: 1 }, { f: 230, x: 0.5, y: 0.5, s: 1.4 }]} />
       </Sequence>
       <Sequence from={f1 + 3 * sceneLen} durationInFrames={sceneLen}>
-        <FeatureScene title={t.members} src={shot('members')} duration={sceneLen} tiltY={14} video={clip('members')}
+        <FeatureScene title={t.members} src={shot('members')} duration={sceneLen} tiltY={14} video={clip('members')} region={{ x: 0.62, y: 0.17, w: 0.36 }}
           focus={[{ f: 0, x: 0.6, y: 0.2, s: 1.05 }, { f: 220, x: 0.6, y: 0.12, s: 1.4 }]} />
       </Sequence>
 
@@ -203,11 +211,11 @@ export const HaMacsVideo: React.FC<VideoProps> = ({ lang, titleWeight = 800 }) =
 
       {/* 15-22 : mur de caméras, historique, zoom, énergie + langues */}
       <Sequence from={f2} durationInFrames={sceneLen}>
-        <FeatureScene title={t.wall} src={shot('camera-wall')} duration={sceneLen} tiltY={14} video={clip('wall')}
+        <FeatureScene title={t.wall} src={shot('camera-wall')} duration={sceneLen} tiltY={14} video={clip('wall')} region={{ x: 0.76, y: 0.27, w: 0.46 }}
           focus={[{ f: 0, x: 0.5, y: 0.5, s: 1 }, { f: 230, x: 0.55, y: 0.45, s: 1.18 }]} />
       </Sequence>
       <Sequence from={f2 + sceneLen} durationInFrames={sceneLen}>
-        <FeatureScene title={t.history} src={shot('detection-history')} duration={sceneLen}
+        <FeatureScene title={t.history} src={shot('detection-history')} duration={sceneLen} region={{ x: 0.83, y: 0.44, w: 0.33 }}
           focus={[{ f: 0, x: 0.5, y: 0.5, s: 1 }, { f: 60, x: 0.3, y: 0.25, s: 1.5 }, { f: 170, x: 0.8, y: 0.45, s: 1.6 }, { f: 240, x: 0.8, y: 0.45, s: 1.65 }]} />
       </Sequence>
       <Sequence from={f2 + 2 * sceneLen} durationInFrames={sceneLen}>
