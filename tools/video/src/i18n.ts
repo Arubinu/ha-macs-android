@@ -1,0 +1,51 @@
+// Textes à l'écran. `*mot*` = mot mis en valeur (couleur d'accent).
+export type Lang = 'en' | 'fr';
+
+export const T = {
+  en: {
+    intro1: 'Your wall tablet',
+    intro2: 'deserves *better*.',
+    tagline: 'A native Android dashboard for Home Assistant',
+    home: 'M.A.C.S. at the *heart* of your home',
+    moods: 'Alive. *Expressive.*',
+    dashboard: 'Rooms, cameras, alerts. *At a glance.*',
+    members: 'Your family, *always* in view',
+    breakTitle: 'Nothing to set up in *Home Assistant*',
+    noCards: 'No custom cards',
+    noHelpers: 'No helpers',
+    noTemplates: 'No templates',
+    noToken: 'No token to create',
+    wall: 'Every camera. *Live.*',
+    history: 'Every detection, *day by day*',
+    zoom: 'Pinch. Zoom. *Replay.*',
+    energy: 'Energy, weather, music…',
+    languages: '8 languages',
+    outro1: 'Free & open source',
+    outro2: 'Android 8+ · Raspberry Pi',
+    url: 'github.com/Arubinu/ha-macs-android',
+  },
+  fr: {
+    intro1: 'Votre tablette murale',
+    intro2: 'mérite *mieux*.',
+    tagline: 'Un tableau de bord Android natif pour Home Assistant',
+    home: 'M.A.C.S. au *cœur* de la maison',
+    moods: 'Vivant. *Expressif.*',
+    dashboard: 'Pièces, caméras, alertes. *D\'un coup d\'œil.*',
+    members: 'Toute la famille, *toujours* en vue',
+    breakTitle: 'Rien à configurer dans *Home Assistant*',
+    noCards: 'Pas de cartes personnalisées',
+    noHelpers: 'Pas d\'entrées (helpers)',
+    noTemplates: 'Pas de modèles',
+    noToken: 'Pas de jeton à créer',
+    wall: 'Toutes les caméras. *En direct.*',
+    history: 'Chaque détection, *jour après jour*',
+    zoom: 'Pincer. Zoomer. *Revoir.*',
+    energy: 'Énergie, météo, musique…',
+    languages: '8 langues',
+    outro1: 'Gratuit et open source',
+    outro2: 'Android 8+ · Raspberry Pi',
+    url: 'github.com/Arubinu/ha-macs-android',
+  },
+} as const;
+
+export const LANGS = ['English', 'Français', 'Deutsch', 'Español', 'Italiano', 'Nederlands', 'Português', 'Polski'];

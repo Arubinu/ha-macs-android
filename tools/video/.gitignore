@@ -4,3 +4,4 @@ out/
 public/audio/
 # Enregistrements de l'émulateur (régénérables).
 public/rec/
+public/shots/
