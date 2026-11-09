@@ -6,11 +6,10 @@ Ein **natives Android-Dashboard für Home Assistant**, gemacht für Wandtablets.
 Lovelace-Kiosk-Dashboards in eine flüssige Jetpack-Compose-App, auch auf einfachen Tablets: ohne Browser, ohne
 Custom Cards und ohne Einrichtung in Home Assistant.
 
-<!-- video -->
+https://github.com/user-attachments/assets/7d26f8fa-cfbf-4ace-9823-5e4daac6b310
 <p align="center">
   <a href="docs/screenshots/de/README.md"><img src="docs/screenshots/de/gallery.jpg" width="100%" alt="Screenshots"></a>
 </p>
-<p align="center">📸 <em>Demodaten.</em></p>
 
 ## ✨ Funktionen
 

@@ -6,11 +6,10 @@ Una **dashboard Android nativa per Home Assistant**, pensata per i tablet a pare
 dashboard Lovelace in modalità kiosk in un'app Jetpack Compose fluida, anche su tablet modesti: senza browser, senza
 card personalizzate e senza nulla da configurare in Home Assistant.
 
-<!-- video -->
+https://github.com/user-attachments/assets/7d26f8fa-cfbf-4ace-9823-5e4daac6b310
 <p align="center">
   <a href="docs/screenshots/it/README.md"><img src="docs/screenshots/it/gallery.jpg" width="100%" alt="Schermate"></a>
 </p>
-<p align="center">📸 <em>Dati dimostrativi.</em></p>
 
 ## ✨ Funzionalità
 

@@ -6,11 +6,10 @@ A **native Android dashboard for Home Assistant**, made for wall-mounted tablets
 Lovelace kiosk dashboard to a smooth Jetpack Compose app, even on modest tablets, with no browser, no custom cards and
 nothing to set up in Home Assistant.
 
-<!-- video -->
+https://github.com/user-attachments/assets/7d26f8fa-cfbf-4ace-9823-5e4daac6b310
 <p align="center">
   <a href="docs/screenshots/en/README.md"><img src="docs/screenshots/en/gallery.jpg" width="100%" alt="Screenshots"></a>
 </p>
-<p align="center">📸 <em>Demo data.</em></p>
 
 ## ✨ Features
 

@@ -6,11 +6,10 @@ Un **panel Android nativo para Home Assistant**, pensado para tablets de pared. 
 Lovelace en modo quiosco en una app Jetpack Compose fluida, incluso en tablets modestas: sin navegador, sin tarjetas
 personalizadas y sin nada que configurar en Home Assistant.
 
-<!-- video -->
+https://github.com/user-attachments/assets/7d26f8fa-cfbf-4ace-9823-5e4daac6b310
 <p align="center">
   <a href="docs/screenshots/es/README.md"><img src="docs/screenshots/es/gallery.jpg" width="100%" alt="Capturas de pantalla"></a>
 </p>
-<p align="center">📸 <em>Datos de demostración.</em></p>
 
 ## ✨ Funciones
 

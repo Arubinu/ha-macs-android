@@ -6,11 +6,10 @@ Een **native Android-dashboard voor Home Assistant**, gemaakt voor tablets aan d
 een Lovelace-kioskdashboard naar een vloeiende Jetpack Compose-app, ook op eenvoudige tablets: zonder browser, zonder
 custom cards en zonder iets in te stellen in Home Assistant.
 
-<!-- video -->
+https://github.com/user-attachments/assets/7d26f8fa-cfbf-4ace-9823-5e4daac6b310
 <p align="center">
   <a href="docs/screenshots/nl/README.md"><img src="docs/screenshots/nl/gallery.jpg" width="100%" alt="Schermafbeeldingen"></a>
 </p>
-<p align="center">📸 <em>Demogegevens.</em></p>
 
 ## ✨ Functies
 
