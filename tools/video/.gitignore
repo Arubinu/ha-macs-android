@@ -1,0 +1,6 @@
+node_modules/
+out/
+# Musiques et sons achetés ou sous licence : jamais versionnés.
+public/audio/
+# Enregistrements de l'émulateur (régénérables).
+public/rec/

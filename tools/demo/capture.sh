@@ -5,6 +5,8 @@
 # L'app (version publique) doit être installée sur l'émulateur ; le faux serveur est lancé ici dans la langue voulue.
 # Navigation par coordonnées (tablette 1920 × 1200) : les textes changent avec la langue.
 L="$1"
+# ONLY=main|history|avatar : seulement ces captures (main = accueil, tableau de bord, mur, membres, caméras).
+want() { [ -z "$ONLY" ] || [ "$ONLY" = "$1" ]; }
 export MSYS_NO_PATHCONV=1
 ADB="${ADB:-$LOCALAPPDATA/Android/Sdk/platform-tools/adb}"
 WORK="${DEMO_WORK:?DEMO_WORK non défini}"
@@ -15,6 +17,15 @@ OUT="$WORK/shots/$L"
 mkdir -p "$OUT"
 
 shot() { "$ADB" exec-out screencap -p > "$OUT/$1.png"; }
+
+# Touche le premier élément dont le texte commence par $1 (ASCII), d'après uiautomator : les libellés changent de
+# largeur selon la langue (« Hoy » / « Aujourd'hui » décalent « 7 jours »).
+tap_prefix() {
+  "$ADB" shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+  b=$("$ADB" shell cat /sdcard/ui.xml | tr '>' '\n' | grep "text=\"$1" | head -1 | sed -E 's/.*bounds="\[([0-9]+),([0-9]+)\]\[([0-9]+),([0-9]+)\]".*/\1 \2 \3 \4/')
+  set -- $b
+  [ -n "$4" ] && "$ADB" shell input tap $(( ($1 + $3) / 2 )) $(( ($2 + $4) / 2 ))
+}
 
 # État de démo + langue de l'app + config traduite, avec la page centrale $1 affichée d'office.
 prepare() {
@@ -35,6 +46,7 @@ DEMO_LANG="$L" python "$REPO/tools/demo/demo_ha.py" > "$WORK/demo_ha_$L.log" 2>&
 SRV=$!
 sleep 4
 
+if want main; then
 prepare rooms
 shot home
 "$ADB" shell input tap 960 1090; sleep 6          # bouton « Dashboard »
@@ -52,20 +64,27 @@ prepare consumption
 "$ADB" shell input tap 960 1090; sleep 5
 "$ADB" shell input tap 1590 665; sleep 10         # caméra du haut : flux vidéo (badge DIRECT)
 shot cameras-energy
+fi
 
+if want history; then
 prepare rooms
 "$ADB" shell input tap 960 1090; sleep 6
 "$ADB" shell input tap 1828 80; sleep 8           # historique des détections (bouton rond de la zone des détections)
-"$ADB" shell input tap 450 171; sleep 3           # période « 7 jours »
+tap_prefix "7 "; sleep 3                          # période « 7 jours »
 "$ADB" shell input tap 220 890; sleep 3           # 4e capture (2e ligne)
+"$ADB" shell input tap 1555 824; sleep 2.5        # « Lire » : lecture sur place, barre d'avancement visible
 shot detection-history
-# Plein écran zoomé : sans texte, une seule image pour toutes les langues (docs/screenshots/fullscreen-zoom.jpg).
+# Plein écran zoomé (avec la barre de lecture) : sans texte, une seule image pour toutes les langues
+# (docs/screenshots/fullscreen-zoom.jpg). Les commandes se masquent 3 s après la première image : le double toucher
+# relance ce délai, la capture suit aussitôt.
 if [ "$L" = en ]; then
-  "$ADB" shell input tap 1758 824; sleep 8        # plein écran de la capture choisie
-  "$ADB" shell "input tap 1300 750 & sleep 0.12; input tap 1300 750"; sleep 3   # double toucher : zoom
+  "$ADB" shell input tap 1758 824; sleep 2.5      # plein écran de la capture choisie
+  "$ADB" shell "input tap 1300 750 & sleep 0.12; input tap 1300 750"; sleep 1   # double toucher : zoom
   shot fullscreen-zoom
 fi
+fi
 
+if want avatar; then
 prepare members
 "$ADB" shell input tap 960 1090; sleep 4
 for i in 1 2 3; do                                # réglages : appui long en (30, 40)
@@ -81,6 +100,7 @@ done
 "$ADB" shell input tap 1240 390; sleep 4          # Fichier de la tablette
 "$ADB" shell input tap 600 757; sleep 16          # première photo, détourage
 shot avatar-editor
+fi
 
 "$ADB" shell am force-stop fr.pergens.hamacs
 kill $SRV 2>/dev/null

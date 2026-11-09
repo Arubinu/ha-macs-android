@@ -1,0 +1,25 @@
+{
+  "name": "ha-macs-video",
+  "private": true,
+  "description": "Vidéo de présentation de HA-MACS Android (Remotion) : version 16:9 et verticale, en anglais et en français.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render:en": "remotion render src/index.ts Main out/ha-macs-en.mp4 --props=\"{\\\"lang\\\":\\\"en\\\"}\"",
+    "render:fr": "remotion render src/index.ts Main out/ha-macs-fr.mp4 --props=\"{\\\"lang\\\":\\\"fr\\\"}\"",
+    "render:vertical:en": "remotion render src/index.ts Vertical out/ha-macs-vertical-en.mp4 --props=\"{\\\"lang\\\":\\\"en\\\"}\"",
+    "render:vertical:fr": "remotion render src/index.ts Vertical out/ha-macs-vertical-fr.mp4 --props=\"{\\\"lang\\\":\\\"fr\\\"}\""
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.538",
+    "@remotion/google-fonts": "4.0.538",
+    "@remotion/media-utils": "4.0.538",
+    "@remotion/transitions": "4.0.538",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.538"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}
