@@ -19,16 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----------------------------------------------------------------------------
-
-Third-party assets are NOT covered by the MIT license above and keep their
-own licenses:
-
-- app/src/main/assets/macs/ : M.A.C.S. by Glyn Davidson, CC BY-NC-SA 4.0
-  (https://github.com/glyndavidson/MACS)
-- app/src/main/assets/hue.json : hass-hue-icons by arallsopp, CC BY-NC-SA 4.0
-  (https://github.com/arallsopp/hass-hue-icons)
-
-Other bundled resources (Material Design Icons, Meteocons, fonts, AlertTicker
-Card themes and translations) are listed with their licenses in README.md.

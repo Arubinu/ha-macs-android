@@ -150,6 +150,8 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Verder lezen
 
+- ❓ [FAQ](docs/faq.md) (in het Engels): geschikte tablets, Raspberry Pi, camera's, updates, problemen
+- 🐛 Een probleem? Instellingen › Over › *Crashlogboek*: kopieer het in een [melding](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
 - 📖 [Technische referentie](docs/reference.fr.md) (in het Frans): `dashboard.json`, kaarttypen, detecties,
   AlertTicker, bewerkmodus, spraakgateway
 

@@ -1,0 +1,76 @@
+name: 🐛 Bug report
+description: Something does not work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem! English is preferred, but any language of the app is fine
+        (Français, Deutsch, Español, Italiano, Nederlands, Português, Polski).
+
+        Please check the [FAQ](https://github.com/Arubinu/ha-macs-android/blob/main/docs/faq.md) first: the answer may already be there.
+
+        ⚠️ **Never paste your Home Assistant token, access codes or an exported backup** (it contains them).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+      placeholder: |
+        1. Open the camera wall
+        2. Tap the doorbell camera
+        3. The fullscreen stays black
+    validations:
+      required: true
+  - type: textarea
+    id: crash-log
+    attributes:
+      label: Crash log
+      description: |
+        **Settings › About › Crash log**: copy it and paste it here (or download it from a phone with
+        *Settings › Dashboard › Backup with the phone*). It also lists video and stream errors, with addresses hidden.
+        It is the fastest way to find the cause, even when the app did not crash.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Settings › About › Version
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: "Samsung Galaxy Tab A8, Android 14 / Raspberry Pi 4, LineageOS 22"
+    validations:
+      required: true
+  - type: input
+    id: ha
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.11.1"
+  - type: dropdown
+    id: setup
+    attributes:
+      label: How is the app set up?
+      multiple: true
+      options:
+        - Installed from a GitHub Release
+        - Built from the sources
+        - Kiosk mode on
+        - Device owner
+        - Reverse proxy / remote access (Pangolin, Cloudflare…)
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or video
+      description: Optional. Hide anything personal (names, addresses, faces, camera images).
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I did not include any token, access code, backup file or personal address.
+          required: true

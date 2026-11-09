@@ -153,6 +153,8 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Per approfondire
 
+- ❓ [FAQ](docs/faq.md) (in inglese): tablet compatibili, Raspberry Pi, telecamere, aggiornamenti, problemi
+- 🐛 Un problema? Impostazioni › Informazioni › *Registro degli arresti anomali*: copialo in una [segnalazione](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
 - 📖 [Riferimento tecnico](docs/reference.fr.md) (in francese): `dashboard.json`, tipi di card, rilevamenti,
   AlertTicker, modalità modifica, gateway vocale
 

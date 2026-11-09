@@ -1,0 +1,28 @@
+name: 💡 Idea or feature request
+description: Suggest a new card, an improvement or a missing option
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! English is preferred, but any language of the app is fine.
+        HA-MACS aims to need **nothing to set up in Home Assistant** (no custom cards, helpers or templates):
+        ideas that keep it that way are the easiest to take in.
+  - type: textarea
+    id: need
+    attributes:
+      label: What would you like to do?
+      description: The need or the situation, before the solution (e.g. "see who rang the doorbell while I was away").
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: How do you imagine it?
+      description: Where it would appear, what it would show, a sketch or a Lovelace card that already does it.
+  - type: textarea
+    id: entities
+    attributes:
+      label: Home Assistant entities involved
+      description: Integrations or entity types it would rely on (e.g. `camera.*`, `binary_sensor.*_motion`, Frigate).
+      placeholder: "Reolink cameras, binary_sensor.front_door_visitor"

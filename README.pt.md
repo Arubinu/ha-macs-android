@@ -151,6 +151,8 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Para ir mais longe
 
+- ❓ [FAQ](docs/faq.md) (em inglês): tablets compatíveis, Raspberry Pi, câmaras, atualizações, problemas
+- 🐛 Algum problema? Definições › Acerca de › *Registo de falhas*: copie-o para um [relatório](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
 - 📖 [Referência técnica](docs/reference.fr.md) (em francês): `dashboard.json`, tipos de cartões, deteções,
   AlertTicker, modo de edição, gateway de voz
 

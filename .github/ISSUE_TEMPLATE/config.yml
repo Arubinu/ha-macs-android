@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ❓ FAQ
+    url: https://github.com/Arubinu/ha-macs-android/blob/main/docs/faq.md
+    about: Supported tablets, Raspberry Pi, kiosk mode, updates, cameras, privacy…
+  - name: 📖 Technical reference (French)
+    url: https://github.com/Arubinu/ha-macs-android/blob/main/docs/reference.fr.md
+    about: dashboard.json, card types, detections, edit mode, voice gateway

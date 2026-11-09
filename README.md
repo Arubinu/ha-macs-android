@@ -146,6 +146,8 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Going further
 
+- ❓ [FAQ](docs/faq.md): supported tablets, Raspberry Pi, cameras, updates, troubleshooting
+- 🐛 Something wrong? Settings › About › *Crash log*: copy it into a [bug report](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
 - 📖 [Technical reference](docs/reference.fr.md) (in French): `dashboard.json`, card types, detections, AlertTicker,
   edit mode, voice gateway
 

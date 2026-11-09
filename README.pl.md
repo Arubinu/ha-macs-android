@@ -149,6 +149,8 @@ cd gateway && docker compose up -d
 
 ## 🛠️ Więcej informacji
 
+- ❓ [FAQ](docs/faq.md) (po angielsku): obsługiwane tablety, Raspberry Pi, kamery, aktualizacje, problemy
+- 🐛 Problem? Ustawienia › Informacje › *Dziennik awarii*: skopiuj go do [zgłoszenia](https://github.com/Arubinu/ha-macs-android/issues/new/choose)
 - 📖 [Dokumentacja techniczna](docs/reference.fr.md) (po francusku): `dashboard.json`, typy kart, wykrycia,
   AlertTicker, tryb edycji, bramka głosowa
 
