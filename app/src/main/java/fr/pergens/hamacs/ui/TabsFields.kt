@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -201,6 +202,24 @@ fun TabsFields(key: String) {
             state.openEditChild(EditTarget.Tabs(key), EditTarget.Tab(key, t.pages.size))
         }
         val set = app.config.rawBlocks.collectAsState().value[key]?.get("set") as? JsonObject
+        // Caméras qui ne tiennent pas dans la colonne : défilement (défaut) ou tuile « +N » vers le mur.
+        val defaultOverflow = t.original.s("overflow") ?: "scroll"
+        val overflow = set?.s("overflow") ?: defaultOverflow
+        Column(Modifier.fillMaxWidth().padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.tabs_overflow), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
+            Text(stringResource(R.string.tabs_overflow_help), style = TextStyle(fontSize = 13.sp, color = Muted))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf("scroll" to R.string.tabs_overflow_scroll, "more" to R.string.tabs_overflow_more).forEach { (v, label) ->
+                    androidx.compose.material3.FilterChip(
+                        selected = overflow == v,
+                        onClick = { app.config.setBlockField(key, "overflow", JsonPrimitive(v).takeIf { v != defaultOverflow }) },
+                        label = { Text(stringResource(label)) },
+                        modifier = Modifier.heightIn(min = 40.dp),
+                        colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
+                    )
+                }
+            }
+        }
         if (set != null && set.isNotEmpty()) Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             TextLink(stringResource(R.string.tabs_reset)) {
                 app.config.setBlockField(key, "pages", null)

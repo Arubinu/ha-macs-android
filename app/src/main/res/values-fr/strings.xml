@@ -908,6 +908,10 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Aucune caméra trouvée sur cet appareil.</string>
     <string name="camera_preview">Aperçu</string>
+    <string name="tabs_overflow">Caméras qui dépassent</string>
+    <string name="tabs_overflow_help">Sur le tableau de bord, quand les caméras d\'un onglet sont plus hautes que l\'écran. Les autres se règlent aussi depuis le mur de caméras en mode édition.</string>
+    <string name="tabs_overflow_scroll">Défilement</string>
+    <string name="tabs_overflow_more">Tuile « +N »</string>
     <string name="camera_dashboard">Afficher sur le tableau de bord</string>
     <string name="camera_dashboard_help">Désactivé : la caméra n\'apparaît que dans le mur de caméras. La tuile « +N » ne compte que les caméras affichées sur le tableau de bord.</string>
     <string name="camera_wall_only">Mur seulement</string>

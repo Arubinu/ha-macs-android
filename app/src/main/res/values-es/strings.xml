@@ -890,6 +890,10 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">No se ha encontrado ninguna cámara en este dispositivo.</string>
     <string name="camera_preview">Vista previa</string>
+    <string name="tabs_overflow">Cámaras que no caben</string>
+    <string name="tabs_overflow_help">En el panel, cuando las cámaras de una pestaña son más altas que la pantalla. Las demás también se ajustan desde el muro de cámaras en modo edición.</string>
+    <string name="tabs_overflow_scroll">Desplazamiento</string>
+    <string name="tabs_overflow_more">Mosaico «+N»</string>
     <string name="camera_dashboard">Mostrar en el panel</string>
     <string name="camera_dashboard_help">Desactivado: la cámara solo aparece en el muro de cámaras. El mosaico «+N» solo cuenta las cámaras mostradas en el panel.</string>
     <string name="camera_wall_only">Solo en el muro</string>

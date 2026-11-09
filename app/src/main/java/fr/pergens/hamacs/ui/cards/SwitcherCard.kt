@@ -91,9 +91,12 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
             label = "switcher-$id",
         ) { pageId ->
             val page = pages.firstOrNull { it.s("id") == pageId } ?: pages.first()
-            // Caméras plus hautes que l'écran : les premières (ordre de l'onglet) et une tuile « +N » vers le mur.
-            // Mode édition : toutes, pour pouvoir régler chacune.
-            if (tabsKey != null && !state.editMode) CameraFitColumn(page.objs("cards"), card.d("bottom_margin", 24.0).dp) {
+            // Caméras plus hautes que l'écran : défilement avec fondu (défaut), ou les premières (ordre de l'onglet) et
+            // une tuile « +N » vers le mur (`overflow: "more"`). Pareil en mode édition : les autres se règlent depuis
+            // le mur ou l'éditeur des onglets.
+            if (tabsKey != null) CameraFitColumn(
+                page.objs("cards"), card.d("bottom_margin", 24.0).dp, scroll = card.s("overflow", "scroll") != "more",
+            ) {
                 state.wall = fr.pergens.hamacs.ui.WallRequest(page = pageId)
             } else Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Dash.shapes.gutter)) {
                 page.objs("cards").forEach { RenderCard(it) }
@@ -121,7 +124,8 @@ fun SwitcherCard(card: Card, modifier: Modifier) {
                 tabsKey != null -> ({ state.editTarget = fr.pergens.hamacs.ui.EditTarget.Tabs(tabsKey) })
                 pagesKey != null -> ({ state.editTarget = fr.pergens.hamacs.ui.EditTarget.Pages(pagesKey) })
                 else -> null
-            }, onWall = if (tabsKey != null && !state.editMode) ({ state.wall = fr.pergens.hamacs.ui.WallRequest(page = current) }) else null)
+            // Mur aussi en mode édition : on y règle chaque caméra (même celles qui ne tiennent pas dans la colonne).
+            }, onWall = if (tabsKey != null) ({ state.wall = fr.pergens.hamacs.ui.WallRequest(page = current) }) else null)
             Spacer(Modifier.height(12.dp))
             content()
         }

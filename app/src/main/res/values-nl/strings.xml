@@ -890,6 +890,10 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Geen camera gevonden op dit apparaat.</string>
     <string name="camera_preview">Voorbeeld</string>
+    <string name="tabs_overflow">Camera\'s die niet passen</string>
+    <string name="tabs_overflow_help">Op het dashboard, als de camera\'s van een tabblad hoger zijn dan het scherm. De andere zijn in de bewerkmodus ook via de camerawand in te stellen.</string>
+    <string name="tabs_overflow_scroll">Scrollen</string>
+    <string name="tabs_overflow_more">Tegel „+N”</string>
     <string name="camera_dashboard">Tonen op het dashboard</string>
     <string name="camera_dashboard_help">Uit: de camera verschijnt alleen in de camerawand. De tegel „+N” telt alleen de camera\'s op het dashboard.</string>
     <string name="camera_wall_only">Alleen camerawand</string>

@@ -910,6 +910,10 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Nie znaleziono kamery w tym urządzeniu.</string>
     <string name="camera_preview">Podgląd</string>
+    <string name="tabs_overflow">Kamery, które się nie mieszczą</string>
+    <string name="tabs_overflow_help">Na panelu, gdy kamery karty są wyższe niż ekran. Pozostałe można też ustawić ze ściany kamer w trybie edycji.</string>
+    <string name="tabs_overflow_scroll">Przewijanie</string>
+    <string name="tabs_overflow_more">Kafelek „+N”</string>
     <string name="camera_dashboard">Pokaż na panelu</string>
     <string name="camera_dashboard_help">Wyłączone: kamera pojawia się tylko na ścianie kamer. Kafelek „+N” liczy tylko kamery pokazane na panelu.</string>
     <string name="camera_wall_only">Tylko ściana kamer</string>

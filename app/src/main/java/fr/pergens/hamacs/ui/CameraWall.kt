@@ -61,6 +61,7 @@ import fr.pergens.hamacs.config.s
 import fr.pergens.hamacs.config.strs
 import fr.pergens.hamacs.ha.EntityState
 import fr.pergens.hamacs.ui.components.HaIcon
+import fr.pergens.hamacs.ui.components.editOutline
 import fr.pergens.hamacs.ui.components.tapHold
 import fr.pergens.hamacs.ui.theme.Dash
 import kotlinx.coroutines.delay
@@ -325,8 +326,9 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
     // Fermeture : délai de l'événement, sinon celui du mur (ou du plein écran) ; jamais pendant une détection
     // ni pendant qu'une caméra est agrandie, le délai repartant ensuite.
     val seconds = request.autoSeconds ?: if (settings.wallSeconds < 0) settings.fullscreenSeconds else settings.wallSeconds
-    LaunchedEffect(seconds, moving.isEmpty(), paused) {
-        if (seconds > 0 && moving.isEmpty() && !paused) {
+    // Mode édition : jamais fermé seul (on y règle les caméras).
+    LaunchedEffect(seconds, moving.isEmpty(), paused, state.editMode) {
+        if (seconds > 0 && moving.isEmpty() && !paused && !state.editMode) {
             delay(seconds * 1000L)
             // Événement : seulement si personne n'a touché l'écran depuis l'ouverture.
             if (request.autoSeconds == null || state.lastInteraction <= request.at) onDismiss()
@@ -403,6 +405,8 @@ fun CameraWallDialog(request: WallRequest, onDismiss: () -> Unit) {
 /** Caméra agrandie seule, avec le son (le mur reste dessous, ses directs en pause). */
 private fun open(state: DashState, card: JsonObject) {
     val id = card.s("entity") ?: return
+    // Mode édition : réglages de la caméra (y compris celles qui ne tiennent pas dans la colonne du tableau de bord).
+    if (state.editInstead(EditTarget.Camera(id))) return
     state.openPlayer(card.s("fullscreen_url") ?: card.s("fullscreen_entity") ?: card.s("live_url") ?: id, card.s("live_url") ?: id)
 }
 
@@ -480,7 +484,8 @@ private fun WallTile(
     val shape = RoundedCornerShape(12.dp)
     Box(
         Modifier.fillMaxSize().clip(shape).background(Color(0xFF1A1A1E))
-            .tapHold({ onTap() }),
+            .tapHold({ onTap() })
+            .editOutline(state.editMode, shape),
     ) {
         if (cam?.isUnavailable == true) {
             fr.pergens.hamacs.ui.cards.CameraPlaceholder(fr.pergens.hamacs.ui.cards.CameraPlaceholderKind.Offline, Modifier.fillMaxSize())
@@ -570,6 +575,16 @@ private fun WallTile(
         ) {
             Box(Modifier.size(6.dp).background(Color.White, CircleShape))
             Text(stringResource(R.string.camera_live), Modifier.padding(start = 6.dp), style = TextStyle(fontSize = 11.sp, color = Color.White, fontWeight = FontWeight.Bold))
+        }
+        // Mode édition : caméra absente du tableau de bord (option « Afficher sur le tableau de bord » coupée).
+        if (state.editMode && (blocks[camId]?.get("dashboard") as? kotlinx.serialization.json.JsonPrimitive)?.content == "false") Row(
+            Modifier.align(Alignment.Center).background(Color(0xB3000000), RoundedCornerShape(8.dp))
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HaIcon("mdi:view-grid", size = 16.dp, tint = Color.White)
+            Text(stringResource(R.string.camera_wall_only), Modifier.padding(start = 8.dp),
+                style = TextStyle(fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Medium))
         }
     }
 }

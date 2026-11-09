@@ -275,7 +275,10 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
   (ordre de l'éditeur des onglets) qui tiennent, puis une tuile « +N » vers le mur. Nombre calculé sans composer les
   cartes (hauteur = largeur / `aspect_ratio`, `WallLogic.visibleCount`) : une caméra cachée n'est jamais chargée.
   Option du bloc caméra `dashboard: false` (« Afficher sur le tableau de bord ») : caméra seulement dans le mur, hors
-  colonne et hors compte « +N » (toujours affichée en mode édition, pour la régler).
+  colonne et hors compte « +N ». Dépassement : champ `overflow` du switcher (`scroll` par défaut : `LazyColumn` avec
+  fondus, seules les caméras à l'écran chargées ; `more` : tuile « +N »), choix dans l'éditeur des onglets. Même
+  colonne en mode édition ; le mur reste ouvrable en mode édition (pas de fermeture auto), toucher une caméra = ses
+  réglages (`editInstead`), pastille « Mur seulement ».
   Hauteur suivie par `rememberRootHeight` ; espace réparti par une `FitColumn` publié par `LocalColumnSlack` (sinon,
   en rétrécissant, le bloc descend et se croit à l'étroit). Même chose pour `BottomFadeScroll` (pièces, calendrier).
 - **Connexion WebSocket** : rien n'est envoyé avant `auth_ok` (HA prenait le message pour l'authentification :

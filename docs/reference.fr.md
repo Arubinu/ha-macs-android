@@ -166,10 +166,12 @@ barre d'onglets ouvre la liste des onglets (nom, nombre de caméras, onglet par 
 toucher un onglet ouvre sa fenêtre (icône, nom, onglet par défaut, ses caméras : réglages, ordre, retrait, ajout).
 Fermer une fenêtre ouverte depuis une autre ramène à la précédente (caméra → onglet → liste des onglets). Une caméra ajoutée reprend les réglages de la première caméra, et sa
 batterie et ses capteurs de mouvement sont trouvés sur le même appareil dans Home Assistant. La batterie et les
-capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenêtre de réglages. Hors mode édition, la
-colonne des caméras montre les premières caméras de l'onglet (ordre de l'éditeur des onglets) qui tiennent, puis une
-tuile « +N » qui ouvre le mur de caméras. Une caméra dont l'option *Afficher sur le tableau de bord* est coupée (son
-éditeur) n'apparaît que dans le mur, et n'est pas comptée dans « +N » : si les autres tiennent, pas de tuile.
+capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenêtre de réglages. Quand les caméras d'un
+onglet sont plus hautes que l'écran, la colonne défile avec un fondu (défaut), ou montre les premières (ordre de
+l'éditeur des onglets) puis une tuile « +N » qui ouvre le mur : choix *Caméras qui dépassent* de l'éditeur des onglets
+(`"overflow": "scroll"` ou `"more"`). Une caméra dont l'option *Afficher sur le tableau de bord* est coupée (son
+éditeur) n'apparaît que dans le mur et n'est pas comptée dans « +N ». En mode édition, le mur reste accessible : toucher
+une de ses caméras ouvre ses réglages (pastille *Mur seulement* pour celles absentes du tableau de bord).
 
 Les réglages globaux (connexion, affichage, veille, code d'accès…) restent dans la page Réglages.
 

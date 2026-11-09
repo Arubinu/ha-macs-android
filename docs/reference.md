@@ -160,10 +160,12 @@ the grid and removal. An "Add a room" tile ends the grid in edit mode.
 (name, number of cameras, default tab, order, removal, add); tapping a tab opens its window (icon, name, default tab, its
 cameras: settings, order, removal, add). Closing a window opened from another returns to the previous one (camera → tab
 → tab list). An added camera takes the settings of the first camera, and its battery and motion sensors are found on the
-same device in Home Assistant. A camera's battery and motion sensors can also be added from its settings window. Outside
-edit mode, the camera column shows the first cameras of the tab (tab editor order) that fit, then a "+N" tile that
-opens the camera wall. A camera whose *Show on the dashboard* option is off (its editor) only appears in the wall and
-is not counted in "+N": if the others fit, there is no tile.
+same device in Home Assistant. A camera's battery and motion sensors can also be added from its settings window. When
+the cameras of a tab are taller than the screen, the column scrolls with a fade (default), or shows the first ones (tab
+editor order) then a "+N" tile that opens the wall: *Cameras that don't fit* choice of the tab editor
+(`"overflow": "scroll"` or `"more"`). A camera whose *Show on the dashboard* option is off (its editor) only appears in
+the wall and is not counted in "+N". In edit mode, the wall stays reachable: tapping one of its cameras opens its
+settings (*Wall only* badge for those absent from the dashboard).
 
 Global settings (connection, display, standby, access code…) stay in the Settings page.
 
