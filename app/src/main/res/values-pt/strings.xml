@@ -890,6 +890,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Nenhuma câmara encontrada neste dispositivo.</string>
     <string name="camera_preview">Pré-visualização</string>
+    <string name="camera_dashboard">Mostrar no painel</string>
+    <string name="camera_dashboard_help">Desativado: a câmara só aparece no mural de câmaras. O mosaico «+N» só conta as câmaras mostradas no painel.</string>
     <string name="camera_battery_title">Nível da bateria</string>
     <string name="camera_battery_help">Nunca mostrado numa câmara ligada à corrente.</string>
     <string name="camera_battery_card">No cartão</string>

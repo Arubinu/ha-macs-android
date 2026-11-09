@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +51,11 @@ fun CameraFitColumn(cards: List<Card>, bottomMargin: Dp, onMore: () -> Unit) {
     val density = LocalDensity.current
     var top by remember { mutableStateOf<Float?>(null) }
     val gap = Dash.shapes.gutter
-    val shown = cards.filter { !it.b("hidden") }
+    // Caméras réservées au mur (option « Afficher sur le tableau de bord » coupée) : ni affichées ni comptées dans « +N ».
+    val blocks by fr.pergens.hamacs.App.instance.config.blocks.collectAsState()
+    val shown = cards.filter { c ->
+        !c.b("hidden") && (c.s("entity")?.let { blocks[it] }?.get("dashboard") as? kotlinx.serialization.json.JsonPrimitive)?.content != "false"
+    }
     BoxWithConstraints(Modifier.fillMaxWidth().onGloballyPositioned { top = it.positionInWindow().y }) {
         // Position inconnue (première image) : rien de chargé tant que la place disponible n'est pas connue.
         val t = top ?: return@BoxWithConstraints

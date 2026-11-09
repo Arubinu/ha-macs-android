@@ -168,7 +168,8 @@ Fermer une fenêtre ouverte depuis une autre ramène à la précédente (caméra
 batterie et ses capteurs de mouvement sont trouvés sur le même appareil dans Home Assistant. La batterie et les
 capteurs de mouvement d'une caméra peuvent aussi être ajoutés depuis sa fenêtre de réglages. Hors mode édition, la
 colonne des caméras montre les premières caméras de l'onglet (ordre de l'éditeur des onglets) qui tiennent, puis une
-tuile « +N » qui ouvre le mur de caméras.
+tuile « +N » qui ouvre le mur de caméras. Une caméra dont l'option *Afficher sur le tableau de bord* est coupée (son
+éditeur) n'apparaît que dans le mur, et n'est pas comptée dans « +N » : si les autres tiennent, pas de tuile.
 
 Les réglages globaux (connexion, affichage, veille, code d'accès…) restent dans la page Réglages.
 

@@ -274,6 +274,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Colonne des caméras** (`ui/cards/CameraFitColumn.kt`) : hors mode édition, les premières caméras de l'onglet
   (ordre de l'éditeur des onglets) qui tiennent, puis une tuile « +N » vers le mur. Nombre calculé sans composer les
   cartes (hauteur = largeur / `aspect_ratio`, `WallLogic.visibleCount`) : une caméra cachée n'est jamais chargée.
+  Option du bloc caméra `dashboard: false` (« Afficher sur le tableau de bord ») : caméra seulement dans le mur, hors
+  colonne et hors compte « +N » (toujours affichée en mode édition, pour la régler).
   Hauteur suivie par `rememberRootHeight` ; espace réparti par une `FitColumn` publié par `LocalColumnSlack` (sinon,
   en rétrécissant, le bloc descend et se croit à l'étroit). Même chose pour `BottomFadeScroll` (pièces, calendrier).
 - **Connexion WebSocket** : rien n'est envoyé avant `auth_ok` (HA prenait le message pour l'authentification :

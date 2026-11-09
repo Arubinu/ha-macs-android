@@ -162,7 +162,8 @@ cameras: settings, order, removal, add). Closing a window opened from another re
 → tab list). An added camera takes the settings of the first camera, and its battery and motion sensors are found on the
 same device in Home Assistant. A camera's battery and motion sensors can also be added from its settings window. Outside
 edit mode, the camera column shows the first cameras of the tab (tab editor order) that fit, then a "+N" tile that
-opens the camera wall.
+opens the camera wall. A camera whose *Show on the dashboard* option is off (its editor) only appears in the wall and
+is not counted in "+N": if the others fit, there is no tile.
 
 Global settings (connection, display, standby, access code…) stay in the Settings page.
 

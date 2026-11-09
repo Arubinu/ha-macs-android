@@ -247,6 +247,11 @@ private fun BlockEditSheet(target: EditTarget, onDismiss: () -> Unit) {
                     stringResource(R.string.edit_always_live), stringResource(R.string.edit_always_live_help),
                     options?.b("always_live") ?: configAlwaysLive,
                 ) { app.config.setBlockOption(optionKey, "always_live", it.takeIf { v -> v != configAlwaysLive }) }
+                // Caméra seulement dans le mur : hors de la colonne du tableau de bord (et du compte de la tuile « +N »).
+                EditSwitch(
+                    stringResource(R.string.camera_dashboard), stringResource(R.string.camera_dashboard_help),
+                    options?.b("dashboard") ?: true,
+                ) { app.config.setBlockOption(optionKey, "dashboard", if (it) null else false) }
                 // Nom affiché (mur de caméras) et alimentation (direct permanent sur secteur, capture sinon).
                 CameraNameField(optionKey, options, original)
                 CameraPowerFields(optionKey, options, original)

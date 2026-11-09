@@ -890,6 +890,8 @@
     <string name="camera_facing_usb">USB</string>
     <string name="camera_none">Keine Kamera auf diesem Gerät gefunden.</string>
     <string name="camera_preview">Vorschau</string>
+    <string name="camera_dashboard">Im Dashboard anzeigen</string>
+    <string name="camera_dashboard_help">Aus: Die Kamera erscheint nur in der Kamerawand. Die Kachel „+N“ zählt nur die im Dashboard angezeigten Kameras.</string>
     <string name="camera_battery_title">Akkustand</string>
     <string name="camera_battery_help">Bei einer Kamera mit Netzstrom nie angezeigt.</string>
     <string name="camera_battery_card">Auf der Karte</string>
