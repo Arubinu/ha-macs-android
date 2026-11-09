@@ -333,6 +333,19 @@ fun CameraCard(card: Card, modifier: Modifier) {
         if (battery != null && !battery.isUnavailable && fr.pergens.hamacs.ui.CameraWall.showBattery(card, blocks, states, wall = false)) {
             BatteryBadge(battery.numeric ?: 0.0, Modifier.align(Alignment.TopEnd).padding(top = BATTERY_MARGIN, end = BATTERY_MARGIN))
         }
+        // Mode édition : caméra réservée au mur (option « Afficher sur le tableau de bord » coupée), assombrie et signalée.
+        if (state.editMode && camId != null && (blocks[camId]?.get("dashboard") as? kotlinx.serialization.json.JsonPrimitive)?.content == "false") {
+            Box(Modifier.fillMaxSize().background(Color(0x8C000000)))
+            Row(
+                Modifier.align(Alignment.Center).background(Color(0xB3000000), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                HaIcon("mdi:view-grid", size = 16.dp, tint = Color.White)
+                Text(stringResource(R.string.camera_wall_only), Modifier.padding(start = 8.dp),
+                    style = TextStyle(fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Medium))
+            }
+        }
     }
 }
 

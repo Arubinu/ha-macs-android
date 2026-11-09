@@ -892,6 +892,7 @@
     <string name="camera_preview">Anteprima</string>
     <string name="camera_dashboard">Mostra nella dashboard</string>
     <string name="camera_dashboard_help">Disattivato: la telecamera appare solo nel muro di telecamere. Il riquadro «+N» conta solo le telecamere mostrate nella dashboard.</string>
+    <string name="camera_wall_only">Solo nel muro</string>
     <string name="camera_battery_title">Livello della batteria</string>
     <string name="camera_battery_help">Mai mostrato per una telecamera alimentata dalla rete.</string>
     <string name="camera_battery_card">Sulla scheda</string>

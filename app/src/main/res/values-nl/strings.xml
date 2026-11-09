@@ -892,6 +892,7 @@
     <string name="camera_preview">Voorbeeld</string>
     <string name="camera_dashboard">Tonen op het dashboard</string>
     <string name="camera_dashboard_help">Uit: de camera verschijnt alleen in de camerawand. De tegel „+N” telt alleen de camera\'s op het dashboard.</string>
+    <string name="camera_wall_only">Alleen camerawand</string>
     <string name="camera_battery_title">Batterijniveau</string>
     <string name="camera_battery_help">Nooit getoond voor een camera op netstroom.</string>
     <string name="camera_battery_card">Op de kaart</string>

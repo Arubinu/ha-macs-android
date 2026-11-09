@@ -910,6 +910,7 @@
     <string name="camera_preview">Aperçu</string>
     <string name="camera_dashboard">Afficher sur le tableau de bord</string>
     <string name="camera_dashboard_help">Désactivé : la caméra n\'apparaît que dans le mur de caméras. La tuile « +N » ne compte que les caméras affichées sur le tableau de bord.</string>
+    <string name="camera_wall_only">Mur seulement</string>
     <string name="camera_battery_title">Niveau de batterie</string>
     <string name="camera_battery_help">Jamais affiché pour une caméra sur secteur.</string>
     <string name="camera_battery_card">Sur la carte</string>

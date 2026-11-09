@@ -892,6 +892,7 @@
     <string name="camera_preview">Vista previa</string>
     <string name="camera_dashboard">Mostrar en el panel</string>
     <string name="camera_dashboard_help">Desactivado: la cámara solo aparece en el muro de cámaras. El mosaico «+N» solo cuenta las cámaras mostradas en el panel.</string>
+    <string name="camera_wall_only">Solo en el muro</string>
     <string name="camera_battery_title">Nivel de batería</string>
     <string name="camera_battery_help">Nunca se muestra en una cámara conectada a la red.</string>
     <string name="camera_battery_card">En la tarjeta</string>

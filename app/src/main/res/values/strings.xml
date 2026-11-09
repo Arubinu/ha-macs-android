@@ -923,6 +923,7 @@
     <string name="camera_preview">Preview</string>
     <string name="camera_dashboard">Show on the dashboard</string>
     <string name="camera_dashboard_help">Off: the camera only appears in the camera wall. The \"+N\" tile only counts the cameras shown on the dashboard.</string>
+    <string name="camera_wall_only">Wall only</string>
     <string name="camera_battery_title">Battery level</string>
     <string name="camera_battery_help">Never shown for a camera on mains power.</string>
     <string name="camera_battery_card">On the card</string>
