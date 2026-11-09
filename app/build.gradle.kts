@@ -31,6 +31,16 @@ android {
 
     }
 
+    // Deux variantes, même identifiant d'app (on peut passer de l'une à l'autre) :
+    // - full : détourage des avatars et détection de visage par ML Kit (≈ 34 Mo de bibliothèques Google) ;
+    // - lite : sans ML Kit ni composant propriétaire, avatars en photo ronde (APK ≈ 16 Mo).
+    // Le code propre à chacune est dans src/full et src/lite (`ui/avatar/Cutout.kt`).
+    flavorDimensions += "edition"
+    productFlavors {
+        create("full") { dimension = "edition"; isDefault = true }
+        create("lite") { dimension = "edition" }
+    }
+
     // Clé de release : variables d'environnement (GitHub Actions) ou local.properties (release.store.file…).
     // Sans clé, la release est signée avec la clé de debug (installation de test uniquement).
     val releaseStore = System.getenv("RELEASE_STORE_FILE") ?: localProp("release.store.file").ifBlank { null }
@@ -115,9 +125,10 @@ dependencies {
 
     // Avatars : détourage sur l'appareil (services Google, sinon modèle « selfie » embarqué), orientation des
     // photos, QR code pour envoyer une photo depuis un téléphone.
-    implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
-    implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
-    implementation("com.google.mlkit:face-detection:16.1.7")
+    // Variante full seulement (la variante lite s'en passe).
+    "fullImplementation"("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
+    "fullImplementation"("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
+    "fullImplementation"("com.google.mlkit:face-detection:16.1.7")
     implementation("androidx.exifinterface:exifinterface:1.3.7")
     implementation("com.google.zxing:core:3.5.3")
 

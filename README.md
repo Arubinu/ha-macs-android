@@ -65,9 +65,12 @@ the app then updates itself. To build it from the sources instead:
 
 ```sh
 # Android SDK (platform 36) and JDK 17 required
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # or assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Light version** `…-lite-universal.apk` (15 MB instead of 50, every tablet): without Google ML Kit or any
+proprietary component; avatars are round photos (no cut-out). It updates itself too, staying in the light version.
 
 On first launch, the **wizard** finds Home Assistant on the network and signs in, then adapts the dashboard to your
 home. Already have a backup? **Import** it on the first step and you are done.

@@ -67,9 +67,12 @@ hem: daarna werkt de app zichzelf bij. Zelf bouwen vanuit de broncode:
 
 ```sh
 # Android SDK (platform 36) en JDK 17 vereist
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # of assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Lichte versie** `…-lite-universal.apk` (15 MB in plaats van 50, alle tablets): zonder Google ML Kit of
+propriëtaire onderdelen; avatars zijn ronde foto's (geen uitknippen). Ze werkt zichzelf ook bij en blijft licht.
 
 Bij de eerste start vindt de **assistent** Home Assistant op het netwerk, logt in en past het dashboard aan je
 huis aan. Heb je al een back-up? **Importeer** die bij de eerste stap en je bent klaar.

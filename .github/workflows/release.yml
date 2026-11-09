@@ -43,16 +43,19 @@ jobs:
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon testDebugUnitTest assembleRelease -PappVersion="${GITHUB_REF_NAME#v}"
+          ./gradlew --no-daemon testFullDebugUnitTest testLiteDebugUnitTest assembleRelease -PappVersion="${GITHUB_REF_NAME#v}"
 
+      # Variante complète : un APK par architecture + universel. Variante lite (sans ML Kit, presque sans code natif,
+      # même taille partout) : seulement l'universel, « -lite-universal » (nom attendu par Updater.parseRelease).
       - name: APK nommés avec la version
         run: |
           tag="${GITHUB_REF_NAME}"
           mkdir dist
-          for f in app/build/outputs/apk/release/app-*-release.apk; do
-            abi=$(basename "$f" | sed -E 's/^app-(.*)-release\.apk$/\1/')
+          for f in app/build/outputs/apk/full/release/app-full-*-release.apk; do
+            abi=$(basename "$f" | sed -E 's/^app-full-(.*)-release\.apk$/\1/')
             cp "$f" "dist/ha-macs-android-${tag}-${abi}.apk"
           done
+          cp app/build/outputs/apk/lite/release/app-lite-universal-release.apk "dist/ha-macs-android-${tag}-lite-universal.apk"
           ls -la dist
 
       - name: Ajout à la Release (brouillon créé si besoin)

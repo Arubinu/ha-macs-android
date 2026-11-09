@@ -66,9 +66,12 @@ zainstaluj go: potem aplikacja aktualizuje się sama. Aby zbudować ją samodzie
 
 ```sh
 # Wymagane Android SDK (platforma 36) i JDK 17
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # lub assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Wersja lekka** `…-lite-universal.apk` (15 MB zamiast 50, wszystkie tablety): bez Google ML Kit i bez
+zastrzeżonych komponentów; awatary to okrągłe zdjęcia (bez wycinania). Też aktualizuje się sama, pozostając lekka.
 
 Przy pierwszym uruchomieniu **kreator** znajduje Home Assistant w sieci i loguje się, a następnie dopasowuje pulpit do Twojego
 domu. Masz już kopię zapasową? **Zaimportuj** ją w pierwszym kroku i gotowe.

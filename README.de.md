@@ -67,9 +67,12 @@ installiere sie: Danach aktualisiert sich die App selbst. Oder aus dem Quellcode
 
 ```sh
 # Android SDK (Plattform 36) und JDK 17 erforderlich
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # oder assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Leichte Version** `…-lite-universal.apk` (15 MB statt 50, alle Tablets): ohne Google ML Kit und ohne proprietäre
+Komponenten; Avatare sind runde Fotos (kein Freistellen). Sie aktualisiert sich ebenfalls selbst und bleibt dabei leicht.
 
 Beim ersten Start findet der **Assistent** Home Assistant im Netzwerk, meldet sich an und passt das Dashboard an dein
 Zuhause an. Schon eine Sicherung? Im ersten Schritt **importieren**, fertig.

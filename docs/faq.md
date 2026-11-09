@@ -23,7 +23,8 @@ The universal APK works everywhere but is three times larger.
 
 **Why is the app this large?**
 Mostly because of the on-device cut-out of the avatars (Google ML Kit models). The APK of your tablet's architecture
-is about 44 MB.
+is about 50 MB. The **light version** (`…-lite-universal.apk`, 15 MB, for every tablet) has no Google ML
+Kit: avatars are then round photos, without cut-out; everything else is the same.
 
 ## 🏡 Home Assistant
 

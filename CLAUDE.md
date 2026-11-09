@@ -34,9 +34,14 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 
 ## Environnement (Windows)
 
-- Build : `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q assembleDebug` (Bash) → un seul APK
-  (`app-debug.apk`). `assembleRelease` → un APK par architecture + un universel (`app-<abi>-release.apk`,
-  `app-universal-release.apk` ; arm64 ≈ 44 Mo contre 121 Mo, à cause des bibliothèques ML Kit).
+- Build : `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q assembleFullDebug` (Bash) → un seul APK
+  (`app/build/outputs/apk/full/debug/app-full-debug.apk`). Deux variantes (`productFlavors`, même identifiant d'app) :
+  **full** (ML Kit : détourage des avatars) et **lite** (sans ML Kit ni composant propriétaire, avatars en photo ronde,
+  `assembleLiteDebug`). Code propre à chacune : `src/full|lite/java/…/ui/avatar/Cutout.kt` (`cutout`, `detectFace`,
+  `CUTOUT_AVAILABLE`). `assembleRelease` → full : un APK par architecture + universel (arm64 ≈ 50 Mo, dont ≈ 34 Mo de
+  ML Kit) ; lite ≈ 15 Mo quelle que soit l'architecture, seul l'universel est publié (`…-lite-universal.apk`). La mise à
+  jour garde la variante installée (`Updater.LITE`, `-lite-` dans le nom des APK). Erreur AAPT « stableIds.txt …
+  Données non valides » : supprimer `app/build/intermediates/stable_resource_ids_file` et relancer.
 - adb : `$LOCALAPPDATA/Android/Sdk/platform-tools/adb`. Émulateur : AVD `taba8` (`emulator-5554`, 1920×1200).
 - **Encodage** : ne jamais mettre de caractères non-ASCII dans un heredoc bash, un `sed` ou un script python
   passé sur stdin (corrompt les fichiers). Utiliser Edit/Write, ou un script python écrit avec Write dans le
@@ -49,7 +54,8 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 
 ## Tests automatiques
 
-- `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q :app:testDebugUnitTest` (JUnit sur le PC, < 1 s de tests) :
+- `JAVA_HOME="/c/Program Files/Java/jdk-17" ./gradlew -q :app:testFullDebugUnitTest` (JUnit sur le PC, < 1 s de tests ;
+  `testLiteDebugUnitTest` pour la variante lite, les deux dans `release.yml`) :
   `app/src/test/`. Seulement des fonctions sans Android (les sortir dans un objet à part si besoin, ex.
   `ui/WallLogic.kt`, `config/PrefValue.kt`, `voice/WyomingProtocol.kt`, `DeviceSecret.encryptWith`,
   `Updater.parseRelease` / `latestOf`, `parseHistory`, `compareState` / `evalJinja` / `triggerTimeLabel` des alertes,

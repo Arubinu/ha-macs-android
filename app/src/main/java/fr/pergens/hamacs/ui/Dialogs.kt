@@ -675,8 +675,9 @@ private fun PlayerDialog(requested: String, fallback: String?, onDismiss: () -> 
                 color = Color.White, fontSize = 13.sp,
             )
             // Enregistrement : lecture / pause, temps écoulé, barre (toucher ou glisser pour se déplacer) et durée.
-            LaunchedEffect(controls, controlsAt, touchedAt, paused) {
-                if (controls && !paused) { delay(3_000); controls = false }
+            // Délai compté à partir de la première image (un chargement long ne masque pas les commandes d'avance).
+            LaunchedEffect(controls, controlsAt, touchedAt, paused, rendered) {
+                if (controls && !paused && rendered) { delay(3_000); controls = false }
             }
             androidx.compose.animation.AnimatedVisibility(
                 controls && rendered && error == null && progress.hasProgress, Modifier.align(Alignment.BottomCenter),

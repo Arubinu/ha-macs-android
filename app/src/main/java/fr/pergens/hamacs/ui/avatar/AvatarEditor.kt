@@ -209,7 +209,8 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
     var cutting by remember { mutableStateOf(false) }
     var cutFailed by remember { mutableStateOf(false) }
     var face by remember { mutableStateOf<android.graphics.Rect?>(null) }
-    var useCutout by remember { mutableStateOf(true) }
+    // Variante « lite » (sans ML Kit) : pas de détourage, photo ronde.
+    var useCutout by remember { mutableStateOf(CUTOUT_AVAILABLE) }
     /** Choix du détourage fait à la main (pas de bascule automatique ensuite). */
     var cutoutChosen by remember { mutableStateOf(false) }
     /** Photo coupée au sommet du crâne : passée automatiquement en photo ronde. */
@@ -250,20 +251,20 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
         cutFailed = false
         cutoutChosen = false
         tightPhoto = false
-        useCutout = true
+        useCutout = CUTOUT_AVAILABLE
         filteredCache.clear()
         thumbs.clear()
         filter = AvatarFilter.None
         framing = null
         keepFraming = false
         face = null
-        cutting = true
+        cutting = CUTOUT_AVAILABLE
         scope.launch {
-            // Visage (cadrage de départ), puis détourage.
+            // Visage (cadrage de départ), puis détourage (variante complète seulement).
             face = detectFace(b)
-            val c = withContext(Dispatchers.Default) { cutout(context, b) }
+            val c = if (CUTOUT_AVAILABLE) withContext(Dispatchers.Default) { cutout(context, b) } else null
             cut = c
-            cutFailed = c == null
+            cutFailed = CUTOUT_AVAILABLE && c == null
             cutting = false
         }
     }
@@ -389,7 +390,8 @@ fun AvatarEditor(memberId: String, name: String, personPicture: String?, onDismi
                             message?.let { Text(it, style = TextStyle(fontSize = 13.sp, color = Color(0xFFFF6B6B))) }
                         }
                         if (source != null) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            // Variante lite : option affichée seulement pour un avatar détouré importé (pour le retirer).
+                            if (CUTOUT_AVAILABLE || cut != null) Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(Modifier.weight(1f).padding(end = 16.dp)) {
                                     Text(stringResource(R.string.avatar_cutout), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
                                     Text(

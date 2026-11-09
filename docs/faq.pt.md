@@ -23,7 +23,8 @@ aparece a indicação *Alimentação insuficiente*.
 
 **Porque é que a aplicação é tão grande?**
 Sobretudo por causa do recorte dos avatares no dispositivo (modelos Google ML Kit). O APK da arquitetura do seu tablet
-tem cerca de 44 MB.
+tem cerca de 50 MB. A **versão leve** (`…-lite-universal.apk`, 15 MB, para todos os tablets) não tem Google ML
+Kit: os avatares são então fotos redondas, sem recorte; tudo o resto é igual.
 
 ## 🏡 Home Assistant
 

@@ -68,9 +68,12 @@ instale-o: depois a app atualiza-se sozinha. Para o compilar a partir do código
 
 ```sh
 # São necessários o Android SDK (plataforma 36) e o JDK 17
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # ou assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Versão leve** `…-lite-universal.apk` (15 MB em vez de 50, todos os tablets): sem Google ML Kit nem qualquer
+componente proprietário; os avatares são fotos redondas (sem recorte). Também se atualiza sozinha, continuando leve.
 
 No primeiro arranque, o **assistente** encontra o Home Assistant na rede, inicia sessão e adapta o painel à sua casa. Já
 tem uma cópia de segurança? **Importe-a** no primeiro passo e está feito.

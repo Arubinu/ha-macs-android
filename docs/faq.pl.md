@@ -23,7 +23,8 @@ się komunikat *Zbyt słabe zasilanie*.
 
 **Dlaczego aplikacja jest tak duża?**
 Głównie przez wycinanie awatarów na urządzeniu (modele Google ML Kit). APK dla architektury Twojego tabletu ma około
-44 MB.
+50 MB. **Wersja lekka** (`…-lite-universal.apk`, 15 MB, dla wszystkich tabletów) nie ma Google ML
+Kit: awatary są wtedy okrągłymi zdjęciami, bez wycinania; wszystko inne jest takie samo.
 
 ## 🏡 Home Assistant
 

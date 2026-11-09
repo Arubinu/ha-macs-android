@@ -67,9 +67,13 @@ installez-le : l'app se met ensuite à jour toute seule. Pour le compiler vous-m
 
 ```sh
 # Android SDK (plateforme 36) et JDK 17 nécessaires
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # ou assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Version légère** `…-lite-universal.apk` (15 Mo au lieu de 50, toutes les tablettes) : sans Google ML Kit ni aucun
+composant propriétaire ; les avatars sont des photos rondes (pas de détourage). Elle se met aussi à jour seule, en
+restant légère.
 
 Au premier lancement, l'**assistant** trouve Home Assistant sur le réseau et s'y connecte, puis adapte le tableau de bord
 à votre maison. Vous avez déjà une sauvegarde ? **Importez-la** dès la première étape, et c'est terminé.

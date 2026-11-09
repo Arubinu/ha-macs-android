@@ -23,7 +23,8 @@ L'APK universale funziona ovunque, ma pesa il triplo.
 
 **Perché l'app è così pesante?**
 Soprattutto per lo scontorno degli avatar sul dispositivo (modelli Google ML Kit). L'APK dell'architettura del tuo tablet
-pesa circa 44 MB.
+pesa circa 50 MB. La **versione leggera** (`…-lite-universal.apk`, 15 MB, per tutti i tablet) non ha Google ML
+Kit: gli avatar sono allora foto rotonde, senza scontorno; tutto il resto è uguale.
 
 ## 🏡 Home Assistant
 

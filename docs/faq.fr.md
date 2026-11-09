@@ -23,7 +23,8 @@ tablettes 32 bits. L'APK universel marche partout mais pèse trois fois plus.
 
 **Pourquoi l'app est-elle si lourde ?**
 Surtout à cause du détourage des avatars sur l'appareil (modèles Google ML Kit). L'APK de l'architecture de votre
-tablette fait environ 44 Mo.
+tablette fait environ 50 Mo. La **version légère** (`…-lite-universal.apk`, 15 Mo, pour toutes les tablettes) n'a pas
+Google ML Kit : les avatars sont alors des photos rondes, sans détourage ; tout le reste est identique.
 
 ## 🏡 Home Assistant
 

@@ -68,9 +68,12 @@ poi l'app si aggiorna da sola. Per compilarlo tu stesso dai sorgenti:
 
 ```sh
 # Servono Android SDK (piattaforma 36) e JDK 17
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleFullDebug    # o assembleLiteDebug
+adb install -r app/build/outputs/apk/full/debug/app-full-debug.apk
 ```
+
+🪶 **Versione leggera** `…-lite-universal.apk` (15 MB invece di 50, tutti i tablet): senza Google ML Kit né componenti
+proprietari; gli avatar sono foto rotonde (niente scontorno). Anche lei si aggiorna da sola, restando leggera.
 
 Al primo avvio, la **procedura guidata** trova Home Assistant sulla rete e accede, poi adatta la dashboard alla
 tua casa. Hai già un backup? **Importalo** al primo passo e hai finito.

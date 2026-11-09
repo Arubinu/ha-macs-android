@@ -23,7 +23,8 @@ De universele APK werkt overal, maar is drie keer zo groot.
 
 **Waarom is de app zo groot?**
 Vooral door het uitknippen van de avatars op het apparaat (Google ML Kit-modellen). De APK voor de architectuur van uw
-tablet is ongeveer 44 MB.
+tablet is ongeveer 50 MB. De **lichte versie** (`…-lite-universal.apk`, 15 MB, voor alle tablets) heeft geen Google ML
+Kit: avatars zijn dan ronde foto's, zonder uitknippen; al het andere is hetzelfde.
 
 ## 🏡 Home Assistant
 

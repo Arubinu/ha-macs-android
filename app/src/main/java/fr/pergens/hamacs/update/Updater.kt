@@ -211,7 +211,7 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
         http.newCall(req).execute().use { r ->
             if (!r.isSuccessful) return@withContext null
             val list = (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
-                .filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }.mapNotNull { parseRelease(it, Build.SUPPORTED_ABIS.toList()) }
+                .filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }.mapNotNull { parseRelease(it, Build.SUPPORTED_ABIS.toList(), LITE) }
             (list.firstOrNull { it.version == version }
                 ?: list.filter { !it.prerelease }.reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a })?.apkUrl
         }
@@ -224,7 +224,7 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
             if (r.code == 404) return@withContext null
             if (!r.isSuccessful) error("HTTP ${r.code}")
             val list = (json.parseToJsonElement(r.body!!.string()) as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
-            latestOf(list, prereleases, Build.SUPPORTED_ABIS.toList())
+            latestOf(list, prereleases, Build.SUPPORTED_ABIS.toList(), LITE)
         }
     }
 
@@ -273,9 +273,14 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
     }
 
     companion object {
-        internal fun parseRelease(o: JsonObject, abis: List<String>): Release? {
+        /** Variante installée : « lite » (sans ML Kit, APK `…-lite-<abi>.apk`) ou complète. */
+        val LITE: Boolean get() = BuildConfig.FLAVOR == "lite"
+
+        /** [lite] : APK de la variante lite (`-lite-` dans le nom), sinon ceux de la variante complète (sans). */
+        internal fun parseRelease(o: JsonObject, abis: List<String>, lite: Boolean = false): Release? {
             val tag = o["tag_name"]?.jsonPrimitive?.contentOrNull ?: return null
             val assets = (o["assets"] as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
+                .filter { ("-lite-" in it["name"]?.jsonPrimitive?.contentOrNull.orEmpty()) == lite }
             fun asset(suffix: String) = assets.firstOrNull { it["name"]?.jsonPrimitive?.contentOrNull?.endsWith(suffix) == true }
             // APK de l'architecture de la tablette (le plus léger), sinon l'universel.
             val apk = abis.firstNotNullOfOrNull { asset("-$it.apk") } ?: asset("-universal.apk") ?: return null
@@ -290,9 +295,9 @@ class Updater(private val context: Context, private val http: OkHttpClient, priv
         }
 
         /** Release la plus recente hors brouillons (preversions comprises si [prereleases]), APK choisi pour [abis]. */
-        internal fun latestOf(list: List<JsonObject>, prereleases: Boolean, abis: List<String>): Release? =
+        internal fun latestOf(list: List<JsonObject>, prereleases: Boolean, abis: List<String>, lite: Boolean = false): Release? =
             list.filter { it["draft"]?.jsonPrimitive?.contentOrNull != "true" }
-                .mapNotNull { parseRelease(it, abis) }
+                .mapNotNull { parseRelease(it, abis, lite) }
                 .filter { prereleases || !it.prerelease }
                 .reduceOrNull { a, b -> if (newer(b.version, a.version)) b else a }
 

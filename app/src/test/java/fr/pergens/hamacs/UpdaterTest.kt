@@ -50,6 +50,29 @@ class UpdaterTest {
         assertTrue(r.prerelease)
     }
 
+    /** Release avec les deux variantes : complète (`-<abi>.apk`) et lite (`-lite-<abi>.apk`). */
+    private fun both(tag: String) =
+        """{"tag_name":"$tag","prerelease":false,"draft":false,"body":"","assets":[""" +
+            listOf("arm64-v8a", "universal", "lite-arm64-v8a", "lite-universal").joinToString(",") {
+                """{"name":"ha-macs-android-$tag-$it.apk","browser_download_url":"https://x/$tag/$it.apk","size":1}"""
+            } + "]}"
+
+    @Test fun `variante complete - jamais un APK lite`() {
+        val r = Updater.parseRelease(list(both("v1.2.0"))[0], listOf("arm64-v8a"), lite = false)!!
+        assertEquals("https://x/v1.2.0/arm64-v8a.apk", r.apkUrl)
+    }
+
+    @Test fun `variante lite - son APK, sinon son universel`() {
+        assertEquals("https://x/v1.2.0/lite-arm64-v8a.apk", Updater.parseRelease(list(both("v1.2.0"))[0], listOf("arm64-v8a"), lite = true)!!.apkUrl)
+        assertEquals("https://x/v1.2.0/lite-universal.apk", Updater.parseRelease(list(both("v1.2.0"))[0], listOf("x86"), lite = true)!!.apkUrl)
+    }
+
+    @Test fun `variante lite - release sans APK lite ignoree`() {
+        val l = list(release("v1.1.0"), both("v1.2.0"))
+        assertEquals("1.2.0", Updater.latestOf(l, prereleases = false, abis = listOf("arm64-v8a"), lite = true)!!.version)
+        assertNull(Updater.parseRelease(list(release("v1.1.0"))[0], listOf("arm64-v8a"), lite = true))
+    }
+
     @Test fun `liste vide - rien`() {
         assertNull(Updater.latestOf(emptyList(), prereleases = true, abis = listOf("arm64-v8a")))
     }

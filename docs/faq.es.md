@@ -23,7 +23,8 @@ de 32 bits. El APK universal funciona en todas partes, pero ocupa el triple.
 
 **¿Por qué la aplicación es tan grande?**
 Sobre todo por el recorte de los avatares en el dispositivo (modelos de Google ML Kit). El APK de la arquitectura de su
-tableta ocupa unos 44 MB.
+tableta ocupa unos 50 MB. La **versión ligera** (`…-lite-universal.apk`, 15 MB, para todas las tabletas) no lleva
+Google ML Kit: los avatares son entonces fotos redondas, sin recorte; todo lo demás es igual.
 
 ## 🏡 Home Assistant
 
