@@ -894,6 +894,8 @@
     <string name="tabs_overflow_help">En el panel, cuando las cámaras de una pestaña son más altas que la pantalla. Las demás también se ajustan desde el muro de cámaras en modo edición.</string>
     <string name="tabs_overflow_scroll">Desplazamiento</string>
     <string name="tabs_overflow_more">Mosaico «+N»</string>
+    <string name="tabs_overflow_scroll_desc">Todas las cámaras en la columna, que se desplaza y se desvanece abajo. Solo se cargan las cámaras en pantalla.</string>
+    <string name="tabs_overflow_more_desc">Las primeras cámaras que caben y después un mosaico que abre el muro de cámaras con las demás.</string>
     <string name="camera_dashboard">Mostrar en el panel</string>
     <string name="camera_dashboard_help">Desactivado: la cámara solo aparece en el muro de cámaras. El mosaico «+N» solo cuenta las cámaras mostradas en el panel.</string>
     <string name="camera_wall_only">Solo en el muro</string>

@@ -894,6 +894,8 @@
     <string name="tabs_overflow_help">Im Dashboard, wenn die Kameras eines Tabs höher als der Bildschirm sind. Die übrigen lassen sich im Bearbeitungsmodus auch über die Kamerawand einstellen.</string>
     <string name="tabs_overflow_scroll">Scrollen</string>
     <string name="tabs_overflow_more">Kachel „+N“</string>
+    <string name="tabs_overflow_scroll_desc">Alle Kameras in der Spalte, die scrollt und unten ausgeblendet wird. Nur die Kameras auf dem Bildschirm werden geladen.</string>
+    <string name="tabs_overflow_more_desc">Die ersten Kameras, die passen, dann eine Kachel, die die Kamerawand mit den übrigen öffnet.</string>
     <string name="camera_dashboard">Im Dashboard anzeigen</string>
     <string name="camera_dashboard_help">Aus: Die Kamera erscheint nur in der Kamerawand. Die Kachel „+N“ zählt nur die im Dashboard angezeigten Kameras.</string>
     <string name="camera_wall_only">Nur Kamerawand</string>

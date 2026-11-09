@@ -925,6 +925,8 @@
     <string name="tabs_overflow_help">On the dashboard, when the cameras of a tab are taller than the screen. The others can also be set up from the camera wall in edit mode.</string>
     <string name="tabs_overflow_scroll">Scroll</string>
     <string name="tabs_overflow_more">\"+N\" tile</string>
+    <string name="tabs_overflow_scroll_desc">All the cameras in the column, which scrolls and fades out at the bottom. Only the cameras on screen are loaded.</string>
+    <string name="tabs_overflow_more_desc">The first cameras that fit, then a tile that opens the camera wall with the others.</string>
     <string name="camera_dashboard">Show on the dashboard</string>
     <string name="camera_dashboard_help">Off: the camera only appears in the camera wall. The \"+N\" tile only counts the cameras shown on the dashboard.</string>
     <string name="camera_wall_only">Wall only</string>

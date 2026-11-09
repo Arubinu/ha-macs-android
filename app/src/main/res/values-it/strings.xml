@@ -894,6 +894,8 @@
     <string name="tabs_overflow_help">Nella dashboard, quando le telecamere di una scheda sono più alte dello schermo. Le altre si regolano anche dal muro di telecamere in modalità modifica.</string>
     <string name="tabs_overflow_scroll">Scorrimento</string>
     <string name="tabs_overflow_more">Riquadro «+N»</string>
+    <string name="tabs_overflow_scroll_desc">Tutte le telecamere nella colonna, che scorre e sfuma in basso. Vengono caricate solo le telecamere sullo schermo.</string>
+    <string name="tabs_overflow_more_desc">Le prime telecamere che ci stanno, poi un riquadro che apre il muro di telecamere con le altre.</string>
     <string name="camera_dashboard">Mostra nella dashboard</string>
     <string name="camera_dashboard_help">Disattivato: la telecamera appare solo nel muro di telecamere. Il riquadro «+N» conta solo le telecamere mostrate nella dashboard.</string>
     <string name="camera_wall_only">Solo nel muro</string>

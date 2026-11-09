@@ -912,6 +912,8 @@
     <string name="tabs_overflow_help">Sur le tableau de bord, quand les caméras d\'un onglet sont plus hautes que l\'écran. Les autres se règlent aussi depuis le mur de caméras en mode édition.</string>
     <string name="tabs_overflow_scroll">Défilement</string>
     <string name="tabs_overflow_more">Tuile « +N »</string>
+    <string name="tabs_overflow_scroll_desc">Toutes les caméras dans la colonne, qui défile et s\'efface en fondu en bas. Seules les caméras à l\'écran sont chargées.</string>
+    <string name="tabs_overflow_more_desc">Les premières caméras qui tiennent, puis une tuile qui ouvre le mur de caméras avec les autres.</string>
     <string name="camera_dashboard">Afficher sur le tableau de bord</string>
     <string name="camera_dashboard_help">Désactivé : la caméra n\'apparaît que dans le mur de caméras. La tuile « +N » ne compte que les caméras affichées sur le tableau de bord.</string>
     <string name="camera_wall_only">Mur seulement</string>

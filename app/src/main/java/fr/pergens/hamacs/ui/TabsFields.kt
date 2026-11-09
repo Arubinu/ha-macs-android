@@ -208,15 +208,13 @@ fun TabsFields(key: String) {
         Column(Modifier.fillMaxWidth().padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.tabs_overflow), style = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Medium))
             Text(stringResource(R.string.tabs_overflow_help), style = TextStyle(fontSize = 13.sp, color = Muted))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("scroll" to R.string.tabs_overflow_scroll, "more" to R.string.tabs_overflow_more).forEach { (v, label) ->
-                    androidx.compose.material3.FilterChip(
-                        selected = overflow == v,
-                        onClick = { app.config.setBlockField(key, "overflow", JsonPrimitive(v).takeIf { v != defaultOverflow }) },
-                        label = { Text(stringResource(label)) },
-                        modifier = Modifier.heightIn(min = 40.dp),
-                        colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(selectedContainerColor = Dash.colors.accent.copy(alpha = 0.22f)),
-                    )
+            // Même rendu que les choix de l'assistant (icône, titre, description, bouton radio), un par ligne.
+            listOf(
+                Triple("scroll", "mdi:gesture-swipe-vertical", R.string.tabs_overflow_scroll to R.string.tabs_overflow_scroll_desc),
+                Triple("more", "mdi:view-grid-plus-outline", R.string.tabs_overflow_more to R.string.tabs_overflow_more_desc),
+            ).forEach { (v, icon, texts) ->
+                LoginChoice(icon, stringResource(texts.first), stringResource(texts.second), overflow == v) {
+                    app.config.setBlockField(key, "overflow", JsonPrimitive(v).takeIf { v != defaultOverflow })
                 }
             }
         }

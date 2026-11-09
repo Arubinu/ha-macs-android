@@ -894,6 +894,8 @@
     <string name="tabs_overflow_help">Op het dashboard, als de camera\'s van een tabblad hoger zijn dan het scherm. De andere zijn in de bewerkmodus ook via de camerawand in te stellen.</string>
     <string name="tabs_overflow_scroll">Scrollen</string>
     <string name="tabs_overflow_more">Tegel „+N”</string>
+    <string name="tabs_overflow_scroll_desc">Alle camera\'s in de kolom, die scrolt en onderaan vervaagt. Alleen de camera\'s op het scherm worden geladen.</string>
+    <string name="tabs_overflow_more_desc">De eerste camera\'s die passen, daarna een tegel die de camerawand met de andere opent.</string>
     <string name="camera_dashboard">Tonen op het dashboard</string>
     <string name="camera_dashboard_help">Uit: de camera verschijnt alleen in de camerawand. De tegel „+N” telt alleen de camera\'s op het dashboard.</string>
     <string name="camera_wall_only">Alleen camerawand</string>
