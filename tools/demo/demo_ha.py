@@ -587,9 +587,9 @@ async def mobile_webhook(request):
 
 
 async def demo_notify(request):
-    """Notification de test : /demo/notify?message=...&title=...&tts_text=...&entity=..."""
+    """Notification de test : /demo/notify?message=...&title=...&tts_text=...&entity=...&mood=...&duration=..."""
     q = request.query
-    data = {k: q[k] for k in ('tts_text', 'entity') if k in q}
+    data = {k: q[k] for k in ('tts_text', 'entity', 'mood', 'duration') if k in q}
     for ws, mid in list(PUSH):
         if ws.closed:
             PUSH.remove((ws, mid))
