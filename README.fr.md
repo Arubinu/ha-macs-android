@@ -112,7 +112,7 @@ Quand la tension chute (signal HDMI perdu, ralentissements), l'app affiche *Alim
 - 🔔 **Sonnette** : en mode édition, *Ouvrir sur un événement* d'une caméra l'affiche en plein écran quand une sonnette
   ou un détecteur se déclenche, avec un son
 - 📡 **Tablette dans Home Assistant** : Réglages › Home Assistant ; capteurs de batterie, d'écran et de présence, et
-  notifications (bandeau, lecture à voix haute, allumage de l'écran, caméra en plein écran)
+  notifications (bandeau, lecture à voix haute, allumage de l'écran, caméra en plein écran, humeur de M.A.C.S.)
 - 🔊 **Lecteur multimédia** : Home Assistant trouve la tablette (DLNA) et peut y diffuser synthèse vocale, radios ou
   Music Assistant ; Réglages › Home Assistant
   (accès : Home Assistant et appareils approuvés, ou tout le réseau)

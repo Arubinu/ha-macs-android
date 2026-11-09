@@ -113,7 +113,7 @@ tensión baja (señal HDMI perdida, lentitud), la app muestra *Alimentación ins
 - 🔔 **Timbre**: en modo edición, *Abrir con un evento* de una cámara la muestra a pantalla completa cuando un timbre
   o un detector se activa, con un sonido
 - 📡 **Tableta en Home Assistant**: Ajustes › Home Assistant; sensores de batería, pantalla y presencia, y
-  notificaciones (banner, lectura en voz alta, encendido de la pantalla, cámara a pantalla completa)
+  notificaciones (banner, lectura en voz alta, encendido de la pantalla, cámara a pantalla completa, estado de ánimo de M.A.C.S.)
 - 🔊 **Reproductor multimedia**: Home Assistant encuentra la tableta (DLNA) y puede reproducir en ella síntesis de voz,
   radios o Music Assistant; Ajustes › Home Assistant
   (acceso: Home Assistant y dispositivos aprobados, o toda la red)

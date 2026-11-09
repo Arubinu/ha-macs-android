@@ -110,7 +110,7 @@ Delivery: port stacji dokującej lub ładowarki często nie wystarcza, zwłaszcz
 - 🔔 **Dzwonek**: w trybie edycji *Otwórz przy zdarzeniu* kamery pokazuje ją na pełnym ekranie, gdy uruchomi się dzwonek
   lub czujnik, z dźwiękiem
 - 📡 **Tablet w Home Assistant**: Ustawienia › Home Assistant; czujniki baterii, ekranu i obecności oraz powiadomienia
-  (baner, czytanie na głos, włączenie ekranu, kamera na pełnym ekranie)
+  (baner, czytanie na głos, włączenie ekranu, kamera na pełnym ekranie, nastrój M.A.C.S.)
 - 🔊 **Odtwarzacz multimediów**: Home Assistant wykrywa tablet (DLNA) i może odtwarzać na nim syntezę mowy, radio lub
   Music Assistant; Ustawienia › Home Assistant
   (dostęp: Home Assistant i zatwierdzone urządzenia albo cała sieć)

@@ -97,7 +97,18 @@ fun MacsFields() {
         // --- Humeur
         Section(stringResource(R.string.macs_section_mood))
         Indented {
-            EntityRow(stringResource(R.string.macs_mood_entity), c.s("mood_entity") ?: "select.macs_mood", c.s("mood_entity").let { it != null && it != "select.macs_mood" }, { pick = "mood_entity" to "select" }) { m.text("mood_entity", null) }
+            // Facultative : l'entité de l'intégration M.A.C.S. n'est montrée que si elle existe ; "" = aucune (choisi).
+            val states by App.instance.ha.states.collectAsState()
+            val moodSet = c.s("mood_entity")
+            val moodId = when {
+                moodSet == "" -> null
+                moodSet != null -> moodSet
+                else -> "select.macs_mood".takeIf { it in states }
+            }
+            EntityRow(stringResource(R.string.macs_mood_entity), moodId, moodId != null, { pick = "mood_entity" to "select" }) {
+                m.set("mood_entity", JsonPrimitive(""))
+            }
+            Help(stringResource(R.string.macs_mood_help))
             EntityRow(stringResource(R.string.macs_satellite), c.s("assist_satellite"), true, { pick = "assist_satellite" to "assist_satellite" }) { m.text("assist_satellite", null) }
             Help(stringResource(R.string.macs_satellite_help))
             SwitchLine(stringResource(R.string.macs_low_battery_sad), stringResource(R.string.macs_low_battery_sad_help), c.b("low_battery_sad", true)) {

@@ -401,6 +401,7 @@
     <string name="det_err_folder">nie znaleziono folderu: %1$s</string>
     <string name="macs_section_mood">Nastrój</string>
     <string name="macs_mood_entity">Encja nastroju</string>
+    <string name="macs_mood_help">Opcjonalna: bez niej M.A.C.S. pozostaje spokojny. Home Assistant może też na chwilę ustawić jego nastrój powiadomieniem do tabletu (wiadomość command_macs_mood, dane mood i duration).</string>
     <string name="macs_satellite">Satelita Assist (opcjonalnie)</string>
     <string name="macs_satellite_help">M.A.C.S. słucha i myśli razem z satelitą głosowym Home Assistant, a potem wygląda na zadowolonego (zrozumiał) lub zdezorientowanego. Asystent głosowy aplikacji ma zawsze pierwszeństwo.</string>
     <string name="macs_low_battery_sad">Smutny przy słabej baterii</string>

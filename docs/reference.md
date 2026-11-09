@@ -166,6 +166,32 @@ opens the camera wall.
 
 Global settings (connection, display, standby, access code…) stay in the Settings page.
 
+## Notifications from Home Assistant
+
+With *Settings › Home Assistant › Tablet in Home Assistant*, the tablet appears as a device (`mobile_app`) and receives
+`notify.mobile_app_<name>` notifications:
+
+| `message` | `data` | Effect |
+|---|---|---|
+| any text | `title` (optional) | banner at the top of the screen |
+| `TTS` | `tts_text` | read aloud |
+| `command_screen_on` | — | turns the screen on |
+| `command_camera` | `entity` | camera fullscreen |
+| `command_macs_mood` | `mood`, `duration` (seconds, default 10) | M.A.C.S. mood for a while: `surprised`, `happy`, `sad`, `confused`, `thinking`, `listening`, `sleeping`, `bored`; `idle` cancels it |
+
+The mood entity of M.A.C.S. (`select.macs_mood` of the M.A.C.S. integration, or any entity whose state is a mood) is
+optional: without it, M.A.C.S. stays calm, and the command above needs nothing to be created in Home Assistant.
+
+```yaml
+# Doorbell: M.A.C.S. surprised for 10 s
+action: notify.mobile_app_wall_tablet
+data:
+  message: command_macs_mood
+  data:
+    mood: surprised
+    duration: 10
+```
+
 ## Home Assistant satellite (Wyoming)
 
 Settings › Voice assistant › *Home Assistant satellite (Wyoming)*: the tablet behaves like a voice satellite

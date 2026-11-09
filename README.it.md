@@ -114,7 +114,7 @@ tensione cala (segnale HDMI perso, rallentamenti), l'app mostra *Alimentazione i
 - 🔔 **Campanello**: in modalità modifica, *Apri a un evento* di una telecamera la mostra a schermo intero quando un
   campanello o un sensore si attiva, con un suono
 - 📡 **Tablet in Home Assistant**: Impostazioni › Home Assistant; sensori di batteria, schermo e presenza, e notifiche
-  (banner, lettura ad alta voce, accensione dello schermo, telecamera a schermo intero)
+  (banner, lettura ad alta voce, accensione dello schermo, telecamera a schermo intero, umore di M.A.C.S.)
 - 🔊 **Lettore multimediale**: Home Assistant trova il tablet (DLNA) e può riprodurvi sintesi vocale, radio o Music
   Assistant; Impostazioni › Home Assistant
   (accesso: Home Assistant e dispositivi approvati, o tutta la rete)

@@ -258,7 +258,7 @@ export const HaMacsVideo: React.FC<VideoProps> = ({ lang, titleWeight = 800 }) =
       <Flash at={S.drop} />
       <Flash at={S.features2} strength={0.6} />
       <Flash at={S.outro} strength={0.7} />
-      {[f1, f1 + sceneLen, f1 + 2 * sceneLen, f1 + 3 * sceneLen, S.break, f2 + sceneLen, f2 + 2 * sceneLen, f2 + 3 * sceneLen].map((f, i) => (
+      {[f1, f1 + sceneLen, f1 + 2 * sceneLen, f1 + 3 * sceneLen, f2, f2 + sceneLen, f2 + 2 * sceneLen, f2 + 3 * sceneLen].map((f, i) => (
         <Sfx key={i} at={f - 14} name={i % 2 ? 'whoosh_down' : 'whoosh'} volume={0.45} />
       ))}
       <Sfx at={S.outro + 4} name="shimmer" volume={0.6} />

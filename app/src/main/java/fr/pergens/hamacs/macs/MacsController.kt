@@ -55,6 +55,11 @@ class MacsController(
     private var webView: WebView? = null
     private var ready = false
 
+    companion object {
+        /** Humeurs que M.A.C.S. sait afficher (page embarquée, classes `mood-…`). */
+        val MOODS = setOf("idle", "happy", "sad", "confused", "thinking", "listening", "sleeping", "surprised", "bored")
+    }
+
     /**
      * M.A.C.S. reste invisible tant que sa page se dessine (chargement, puis réagencement après un déplacement ou un
      * changement de taille) : sinon on voit ses éléments se placer à des endroits bizarres de l'écran. Il apparaît
@@ -341,6 +346,28 @@ class MacsController(
         return JsonObject(base + local)
     }
 
+    /** Humeur imposée par Home Assistant (notification `command_macs_mood`), jusqu'à [cmdMoodUntil]. */
+    private var cmdMood: String? = null
+    private var cmdMoodUntil = 0L
+
+    /**
+     * Humeur demandée par Home Assistant pendant [seconds] secondes (1 à 3600), par-dessus l'entité d'humeur ; `idle`
+     * l'annule. Humeurs reconnues : celles de M.A.C.S. ([MOODS]).
+     */
+    fun commandMood(mood: String, seconds: Int) {
+        val m = mood.trim().lowercase()
+        if (m !in MOODS) return
+        main.post {
+            if (m == "idle") { cmdMood = null; cmdMoodUntil = 0L } else {
+                cmdMood = m
+                cmdMoodUntil = System.currentTimeMillis() + seconds.coerceIn(1, 3600) * 1000L
+                // Fin de l'humeur imposée : retour à l'humeur habituelle.
+                main.postDelayed({ if (ready) pushDeltas() }, seconds.coerceIn(1, 3600) * 1000L + 100)
+            }
+            if (ready) pushDeltas()
+        }
+    }
+
     /** Suivi d'un satellite Assist : écoute → réflexion → réponse = content, sinon perplexe (comme la carte). */
     private var satPrev = "idle"
     private var satRun: BooleanArray? = null
@@ -449,7 +476,9 @@ class MacsController(
         val chargingValue = if (batteryMode == "none") null else charging ?: states["switch.macs_charging"]?.let { it.state == "on" }
         // Humeur : assistant vocal de l'app, puis satellite Assist (s'il est actif), puis l'entité d'humeur ;
         // batterie faible (≤ 20 %) hors charge = triste, comme la carte d'origine.
-        var mood = voiceMood ?: satMood?.takeIf { it != "idle" } ?: baseMood
+        // Humeur imposée par Home Assistant (commande), tant qu'elle n'a pas expiré.
+        val commanded = cmdMood?.takeIf { System.currentTimeMillis() < cmdMoodUntil }
+        var mood = voiceMood ?: commanded ?: satMood?.takeIf { it != "idle" } ?: baseMood
         if (voiceMood == null && (satMood == null || satMood == "idle") && batteryValue != null && batteryValue <= 20.0 && chargingValue != true &&
             cfg.b("low_battery_sad", true)) mood = "sad"
         return Snapshot(

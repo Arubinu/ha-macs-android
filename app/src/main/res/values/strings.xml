@@ -424,6 +424,7 @@
     <string name="det_err_folder">folder not found: %1$s</string>
     <string name="macs_section_mood">Mood</string>
     <string name="macs_mood_entity">Mood entity</string>
+    <string name="macs_mood_help">Optional: without it, M.A.C.S. stays calm. Home Assistant can also set his mood for a while with a notification to the tablet (message command_macs_mood, data mood and duration).</string>
     <string name="macs_satellite">Assist satellite (optional)</string>
     <string name="macs_satellite_help">M.A.C.S. listens and thinks with a Home Assistant voice satellite, then looks happy (understood) or confused. The app\'s own voice assistant always takes precedence.</string>
     <string name="macs_low_battery_sad">Sad when the battery is low</string>

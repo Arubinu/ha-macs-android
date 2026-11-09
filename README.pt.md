@@ -112,7 +112,7 @@ desce (sinal HDMI perdido, lentidão), a app mostra *Alimentação insuficiente*
 - 🔔 **Campainha**: no modo de edição, *Abrir num evento* de uma câmara mostra-a em ecrã inteiro quando uma campainha
   ou um detetor é acionado, com um som
 - 📡 **Tablet no Home Assistant**: Definições › Home Assistant; sensores de bateria, ecrã e presença, e notificações
-  (faixa, leitura em voz alta, ecrã aceso, câmara em ecrã inteiro)
+  (faixa, leitura em voz alta, ecrã aceso, câmara em ecrã inteiro, humor do M.A.C.S.)
 - 🔊 **Leitor multimédia**: o Home Assistant encontra o tablet (DLNA) e pode reproduzir nele síntese de voz, rádios ou
   Music Assistant; Definições › Home Assistant
   (acesso: Home Assistant e dispositivos aprovados, ou toda a rede)

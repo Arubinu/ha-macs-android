@@ -111,7 +111,7 @@ geen USB Power Delivery: een poort van een dock of lader is vaak te zwak, zeker 
 - 🔔 **Deurbel**: in de bewerkmodus toont *Openen bij een gebeurtenis* een camera schermvullend wanneer een deurbel
   of sensor afgaat, met geluid
 - 📡 **Tablet in Home Assistant**: Instellingen › Home Assistant; sensoren voor batterij, scherm en aanwezigheid, en
-  meldingen (banner, voorlezen, scherm aan, camera schermvullend)
+  meldingen (banner, voorlezen, scherm aan, camera schermvullend, stemming van M.A.C.S.)
 - 🔊 **Mediaspeler**: Home Assistant vindt de tablet (DLNA) en kan er tekst-naar-spraak, radio's of Music Assistant op
   afspelen; Instellingen › Home Assistant
   (toegang: Home Assistant en goedgekeurde apparaten, of het hele netwerk)

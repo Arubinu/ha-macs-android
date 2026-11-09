@@ -45,7 +45,9 @@ import java.util.Locale
  * - texte quelconque : bandeau en haut de l'écran ;
  * - `message: TTS` + `data.tts_text` : lecture à voix haute ;
  * - `message: command_screen_on` : allume l'écran ;
- * - `message: command_camera` + `data.entity` : caméra en plein écran.
+ * - `message: command_camera` + `data.entity` : caméra en plein écran ;
+ * - `message: command_macs_mood` + `data.mood` (`surprised`, `happy`…) et `data.duration` (secondes, 10 par défaut) :
+ *   humeur de M.A.C.S. le temps indiqué, sans entité à créer dans Home Assistant (`idle` l'annule).
  * Réception par la WebSocket déjà ouverte (`mobile_app/push_notification_channel`), sans service Google.
  */
 class MobileAppLink(
@@ -221,6 +223,12 @@ class MobileAppLink(
             "TTS" -> speak(data?.get("tts_text")?.jsonPrimitive?.contentOrNull ?: return)
             "command_screen_on" -> commands.tryEmit(Command.ScreenOn)
             "command_camera" -> commands.tryEmit(Command.Camera(data?.get("entity")?.jsonPrimitive?.contentOrNull ?: return))
+            "command_macs_mood" -> {
+                val mood = data?.get("mood")?.jsonPrimitive?.contentOrNull ?: return
+                val seconds = data["duration"]?.jsonPrimitive?.contentOrNull?.toDoubleOrNull()?.toInt() ?: 10
+                fr.pergens.hamacs.App.instance.macs.commandMood(mood, seconds)
+                commands.tryEmit(Command.ScreenOn)
+            }
             else -> commands.tryEmit(Command.Banner(e["title"]?.jsonPrimitive?.contentOrNull, message))
         }
     }

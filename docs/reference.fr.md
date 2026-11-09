@@ -172,6 +172,33 @@ tuile « +N » qui ouvre le mur de caméras.
 
 Les réglages globaux (connexion, affichage, veille, code d'accès…) restent dans la page Réglages.
 
+## Notifications de Home Assistant
+
+Avec *Réglages › Home Assistant › Tablette dans Home Assistant*, la tablette apparaît comme un appareil (`mobile_app`)
+et reçoit les notifications `notify.mobile_app_<nom>` :
+
+| `message` | `data` | Effet |
+|---|---|---|
+| texte quelconque | `title` (facultatif) | bandeau en haut de l'écran |
+| `TTS` | `tts_text` | lecture à voix haute |
+| `command_screen_on` | — | allume l'écran |
+| `command_camera` | `entity` | caméra en plein écran |
+| `command_macs_mood` | `mood`, `duration` (secondes, 10 par défaut) | humeur de M.A.C.S. un moment : `surprised`, `happy`, `sad`, `confused`, `thinking`, `listening`, `sleeping`, `bored` ; `idle` l'annule |
+
+L'entité d'humeur de M.A.C.S. (`select.macs_mood` de l'intégration M.A.C.S., ou toute entité dont l'état est une
+humeur) est facultative : sans elle, M.A.C.S. reste calme, et la commande ci-dessus ne demande rien à créer dans Home
+Assistant.
+
+```yaml
+# Sonnette : M.A.C.S. surpris pendant 10 s
+action: notify.mobile_app_tablette_murale
+data:
+  message: command_macs_mood
+  data:
+    mood: surprised
+    duration: 10
+```
+
 ## Satellite Home Assistant (Wyoming)
 
 Réglages › Assistant vocal › *Satellite Home Assistant (Wyoming)* : la tablette se comporte comme un satellite vocal

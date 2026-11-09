@@ -113,7 +113,7 @@ Sinkt die Spannung (HDMI-Signal weg, Ruckeln), zeigt die App unten *Stromversorg
 - 🔔 **Türklingel**: im Bearbeitungsmodus zeigt *Bei einem Ereignis öffnen* eine Kamera im Vollbild, wenn eine
   Klingel oder ein Melder auslöst, mit Ton
 - 📡 **Tablet in Home Assistant**: Einstellungen › Home Assistant; Sensoren für Akku, Bildschirm und Anwesenheit sowie
-  Benachrichtigungen (Banner, Vorlesen, Bildschirm an, Kamera im Vollbild)
+  Benachrichtigungen (Banner, Vorlesen, Bildschirm an, Kamera im Vollbild, Stimmung von M.A.C.S.)
 - 🔊 **Mediaplayer**: Home Assistant findet das Tablet (DLNA) und kann Sprachausgabe, Radios oder Music Assistant darauf
   abspielen; Einstellungen › Home Assistant
   (Zugriff: Home Assistant und genehmigte Geräte oder das ganze Netzwerk)

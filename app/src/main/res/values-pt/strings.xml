@@ -393,6 +393,7 @@
     <string name="det_err_folder">pasta não encontrada: %1$s</string>
     <string name="macs_section_mood">Humor</string>
     <string name="macs_mood_entity">Entidade de humor</string>
+    <string name="macs_mood_help">Opcional: sem ela, o M.A.C.S. fica calmo. O Home Assistant também pode dar-lhe um humor durante algum tempo com uma notificação para o tablet (mensagem command_macs_mood, dados mood e duration).</string>
     <string name="macs_satellite">Satélite Assist (opcional)</string>
     <string name="macs_satellite_help">M.A.C.S. ouve e pensa com um satélite de voz do Home Assistant e depois mostra-se contente (percebeu) ou confuso. O assistente de voz da aplicação tem sempre prioridade.</string>
     <string name="macs_low_battery_sad">Triste quando a bateria está fraca</string>

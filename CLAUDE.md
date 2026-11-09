@@ -181,7 +181,9 @@ dashboard Lovelace Home Assistant de l'utilisateur sans dépendre de Lovelace ni
 - **Tablette dans HA** (`ha/MobileAppLink.kt`) : intégration `mobile_app` (`/api/mobile_app/registrations`, webhook,
   `register_sensor` / `update_sensor_states` toutes les 60 s), notifications par la WebSocket
   (`mobile_app/push_notification_channel`) : texte → bandeau (`ui/HaBanner.kt`), `TTS` + `tts_text`,
-  `command_screen_on`, `command_camera` + `entity`. Webhook et identifiant non exportés (`LOCAL_KEYS`). Test :
+  `command_screen_on`, `command_camera` + `entity`, `command_macs_mood` + `mood` / `duration` (`MacsController.commandMood`,
+  prioritaire sur l'entité d'humeur, après la voix). Entité d'humeur facultative (absente → repos ; éditeur : montrée
+  seulement si elle existe, croix = aucune). Webhook et identifiant non exportés (`LOCAL_KEYS`). Test :
   `demo_ha.py` simule l'enregistrement et `/demo/notify?message=…`. Ne pas activer sur le vrai HA sans accord
   (crée un appareil).
 - **Lecteur DLNA** (`dlna/DlnaRenderer.kt`, `dlna/Scpd.kt`, prefs `dlna`, non exportées) : MediaRenderer UPnP (SSDP sur

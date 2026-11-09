@@ -411,6 +411,7 @@
     <string name="det_err_folder">dossier introuvable : %1$s</string>
     <string name="macs_section_mood">Humeur</string>
     <string name="macs_mood_entity">Entité d\'humeur</string>
+    <string name="macs_mood_help">Facultative : sans elle, M.A.C.S. reste calme. Home Assistant peut aussi lui donner une humeur un moment par une notification à la tablette (message command_macs_mood, données mood et duration).</string>
     <string name="macs_satellite">Satellite Assist (facultatif)</string>
     <string name="macs_satellite_help">M.A.C.S. écoute et réfléchit avec un satellite vocal de Home Assistant, puis se montre content (compris) ou perplexe. L\'assistant vocal de l\'app reste prioritaire.</string>
     <string name="macs_low_battery_sad">Triste quand la batterie est faible</string>

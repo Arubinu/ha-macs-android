@@ -393,6 +393,7 @@
     <string name="det_err_folder">map niet gevonden: %1$s</string>
     <string name="macs_section_mood">Stemming</string>
     <string name="macs_mood_entity">Stemmingsentiteit</string>
+    <string name="macs_mood_help">Optioneel: zonder blijft M.A.C.S. rustig. Home Assistant kan zijn stemming ook een tijdje instellen met een melding naar de tablet (bericht command_macs_mood, gegevens mood en duration).</string>
     <string name="macs_satellite">Assist-satelliet (optioneel)</string>
     <string name="macs_satellite_help">M.A.C.S. luistert en denkt na met een spraaksatelliet van Home Assistant en kijkt daarna blij (begrepen) of verward. De spraakassistent van de app gaat altijd voor.</string>
     <string name="macs_low_battery_sad">Verdrietig bij een bijna lege batterij</string>

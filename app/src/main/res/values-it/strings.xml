@@ -393,6 +393,7 @@
     <string name="det_err_folder">cartella non trovata: %1$s</string>
     <string name="macs_section_mood">Umore</string>
     <string name="macs_mood_entity">Entità dell\'umore</string>
+    <string name="macs_mood_help">Facoltativa: senza di essa M.A.C.S. resta tranquillo. Home Assistant può anche dargli un umore per un po\' con una notifica al tablet (messaggio command_macs_mood, dati mood e duration).</string>
     <string name="macs_satellite">Satellite Assist (facoltativo)</string>
     <string name="macs_satellite_help">M.A.C.S. ascolta e riflette con un satellite vocale di Home Assistant, poi appare contento (capito) o confuso. L\'assistente vocale dell\'app ha sempre la priorità.</string>
     <string name="macs_low_battery_sad">Triste quando la batteria è scarica</string>

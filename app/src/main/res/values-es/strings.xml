@@ -393,6 +393,7 @@
     <string name="det_err_folder">carpeta no encontrada: %1$s</string>
     <string name="macs_section_mood">Estado de ánimo</string>
     <string name="macs_mood_entity">Entidad de estado de ánimo</string>
+    <string name="macs_mood_help">Opcional: sin ella, M.A.C.S. permanece tranquilo. Home Assistant también puede darle un estado de ánimo durante un rato con una notificación a la tableta (mensaje command_macs_mood, datos mood y duration).</string>
     <string name="macs_satellite">Satélite Assist (opcional)</string>
     <string name="macs_satellite_help">M.A.C.S. escucha y piensa con un satélite de voz de Home Assistant y luego se muestra contento (entendido) o confundido. El asistente de voz de la app siempre tiene prioridad.</string>
     <string name="macs_low_battery_sad">Triste cuando la batería está baja</string>

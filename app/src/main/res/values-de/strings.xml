@@ -393,6 +393,7 @@
     <string name="det_err_folder">Ordner nicht gefunden: %1$s</string>
     <string name="macs_section_mood">Stimmung</string>
     <string name="macs_mood_entity">Stimmungs-Entität</string>
+    <string name="macs_mood_help">Optional: ohne sie bleibt M.A.C.S. ruhig. Home Assistant kann seine Stimmung auch für eine Weile per Benachrichtigung an das Tablet setzen (Nachricht command_macs_mood, Daten mood und duration).</string>
     <string name="macs_satellite">Assist-Satellit (optional)</string>
     <string name="macs_satellite_help">M.A.C.S. hört zu und denkt nach mit einem Home-Assistant-Sprachsatelliten und wirkt danach zufrieden (verstanden) oder verwirrt. Der Sprachassistent der App hat immer Vorrang.</string>
     <string name="macs_low_battery_sad">Traurig bei schwachem Akku</string>

@@ -108,7 +108,7 @@ drops (lost HDMI signal, slowdowns), the app shows *Power supply too weak* at th
 - 🔔 **Doorbell**: in edit mode, a camera's *Open on an event* shows it fullscreen when a doorbell or sensor
   triggers, with a sound
 - 📡 **Tablet in Home Assistant**: Settings › Home Assistant; battery, screen and presence sensors, and
-  notifications (banner, text read aloud, screen on, camera fullscreen)
+  notifications (banner, text read aloud, screen on, camera fullscreen, M.A.C.S. mood)
 - 🔊 **Media player**: Home Assistant finds the tablet (DLNA) and can play text to speech, radios or Music Assistant on
   it; Settings › Home Assistant
   (access: Home Assistant and approved devices, or the whole network)
