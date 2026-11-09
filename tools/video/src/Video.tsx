@@ -219,7 +219,7 @@ export const HaMacsVideo: React.FC<VideoProps> = ({ lang, titleWeight = 800 }) =
           focus={[{ f: 0, x: 0.5, y: 0.5, s: 1 }, { f: 60, x: 0.3, y: 0.25, s: 1.5 }, { f: 170, x: 0.8, y: 0.45, s: 1.6 }, { f: 240, x: 0.8, y: 0.45, s: 1.65 }]} />
       </Sequence>
       <Sequence from={f2 + 2 * sceneLen} durationInFrames={sceneLen}>
-        <FeatureScene title={t.zoom} src="shots/fullscreen-zoom.jpg" duration={sceneLen} tiltY={12}
+        <FeatureScene title={t.zoom} src="shots/fullscreen-zoom.jpg" duration={sceneLen} tiltY={12} region={{ x: 0.3, y: 0.75, w: 0.55 }}
           focus={[{ f: 0, x: 0.5, y: 0.45, s: 1 }, { f: 40, x: 0.5, y: 0.45, s: 1 }, { f: 110, x: 0.35, y: 0.4, s: 1.5 }, { f: 240, x: 0.35, y: 0.4, s: 1.55 }]}
           extra={<PinchHint x={L.width / 2} y={L.tabletTop + L.tabletW * 0.3} />} />
       </Sequence>
